@@ -21,3 +21,5 @@ parameters:
         -
             message: '#Do not inherit from abstract class, better use composition#'
             path: "*Rector.php"
+
+        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'

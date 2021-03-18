@@ -73,7 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
+        if (! $this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
         }
 

@@ -146,7 +146,7 @@ CODE_SAMPLE
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if (! $this->formAddMethodCallAnalyzer->matches($node)) {
+        if (! $this->formAddMethodCallAnalyzer->isMatching($node)) {
             return null;
         }
 

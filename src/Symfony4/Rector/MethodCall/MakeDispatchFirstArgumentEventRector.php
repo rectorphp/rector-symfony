@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
+ *
  * @see \Rector\Tests\Symfony4\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\MakeDispatchFirstArgumentEventRectorTest
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
@@ -83,12 +84,14 @@ CODE_SAMPLE
 
         $firstArgumentValue = $node->args[0]->value;
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($firstArgumentValue)) {
-            return $this->refactorStringArgument($node);
+            $this->refactorStringArgument($node);
+            return $node;
         }
 
         $secondArgumentValue = $node->args[1]->value;
         if ($secondArgumentValue instanceof FuncCall) {
-            return $this->refactorGetCallFuncCall($node, $secondArgumentValue, $firstArgumentValue);
+            $this->refactorGetCallFuncCall($node, $secondArgumentValue, $firstArgumentValue);
+            return $node;
         }
 
         return null;
@@ -110,7 +113,7 @@ CODE_SAMPLE
         return ! isset($methodCall->args[1]);
     }
 
-    private function refactorStringArgument(MethodCall $methodCall): MethodCall
+    private function refactorStringArgument(MethodCall $methodCall): void
     {
         // swap arguments
         [$methodCall->args[0], $methodCall->args[1]] = [$methodCall->args[1], $methodCall->args[0]];
@@ -118,23 +121,20 @@ CODE_SAMPLE
         if ($this->isEventNameSameAsEventObjectClass($methodCall)) {
             unset($methodCall->args[1]);
         }
-
-        return $methodCall;
     }
 
-    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr): ?MethodCall
+    private function refactorGetCallFuncCall(MethodCall $methodCall, FuncCall $funcCall, Expr $expr): void
     {
-        if ($this->isName($funcCall, 'get_class')) {
-            $getClassArgumentValue = $funcCall->args[0]->value;
-
-            if ($this->nodeComparator->areNodesEqual($expr, $getClassArgumentValue)) {
-                unset($methodCall->args[1]);
-
-                return $methodCall;
-            }
+        if (! $this->isName($funcCall, 'get_class')) {
+            return;
         }
 
-        return null;
+        $getClassArgumentValue = $funcCall->args[0]->value;
+        if (! $this->nodeComparator->areNodesEqual($expr, $getClassArgumentValue)) {
+            return;
+        }
+
+        unset($methodCall->args[1]);
     }
 
     /**

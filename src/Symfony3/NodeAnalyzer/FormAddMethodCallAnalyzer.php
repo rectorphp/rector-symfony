@@ -37,7 +37,7 @@ final class FormAddMethodCallAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    public function matches(MethodCall $methodCall): bool
+    public function isMatching(MethodCall $methodCall): bool
     {
         if (! $this->nodeTypeResolver->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
             return false;

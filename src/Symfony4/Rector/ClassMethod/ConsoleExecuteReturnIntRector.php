@@ -111,7 +111,7 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->isAReturnWithExprIntEquals($parentNode, $node)) {
+            if ($parentNode instanceof Node && $this->isReturnWithExprIntEquals($parentNode, $node)) {
                 $hasReturn = true;
                 return null;
             }
@@ -166,7 +166,7 @@ CODE_SAMPLE
         $classMethod->stmts[] = new Return_(new LNumber(0));
     }
 
-    private function isAReturnWithExprIntEquals(?Node $parentNode, Node $node): bool
+    private function isReturnWithExprIntEquals(Node $parentNode, Node $node): bool
     {
         if (! $parentNode instanceof Return_) {
             return false;
