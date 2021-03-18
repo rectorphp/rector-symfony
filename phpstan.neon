@@ -23,3 +23,13 @@ parameters:
             path: "*Rector.php"
 
         - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
+
+        # symfony native values
+        -
+             message: '#Parameter "(.*?)" cannot be nullable#'
+             path: src/Symfony/ValueObject/ServiceDefinition.php
+
+
+        -
+            message: '#Use decoupled factory service to create "PHPStan\\Type\\ObjectType" object#'
+            path:  src/Symfony/ValueObject/ServiceMap/ServiceMap.php

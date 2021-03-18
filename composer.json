@@ -4,6 +4,7 @@
     "description": "Rector upgrades rules for Symfony Framework",
     "require": {
         "php": ">=7.3",
+        "ext-xml": "*",
         "rector/rector": "dev-main",
         "symplify/rule-doc-generator-contracts": "^9.3",
         "symfony/dependency-injection": "^5.2"
