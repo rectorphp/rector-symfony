@@ -12,7 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 
 final class ServiceTypeMethodCallResolver
 {

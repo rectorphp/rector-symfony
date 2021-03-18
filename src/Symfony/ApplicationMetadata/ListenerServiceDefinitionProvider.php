@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\ApplicationMetadata;
 
 use Nette\Utils\Strings;
-use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 
@@ -30,11 +30,11 @@ final class ListenerServiceDefinitionProvider
     /**
      * @var ServiceMapProvider
      */
-    private $applicationServiceMapProvider;
+    private $serviceMapProvider;
 
-    public function __construct(ServiceMapProvider $applicationServiceMapProvider)
+    public function __construct(ServiceMapProvider $serviceMapProvider)
     {
-        $this->applicationServiceMapProvider = $applicationServiceMapProvider;
+        $this->serviceMapProvider = $serviceMapProvider;
     }
 
     /**
@@ -46,7 +46,7 @@ final class ListenerServiceDefinitionProvider
             return $this->listenerClassesToEvents;
         }
 
-        $serviceMap = $this->applicationServiceMapProvider->provide();
+        $serviceMap = $this->serviceMapProvider->provide();
         $eventListeners = $serviceMap->getServicesByTag('kernel.event_listener');
 
         foreach ($eventListeners as $eventListener) {

@@ -7,6 +7,8 @@ use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(__DIR__ . '/../../../../../../config/config.php');
+
     $parameters = $containerConfigurator->parameters();
     // wtf: all test have to be in single file due to autoloading race-condigition and container creating issue of fixture
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/listener_services.xml');

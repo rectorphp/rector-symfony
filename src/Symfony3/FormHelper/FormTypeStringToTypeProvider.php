@@ -6,7 +6,7 @@ namespace Rector\Symfony3\FormHelper;
 
 use Nette\Utils\Strings;
 use Rector\Symfony\Contract\Tag\TagInterface;
-use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 
 final class FormTypeStringToTypeProvider
 {

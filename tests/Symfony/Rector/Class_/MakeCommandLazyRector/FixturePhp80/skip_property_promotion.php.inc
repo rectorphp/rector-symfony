@@ -12,5 +12,3 @@ final class SkipPropertyPromotion extends Command
         parent::__construct();
     }
 }
-
-?>
