@@ -1,3 +1,9 @@
-# Rector upgrades rules for Symfony Framework
+# Rector Rules for Symfony
+
+## Install
+
+```bash 
+composer require rector/rector-symfony
+```
 
 @todo
