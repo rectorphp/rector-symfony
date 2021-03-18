@@ -1,0 +1,6 @@
+{
+    "require": {
+        "rector/rector": "dev-main",
+        "symplify/rule-doc-generator-contracts": "dev-main"
+    }
+}
