@@ -19,7 +19,7 @@ jobs:
                         name: 'ECS'
                         run: composer check-cs
 
-        name: ${{ actions.run }}
+        name: ${{ matrix.actions.name }}
 
         steps:
             -   uses: actions/checkout@v2
@@ -32,4 +32,4 @@ jobs:
 
             -   uses: "ramsey/composer-install@v1"
 
-            -   run: ${{ actions.run }}
+            -   run: ${{ matrix.actions.run }}
