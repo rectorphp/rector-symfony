@@ -17,10 +17,7 @@ parameters:
         - */Source/*
         - *Source/*
 
-services:
-    -
-        class: Symplify\PHPStanRules\Rules\NoInheritanceRule
-        tags: [phpstan.rules.rule]
-        arguments:
-            allowedParentTypes:
-                - Rector\Core\Rector\AbstractRector
+    ignoreErrors:
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            path: "*Rector.php"

@@ -5,7 +5,8 @@
     "require": {
         "php": ">=7.3",
         "rector/rector": "dev-main",
-        "symplify/rule-doc-generator-contracts": "^9.3"
+        "symplify/rule-doc-generator-contracts": "^9.3",
+        "symfony/dependency-injection": "^5.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
