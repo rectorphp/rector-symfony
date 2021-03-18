@@ -1,6 +1,22 @@
 {
+    "name": "rector/rector-symfony",
+    "license": "MIT",
+    "description": "Rector upgrades rules for Symfony Framework",
     "require": {
         "rector/rector": "dev-main",
         "symplify/rule-doc-generator-contracts": "dev-main"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\Tests\\": "tests"
+        }
     }
 }
