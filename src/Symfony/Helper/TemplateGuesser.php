@@ -80,7 +80,9 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
+        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
+
         return $this->resolve($namespace, $class, $methodName);
     }
 

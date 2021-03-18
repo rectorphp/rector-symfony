@@ -25,6 +25,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $arrayType = new ArrayType(new MixedType(), new MixedType());
     $iterableType = new IterableType(new MixedType(), new MixedType());
 
+    $nullableStringType = new UnionType([new StringType(), new NullType()]);
+
     $services->set(AddParamTypeDeclarationRector::class)
         ->call('configure', [[
             AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => ValueObjectInliner::inline([
@@ -323,7 +325,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Contracts\Translation\TranslatorInterface',
                     'trans',
                     0,
-                    new UnionType([new StringType(), new NullType()])
+                    $nullableStringType
                 ),
                 new AddParamTypeDeclaration(
                     'Symfony\Contracts\Translation\TranslatorInterface',

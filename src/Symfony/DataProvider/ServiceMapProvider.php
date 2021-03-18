@@ -41,7 +41,7 @@ final class ServiceMapProvider
         );
 
         if ($symfonyContainerXmlPath === '') {
-            return new ServiceMap([]);
+            return $this->serviceMapFactory->createEmpty();
         }
 
         return $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);

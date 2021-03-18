@@ -39,3 +39,20 @@ parameters:
 
         # fixed in dev php-parser
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+
+        # should be fixed on master
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            paths:
+                - src/Symfony/ConstantNameAndValueMatcher.php
+
+        -
+            message: '#Parameter "priority" cannot be nullable#'
+            paths:
+                - src/Symfony/NodeFactory/GetSubscribedEventsClassMethodFactory.php
+
+        # good place for value object
+        -
+            message: '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
+            paths:
+                - src/Symfony3/Rector/MethodCall/FormTypeInstanceToClassConstRector.php

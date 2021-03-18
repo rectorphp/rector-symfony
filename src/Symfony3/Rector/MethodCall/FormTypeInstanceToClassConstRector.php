@@ -279,10 +279,10 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Arg[] $argNodes
-     * @return Arg[]
+     * @param Arg[] $args
+     * @return array<string, Arg>
      */
-    private function resolveNamesToArgs(string $className, array $argNodes): array
+    private function resolveNamesToArgs(string $className, array $args): array
     {
         if (! $this->reflectionProvider->hasClass($className)) {
             return [];
@@ -298,7 +298,7 @@ CODE_SAMPLE
 
         $namesToArgs = [];
         foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {
-            $namesToArgs[$reflectionParameter->getName()] = $argNodes[$position];
+            $namesToArgs[$reflectionParameter->getName()] = $args[$position];
         }
 
         return $namesToArgs;

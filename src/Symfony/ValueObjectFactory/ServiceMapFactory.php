@@ -70,6 +70,11 @@ final class ServiceMapFactory
         return new ServiceMap($services);
     }
 
+    public function createEmpty(): ServiceMap
+    {
+        return new ServiceMap([]);
+    }
+
     /**
      * @param mixed[] $def
      * @return mixed[]
