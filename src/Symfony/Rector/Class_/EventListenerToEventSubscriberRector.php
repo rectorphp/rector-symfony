@@ -163,7 +163,8 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->changeListenerToSubscriberWithMethods($node, $listenerClassesToEventsToMethods[$className]);
+        $this->changeListenerToSubscriberWithMethods($node, $listenerClassesToEventsToMethods[$className]);
+        return $node;
     }
 
     private function isAlreadyEventSubscriber(Class_ $class): bool
@@ -180,7 +181,7 @@ CODE_SAMPLE
     /**
      * @param array<string, ServiceDefinition[]> $eventsToMethods
      */
-    private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods): Class_
+    private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods): void
     {
         $class->implements[] = new FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
 
@@ -196,7 +197,5 @@ CODE_SAMPLE
             $this->eventNamesToClassConstants
         );
         $class->stmts[] = $classMethod;
-
-        return $class;
     }
 }

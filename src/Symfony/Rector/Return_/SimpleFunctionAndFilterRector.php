@@ -157,7 +157,7 @@ CODE_SAMPLE
 
             $oldArguments = $arrayItem->value->args;
 
-            $this->createNewArrayItem($arrayItem, $oldArguments, $filterName);
+            $this->decorateArrayItem($arrayItem, $oldArguments, $filterName);
             break;
         }
     }
@@ -165,7 +165,7 @@ CODE_SAMPLE
     /**
      * @param Arg[] $oldArguments
      */
-    private function createNewArrayItem(ArrayItem $arrayItem, array $oldArguments, string $filterName): ArrayItem
+    private function decorateArrayItem(ArrayItem $arrayItem, array $oldArguments, string $filterName): void
     {
         /** @var New_ $new */
         $new = $arrayItem->value;
@@ -173,8 +173,7 @@ CODE_SAMPLE
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
             $new->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
-
-            return $arrayItem;
+            return;
         }
 
         // not array yet, wrap to one
@@ -185,7 +184,5 @@ CODE_SAMPLE
 
         $new->args[0] = new Arg(new String_($filterName));
         $new->args[1] = new Arg(new Array_($arrayItems));
-
-        return $arrayItem;
     }
 }

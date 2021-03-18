@@ -26,10 +26,16 @@ parameters:
 
         # symfony native values
         -
-             message: '#Parameter "(.*?)" cannot be nullable#'
-             path: src/Symfony/ValueObject/ServiceDefinition.php
-
+            message: '#Parameter "(.*?)" cannot be nullable#'
+            path: src/Symfony/ValueObject/ServiceDefinition.php
 
         -
             message: '#Use decoupled factory service to create "PHPStan\\Type\\ObjectType" object#'
-            path:  src/Symfony/ValueObject/ServiceMap/ServiceMap.php
+            path: src/Symfony/ValueObject/ServiceMap/ServiceMap.php
+
+        -
+            message: '#Parameter "return" cannot be nullable#'
+            path: src/Symfony/NodeFactory/ThisRenderFactory.php
+
+        # fixed in dev php-parser
+        - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'

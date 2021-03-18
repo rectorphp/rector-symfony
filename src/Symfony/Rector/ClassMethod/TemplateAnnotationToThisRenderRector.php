@@ -122,7 +122,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->classHasTemplateAnnotations($class)) {
+        if (! $this->hasTemplateAnnotations($class)) {
             return null;
         }
 
@@ -149,7 +149,7 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function classHasTemplateAnnotations(Class_ $class): bool
+    private function hasTemplateAnnotations(Class_ $class): bool
     {
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);

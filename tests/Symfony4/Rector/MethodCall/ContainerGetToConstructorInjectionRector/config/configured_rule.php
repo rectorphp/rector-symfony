@@ -8,6 +8,8 @@ use Rector\Tests\Symfony4\Rector\MethodCall\ContainerGetToConstructorInjectionRe
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(__DIR__ . '/../../../../../../config/config.php');
+
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/../xml/services.xml');
 
