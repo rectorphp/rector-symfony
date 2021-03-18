@@ -26,7 +26,7 @@ final class GetToConstructorInjectionRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    public function provideConfigFilePath(): string
+    protected function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/configured_rule.php';
     }

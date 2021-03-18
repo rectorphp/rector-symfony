@@ -26,7 +26,7 @@ final class WithContainerTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithContainer');
     }
 
-    public function provideConfigFilePath(): string
+    protected function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/xml_path_config.php';
     }
