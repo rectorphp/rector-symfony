@@ -138,8 +138,7 @@ CODE_SAMPLE
     }
 
     /**
-     * Is the event name just `::class`?
-     * We can remove it
+     * Is the event name just `::class`? We can remove it
      */
     private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
     {

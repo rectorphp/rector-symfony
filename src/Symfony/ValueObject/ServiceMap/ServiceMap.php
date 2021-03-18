@@ -44,7 +44,6 @@ final class ServiceMap
         $interfaces = (array) class_implements($class);
 
         foreach ($interfaces as $interface) {
-            // return first interface
             return new ObjectType($interface);
         }
 
