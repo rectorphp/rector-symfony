@@ -144,20 +144,24 @@ CODE_SAMPLE
 
     private function processPreviousAssign(Node $node, Expr $firstArgumentExpr): void
     {
-        $previousNodeAssign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
-        if (! $previousNodeAssign instanceof Assign) {
+        $assign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
+        if (! $assign instanceof Assign) {
             return;
         }
 
-        if (! $this->nodeNameResolver->isFuncCallName($previousNodeAssign->expr, 'sprintf')) {
+        if (! $assign->expr instanceof FuncCall) {
             return;
         }
 
-        /** @var FuncCall $funcCall */
-        $funcCall = $previousNodeAssign->expr;
+        $funcCall = $assign->expr;
+
+        if (! $this->nodeNameResolver->isName($funcCall, 'sprintf')) {
+            return;
+        }
+
         $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
         if ($arrayNode !== null) {
-            $previousNodeAssign->expr = $arrayNode;
+            $assign->expr = $arrayNode;
         }
     }
 
