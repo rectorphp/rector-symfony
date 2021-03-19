@@ -18,12 +18,6 @@ parameters:
         - *Source/*
 
     ignoreErrors:
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            path: "*Rector.php"
-
-        - '#Constant string value need to only have small letters, _, \-, \. and numbers#'
-
         # symfony native values
         -
             message: '#Parameter "(.*?)" cannot be nullable#'
@@ -41,11 +35,6 @@ parameters:
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
 
         # should be fixed on master
-        -
-            message: '#Do not use chained method calls\. Put each on separated lines#'
-            paths:
-                - src/Symfony/ConstantNameAndValueMatcher.php
-
         -
             message: '#Parameter "priority" cannot be nullable#'
             paths:
