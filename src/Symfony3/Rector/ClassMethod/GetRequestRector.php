@@ -134,7 +134,15 @@ CODE_SAMPLE
         }
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($classMethod, function (Node $node): bool {
-            return $this->nodeNameResolver->isLocalMethodCallNamed($node, 'get');
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
+
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node->name, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -157,7 +165,11 @@ CODE_SAMPLE
         }
 
         // must be $this->getRequest() in controller
-        if (! $this->nodeNameResolver->isVariableName($node->var, 'this')) {
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
+        if (! $this->nodeNameResolver->isName($node->var, 'this')) {
             return false;
         }
 
@@ -176,7 +188,15 @@ CODE_SAMPLE
     private function containsGetRequestMethod(ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
-            return $this->nodeNameResolver->isLocalMethodCallNamed($node, 'getRequest');
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
+
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, 'getRequest');
         });
     }
 

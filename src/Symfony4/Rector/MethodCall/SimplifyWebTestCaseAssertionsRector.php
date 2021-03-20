@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -21,6 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @see https://github.com/symfony/symfony/pull/30813/files
+ *
  * @see \Rector\Tests\Symfony4\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\SimplifyWebTestCaseAssertionsRectorTest
  */
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
@@ -114,6 +116,7 @@ CODE_SAMPLE
         $args = [];
         $args[] = new Arg(new LNumber(200));
         $args[] = new Arg($this->getStatusCodeMethodCall);
+
         $methodCall = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
         if ($this->nodeComparator->areNodesEqual($node, $methodCall)) {
             return $this->nodeFactory->createLocalMethodCall('assertResponseIsSuccessful');
@@ -130,6 +133,7 @@ CODE_SAMPLE
         if ($args !== null) {
             return $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $args);
         }
+
         return $this->processAssertResponseRedirects($node);
     }
 
@@ -181,7 +185,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isVariableName($comparedNode->var->var, 'crawler')) {
+        $comparedMethodCaller = $comparedNode->var;
+        if (! $comparedMethodCaller->var instanceof Variable) {
+            return null;
+        }
+
+        if (! $this->isName($comparedMethodCaller->name, 'crawler')) {
             return null;
         }
 
