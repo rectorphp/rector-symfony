@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\ObjectType;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -102,15 +102,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isInWebTestCase($node)) {
+            return null;
+        }
+
         $clientGetResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
         $this->getStatusCodeMethodCall = $this->nodeFactory->createMethodCall(
             $clientGetResponseMethodCall,
             'getStatusCode'
         );
-
-        if (! $this->isInWebTestCase($node)) {
-            return null;
-        }
 
         // assertResponseIsSuccessful
         $args = [];
@@ -139,12 +139,17 @@ CODE_SAMPLE
 
     private function isInWebTestCase(MethodCall $methodCall): bool
     {
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof ClassLike) {
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
             return false;
         }
 
-        return $this->isObjectType($classLike, new ObjectType('Symfony\Bundle\FrameworkBundle\Test\WebTestCase'));
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
     private function processAssertResponseStatusCodeSame(MethodCall $methodCall): ?MethodCall
@@ -190,7 +195,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($comparedMethodCaller->name, 'crawler')) {
+        if (! $this->isName($comparedMethodCaller->var, 'crawler')) {
             return null;
         }
 

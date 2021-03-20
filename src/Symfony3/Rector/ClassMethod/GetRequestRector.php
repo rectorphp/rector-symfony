@@ -196,7 +196,11 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($node, 'getRequest');
+            if (! $this->isName($node->var, 'this')) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node->name, 'getRequest');
         });
     }
 
