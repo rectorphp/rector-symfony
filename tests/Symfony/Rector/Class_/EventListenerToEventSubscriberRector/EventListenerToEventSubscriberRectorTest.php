@@ -26,7 +26,7 @@ final class EventListenerToEventSubscriberRectorTest extends AbstractRectorTestC
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    protected function provideConfigFilePath(): string
+    public function provideConfigFilePath(): string
     {
         return __DIR__ . '/config/config_with_parameter.php';
     }
