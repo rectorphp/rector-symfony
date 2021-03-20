@@ -42,14 +42,4 @@ final class TwigSetList implements SetListInterface
      * @var string
      */
     public const TWIG_UNDERSCORE_TO_NAMESPACE = __DIR__ . '/../../config/sets/twig/twig-underscore-to-namespace.php';
-
-    /**
-     * @var string
-     */
-    public const TYPE_DECLARATION = __DIR__ . '/../../config/sets/twig/type-declaration.php';
-
-    /**
-     * @var string
-     */
-    public const TYPE_DECLARATION_STRICT = __DIR__ . '/../../config/sets/twig/type-declaration-strict.php';
 }
