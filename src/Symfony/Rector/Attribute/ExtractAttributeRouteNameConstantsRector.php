@@ -6,12 +6,12 @@ namespace Rector\Symfony\Rector\Attribute;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\Symfony\ConstantNameAndValueMatcher;
 use Rector\Symfony\ConstantNameAndValueResolver;
 use Rector\Symfony\NodeFactory\RouteNameClassFactory;
+use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Symfony\ValueObject\ClassName;
 use Rector\Symfony\ValueObject\ConstantNameAndValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ExtraFileCodeSample;
