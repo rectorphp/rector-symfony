@@ -11,7 +11,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NetteKdyby\NodeManipulator\ParamAnalyzer;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class OnLogoutClassMethodFactory
