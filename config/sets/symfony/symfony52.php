@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SymfonyRequiredTagNode;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
@@ -14,6 +13,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\SymfonyRequiredTagNode;
 use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Symfony\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Rector\MethodCall\FormBuilderSetDataMapperRector;

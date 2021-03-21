@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\ValueObject\Routing;
+namespace Rector\Symfony\ValueObject\Routing;
 
 final class RouteName
 {
