@@ -56,7 +56,7 @@ parameters:
         -
             message: '#Do not inherit from abstract class, better use composition#'
             paths:
-                - src/PhpDoc/NodeFactory/MultiPhpDocNodeFactory.php
+                - src/PhpDoc/NodeFactory/*
 
         -
             message: '#Do not use static property#'
