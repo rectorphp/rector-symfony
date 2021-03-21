@@ -24,8 +24,8 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortN
         ArrayPartPhpDocTagPrinter $arrayPartPhpDocTagPrinter,
         TagValueNodePrinter $tagValueNodePrinter,
         array $items,
-        ?string $serviceName,
-        ?string $annotationContent
+        ?string $serviceName = null,
+        ?string $annotationContent = null
     ) {
         $this->serviceName = $serviceName;
 
