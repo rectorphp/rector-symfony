@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
 use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
-use Rector\Symfony2\Rector\StaticCall\ParseFileRector;
+use Rector\Symfony\Rector\StaticCall\ParseFileRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
