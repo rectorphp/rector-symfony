@@ -18,6 +18,12 @@ use Rector\Symfony\PhpDoc\Node\AssertChoiceTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
 use Rector\Symfony\PhpDoc\Node\AssertTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSInjectParamsTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\JMSServiceTagValueNode;
+use Rector\Symfony\PhpDoc\Node\JMS\SerializerTypeTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioRouteTagValueNode;
+use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 
 final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface, MultiPhpDocNodeFactoryInterface
@@ -55,6 +61,17 @@ final class MultiPhpDocNodeFactory extends AbstractPhpDocNodeFactory implements 
             AssertTypeTagValueNode::class => 'Symfony\Component\Validator\Constraints\Type',
             AssertChoiceTagValueNode::class => 'Symfony\Component\Validator\Constraints\Choice',
             AssertEmailTagValueNode::class => 'Symfony\Component\Validator\Constraints\Email',
+
+            // Sensio
+            SensioTemplateTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template',
+            SensioMethodTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method',
+            SensioRouteTagValueNode::class => 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
+
+            // JMS
+            JMSInjectParamsTagValueNode::class => 'JMS\DiExtraBundle\Annotation\InjectParams',
+            JMSServiceTagValueNode::class => 'JMS\DiExtraBundle\Annotation\Service',
+            SerializerTypeTagValueNode::class => 'JMS\Serializer\Annotation\Type',
+            PHPDIInjectTagValueNode::class => 'DI\Annotation\Inject',
         ];
     }
 
