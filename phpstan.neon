@@ -62,3 +62,5 @@ parameters:
             message: '#Do not use static property#'
             paths:
                 - tests/bootstrap.php
+
+        - '#Method "replaceName\(\)" returns bool type, so the name should start with is/has/was#'
