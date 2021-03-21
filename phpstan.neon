@@ -21,15 +21,15 @@ parameters:
         # symfony native values
         -
             message: '#Parameter "(.*?)" cannot be nullable#'
-            path: src/Symfony/ValueObject/ServiceDefinition.php
+            path: src/ValueObject/ServiceDefinition.php
 
         -
             message: '#Use decoupled factory service to create "PHPStan\\Type\\ObjectType" object#'
-            path: src/Symfony/ValueObject/ServiceMap/ServiceMap.php
+            path: src/ValueObject/ServiceMap/ServiceMap.php
 
         -
             message: '#Parameter "return" cannot be nullable#'
-            path: src/Symfony/NodeFactory/ThisRenderFactory.php
+            path: src/NodeFactory/ThisRenderFactory.php
 
         # fixed in dev php-parser
         - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
@@ -38,10 +38,27 @@ parameters:
         -
             message: '#Parameter "priority" cannot be nullable#'
             paths:
-                - src/Symfony/NodeFactory/GetSubscribedEventsClassMethodFactory.php
+                - src/NodeFactory/GetSubscribedEventsClassMethodFactory.php
 
         # good place for value object
         -
             message: '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
             paths:
-                - src/Symfony3/Rector/MethodCall/FormTypeInstanceToClassConstRector.php
+                - src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php
+
+        # known types
+        - '#Method Rector\\Symfony\\PhpDoc\\NodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
+
+
+        - '#Return typehint of method Rector\\Symfony\\PhpDoc\\NodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) has invalid type Doctrine\\ORM\\Mapping\\Annotation#'
+
+
+        -
+            message: '#Do not inherit from abstract class, better use composition#'
+            paths:
+                - src/PhpDoc/NodeFactory/MultiPhpDocNodeFactory.php
+
+        -
+            message: '#Use value object over return of values#'
+            paths:
+                - src/PhpDoc/NodeFactory/MultiPhpDocNodeFactory.php
