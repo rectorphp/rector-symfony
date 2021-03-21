@@ -59,11 +59,6 @@ parameters:
                 - src/PhpDoc/NodeFactory/MultiPhpDocNodeFactory.php
 
         -
-            message: '#Use value object over return of values#'
-            paths:
-                - src/PhpDoc/NodeFactory/MultiPhpDocNodeFactory.php
-
-        -
             message: '#Do not use static property#'
             paths:
                 - tests/bootstrap.php
