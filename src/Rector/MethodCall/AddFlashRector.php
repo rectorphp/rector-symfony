@@ -72,8 +72,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Scope $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        // might be missing in a trait
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+        
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;
