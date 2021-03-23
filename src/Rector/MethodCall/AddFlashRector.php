@@ -78,7 +78,7 @@ CODE_SAMPLE
         if (! $scope instanceof Scope) {
             return null;
         }
-        
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;
