@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'addCompilerPass',
                     2,
                     'priority',
-                    '0'
+                    0
                 ),
             ]),
         ]]);
