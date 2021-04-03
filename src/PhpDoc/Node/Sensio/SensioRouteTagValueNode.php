@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 
 /**
  * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html
+ * @deprecated
  */
 final class SensioRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface
 {

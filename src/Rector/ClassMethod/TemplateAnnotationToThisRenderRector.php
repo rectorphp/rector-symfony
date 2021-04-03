@@ -23,9 +23,10 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeFactory\ThisRenderFactory;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
 use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -60,14 +61,21 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
      */
     private $arrayUnionResponseTypeAnalyzer;
 
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
     public function __construct(
         ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
         ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
-        ThisRenderFactory $thisRenderFactory
+        ThisRenderFactory $thisRenderFactory,
+        PhpDocTagRemover $phpDocTagRemover
     ) {
         $this->returnTypeDeclarationUpdater = $returnTypeDeclarationUpdater;
         $this->thisRenderFactory = $thisRenderFactory;
         $this->arrayUnionResponseTypeAnalyzer = $arrayUnionResponseTypeAnalyzer;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -139,12 +147,14 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-        $sensioTemplateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
-        if (! $sensioTemplateTagValueNode instanceof SensioTemplateTagValueNode) {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
+        );
+        if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
+        $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode);
 
         return $classMethod;
     }
@@ -153,7 +163,7 @@ CODE_SAMPLE
     {
         foreach ($class->getMethods() as $classMethod) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
+            if ($phpDocInfo->hasByAnnotationClass('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template')) {
                 return true;
             }
         }
@@ -163,7 +173,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(
         ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): void {
         /** @var Return_[] $returns */
         $returns = $this->findReturnsInCurrentScope((array) $classMethod->stmts);
@@ -171,14 +181,19 @@ CODE_SAMPLE
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
         foreach ($returns as $return) {
-            $this->refactorReturn($return, $classMethod, $sensioTemplateTagValueNode, $hasThisRenderOrReturnsResponse);
+            $this->refactorReturn(
+                $return,
+                $classMethod,
+                $templateDoctrineAnnotationTagValueNode,
+                $hasThisRenderOrReturnsResponse
+            );
         }
 
         if ($returns === []) {
             $thisRenderMethodCall = $this->thisRenderFactory->create(
                 $classMethod,
                 null,
-                $sensioTemplateTagValueNode
+                $templateDoctrineAnnotationTagValueNode
             );
 
             $this->refactorNoReturn($classMethod, $thisRenderMethodCall);
@@ -240,7 +255,7 @@ CODE_SAMPLE
     private function refactorReturn(
         Return_ $return,
         ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode,
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
         bool $hasThisRenderOrReturnsResponse
     ): void {
         // nothing we can do
@@ -252,7 +267,7 @@ CODE_SAMPLE
         $thisRenderMethodCall = $this->thisRenderFactory->create(
             $classMethod,
             $return,
-            $sensioTemplateTagValueNode
+            $templateDoctrineAnnotationTagValueNode
         );
 
         $this->refactorReturnWithValue(
@@ -269,8 +284,7 @@ CODE_SAMPLE
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
+        $this->removeDoctrineAnnotationTagValueNode($classMethod);
     }
 
     private function refactorReturnWithValue(
@@ -305,8 +319,15 @@ CODE_SAMPLE
         }
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
+        );
+
+        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        }
     }
 
     private function processClassMethodWithoutReturn(
@@ -335,5 +356,19 @@ CODE_SAMPLE
 
         $returnThisRender = new Return_($thisRenderMethodCall);
         $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
+    }
+
+    private function removeDoctrineAnnotationTagValueNode(ClassMethod $classMethod): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
+        );
+        if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            return;
+        }
+
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
     }
 }

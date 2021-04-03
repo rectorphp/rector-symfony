@@ -11,10 +11,6 @@ use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
-use Rector\Symfony\PhpDoc\Node\AssertEmailTagValueNode;
-use Rector\Symfony\PhpDoc\Node\AssertRangeTagValueNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRequiredTagNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Rector\Symfony\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Rector\MethodCall\FormBuilderSetDataMapperRector;
 use Rector\Symfony\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
@@ -39,22 +35,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
                 // symfony
+                new AnnotationToAttribute('required', 'Symfony\Contracts\Service\Attribute\Required'),
                 new AnnotationToAttribute(
-                    SymfonyRequiredTagNode::class,
-                    'Symfony\Contracts\Service\Attribute\Required'
-                ),
-                new AnnotationToAttribute(
-                    SymfonyRouteTagValueNode::class,
+                    'Symfony\Component\Routing\Annotation\Route',
                     'Symfony\Component\Routing\Annotation\Route'
                 ),
 
                 // symfony/validation
                 new AnnotationToAttribute(
-                    AssertEmailTagValueNode::class,
+                    'Symfony\Component\Validator\Constraints\Email',
                     'Symfony\Component\Validator\Constraints\Email'
                 ),
                 new AnnotationToAttribute(
-                    AssertRangeTagValueNode::class,
+                    'Symfony\Component\Validator\Constraints\Range',
                     'Symfony\Component\Validator\Constraints\Range'
                 ),
 

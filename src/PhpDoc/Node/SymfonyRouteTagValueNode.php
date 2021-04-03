@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
+ * @deprecated
  */
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface, SilentKeyNodeInterface, ClassNameAwareTagInterface
 {
