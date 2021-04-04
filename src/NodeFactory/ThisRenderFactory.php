@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -115,6 +116,11 @@ final class ThisRenderFactory
         DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): ?Expr {
         $vars = $templateDoctrineAnnotationTagValueNode->getValue('vars');
+
+        if ($vars instanceof CurlyListNode) {
+            $vars = $vars->getValuesWithExplicitSilentAndWithoutQuotes();
+        }
+
         if (is_array($vars) && $vars !== []) {
             return $this->createArrayFromVars($vars);
         }

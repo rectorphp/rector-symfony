@@ -105,8 +105,8 @@ CODE_SAMPLE
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
         // unset service, that is deprecated
-        $items = $doctrineAnnotationTagValueNode->getItems();
-        $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
+        $values = $doctrineAnnotationTagValueNode->getValues();
+        $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($values);
 
         $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
 

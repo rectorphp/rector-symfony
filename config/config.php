@@ -17,5 +17,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autoconfigure();
 
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')
-        ->exclude([__DIR__ . '/../src/{Rector,PhpDoc/Node,ValueObject}', __DIR__ . '/../src/PhpDoc/Node']);
+        ->exclude([__DIR__ . '/../src/{Rector,ValueObject}']);
 };

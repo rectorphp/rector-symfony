@@ -7,10 +7,10 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioMethodTagValueNode;
-use Rector\Symfony\PhpDoc\Node\SymfonyRouteTagValueNode;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,6 +22,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
 {
+    /**
+     * @var PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+
+    public function __construct(PhpDocTagRemover $phpDocTagRemover)
+    {
+        $this->phpDocTagRemover = $phpDocTagRemover;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -85,20 +95,24 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $sensioMethodTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
-        if (! $sensioMethodTagValueNode instanceof SensioMethodTagValueNode) {
+        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method'
+        );
+        if (! $sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $methods = $sensioMethodTagValueNode->getMethods();
-
-        $symfonyRouteTagValueNode = $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
-        if (! $symfonyRouteTagValueNode instanceof SymfonyRouteTagValueNode) {
+        $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Symfony\Component\Routing\Annotation\Route'
+        );
+        if (! $symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $symfonyRouteTagValueNode->changeMethods($methods);
-        $phpDocInfo->removeByType(SensioMethodTagValueNode::class);
+        $methods = $sensioDoctrineAnnotationTagValueNode->getValue('methods');
+        $symfonyDoctrineAnnotationTagValueNode->changeValue('methods', $methods);
+
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
 
         return $node;
     }

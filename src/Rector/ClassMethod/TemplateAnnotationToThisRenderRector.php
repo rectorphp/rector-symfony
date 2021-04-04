@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -22,6 +23,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -298,6 +300,23 @@ CODE_SAMPLE
 
         $returnStaticType = $this->getStaticType($lastReturnExpr);
 
+        // phpstan regression fix
+        if ($lastReturnExpr instanceof New_ && $returnStaticType instanceof MixedType) {
+            $className = $this->nodeNameResolver->getName($lastReturnExpr->class);
+            if ($className !== null) {
+                $returnStaticType = new ObjectType($className);
+            }
+        }
+
+        $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
+        if ($responseObjectType->isSuperTypeOf($returnStaticType)->yes()) {
+            return;
+        }
+
+        // already response
+        $this->removeAnnotationClass($classMethod);
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+
         if (! $return->expr instanceof MethodCall) {
             if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
                 $return->expr = $thisRenderMethodCall;
@@ -316,17 +335,6 @@ CODE_SAMPLE
 
         if ($isArrayOrResponseType) {
             $this->processIsArrayOrResponseType($return, $lastReturnExpr, $thisRenderMethodCall);
-        }
-
-        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
-        );
-
-        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
         }
     }
 
@@ -370,5 +378,17 @@ CODE_SAMPLE
         }
 
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+    }
+
+    private function removeAnnotationClass(ClassMethod $classMethod): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
+        );
+
+        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        }
     }
 }
