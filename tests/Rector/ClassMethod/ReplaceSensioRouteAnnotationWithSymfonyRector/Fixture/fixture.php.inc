@@ -25,7 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 final class SomeClass
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route()
+     * @\Symfony\Component\Routing\Annotation\Route
      */
     public function run()
     {

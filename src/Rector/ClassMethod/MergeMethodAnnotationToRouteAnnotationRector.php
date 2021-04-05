@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +28,15 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
      */
     private $phpDocTagRemover;
 
-    public function __construct(PhpDocTagRemover $phpDocTagRemover)
+    /**
+     * @var PhpDocInfoPrinter
+     */
+    private $phpDocInfoPrinter;
+
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpDocInfoPrinter $phpDocInfoPrinter)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->phpDocInfoPrinter = $phpDocInfoPrinter;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -98,6 +105,7 @@ CODE_SAMPLE
         $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method'
         );
+
         if (! $sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
@@ -105,14 +113,24 @@ CODE_SAMPLE
         $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
             'Symfony\Component\Routing\Annotation\Route'
         );
+
         if (! $symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $methods = $sensioDoctrineAnnotationTagValueNode->getValue('methods');
+        $methods = $sensioDoctrineAnnotationTagValueNode->getValue(
+            'methods'
+        ) ?: $sensioDoctrineAnnotationTagValueNode->getSilentValue();
+
+        if ($methods === null) {
+            return null;
+        }
+
         $symfonyDoctrineAnnotationTagValueNode->changeValue('methods', $methods);
 
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
+
+        $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
         return $node;
     }

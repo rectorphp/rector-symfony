@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $doctrineAnnotationTagValueNode->changeValue('service', null);
+        $doctrineAnnotationTagValueNode->removeValue('service');
         $phpDocInfo->markAsChanged();
 
         return $node;

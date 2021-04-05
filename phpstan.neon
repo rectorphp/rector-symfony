@@ -55,3 +55,4 @@ parameters:
                 - tests/bootstrap.php
 
         - '#Class with base "ServiceDefinition" name is already used in "(.*?)\\Nette\\DI\\Definitions\\ServiceDefinition", "Rector\\Symfony\\ValueObject\\ServiceDefinition"\. Use unique name to make classes easy to recognize#'
+        - '#Parameter \#2 \$attributeClass of class Rector\\Php80\\ValueObject\\AnnotationToAttribute constructor expects class\-string, string given#'

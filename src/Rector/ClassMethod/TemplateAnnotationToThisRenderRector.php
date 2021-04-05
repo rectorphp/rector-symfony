@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -24,7 +23,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
@@ -237,21 +235,15 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isReturnOfObjectType($lastReturn, self::RESPONSE_CLASS);
-    }
-
-    private function isReturnOfObjectType(Return_ $return, string $objectType): bool
-    {
-        if ($return->expr === null) {
+        if ($lastReturn->expr === null) {
             return false;
         }
 
-        $returnType = $this->getStaticType($return->expr);
-        if (! $returnType instanceof TypeWithClassName) {
-            return false;
-        }
+        $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
 
-        return is_a($returnType->getClassName(), $objectType, true);
+        $returnType = $this->getStaticType($lastReturn->expr);
+        return $responseObjectType->isSuperTypeOf($returnType)
+            ->yes();
     }
 
     private function refactorReturn(
@@ -300,23 +292,6 @@ CODE_SAMPLE
 
         $returnStaticType = $this->getStaticType($lastReturnExpr);
 
-        // phpstan regression fix
-        if ($lastReturnExpr instanceof New_ && $returnStaticType instanceof MixedType) {
-            $className = $this->nodeNameResolver->getName($lastReturnExpr->class);
-            if ($className !== null) {
-                $returnStaticType = new ObjectType($className);
-            }
-        }
-
-        $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
-        if ($responseObjectType->isSuperTypeOf($returnStaticType)->yes()) {
-            return;
-        }
-
-        // already response
-        $this->removeAnnotationClass($classMethod);
-        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
-
         if (! $return->expr instanceof MethodCall) {
             if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
                 $return->expr = $thisRenderMethodCall;
@@ -336,6 +311,10 @@ CODE_SAMPLE
         if ($isArrayOrResponseType) {
             $this->processIsArrayOrResponseType($return, $lastReturnExpr, $thisRenderMethodCall);
         }
+
+        // already response
+        $this->removeAnnotationClass($classMethod);
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
     }
 
     private function processClassMethodWithoutReturn(
@@ -373,6 +352,7 @@ CODE_SAMPLE
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'
         );
+
         if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
