@@ -17,6 +17,9 @@ parameters:
         - */Source/*
         - *Source/*
 
+    # to keep prefixed ServiceDefinition from false positive report
+    reportUnmatchedIgnoredErrors: false
+
     ignoreErrors:
         # symfony native values
         -
@@ -46,21 +49,10 @@ parameters:
             paths:
                 - src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php
 
-        # known types
-        - '#Method Rector\\Symfony\\PhpDoc\\NodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) should return array<class\-string<Rector\\BetterPhpDocParser\\ValueObject\\PhpDocNode\\AbstractTagValueNode\>, class\-string<Doctrine\\ORM\\Mapping\\Annotation\>\> but returns array<string, string\>#'
-
-
-        - '#Return typehint of method Rector\\Symfony\\PhpDoc\\NodeFactory\\MultiPhpDocNodeFactory\:\:getTagValueNodeClassesToAnnotationClasses\(\) has invalid type Doctrine\\ORM\\Mapping\\Annotation#'
-
-
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - src/PhpDoc/NodeFactory/*
-
         -
             message: '#Do not use static property#'
             paths:
                 - tests/bootstrap.php
 
-        - '#Method "replaceName\(\)" returns bool type, so the name should start with is/has/was#'
+        - '#Class with base "ServiceDefinition" name is already used in "(.*?)\\Nette\\DI\\Definitions\\ServiceDefinition", "Rector\\Symfony\\ValueObject\\ServiceDefinition"\. Use unique name to make classes easy to recognize#'
+        - '#Parameter \#2 \$attributeClass of class Rector\\Php80\\ValueObject\\AnnotationToAttribute constructor expects class\-string, string given#'

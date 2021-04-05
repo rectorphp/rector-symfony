@@ -25,7 +25,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 final class SomeClass
 {
     /**
-     * @Route()
+     * @Route
      */
     public function run()
     {

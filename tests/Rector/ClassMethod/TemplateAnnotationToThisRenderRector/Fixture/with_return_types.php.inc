@@ -56,7 +56,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ClassWithReturnTypes extends AbstractController
 {
     /**
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
@@ -65,7 +64,6 @@ class ClassWithReturnTypes extends AbstractController
     }
 
     /**
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index2Action(): \Symfony\Component\HttpFoundation\Response
@@ -78,7 +76,6 @@ class ClassWithReturnTypes extends AbstractController
     }
 
     /**
-     *
      * @return Response
      */
     public function index3Action(): Response

@@ -15,11 +15,12 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Symfony\Helper\TemplateGuesser;
-use Rector\Symfony\PhpDoc\Node\Sensio\SensioTemplateTagValueNode;
 
 final class ThisRenderFactory
 {
@@ -65,9 +66,13 @@ final class ThisRenderFactory
     public function create(
         ClassMethod $classMethod,
         ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): MethodCall {
-        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $sensioTemplateTagValueNode);
+        $renderArguments = $this->resolveRenderArguments(
+            $classMethod,
+            $return,
+            $templateDoctrineAnnotationTagValueNode
+        );
 
         return $this->nodeFactory->createMethodCall('this', 'render', $renderArguments);
     }
@@ -78,13 +83,13 @@ final class ThisRenderFactory
     private function resolveRenderArguments(
         ClassMethod $classMethod,
         ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): array {
-        $templateNameString = $this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode);
+        $templateNameString = $this->resolveTemplateName($classMethod, $templateDoctrineAnnotationTagValueNode);
 
         $arguments = [$templateNameString];
 
-        $parametersExpr = $this->resolveParametersExpr($return, $sensioTemplateTagValueNode);
+        $parametersExpr = $this->resolveParametersExpr($return, $templateDoctrineAnnotationTagValueNode);
         if ($parametersExpr !== null) {
             $arguments[] = new Arg($parametersExpr);
         }
@@ -94,10 +99,13 @@ final class ThisRenderFactory
 
     private function resolveTemplateName(
         ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): string {
-        if ($sensioTemplateTagValueNode->getTemplate() !== null) {
-            return $sensioTemplateTagValueNode->getTemplate();
+        $template = $templateDoctrineAnnotationTagValueNode->getValue(
+            'template'
+        ) ?: $templateDoctrineAnnotationTagValueNode->getSilentValue();
+        if ($template !== null) {
+            return $template;
         }
 
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
@@ -105,10 +113,16 @@ final class ThisRenderFactory
 
     private function resolveParametersExpr(
         ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): ?Expr {
-        if ($sensioTemplateTagValueNode->getVars() !== []) {
-            return $this->createArrayFromVars($sensioTemplateTagValueNode->getVars());
+        $vars = $templateDoctrineAnnotationTagValueNode->getValue('vars');
+
+        if ($vars instanceof CurlyListNode) {
+            $vars = $vars->getValuesWithExplicitSilentAndWithoutQuotes();
+        }
+
+        if (is_array($vars) && $vars !== []) {
+            return $this->createArrayFromVars($vars);
         }
 
         if ($return === null) {
