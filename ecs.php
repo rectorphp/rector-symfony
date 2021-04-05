@@ -17,11 +17,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::SETS, [SetList::PSR_12, SetList::SYMPLIFY, SetList::COMMON, SetList::CLEAN_CODE]);
+
     $parameters->set(Option::SKIP, [
         '*/Source/*', '*/Fixture/*',
 
         // breaks annotated code - removed on symplify dev-main
         \PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer::class,
     ]);
+
     $parameters->set(Option::LINE_ENDING, "\n");
 };
