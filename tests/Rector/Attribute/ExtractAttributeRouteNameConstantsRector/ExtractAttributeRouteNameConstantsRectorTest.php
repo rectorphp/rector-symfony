@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Attribute\ExtractAttributeRouteNameConstantsRector;
 
 use Iterator;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -16,24 +17,23 @@ final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorT
     /**
      * @dataProvider provideData()
      */
-    public function test(
-        SmartFileInfo $inputFile,
-        string $expectedExtraFileName,
-        string $expectedExtraContentFilePath
-    ): void {
+    public function test(SmartFileInfo $inputFile, AddedFileWithContent $expectedAddedFileWithContent): void
+    {
         $this->doTestFileInfo($inputFile);
-        $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
+        $this->assertFileWasAdded($expectedAddedFileWithContent);
     }
 
     /**
-     * @return Iterator<string[]|SmartFileInfo[]>
+     * @return Iterator<SmartFileInfo|AddedFileWithContent>
      */
     public function provideData(): Iterator
     {
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
-            'src/ValueObject/Routing/RouteName.php',
-            __DIR__ . '/Source/extra_file.php',
+            new AddedFileWithContent(
+                'src/ValueObject/Routing/RouteName.php',
+                file_get_contents(__DIR__ . '/Source/extra_file.php')
+            ),
         ];
     }
 
