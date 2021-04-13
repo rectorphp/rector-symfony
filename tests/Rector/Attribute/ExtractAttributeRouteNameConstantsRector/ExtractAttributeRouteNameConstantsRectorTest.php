@@ -8,6 +8,7 @@ use Iterator;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * @requires PHP 8.0
@@ -24,15 +25,17 @@ final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return Iterator<SmartFileInfo|AddedFileWithContent>
+     * @return Iterator<array<SmartFileInfo|AddedFileWithContent>>
      */
     public function provideData(): Iterator
     {
+        $smartFileSystem = new SmartFileSystem();
+
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
             new AddedFileWithContent(
                 'src/ValueObject/Routing/RouteName.php',
-                file_get_contents(__DIR__ . '/Source/extra_file.php')
+                $smartFileSystem->readFile(__DIR__ . '/Source/extra_file.php')
             ),
         ];
     }
