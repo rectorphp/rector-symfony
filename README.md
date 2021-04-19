@@ -5,7 +5,7 @@ See available [Symfony rules](/docs/rector_rules_overview.md)
 ## Install
 
 ```bash
-composer require rector/rector-symfony
+composer require rector/rector-symfony --dev
 ```
 
 ## Use Sets
