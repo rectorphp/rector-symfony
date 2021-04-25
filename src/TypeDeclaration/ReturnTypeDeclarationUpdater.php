@@ -8,6 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
@@ -50,12 +51,18 @@ final class ReturnTypeDeclarationUpdater
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
+    /**
+     * @param class-string $className
+     */
     public function updateClassMethod(ClassMethod $classMethod, string $className): void
     {
         $this->updatePhpDoc($classMethod, $className);
         $this->updatePhp($classMethod, $className);
     }
 
+    /**
+     * @param class-string $className
+     */
     private function updatePhpDoc(ClassMethod $classMethod, string $className): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
@@ -75,16 +82,21 @@ final class ReturnTypeDeclarationUpdater
         }
     }
 
+    /**
+     * @param class-string $className
+     */
     private function updatePhp(ClassMethod $classMethod, string $className): void
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return;
         }
 
+        $objectType = new ObjectType($className);
+
         // change return type
         if ($classMethod->returnType !== null) {
-            $returnTypeName = $this->nodeNameResolver->getName($classMethod->returnType);
-            if ($returnTypeName !== null && is_a($returnTypeName, $className, true)) {
+            $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+            if ($objectType->isSuperTypeOf($returnType)->yes()) {
                 return;
             }
         }

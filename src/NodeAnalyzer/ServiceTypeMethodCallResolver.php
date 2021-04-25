@@ -47,10 +47,6 @@ final class ServiceTypeMethodCallResolver
 
         if ($argument instanceof ClassConstFetch && $argument->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($argument->class);
-            if ($className === null) {
-                return new MixedType();
-            }
-
             return new ObjectType($className);
         }
 
