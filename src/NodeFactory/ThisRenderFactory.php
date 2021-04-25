@@ -134,14 +134,10 @@ final class ThisRenderFactory
         }
 
         if ($return->expr instanceof MethodCall) {
-            $returnStaticType = $this->nodeTypeResolver->getStaticType($return->expr);
-            if ($returnStaticType instanceof ArrayType) {
-                return $return->expr;
-            }
+            return $this->resolveMethodCall($return->expr);
         }
 
         if ($return->expr instanceof FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
-            /** @var FuncCall $compactFunCall */
             $compactFunCall = $return->expr;
             return $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
         }
@@ -160,5 +156,15 @@ final class ThisRenderFactory
         }
 
         return new Array_($arrayItems);
+    }
+
+    private function resolveMethodCall(MethodCall $methodCall): ?Expr
+    {
+        $returnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        if ($returnStaticType instanceof ArrayType) {
+            return $methodCall;
+        }
+
+        return null;
     }
 }

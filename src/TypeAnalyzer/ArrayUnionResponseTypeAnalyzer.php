@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Rector\Symfony\TypeAnalyzer;
 
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 
 final class ArrayUnionResponseTypeAnalyzer
 {
+    /**
+     * @param class-string $className
+     */
     public function isArrayUnionResponseType(Type $type, string $className): bool
     {
         if (! $type instanceof UnionType) {
@@ -38,12 +42,17 @@ final class ArrayUnionResponseTypeAnalyzer
         return $hasResponseType;
     }
 
+    /**
+     * @param class-string $className
+     */
     private function isTypeOfClassName(Type $type, string $className): bool
     {
         if (! $type instanceof TypeWithClassName) {
             return false;
         }
 
-        return is_a($type->getClassName(), $className, true);
+        $objectType = new ObjectType($className);
+        return $objectType->isSuperTypeOf($type)
+            ->yes();
     }
 }
