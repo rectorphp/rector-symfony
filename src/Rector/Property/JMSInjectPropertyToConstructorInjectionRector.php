@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -13,11 +12,10 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DependencyInjection\TypeAnalyzer\JMSDITypeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
+use Rector\Symfony\TypeAnalyzer\JMSDITypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -50,14 +48,21 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
      */
     private $jmsDITypeResolver;
 
+    /**
+     * @var PropertyConstructorInjectionManipulator
+     */
+    private $propertyConstructorInjectionManipulator;
+
     public function __construct(
         PhpDocTypeChanger $phpDocTypeChanger,
         PhpDocTagRemover $phpDocTagRemover,
-        JMSDITypeResolver $jmsDITypeResolver
+        JMSDITypeResolver $jmsDITypeResolver,
+        PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
     ) {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->jmsDITypeResolver = $jmsDITypeResolver;
+        $this->propertyConstructorInjectionManipulator = $propertyConstructorInjectionManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,7 +123,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->refactorPropertyWithAnnotation($node, $serviceType, $injectTagNode);
+        $this->propertyConstructorInjectionManipulator->refactor($node, $serviceType, $injectTagNode);
 
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->removeNode($node);
@@ -126,28 +131,6 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    /**
-     * @generic extract to core
-     */
-    private function refactorPropertyWithAnnotation(
-        Property $property,
-        Type $type,
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
-    ): void {
-        $propertyName = $this->getName($property);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->addConstructorDependencyToClass($classLike, $type, $propertyName, $property->flags);
     }
 
     private function resolveServiceType(
