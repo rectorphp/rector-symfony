@@ -28,3 +28,5 @@ parameters:
         -
             message: '#Function "class_implements\(\)" cannot be used/left in the code#'
             path:  src/ValueObject/ServiceMap/ServiceMap.php
+
+        - '#Method Rector\\Symfony\\Rector\\Property\\JMSInjectPropertyToConstructorInjectionRector\:\:resolveServiceType\(\) has parameter \$phpDocInfo with generic class Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but does not specify its types\: TNode#'
