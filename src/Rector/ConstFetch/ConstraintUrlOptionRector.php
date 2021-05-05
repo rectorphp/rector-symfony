@@ -32,8 +32,9 @@ final class ConstraintUrlOptionRector extends AbstractRector
                 new CodeSample(
                     '$constraint = new Url(["checkDNS" => true]);',
                     '$constraint = new Url(["checkDNS" => Url::CHECK_DNS_TYPE_ANY]);'
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

@@ -113,7 +113,6 @@ final class SomeLogoutHandler implements EventSubscriberInterface
     }
 }
 CODE_SAMPLE
-
             ),
         ]);
     }

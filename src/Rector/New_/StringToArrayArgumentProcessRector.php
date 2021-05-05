@@ -54,8 +54,9 @@ CODE_SAMPLE
 use Symfony\Component\Process\Process;
 $process = new Process(['ls', '-l']);
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

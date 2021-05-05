@@ -40,8 +40,9 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
                 new CodeSample(
                     'Symfony\Component\Console\ConsoleEvents::EXCEPTION',
                     'Symfony\Component\Console\ConsoleEvents::ERROR'
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -59,7 +60,8 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     {
         if ($node instanceof ClassConstFetch && (
             $this->isObjectType($node->class, $this->consoleEventsObjectType) &&
-            $this->isName($node->name, 'EXCEPTION'))
+            $this->isName($node->name, 'EXCEPTION')
+        )
         ) {
             return $this->nodeFactory->createClassConstFetch($this->consoleEventsObjectType->getClassName(), 'ERROR');
         }

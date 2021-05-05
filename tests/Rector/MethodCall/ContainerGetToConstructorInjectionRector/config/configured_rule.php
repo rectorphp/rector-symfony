@@ -15,12 +15,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(ContainerGetToConstructorInjectionRector::class)
-        ->call('configure', [[
-            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
-                ContainerAwareParentClass::class,
-                ContainerAwareParentCommand::class,
-                ThisClassCallsMethodInConstructor::class,
-            ],
-        ]]
-    );
+        ->call(
+            'configure',
+            [[
+                ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
+                    ContainerAwareParentClass::class,
+                    ContainerAwareParentCommand::class,
+                    ThisClassCallsMethodInConstructor::class,
+                ],
+            ]]
+        );
 };

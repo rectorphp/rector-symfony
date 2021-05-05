@@ -41,7 +41,7 @@ if ($form->isValid()) {
 }
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 if ($form->isSubmitted() && $form->isValid()) {
 }
 CODE_SAMPLE

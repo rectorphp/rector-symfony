@@ -47,7 +47,7 @@ final class StringFormTypeToClassRector extends AbstractRector
     {
         return new RuleDefinition(self::DESCRIPTION, [
             new CodeSample(
-<<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
 $formBuilder->add('name', 'form.type.text');
 CODE_SAMPLE

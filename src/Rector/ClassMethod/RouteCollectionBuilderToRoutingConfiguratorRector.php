@@ -60,7 +60,6 @@ final class ConcreteMicroKernel extends Kernel
             ->controller('App\Controller\AdminController::dashboard')
     }}
 CODE_SAMPLE
-
             ),
         ]);
     }

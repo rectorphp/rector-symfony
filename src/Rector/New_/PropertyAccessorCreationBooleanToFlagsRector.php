@@ -102,8 +102,9 @@ CODE_SAMPLE
             'MAGIC_CALL'
         );
 
-        return new BitwiseOr(new BitwiseOr(
-            $magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch
+        return new BitwiseOr(
+            new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch),
+            $magicSetClassConstFetch
         );
     }
 }

@@ -59,8 +59,9 @@ final class SomeClassTest extends TestCase
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

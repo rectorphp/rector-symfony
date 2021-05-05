@@ -26,8 +26,9 @@ final class RedirectToRouteRector extends AbstractRector
                 new CodeSample(
                     '$this->redirect($this->generateUrl("homepage"));',
                     '$this->redirectToRoute("homepage");'
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

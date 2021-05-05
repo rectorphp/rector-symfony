@@ -59,7 +59,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector impl
             'Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
                 new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class SomeCommand extends ContainerAwareCommand
 {
     public function someMethod()
@@ -71,7 +71,7 @@ final class SomeCommand extends ContainerAwareCommand
 }
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 final class SomeCommand extends Command
 {
     public function __construct(SomeService $someService)

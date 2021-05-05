@@ -96,8 +96,9 @@ class TaskType extends AbstractType
     }
 }
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

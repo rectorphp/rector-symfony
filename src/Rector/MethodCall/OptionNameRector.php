@@ -51,17 +51,18 @@ final class OptionNameRector extends AbstractRector
             'Turns old option names to new ones in FormTypes in Form in Symfony',
             [
                 new CodeSample(
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 $builder = new FormBuilder;
 $builder->add("...", ["precision" => "...", "virtual" => "..."];
 CODE_SAMPLE
                     ,
-<<<'CODE_SAMPLE'
+                    <<<'CODE_SAMPLE'
 $builder = new FormBuilder;
 $builder->add("...", ["scale" => "...", "inherit_data" => "..."];
 CODE_SAMPLE
-            ),
-            ]);
+                ),
+            ]
+        );
     }
 
     /**

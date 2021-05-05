@@ -44,7 +44,8 @@ final class ParseFileRector extends AbstractRector
     {
         return new RuleDefinition(
             'session > use_strict_mode is true by default and can be removed',
-            [new CodeSample('session > use_strict_mode: true', 'session:')]);
+            [new CodeSample('session > use_strict_mode: true', 'session:')]
+        );
     }
 
     /**

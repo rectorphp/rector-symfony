@@ -72,7 +72,8 @@ class SomeClass
 }
 CODE_SAMPLE
                 ),
-            ]);
+            ]
+        );
     }
 
     /**
@@ -178,7 +179,8 @@ CODE_SAMPLE
         );
 
         return new BitwiseOr(
-            new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch
+            new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch),
+            $magicSetClassConstFetch
         );
     }
 }

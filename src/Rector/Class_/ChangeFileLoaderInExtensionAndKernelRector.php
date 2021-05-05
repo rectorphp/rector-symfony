@@ -95,10 +95,12 @@ final class SomeExtension extends Extension
     }
 }
 CODE_SAMPLE
-    , [
-        self::FROM => 'xml',
-        self::TO => 'yaml',
-    ]),
+    ,
+                [
+                    self::FROM => 'xml',
+                    self::TO => 'yaml',
+                ]
+            ),
         ]);
     }
 
