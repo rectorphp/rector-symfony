@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,4 +19,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')
         ->exclude([__DIR__ . '/../src/{Rector,ValueObject}']);
+
+    $services->set(RenameClassNonPhpRector::class);
 };
