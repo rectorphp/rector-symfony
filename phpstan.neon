@@ -13,10 +13,9 @@ parameters:
         - */Source/*
         - *Source/*
 
-    ignoreErrors:
-        # fixed in dev php-parser
-        - '#Method Rector\\Symfony\\NodeFactory\\RouteNameClassFactory\:\:create\(\) should return PhpParser\\Node\\Stmt\\Namespace_ but returns PhpParser\\Node#'
+    reportUnmatchedIgnoredErrors: false
 
+    ignoreErrors:
         # should be fixed on master
         - '#Parameter \#2 \$attributeClass of class Rector\\Php80\\ValueObject\\AnnotationToAttribute constructor expects class\-string, string given#'
 
@@ -30,3 +29,6 @@ parameters:
             path:  src/ValueObject/ServiceMap/ServiceMap.php
 
         - '#Method Rector\\Symfony\\Rector\\Property\\JMSInjectPropertyToConstructorInjectionRector\:\:resolveServiceType\(\) has parameter \$phpDocInfo with generic class Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but does not specify its types\: TNode#'
+
+
+        - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'
