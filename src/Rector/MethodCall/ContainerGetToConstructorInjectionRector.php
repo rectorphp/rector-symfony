@@ -30,27 +30,15 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector impl
     /**
      * @var string[]
      */
-    private $containerAwareParentTypes = [
+    private array $containerAwareParentTypes = [
         'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand',
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
     ];
 
-    /**
-     * @var DependencyInjectionMethodCallAnalyzer
-     */
-    private $dependencyInjectionMethodCallAnalyzer;
-
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
     public function __construct(
-        DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
-        ParentClassScopeResolver $parentClassScopeResolver
+        private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
+        private ParentClassScopeResolver $parentClassScopeResolver
     ) {
-        $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
 
     public function getRuleDefinition(): RuleDefinition

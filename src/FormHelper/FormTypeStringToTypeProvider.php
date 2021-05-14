@@ -51,16 +51,11 @@ final class FormTypeStringToTypeProvider
     /**
      * @var array<string, string>
      */
-    private $customServiceFormTypeByAlias = [];
+    private array $customServiceFormTypeByAlias = [];
 
-    /**
-     * @var ServiceMapProvider
-     */
-    private $serviceMapProvider;
-
-    public function __construct(ServiceMapProvider $serviceMapProvider)
-    {
-        $this->serviceMapProvider = $serviceMapProvider;
+    public function __construct(
+        private ServiceMapProvider $serviceMapProvider
+    ) {
     }
 
     public function matchClassForNameWithPrefix(string $name): ?string

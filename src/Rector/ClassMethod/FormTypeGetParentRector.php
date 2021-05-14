@@ -21,14 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormTypeGetParentRector extends AbstractRector
 {
-    /**
-     * @var FormTypeStringToTypeProvider
-     */
-    private $formTypeStringToTypeProvider;
-
-    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
-    {
-        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+    public function __construct(
+        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

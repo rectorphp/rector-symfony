@@ -48,15 +48,9 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
         'php' => 'Symfony\Component\DependencyInjection\Loader\PhpFileLoader',
     ];
 
-    /**
-     * @var string
-     */
-    private $from;
+    private string $from;
 
-    /**
-     * @var string
-     */
-    private $to;
+    private string $to;
 
     public function getRuleDefinition(): RuleDefinition
     {

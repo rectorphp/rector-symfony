@@ -20,14 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormIsValidRector extends AbstractRector
 {
-    /**
-     * @var MethodCallManipulator
-     */
-    private $methodCallManipulator;
-
-    public function __construct(MethodCallManipulator $methodCallManipulator)
-    {
-        $this->methodCallManipulator = $methodCallManipulator;
+    public function __construct(
+        private MethodCallManipulator $methodCallManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

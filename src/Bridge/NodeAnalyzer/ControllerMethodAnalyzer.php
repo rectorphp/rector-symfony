@@ -11,14 +11,9 @@ use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 
 final class ControllerMethodAnalyzer
 {
-    /**
-     * @var ParentClassScopeResolver
-     */
-    private $parentClassScopeResolver;
-
-    public function __construct(ParentClassScopeResolver $parentClassScopeResolver)
-    {
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
+    public function __construct(
+        private ParentClassScopeResolver $parentClassScopeResolver
+    ) {
     }
 
     /**

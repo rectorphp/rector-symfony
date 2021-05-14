@@ -25,36 +25,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
 {
-    /**
-     * @var FormAddMethodCallAnalyzer
-     */
-    private $formAddMethodCallAnalyzer;
-
-    /**
-     * @var FormOptionsArrayMatcher
-     */
-    private $formOptionsArrayMatcher;
-
-    /**
-     * @var FormTypeStringToTypeProvider
-     */
-    private $formTypeStringToTypeProvider;
-
-    /**
-     * @var FormCollectionAnalyzer
-     */
-    private $formCollectionAnalyzer;
-
     public function __construct(
-        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
-        FormCollectionAnalyzer $formCollectionAnalyzer
+        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        private FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
-        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
-        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
-        $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
-        $this->formCollectionAnalyzer = $formCollectionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

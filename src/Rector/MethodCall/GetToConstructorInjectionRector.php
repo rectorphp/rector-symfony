@@ -26,21 +26,15 @@ final class GetToConstructorInjectionRector extends AbstractRector implements Co
     /**
      * @var ObjectType[]
      */
-    private $getMethodAwareObjectTypes = [];
+    private array $getMethodAwareObjectTypes = [];
 
-    /**
-     * @var DependencyInjectionMethodCallAnalyzer
-     */
-    private $dependencyInjectionMethodCallAnalyzer;
-
-    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer)
-    {
+    public function __construct(
+        private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer
+    ) {
         $this->getMethodAwareObjectTypes = [
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'),
         ];
-
-        $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

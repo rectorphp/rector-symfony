@@ -13,14 +13,9 @@ use Rector\Core\NodeManipulator\FuncCallManipulator;
 
 final class ArrayFromCompactFactory
 {
-    /**
-     * @var FuncCallManipulator
-     */
-    private $funcCallManipulator;
-
-    public function __construct(FuncCallManipulator $funcCallManipulator)
-    {
-        $this->funcCallManipulator = $funcCallManipulator;
+    public function __construct(
+        private FuncCallManipulator $funcCallManipulator
+    ) {
     }
 
     public function createArrayFromCompactFuncCall(FuncCall $compactFuncCall): Array_

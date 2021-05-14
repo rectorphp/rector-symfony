@@ -33,36 +33,12 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
      */
     private const INJECT_ANNOTATION_CLASS = 'JMS\DiExtraBundle\Annotation\Inject';
 
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-
-    /**
-     * @var JMSDITypeResolver
-     */
-    private $jmsDITypeResolver;
-
-    /**
-     * @var PropertyConstructorInjectionManipulator
-     */
-    private $propertyConstructorInjectionManipulator;
-
     public function __construct(
-        PhpDocTypeChanger $phpDocTypeChanger,
-        PhpDocTagRemover $phpDocTagRemover,
-        JMSDITypeResolver $jmsDITypeResolver,
-        PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PhpDocTagRemover $phpDocTagRemover,
+        private JMSDITypeResolver $jmsDITypeResolver,
+        private PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
     ) {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocTagRemover = $phpDocTagRemover;
-        $this->jmsDITypeResolver = $jmsDITypeResolver;
-        $this->propertyConstructorInjectionManipulator = $propertyConstructorInjectionManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition

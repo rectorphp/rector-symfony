@@ -29,14 +29,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
-    /**
-     * @var NodeTransformer
-     */
-    private $nodeTransformer;
-
-    public function __construct(NodeTransformer $nodeTransformer)
-    {
-        $this->nodeTransformer = $nodeTransformer;
+    public function __construct(
+        private NodeTransformer $nodeTransformer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -21,14 +21,9 @@ final class ServiceMapFactory
      */
     private const TAG = 'tag';
 
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    public function __construct(SmartFileSystem $smartFileSystem)
-    {
-        $this->smartFileSystem = $smartFileSystem;
+    public function __construct(
+        private SmartFileSystem $smartFileSystem
+    ) {
     }
 
     public function createFromFileContent(string $configFilePath): ServiceMap

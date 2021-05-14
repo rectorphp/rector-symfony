@@ -29,41 +29,14 @@ final class ExtractAttributeRouteNameConstantsRector extends AbstractRector
      */
     private const ROUTE_NAME_FILE_LOCATION = 'src/ValueObject/Routing/RouteName.php';
 
-    /**
-     * @var RouteNameClassFactory
-     */
-    private $routeNameClassFactory;
-
-    /**
-     * @var bool
-     */
-    private $isRouteNameValueObjectCreated = false;
-
-    /**
-     * @var ConstantNameAndValueMatcher
-     */
-    private $constantNameAndValueMatcher;
-
-    /**
-     * @var ConstantNameAndValueResolver
-     */
-    private $constantNameAndValueResolver;
-
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
+    private bool $isRouteNameValueObjectCreated = false;
 
     public function __construct(
-        RouteNameClassFactory $routeNameClassFactory,
-        ConstantNameAndValueMatcher $constantNameAndValueMatcher,
-        ConstantNameAndValueResolver $constantNameAndValueResolver,
-        SmartFileSystem $smartFileSystem
+        private RouteNameClassFactory $routeNameClassFactory,
+        private ConstantNameAndValueMatcher $constantNameAndValueMatcher,
+        private ConstantNameAndValueResolver $constantNameAndValueResolver,
+        private SmartFileSystem $smartFileSystem
     ) {
-        $this->routeNameClassFactory = $routeNameClassFactory;
-        $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
-        $this->constantNameAndValueResolver = $constantNameAndValueResolver;
-        $this->smartFileSystem = $smartFileSystem;
     }
 
     public function getRuleDefinition(): RuleDefinition

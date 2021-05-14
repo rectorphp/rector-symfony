@@ -30,29 +30,11 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
         'options' => 'entry_options',
     ];
 
-    /**
-     * @var FormAddMethodCallAnalyzer
-     */
-    private $formAddMethodCallAnalyzer;
-
-    /**
-     * @var FormOptionsArrayMatcher
-     */
-    private $formOptionsArrayMatcher;
-
-    /**
-     * @var FormCollectionAnalyzer
-     */
-    private $formCollectionAnalyzer;
-
     public function __construct(
-        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        FormCollectionAnalyzer $formCollectionAnalyzer
+        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
-        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
-        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
-        $this->formCollectionAnalyzer = $formCollectionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

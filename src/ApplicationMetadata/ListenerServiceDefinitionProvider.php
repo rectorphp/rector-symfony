@@ -17,24 +17,16 @@ final class ListenerServiceDefinitionProvider
      */
     private const SYMFONY_FAMILY_REGEX = '#^(Symfony|Sensio|Doctrine)\b#';
 
-    /**
-     * @var bool
-     */
-    private $areListenerClassesLoaded = false;
+    private bool $areListenerClassesLoaded = false;
 
     /**
      * @var ServiceDefinition[][][]
      */
-    private $listenerClassesToEvents = [];
+    private array $listenerClassesToEvents = [];
 
-    /**
-     * @var ServiceMapProvider
-     */
-    private $serviceMapProvider;
-
-    public function __construct(ServiceMapProvider $serviceMapProvider)
-    {
-        $this->serviceMapProvider = $serviceMapProvider;
+    public function __construct(
+        private ServiceMapProvider $serviceMapProvider
+    ) {
     }
 
     /**

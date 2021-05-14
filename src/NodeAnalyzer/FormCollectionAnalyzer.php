@@ -11,20 +11,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class FormCollectionAnalyzer
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver)
-    {
-        $this->valueResolver = $valueResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private ValueResolver $valueResolver,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function isCollectionType(MethodCall $methodCall): bool

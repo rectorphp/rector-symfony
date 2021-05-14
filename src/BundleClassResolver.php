@@ -16,36 +16,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class BundleClassResolver
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        NodeNameResolver $nodeNameResolver,
-        Parser $parser,
-        ReflectionProvider $reflectionProvider
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private Parser $parser,
+        private ReflectionProvider $reflectionProvider
     ) {
-        $this->parser = $parser;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
 
     public function resolveShortBundleClassFromControllerClass(string $class): ?string

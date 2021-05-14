@@ -14,27 +14,16 @@ final class FormAddMethodCallAnalyzer
     /**
      * @var ObjectType[]
      */
-    private $formObjectTypes = [];
+    private array $formObjectTypes = [];
 
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
-    {
+    public function __construct(
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver
+    ) {
         $this->formObjectTypes = [
             new ObjectType('Symfony\Component\Form\FormBuilderInterface'),
             new ObjectType('Symfony\Component\Form\FormInterface'),
         ];
-
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function isMatching(MethodCall $methodCall): bool

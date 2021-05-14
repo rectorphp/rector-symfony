@@ -11,16 +11,11 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 final class ServiceMap
 {
     /**
-     * @var ServiceDefinition[]
-     */
-    private $services = [];
-
-    /**
      * @param ServiceDefinition[] $services
      */
-    public function __construct(array $services)
-    {
-        $this->services = $services;
+    public function __construct(
+        private array $services
+    ) {
     }
 
     public function hasService(string $id): bool

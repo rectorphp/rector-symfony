@@ -14,20 +14,10 @@ use Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
 
 final class RouteNameClassFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ComposerNamespaceMatcher
-     */
-    private $composerNamespaceMatcher;
-
-    public function __construct(NodeFactory $nodeFactory, ComposerNamespaceMatcher $composerNamespaceMatcher)
-    {
-        $this->nodeFactory = $nodeFactory;
-        $this->composerNamespaceMatcher = $composerNamespaceMatcher;
+    public function __construct(
+        private NodeFactory $nodeFactory,
+        private ComposerNamespaceMatcher $composerNamespaceMatcher
+    ) {
     }
 
     /**

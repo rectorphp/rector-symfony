@@ -23,20 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(PropertyNaming $propertyNaming, ReflectionProvider $reflectionProvider)
-    {
-        $this->propertyNaming = $propertyNaming;
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private PropertyNaming $propertyNaming,
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

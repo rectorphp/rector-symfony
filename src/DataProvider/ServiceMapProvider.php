@@ -18,20 +18,10 @@ final class ServiceMapProvider
      */
     private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var ServiceMapFactory
-     */
-    private $serviceMapFactory;
-
-    public function __construct(ParameterProvider $parameterProvider, ServiceMapFactory $serviceMapFactory)
-    {
-        $this->parameterProvider = $parameterProvider;
-        $this->serviceMapFactory = $serviceMapFactory;
+    public function __construct(
+        private ParameterProvider $parameterProvider,
+        private ServiceMapFactory $serviceMapFactory
+    ) {
     }
 
     public function provide(): ServiceMap

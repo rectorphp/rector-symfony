@@ -10,20 +10,10 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ComposerNamespaceMatcher
 {
-    /**
-     * @var SmartFileSystem
-     */
-    private $smartFileSystem;
-
-    /**
-     * @var ComposerJsonFactory
-     */
-    private $composerJsonFactory;
-
-    public function __construct(SmartFileSystem $smartFileSystem, ComposerJsonFactory $composerJsonFactory)
-    {
-        $this->smartFileSystem = $smartFileSystem;
-        $this->composerJsonFactory = $composerJsonFactory;
+    public function __construct(
+        private SmartFileSystem $smartFileSystem,
+        private ComposerJsonFactory $composerJsonFactory
+    ) {
     }
 
     public function matchNamespaceForLocation(string $path): ?string

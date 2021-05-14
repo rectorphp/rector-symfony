@@ -27,19 +27,11 @@ final class GetRequestRector extends AbstractRector
      */
     private const REQUEST_CLASS = 'Symfony\Component\HttpFoundation\Request';
 
-    /**
-     * @var string
-     */
-    private $requestVariableAndParamName;
+    private ?string $requestVariableAndParamName = null;
 
-    /**
-     * @var ControllerMethodAnalyzer
-     */
-    private $controllerMethodAnalyzer;
-
-    public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer)
-    {
-        $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
+    public function __construct(
+        private ControllerMethodAnalyzer $controllerMethodAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

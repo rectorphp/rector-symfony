@@ -46,21 +46,11 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     /**
      * @var EventNameToClassAndConstant[]
      */
-    private $eventNamesToClassConstants = [];
-
-    /**
-     * @var ListenerServiceDefinitionProvider
-     */
-    private $listenerServiceDefinitionProvider;
-
-    /**
-     * @var GetSubscribedEventsClassMethodFactory
-     */
-    private $getSubscribedEventsClassMethodFactory;
+    private array $eventNamesToClassConstants = [];
 
     public function __construct(
-        ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
-        GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
+        private ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
+        private GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
@@ -81,8 +71,6 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
             new EventNameToClassAndConstant('console.terminate', self::CONSOLE_EVENTS_CLASS, 'TERMINATE'),
             new EventNameToClassAndConstant('console.error', self::CONSOLE_EVENTS_CLASS, 'ERROR'),
         ];
-        $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
-        $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
     }
 
     public function getRuleDefinition(): RuleDefinition

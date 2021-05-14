@@ -10,22 +10,10 @@ use Rector\Symfony\ValueObject\ConstantNameAndValue;
 
 final class ConstantNameAndValueResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ConstantNameAndValueMatcher
-     */
-    private $constantNameAndValueMatcher;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ConstantNameAndValueMatcher $constantNameAndValueMatcher
+        private NodeNameResolver $nodeNameResolver,
+        private ConstantNameAndValueMatcher $constantNameAndValueMatcher
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->constantNameAndValueMatcher = $constantNameAndValueMatcher;
     }
 
     /**
