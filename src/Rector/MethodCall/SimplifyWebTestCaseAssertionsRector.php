@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -112,7 +113,7 @@ CODE_SAMPLE
         // assertResponseIsSuccessful
         $args = [];
         $args[] = new Arg(new LNumber(200));
-        $args[] = new Arg($this->getStatusCodeMethodCall);
+        $args[] = new Arg($this->getGetStatusCodeMethodCall());
 
         $methodCall = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
         if ($this->nodeComparator->areNodesEqual($node, $methodCall)) {
@@ -155,7 +156,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getStatusCodeMethodCall)) {
+        if (! $this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getGetStatusCodeMethodCall())) {
             return null;
         }
 
@@ -222,7 +223,7 @@ CODE_SAMPLE
 
         $args = [];
         $args[] = new Arg(new LNumber(301));
-        $args[] = new Arg($this->getStatusCodeMethodCall);
+        $args[] = new Arg($this->getGetStatusCodeMethodCall());
 
         $match = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
 
@@ -251,5 +252,14 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function getGetStatusCodeMethodCall(): MethodCall
+    {
+        if ($this->getStatusCodeMethodCall === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->getStatusCodeMethodCall;
     }
 }
