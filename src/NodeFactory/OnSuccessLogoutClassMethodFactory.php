@@ -23,36 +23,12 @@ final class OnSuccessLogoutClassMethodFactory
      */
     private const LOGOUT_EVENT = 'logoutEvent';
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-
-    /**
-     * @var BareLogoutClassMethodFactory
-     */
-    private $bareLogoutClassMethodFactory;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        NodeNameResolver $nodeNameResolver,
-        SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
     }
 
     public function createFromOnLogoutSuccessClassMethod(ClassMethod $onLogoutSuccessClassMethod): ClassMethod

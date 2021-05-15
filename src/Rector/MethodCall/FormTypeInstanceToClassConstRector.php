@@ -44,57 +44,20 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     /**
      * @var ObjectType[]
      */
-    private $controllerObjectTypes = [];
-
-    /**
-     * @var BuilderFormNodeFactory
-     */
-    private $builderFormNodeFactory;
-
-    /**
-     * @var ConfigureOptionsNodeFactory
-     */
-    private $configureOptionsNodeFactory;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var FormAddMethodCallAnalyzer
-     */
-    private $formAddMethodCallAnalyzer;
-
-    /**
-     * @var FormOptionsArrayMatcher
-     */
-    private $formOptionsArrayMatcher;
-
-    /**
-     * @var FormCollectionAnalyzer
-     */
-    private $formCollectionAnalyzer;
+    private array $controllerObjectTypes = [];
 
     public function __construct(
-        BuilderFormNodeFactory $builderFormNodeFactory,
-        ConfigureOptionsNodeFactory $configureOptionsNodeFactory,
-        ReflectionProvider $reflectionProvider,
-        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        FormCollectionAnalyzer $formCollectionAnalyzer
+        private BuilderFormNodeFactory $builderFormNodeFactory,
+        private ConfigureOptionsNodeFactory $configureOptionsNodeFactory,
+        private ReflectionProvider $reflectionProvider,
+        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
-        $this->builderFormNodeFactory = $builderFormNodeFactory;
-        $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
-        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
-
         $this->controllerObjectTypes = [
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
         ];
-        $this->formCollectionAnalyzer = $formCollectionAnalyzer;
     }
 
     public function getRuleDefinition(): RuleDefinition

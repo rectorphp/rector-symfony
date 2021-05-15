@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
@@ -27,19 +28,11 @@ final class GetRequestRector extends AbstractRector
      */
     private const REQUEST_CLASS = 'Symfony\Component\HttpFoundation\Request';
 
-    /**
-     * @var string
-     */
-    private $requestVariableAndParamName;
+    private ?string $requestVariableAndParamName = null;
 
-    /**
-     * @var ControllerMethodAnalyzer
-     */
-    private $controllerMethodAnalyzer;
-
-    public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer)
-    {
-        $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
+    public function __construct(
+        private ControllerMethodAnalyzer $controllerMethodAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -92,14 +85,16 @@ CODE_SAMPLE
 
             if ($this->isActionWithGetRequestInBody($node)) {
                 $fullyQualified = new FullyQualified(self::REQUEST_CLASS);
-                $node->params[] = new Param(new Variable($this->requestVariableAndParamName), null, $fullyQualified);
+                $node->params[] = new Param(new Variable(
+                    $this->getRequestVariableAndParamName()
+                ), null, $fullyQualified);
 
                 return $node;
             }
         }
 
         if ($this->isGetRequestInAction($node)) {
-            return new Variable($this->requestVariableAndParamName);
+            return new Variable($this->getRequestVariableAndParamName());
         }
 
         return null;
@@ -222,5 +217,14 @@ CODE_SAMPLE
         $stringValue = $methodCall->args[0]->value;
 
         return $stringValue->value === 'request';
+    }
+
+    private function getRequestVariableAndParamName(): string
+    {
+        if ($this->requestVariableAndParamName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->requestVariableAndParamName;
     }
 }

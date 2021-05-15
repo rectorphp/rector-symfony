@@ -14,14 +14,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FluentNodeRemover
 {
-    /**
-     * @var NodeRemover
-     */
-    private $nodeRemover;
-
-    public function __construct(NodeRemover $nodeRemover)
-    {
-        $this->nodeRemover = $nodeRemover;
+    public function __construct(
+        private NodeRemover $nodeRemover
+    ) {
     }
 
     /**

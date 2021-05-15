@@ -13,20 +13,10 @@ use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 
 final class EventReferenceFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
-    {
-        $this->nodeFactory = $nodeFactory;
-        $this->reflectionProvider = $reflectionProvider;
+    public function __construct(
+        private NodeFactory $nodeFactory,
+        private ReflectionProvider $reflectionProvider
+    ) {
     }
 
     /**

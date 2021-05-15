@@ -29,6 +29,3 @@ parameters:
             path:  src/ValueObject/ServiceMap/ServiceMap.php
 
         - '#Method Rector\\Symfony\\Rector\\Property\\JMSInjectPropertyToConstructorInjectionRector\:\:resolveServiceType\(\) has parameter \$phpDocInfo with generic class Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but does not specify its types\: TNode#'
-
-
-        - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'

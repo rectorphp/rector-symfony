@@ -16,20 +16,10 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 
 final class ServiceTypeMethodCallResolver
 {
-    /**
-     * @var ServiceMapProvider
-     */
-    private $serviceMapProvider;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    public function __construct(ServiceMapProvider $serviceMapProvider, NodeNameResolver $nodeNameResolver)
-    {
-        $this->serviceMapProvider = $serviceMapProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
+    public function __construct(
+        private ServiceMapProvider $serviceMapProvider,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function resolve(MethodCall $methodCall): ?Type

@@ -9,20 +9,10 @@ use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 
 final class EventReferenceToMethodName implements EventReferenceToMethodNameInterface
 {
-    /**
-     * @var ClassConstFetch
-     */
-    private $classConstFetch;
-
-    /**
-     * @var string
-     */
-    private $methodName;
-
-    public function __construct(ClassConstFetch $classConstFetch, string $methodName)
-    {
-        $this->classConstFetch = $classConstFetch;
-        $this->methodName = $methodName;
+    public function __construct(
+        private ClassConstFetch $classConstFetch,
+        private string $methodName
+    ) {
     }
 
     public function getClassConstFetch(): ClassConstFetch

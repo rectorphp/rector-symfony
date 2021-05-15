@@ -37,50 +37,14 @@ final class GetSubscribedEventsClassMethodFactory
      */
     private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
 
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var VisibilityManipulator
-     */
-    private $visibilityManipulator;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-
-    /**
-     * @var EventReferenceFactory
-     */
-    private $eventReferenceFactory;
-
     public function __construct(
-        NodeFactory $nodeFactory,
-        VisibilityManipulator $visibilityManipulator,
-        PhpVersionProvider $phpVersionProvider,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        PhpDocTypeChanger $phpDocTypeChanger,
-        EventReferenceFactory $eventReferenceFactory
+        private NodeFactory $nodeFactory,
+        private VisibilityManipulator $visibilityManipulator,
+        private PhpVersionProvider $phpVersionProvider,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private EventReferenceFactory $eventReferenceFactory
     ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->visibilityManipulator = $visibilityManipulator;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->eventReferenceFactory = $eventReferenceFactory;
     }
 
     /**

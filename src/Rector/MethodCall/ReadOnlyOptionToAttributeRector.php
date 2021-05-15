@@ -21,29 +21,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
-    /**
-     * @var ArrayManipulator
-     */
-    private $arrayManipulator;
-
-    /**
-     * @var FormAddMethodCallAnalyzer
-     */
-    private $formAddMethodCallAnalyzer;
-
-    /**
-     * @var FormOptionsArrayMatcher
-     */
-    private $formOptionsArrayMatcher;
-
     public function __construct(
-        ArrayManipulator $arrayManipulator,
-        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        FormOptionsArrayMatcher $formOptionsArrayMatcher
+        private ArrayManipulator $arrayManipulator,
+        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private FormOptionsArrayMatcher $formOptionsArrayMatcher
     ) {
-        $this->arrayManipulator = $arrayManipulator;
-        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
-        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
     }
 
     public function getRuleDefinition(): RuleDefinition

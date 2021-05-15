@@ -15,20 +15,10 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 
 final class BareLogoutClassMethodFactory
 {
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(NodeFactory $nodeFactory, PhpVersionProvider $phpVersionProvider)
-    {
-        $this->nodeFactory = $nodeFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
+    public function __construct(
+        private NodeFactory $nodeFactory,
+        private PhpVersionProvider $phpVersionProvider
+    ) {
     }
 
     public function create(): ClassMethod

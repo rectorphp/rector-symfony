@@ -24,14 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CascadeValidationFormBuilderRector extends AbstractRector
 {
-    /**
-     * @var ArrayManipulator
-     */
-    private $arrayManipulator;
-
-    public function __construct(ArrayManipulator $arrayManipulator)
-    {
-        $this->arrayManipulator = $arrayManipulator;
+    public function __construct(
+        private ArrayManipulator $arrayManipulator
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

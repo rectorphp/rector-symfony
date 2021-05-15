@@ -9,46 +9,16 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 final class ServiceDefinition
 {
     /**
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @var bool
-     */
-    private $isPublic = false;
-
-    /**
-     * @var bool
-     */
-    private $isSynthetic = false;
-
-    /**
-     * @var TagInterface[]
-     */
-    private $tags = [];
-
-    /**
-     * @var string|null
-     */
-    private $class;
-
-    /**
-     * @var string|null
-     */
-    private $alias;
-
-    /**
      * @param TagInterface[] $tags
      */
-    public function __construct(string $id, ?string $class, bool $public, bool $synthetic, ?string $alias, array $tags)
-    {
-        $this->id = $id;
-        $this->class = $class;
-        $this->isPublic = $public;
-        $this->isSynthetic = $synthetic;
-        $this->alias = $alias;
-        $this->tags = $tags;
+    public function __construct(
+        private string $id,
+        private ?string $class,
+        private bool $isPublic,
+        private bool $isSynthetic,
+        private ?string $alias,
+        private array $tags
+    ) {
     }
 
     public function getId(): string

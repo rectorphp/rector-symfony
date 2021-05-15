@@ -8,26 +8,11 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 
 final class EventListenerTag implements TagInterface
 {
-    /**
-     * @var string
-     */
-    private $event;
-
-    /**
-     * @var string
-     */
-    private $method;
-
-    /**
-     * @var int
-     */
-    private $priority;
-
-    public function __construct(string $event, string $method, int $priority)
-    {
-        $this->event = $event;
-        $this->method = $method;
-        $this->priority = $priority;
+    public function __construct(
+        private string $event,
+        private string $method,
+        private int $priority
+    ) {
     }
 
     public function getName(): string

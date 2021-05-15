@@ -12,14 +12,9 @@ use Stringy\Stringy;
 
 final class ConstantNameAndValueMatcher
 {
-    /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
+    public function __construct(
+        private ValueResolver $valueResolver
+    ) {
     }
 
     public function matchFromArg(Arg $arg, string $prefixForNumeric): ?ConstantNameAndValue

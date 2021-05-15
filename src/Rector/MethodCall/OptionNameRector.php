@@ -27,22 +27,10 @@ final class OptionNameRector extends AbstractRector
         'virtual' => 'inherit_data',
     ];
 
-    /**
-     * @var FormAddMethodCallAnalyzer
-     */
-    private $formAddMethodCallAnalyzer;
-
-    /**
-     * @var FormOptionsArrayMatcher
-     */
-    private $formOptionsArrayMatcher;
-
     public function __construct(
-        FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        FormOptionsArrayMatcher $formOptionsArrayMatcher
+        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private FormOptionsArrayMatcher $formOptionsArrayMatcher
     ) {
-        $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
-        $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;
     }
 
     public function getRuleDefinition(): RuleDefinition

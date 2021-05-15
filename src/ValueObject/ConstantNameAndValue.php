@@ -7,22 +7,12 @@ namespace Rector\Symfony\ValueObject;
 final class ConstantNameAndValue
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
      * @param mixed $value
      */
-    public function __construct(string $name, $value)
-    {
-        $this->name = $name;
-        $this->value = $value;
+    public function __construct(
+        private string $name,
+        private $value
+    ) {
     }
 
     public function getName(): string

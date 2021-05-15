@@ -47,20 +47,10 @@ final class TemplateGuesser
      */
     private const ACTION_MATCH_REGEX = '#Action$#';
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BundleClassResolver
-     */
-    private $bundleClassResolver;
-
-    public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->bundleClassResolver = $bundleClassResolver;
+    public function __construct(
+        private BundleClassResolver $bundleClassResolver,
+        private NodeNameResolver $nodeNameResolver
+    ) {
     }
 
     public function resolveFromClassMethodNode(ClassMethod $classMethod): string

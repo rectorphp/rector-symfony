@@ -16,36 +16,12 @@ use Rector\PostRector\DependencyInjection\PropertyAdder;
 
 final class DependencyInjectionMethodCallAnalyzer
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var ServiceTypeMethodCallResolver
-     */
-    private $serviceTypeMethodCallResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
-
-    /**
-     * @var PropertyAdder
-     */
-    private $propertyAdder;
-
     public function __construct(
-        PropertyNaming $propertyNaming,
-        ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
-        NodeFactory $nodeFactory,
-        PropertyAdder $propertyAdder
+        private PropertyNaming $propertyNaming,
+        private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
+        private NodeFactory $nodeFactory,
+        private PropertyAdder $propertyAdder
     ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
-        $this->nodeFactory = $nodeFactory;
-        $this->propertyAdder = $propertyAdder;
     }
 
     public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall): ?Node

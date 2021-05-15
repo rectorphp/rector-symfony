@@ -22,7 +22,7 @@ final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
     /**
      * @var ObjectType[]
      */
-    private $definitionObjectTypes = [];
+    private array $definitionObjectTypes = [];
 
     public function __construct()
     {

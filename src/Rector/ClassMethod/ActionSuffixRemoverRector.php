@@ -17,22 +17,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ActionSuffixRemoverRector extends AbstractRector
 {
-    /**
-     * @var ControllerMethodAnalyzer
-     */
-    private $controllerMethodAnalyzer;
-
-    /**
-     * @var IdentifierManipulator
-     */
-    private $identifierManipulator;
-
     public function __construct(
-        ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        IdentifierManipulator $identifierManipulator
+        private ControllerMethodAnalyzer $controllerMethodAnalyzer,
+        private IdentifierManipulator $identifierManipulator
     ) {
-        $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
-        $this->identifierManipulator = $identifierManipulator;
     }
 
     public function getRuleDefinition(): RuleDefinition

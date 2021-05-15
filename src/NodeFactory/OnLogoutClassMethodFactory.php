@@ -25,29 +25,11 @@ final class OnLogoutClassMethodFactory
         'token' => 'getToken',
     ];
 
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var BareLogoutClassMethodFactory
-     */
-    private $bareLogoutClassMethodFactory;
-
-    /**
-     * @var ParamAnalyzer
-     */
-    private $paramAnalyzer;
-
     public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
-        ParamAnalyzer $paramAnalyzer
+        private NodeNameResolver $nodeNameResolver,
+        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
+        private ParamAnalyzer $paramAnalyzer
     ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->bareLogoutClassMethodFactory = $bareLogoutClassMethodFactory;
-        $this->paramAnalyzer = $paramAnalyzer;
     }
 
     public function createFromLogoutClassMethod(ClassMethod $logoutClassMethod): ClassMethod

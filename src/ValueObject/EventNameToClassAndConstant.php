@@ -6,26 +6,11 @@ namespace Rector\Symfony\ValueObject;
 
 final class EventNameToClassAndConstant
 {
-    /**
-     * @var string
-     */
-    private $eventName;
-
-    /**
-     * @var string
-     */
-    private $eventClass;
-
-    /**
-     * @var string
-     */
-    private $eventConstant;
-
-    public function __construct(string $eventName, string $eventClass, string $eventConstant)
-    {
-        $this->eventName = $eventName;
-        $this->eventClass = $eventClass;
-        $this->eventConstant = $eventConstant;
+    public function __construct(
+        private string $eventName,
+        private string $eventClass,
+        private string $eventConstant
+    ) {
     }
 
     public function getEventName(): string
