@@ -48,7 +48,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SomeClass
 {
-    #[Route(path: "path", name: "/name")]
+    #[Route(path: "/path", name: "name")]
     public function run()
     {
     }
@@ -61,7 +61,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SomeClass
 {
-    #[Route(path: "path", name: RouteName::NAME)]
+    #[Route(path: "/path", name: RouteName::NAME)]
     public function run()
     {
     }
