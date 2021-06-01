@@ -34,7 +34,7 @@ final class ExtractAttributeRouteNameConstantsRectorTest extends AbstractRectorT
         yield [
             new SmartFileInfo(__DIR__ . '/Fixture/fixture.php.inc'),
             new AddedFileWithContent(
-                'src/ValueObject/Routing/RouteName.php',
+                $this->getFixtureTempDirectory() . '/src/ValueObject/Routing/RouteName.php',
                 $smartFileSystem->readFile(__DIR__ . '/Source/extra_file.php')
             ),
         ];

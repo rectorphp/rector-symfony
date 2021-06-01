@@ -125,7 +125,11 @@ CODE_SAMPLE
             return;
         }
 
-        if ($this->smartFileSystem->exists(self::ROUTE_NAME_FILE_LOCATION)) {
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        $directory = $smartFileInfo->getPath();
+        $routeNameFilePath = $directory . '/' . self::ROUTE_NAME_FILE_LOCATION;
+
+        if ($this->smartFileSystem->exists($routeNameFilePath)) {
             // avoid override
             return;
         }
@@ -133,9 +137,9 @@ CODE_SAMPLE
         $routeAttributes = $this->nodeRepository->findAttributes('Symfony\Component\Routing\Annotation\Route');
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
 
-        $namespace = $this->routeNameClassFactory->create($constantNameAndValues, self::ROUTE_NAME_FILE_LOCATION);
+        $namespace = $this->routeNameClassFactory->create($constantNameAndValues, $routeNameFilePath);
 
-        $addedFileWithNodes = new AddedFileWithNodes(self::ROUTE_NAME_FILE_LOCATION, [$namespace]);
+        $addedFileWithNodes = new AddedFileWithNodes($routeNameFilePath, [$namespace]);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
 
         $this->isRouteNameValueObjectCreated = true;
