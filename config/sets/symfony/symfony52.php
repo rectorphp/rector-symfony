@@ -26,32 +26,19 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/symfony50-types.php');
+    $containerConfigurator->import(__DIR__ . '/symfony52-validator-attributes.php');
 
     $services = $containerConfigurator->services();
 
-    // @see https://symfony.com/blog/new-in-symfony-5-2-php-8-attributes
     $services->set(AnnotationToAttributeRector::class)
         ->call('configure', [[
             AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
-                // symfony
+                // @see https://symfony.com/blog/new-in-symfony-5-2-php-8-attributes
                 new AnnotationToAttribute('required', 'Symfony\Contracts\Service\Attribute\Required'),
                 new AnnotationToAttribute(
                     'Symfony\Component\Routing\Annotation\Route',
                     'Symfony\Component\Routing\Annotation\Route'
                 ),
-
-                // symfony/validation
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\Email',
-                    'Symfony\Component\Validator\Constraints\Email'
-                ),
-                new AnnotationToAttribute(
-                    'Symfony\Component\Validator\Constraints\Range',
-                    'Symfony\Component\Validator\Constraints\Range'
-                ),
-
-                // @todo complete the rest
             ]),
         ]]);
 
