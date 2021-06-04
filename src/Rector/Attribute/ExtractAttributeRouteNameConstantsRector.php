@@ -137,6 +137,11 @@ CODE_SAMPLE
         $routeAttributes = $this->nodeRepository->findAttributes('Symfony\Component\Routing\Annotation\Route');
         $constantNameAndValues = $this->constantNameAndValueResolver->resolveFromAttributes($routeAttributes, 'ROUTE_');
 
+        // do not create empty file
+        if ($constantNameAndValues === []) {
+            return;
+        }
+
         $namespace = $this->routeNameClassFactory->create($constantNameAndValues, $routeNameFilePath);
 
         $addedFileWithNodes = new AddedFileWithNodes($routeNameFilePath, [$namespace]);
