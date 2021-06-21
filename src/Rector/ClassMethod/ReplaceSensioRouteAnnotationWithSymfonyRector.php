@@ -94,10 +94,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->renamedClassesDataCollector->addOldToNewClass(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route',
-            'Symfony\Component\Routing\Annotation\Route'
-        );
+        $this->renamedClassesDataCollector->addOldToNewClasses([
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route' => 'Symfony\Component\Routing\Annotation\Route',
+        ]);
 
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
