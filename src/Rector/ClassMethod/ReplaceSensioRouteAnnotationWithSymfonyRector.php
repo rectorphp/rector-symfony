@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObjectFactory\PhpDocNode\Symfony\SymfonyRouteTagValueNodeFactory;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,7 +25,8 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
 {
     public function __construct(
         private SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
-        private PhpDocTagRemover $phpDocTagRemover
+        private PhpDocTagRemover $phpDocTagRemover,
+        private RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 
@@ -47,7 +49,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-,
+                    ,
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -87,9 +89,14 @@ CODE_SAMPLE
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route'
         );
+
         if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
+
+        $this->renamedClassesDataCollector->addOldToNewClasses([
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route' => 'Symfony\Component\Routing\Annotation\Route',
+        ]);
 
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 

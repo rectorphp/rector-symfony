@@ -29,3 +29,11 @@ parameters:
             path:  src/ValueObject/ServiceMap/ServiceMap.php
 
         - '#Method Rector\\Symfony\\Rector\\Property\\JMSInjectPropertyToConstructorInjectionRector\:\:resolveServiceType\(\) has parameter \$phpDocInfo with generic class Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but does not specify its types\: TNode#'
+
+        - '#Parameter \#2 \$attributeClass of class Rector\\Php80\\ValueObject\\AnnotationToAttribute constructor expects class\-string\|null, string given#'
+
+
+        # false postiive
+        -
+            message: '#\$service\-\>call\("configure", \[\[ \.\.\. \]\]\) must be followed by exact array#'
+            path: tests/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector/config/configured_rule.php

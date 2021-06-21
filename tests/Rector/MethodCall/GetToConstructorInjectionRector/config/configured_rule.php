@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Rector\Core\Configuration\Option;
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
 use Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\GetTrait;
