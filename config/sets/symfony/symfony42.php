@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Arguments\Rector\ClassMethod\ArgumentDefaultValueReplacerRector;
+use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
-use Rector\Arguments\ValueObject\ArgumentDefaultValueReplacer;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\Visibility;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
@@ -197,18 +196,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ]),
         ]]);
 
-    $services->set(ArgumentDefaultValueReplacerRector::class)
+    $services->set(ReplaceArgumentDefaultValueRector::class)
         ->call('configure', [[
             // https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
-            ArgumentDefaultValueReplacerRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentDefaultValueReplacer(
+            ReplaceArgumentDefaultValueRector::REPLACED_ARGUMENTS => ValueObjectInliner::inline([
+                new ReplaceArgumentDefaultValue(
                     'Symfony\Component\HttpFoundation\Cookie',
                     MethodName::CONSTRUCT,
                     5,
                     false,
                     null
                 ),
-                new ArgumentDefaultValueReplacer(
+                new ReplaceArgumentDefaultValue(
                     'Symfony\Component\HttpFoundation\Cookie',
                     MethodName::CONSTRUCT,
                     8,
