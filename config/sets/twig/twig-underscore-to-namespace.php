@@ -166,6 +166,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Twig_Extensions_Extension_Intl' => 'Twig\Extensions\IntlExtension',
                 'Twig_Extensions_TokenParser_Trans' => 'Twig\Extensions\TokenParser\TransTokenParser',
                 'Twig_Extensions_Node_Trans' => 'Twig\Extensions\Node\TransNode',
+                'Twig_TemplateWrapper' => 'Twig\\TemplateWrapper',
             ],
         ]]);
 
