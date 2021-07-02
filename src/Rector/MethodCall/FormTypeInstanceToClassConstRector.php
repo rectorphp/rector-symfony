@@ -13,12 +13,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
@@ -220,24 +217,16 @@ CODE_SAMPLE
             $methodCall->args[$optionsPosition] = new Arg($array);
         }
 
-        $formTypeClass = $this->nodeRepository->findClass($className);
-        if (! $formTypeClass instanceof Class_) {
+        if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
 
-        $constructorClassMethod = $formTypeClass->getMethod(MethodName::CONSTRUCT);
+        $formTypeClassReflection = $this->reflectionProvider->getClass($className);
+        if (! $formTypeClassReflection->hasConstructor()) {
+            return null;
+        }
 
         // nothing we can do, out of scope
-        if (! $constructorClassMethod instanceof ClassMethod) {
-            return null;
-        }
-
-        $this->addBuildFormMethod($formTypeClass, $constructorClassMethod);
-        $this->addConfigureOptionsMethod($formTypeClass, $namesToArgs);
-
-        // remove ctor
-        $this->removeNode($constructorClassMethod);
-
         return $methodCall;
     }
 
@@ -265,28 +254,5 @@ CODE_SAMPLE
         }
 
         return $namesToArgs;
-    }
-
-    private function addBuildFormMethod(Class_ $class, ClassMethod $classMethod): void
-    {
-        $buildFormClassMethod = $class->getMethod('buildForm');
-        if ($buildFormClassMethod !== null) {
-            return;
-        }
-
-        $class->stmts[] = $this->builderFormNodeFactory->create($classMethod);
-    }
-
-    /**
-     * @param Arg[] $namesToArgs
-     */
-    private function addConfigureOptionsMethod(Class_ $class, array $namesToArgs): void
-    {
-        $configureOptionsClassMethod = $class->getMethod('configureOptions');
-        if ($configureOptionsClassMethod !== null) {
-            return;
-        }
-
-        $class->stmts[] = $this->configureOptionsNodeFactory->create($namesToArgs);
     }
 }

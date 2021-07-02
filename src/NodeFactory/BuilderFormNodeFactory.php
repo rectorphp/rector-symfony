@@ -13,6 +13,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\MethodReflection;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
@@ -20,20 +22,25 @@ use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class BuilderFormNodeFactory
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private AstResolver $astResolver
     ) {
     }
 
-    public function create(ClassMethod $constructorClassMethod): ClassMethod
+    public function create(MethodReflection $methodReflection): ?ClassMethod
     {
+        $constructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+        if ($constructorClassMethod === null) {
+            return null;
+        }
+
         $formBuilderParam = $this->createBuilderParam();
 
         $optionsParam = $this->createOptionsParam();
 
         $classMethodBuilder = new MethodBuilder('buildForm');
         $classMethodBuilder->makePublic();
-        $classMethodBuilder->addParam($formBuilderParam);
-        $classMethodBuilder->addParam($optionsParam);
+        $classMethodBuilder->addParams([$formBuilderParam, $optionsParam]);
 
         // raw copy stmts from ctor
         $options = $this->replaceParameterAssignWithOptionAssign((array) $constructorClassMethod->stmts, $optionsParam);
