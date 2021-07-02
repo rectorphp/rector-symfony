@@ -13,13 +13,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
@@ -221,7 +217,6 @@ CODE_SAMPLE
             $methodCall->args[$optionsPosition] = new Arg($array);
         }
 
-        $formTypeClass = $this->nodeRepository->findClass($className);
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
@@ -232,21 +227,6 @@ CODE_SAMPLE
         }
 
         // nothing we can do, out of scope
-        $constructorMethodReflection = $formTypeClassReflection->getConstructor();
-
-//        $constructorClassMethod = $formTypeClass->getMethod(MethodName::CONSTRUCT);
-//
-//        // nothing we can do, out of scope
-//        if (! $constructorClassMethod instanceof ClassMethod) {
-//            return null;
-//        }
-
-        $this->addBuildFormMethod($formTypeClass, $constructorMethodReflection);
-        $this->addConfigureOptionsMethod($formTypeClass, $namesToArgs);
-
-        // remove ctor
-        // $this->removeNode($constructorMethodReflection);
-
         return $methodCall;
     }
 
@@ -274,35 +254,5 @@ CODE_SAMPLE
         }
 
         return $namesToArgs;
-    }
-
-    private function addBuildFormMethod(Class_ $class, MethodReflection $methodReflection): void
-    {
-        $buildFormClassMethod = $class->getMethod('buildForm');
-
-        // buildForm method already exists
-        if ($buildFormClassMethod !== null) {
-            return;
-        }
-
-        $buildFormClassMethod = $this->builderFormNodeFactory->create($methodReflection);
-        if ($buildFormClassMethod === null) {
-            return;
-        }
-
-        $class->stmts[] = $buildFormClassMethod;
-    }
-
-    /**
-     * @param array<string, Arg> $namesToArgs
-     */
-    private function addConfigureOptionsMethod(Class_ $class, array $namesToArgs): void
-    {
-        $configureOptionsClassMethod = $class->getMethod('configureOptions');
-        if ($configureOptionsClassMethod !== null) {
-            return;
-        }
-
-        $class->stmts[] = $this->configureOptionsNodeFactory->create($namesToArgs);
     }
 }

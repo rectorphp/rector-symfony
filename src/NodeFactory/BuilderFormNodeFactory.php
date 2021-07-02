@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\VendorLocker\Reflection\MethodReflectionContractAnalyzer;
 use Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 
