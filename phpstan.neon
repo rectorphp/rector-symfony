@@ -37,3 +37,5 @@ parameters:
         -
             message: '#\$service\-\>call\("configure", \[\[ \.\.\. \]\]\) must be followed by exact array#'
             path: tests/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector/config/configured_rule.php
+
+        - '#Parameter \#1 \$class of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:(.*?)\(\) expects class\-string, string given#'
