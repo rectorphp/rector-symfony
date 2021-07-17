@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -100,7 +99,7 @@ final class ParseFileRector extends AbstractRector
         // try to detect current value
         $nodeScope = $possibleFileNode->getAttribute(AttributeKey::SCOPE);
         if (! $nodeScope instanceof Scope) {
-            throw new ShouldNotHappenException();
+            return false;
         }
 
         $nodeType = $nodeScope->getType($possibleFileNode);
