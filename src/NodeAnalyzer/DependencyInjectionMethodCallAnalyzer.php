@@ -12,7 +12,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\DependencyInjection\PropertyAdder;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class DependencyInjectionMethodCallAnalyzer
 {
@@ -20,7 +21,7 @@ final class DependencyInjectionMethodCallAnalyzer
         private PropertyNaming $propertyNaming,
         private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
         private NodeFactory $nodeFactory,
-        private PropertyAdder $propertyAdder
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -37,7 +38,9 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $this->propertyAdder->addConstructorDependencyToClass($classLike, $serviceType, $propertyName);
+
+        $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
