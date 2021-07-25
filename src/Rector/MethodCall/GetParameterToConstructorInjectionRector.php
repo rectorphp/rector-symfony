@@ -15,6 +15,8 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +27,8 @@ final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
         private PropertyNaming $propertyNaming,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 
@@ -106,7 +109,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->propertyAdder->addConstructorDependencyToClass($classLike, new StringType(), $propertyName, 0);
+        $propertyMetadata = new PropertyMetadata($propertyName, new StringType(), Class_::MODIFIER_PRIVATE);
+        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
