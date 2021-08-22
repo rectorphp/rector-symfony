@@ -2,9 +2,13 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
 
+use Swift_Mailer;
+
 class Fixture
 {
-    public function __construct(\Swift_Mailer $swift)
+    private $swift;
+
+    public function __construct(Swift_Mailer $swift)
     {
         $this->swift = $swift;
     }
@@ -21,9 +25,13 @@ class Fixture
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
 
+use Swift_Mailer;
+
 class Fixture
 {
-    public function __construct(\Swift_Mailer $swift)
+    private $swift;
+
+    public function __construct(Swift_Mailer $swift)
     {
         $this->swift = $swift;
     }

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 
 use Iterator;
@@ -11,7 +10,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SwiftCreateMessageToNewEmailRectorTest extends AbstractRectorTestCase
 {
-
     /**
      * @dataProvider provideData()
      */
