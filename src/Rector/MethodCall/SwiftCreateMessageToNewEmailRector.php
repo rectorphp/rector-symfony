@@ -33,8 +33,6 @@ final class SwiftCreateMessageToNewEmailRector extends AbstractRector
             return null;
         }
 
-        $newEmail = new Node\Expr\New_(new Node\Name\FullyQualified('Symfony\Component\Mime\Email'));
-
-        return new Node\Expr\MethodCall($newEmail, 'subject');
+        return new Node\Expr\New_(new Node\Name\FullyQualified('Symfony\Component\Mime\Email'));
     }
 }

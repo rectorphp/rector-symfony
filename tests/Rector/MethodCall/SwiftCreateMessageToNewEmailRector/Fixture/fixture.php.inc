@@ -30,7 +30,7 @@ class Fixture
 
     public function createMessage()
     {
-        $email = (new \Symfony\Component\Mime\Email())->subject('message');
+        $email = new \Symfony\Component\Mime\Email();
     }
 }
 
