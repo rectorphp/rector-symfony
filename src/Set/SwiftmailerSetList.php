@@ -12,4 +12,9 @@ final class SwiftmailerSetList implements SetListInterface
      * @var string
      */
     public const SWIFTMAILER_60 = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer60.php';
+
+    /**
+     * @var string
+     */
+    public const SWIFTMAILER_TO_SYMFONY_MAILER = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php';
 }
