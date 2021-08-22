@@ -14,13 +14,11 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ReturnTypeDeclarationUpdater
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
         private PhpVersionProvider $phpVersionProvider,
         private StaticTypeMapper $staticTypeMapper,
         private PhpDocInfoFactory $phpDocInfoFactory
