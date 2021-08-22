@@ -7,6 +7,8 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -55,6 +57,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return new Node\Expr\New_(new Node\Name\FullyQualified('Symfony\Component\Mime\Email'));
+        return new New_(new FullyQualified('Symfony\Component\Mime\Email'));
     }
 }
