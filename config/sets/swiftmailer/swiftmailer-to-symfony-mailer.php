@@ -17,6 +17,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameClassRector::OLD_TO_NEW_CLASSES => [
                 'Swift_Mailer' => 'Symfony\Component\Mailer\MailerInterface',
                 'Swift_Message' => 'Symfony\Component\Mime\Email',
+                'Swift_SmtpTransport' => 'Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport',
+                'Swift_FailoverTransport' => 'Symfony\Component\Mailer\Transport\FailoverTransport',
             ],
         ]]);
 };
