@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -57,6 +58,20 @@ CODE_SAMPLE
             return null;
         }
 
-        die;
+        if (! $this->isName($node->name, 'setBody')) {
+            return null;
+        }
+
+        if (count($node->args) === 2) {
+            $secondArgValue = $this->valueResolver->getValue($node->args[1]->value);
+            if ($secondArgValue === 'text/html') {
+                unset($node->args[1]);
+                $node->name = new Identifier('html');
+                return $node;
+            }
+        }
+
+        $node->name = new Identifier('plain');
+        return $node;
     }
 }

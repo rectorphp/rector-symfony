@@ -72,14 +72,13 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var PropertyFetch $var */
         $var = $methodCall->var;
         if (! $var instanceof PropertyFetch) {
             return true;
         }
 
-        $propertyName = $this->getPropertyIdentifier($swiftMailerProperty->props);
-        return ! $this->isName($var->name, $propertyName);
+        $propertyName = $this->getName($swiftMailerProperty);
+        return ! $this->isName($var, $propertyName);
     }
 
     private function getSwiftMailerProperty(MethodCall $classMethod): ?Property

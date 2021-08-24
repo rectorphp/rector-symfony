@@ -12,7 +12,7 @@ $message->setBody('...');
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\Fixture;
 
 use Swift_Message;
 
