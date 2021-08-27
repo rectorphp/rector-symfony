@@ -78,6 +78,11 @@ CODE_SAMPLE
         if (! $this->isName($new->class, 'Symfony\Component\PropertyAccess\PropertyAccessor')) {
             return true;
         }
+
+        if (! isset($new->args[0])) {
+            return true;
+        }
+
         return ! $this->valueResolver->isTrueOrFalse($new->args[0]->value);
     }
 
