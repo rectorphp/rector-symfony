@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Rector\New_\PropertyAccessorCreationBooleanToFlag
 
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class SkipAlreadyHasConstant
+class SkipNoArg
 {
     public function createPropertyAccessor()
     {
