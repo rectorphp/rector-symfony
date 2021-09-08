@@ -318,7 +318,7 @@ CODE_SAMPLE
         $thisRenderMethodCall->args[1] = new Arg($responseVariable);
 
         $returnThisRender = new Return_($thisRenderMethodCall);
-        $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
+        $this->nodesToAddCollector->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
     }
 
     private function removeDoctrineAnnotationTagValueNode(ClassMethod $classMethod): void
