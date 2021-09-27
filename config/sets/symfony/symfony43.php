@@ -27,7 +27,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
                 new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
                 new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
-                new MethodCallRename('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent', 'getException', 'getThrowable'),
+                new MethodCallRename(
+                    'Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent',
+                    'getException',
+                    'getThrowable'
+                ),
             ]),
         ]]);
 
