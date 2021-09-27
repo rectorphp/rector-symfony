@@ -28,6 +28,6 @@ final class Symfony43Test extends AbstractRectorTestCase
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/symfony52_attributes.php';
+        return __DIR__ . '/config/symfony43.php';
     }
 }
