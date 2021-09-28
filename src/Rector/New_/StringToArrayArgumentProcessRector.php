@@ -89,14 +89,19 @@ CODE_SAMPLE
             return null;
         }
 
-        $firstArgument = $node->args[$argumentPosition]->value;
-        if ($firstArgument instanceof Array_) {
+        $activeArg = $node->args[$argumentPosition];
+        if (! $activeArg instanceof Arg) {
+            return null;
+        }
+
+        $activeArgValue = $activeArg->value;
+        if ($activeArgValue instanceof Array_) {
             return null;
         }
 
         // type analyzer
-        if ($this->nodeTypeResolver->isStaticType($firstArgument, StringType::class)) {
-            $this->processStringType($node, $argumentPosition, $firstArgument);
+        if ($this->nodeTypeResolver->isStaticType($activeArgValue, StringType::class)) {
+            $this->processStringType($node, $argumentPosition, $activeArgValue);
         }
 
         return $node;

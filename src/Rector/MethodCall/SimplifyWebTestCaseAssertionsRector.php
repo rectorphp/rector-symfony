@@ -156,11 +156,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $this->getGetStatusCodeMethodCall())) {
+        $secondArg = $methodCall->args[1];
+        if (! $secondArg instanceof Arg) {
             return null;
         }
 
-        $statusCode = $this->valueResolver->getValue($methodCall->args[0]->value);
+        if (! $this->nodeComparator->areNodesEqual($secondArg->value, $this->getGetStatusCodeMethodCall())) {
+            return null;
+        }
+
+        $firstArg = $methodCall->args[0];
+        if (! $firstArg instanceof Arg) {
+            return null;
+        }
+
+        $statusCode = $this->valueResolver->getValue($firstArg->value);
 
         // handled by another methods
         if (in_array($statusCode, [200, 301], true)) {
@@ -179,7 +189,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $comparedNode = $methodCall->args[1]->value;
+        $secondArg = $methodCall->args[1];
+        if (! $secondArg instanceof Arg) {
+            return null;
+        }
+
+        $comparedNode = $secondArg->value;
         if (! $comparedNode instanceof MethodCall) {
             return null;
         }
@@ -205,6 +220,7 @@ CODE_SAMPLE
         $args[] = $comparedNode->var->args[0];
         $args[] = $methodCall->args[0];
 
+        /** @var Arg[] $args */
         return $args;
     }
 
@@ -240,7 +256,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->nodeComparator->areNodesEqual($methodCall->args[1]->value, $clientGetLocation)) {
+            $firstArg = $methodCall->args[1];
+            if (! $firstArg instanceof Arg) {
+                return null;
+            }
+
+            if ($this->nodeComparator->areNodesEqual($firstArg->value, $clientGetLocation)) {
                 $args = [];
                 $args[] = $methodCall->args[0];
                 $args[] = $previousNode->args[0];

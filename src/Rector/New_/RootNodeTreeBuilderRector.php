@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\New_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -76,7 +77,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $rootNameNode = $rootMethodCallNode->args[0]->value;
+        $firstArg = $rootMethodCallNode->args[0];
+        if (! $firstArg instanceof Arg) {
+            return null;
+        }
+
+        $rootNameNode = $firstArg->value;
         if (! $rootNameNode instanceof String_) {
             return null;
         }

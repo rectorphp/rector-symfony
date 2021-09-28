@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -96,8 +97,16 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var String_ $stringArgument */
-        $stringArgument = $node->args[0]->value;
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Arg) {
+            return null;
+        }
+
+        $stringArgument = $firstArg->value;
+        if (! $stringArgument instanceof String_) {
+            return null;
+        }
+
         $parameterName = $stringArgument->value;
 
         $parameterName = Strings::replace($parameterName, '#\.#', '_');

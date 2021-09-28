@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -98,8 +99,16 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Array_ $contextOptions */
-        $contextOptions = $node->args[2]->value;
+        $thirdArg = $node->args[2];
+        if (! $thirdArg instanceof Arg) {
+            return null;
+        }
+
+        $contextOptions = $thirdArg->value;
+        if (! $contextOptions instanceof Array_) {
+            return null;
+        }
+
         $contextOptions->items[] = new ArrayItem(
             $this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue),
             new String_(self::NEW_OPTION_NAME),
@@ -110,10 +119,9 @@ CODE_SAMPLE
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType(
-            $methodCall->var,
-            new ObjectType('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor')
-        )) {
+        $reflectionExtractorObjectType = new ObjectType('Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor');
+
+        if (! $this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return true;
         }
 
@@ -125,16 +133,30 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Array_ $contextOptions */
-        $contextOptions = $methodCall->args[2]->value;
+        $thirdArg = $methodCall->args[2];
+        if (! $thirdArg instanceof Arg) {
+            return true;
+        }
+
+        $contextOptions = $thirdArg->value;
+        if (! $contextOptions instanceof Array_) {
+            return true;
+        }
 
         return $contextOptions->items === [];
     }
 
     private function getContextOptionValue(MethodCall $methodCall): ?bool
     {
-        /** @var Array_ $contextOptions */
-        $contextOptions = $methodCall->args[2]->value;
+        $thirdArg = $methodCall->args[2];
+        if (! $thirdArg instanceof Arg) {
+            return null;
+        }
+
+        $contextOptions = $thirdArg->value;
+        if (! $contextOptions instanceof Array_) {
+            return null;
+        }
 
         $contextOptionValue = null;
 
