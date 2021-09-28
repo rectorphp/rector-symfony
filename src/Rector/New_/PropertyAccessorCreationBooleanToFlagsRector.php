@@ -62,7 +62,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $isTrue = $this->valueResolver->isTrue($node->args[0]->value);
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Node\Arg) {
+            return null;
+        }
+
+        $isTrue = $this->valueResolver->isTrue($firstArg->value);
         $bitwiseOr = $this->prepareFlags($isTrue);
         $node->args[0] = $this->nodeFactory->createArg($bitwiseOr);
 
@@ -83,7 +88,12 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->valueResolver->isTrueOrFalse($new->args[0]->value);
+        $firstArg = $new->args[0];
+        if (! $firstArg instanceof Node\Arg) {
+            return true;
+        }
+
+        return ! $this->valueResolver->isTrueOrFalse($firstArg->value);
     }
 
     private function prepareFlags(bool $currentValue): BitwiseOr

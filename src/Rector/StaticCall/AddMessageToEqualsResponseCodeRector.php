@@ -86,11 +86,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isHttpRequestArgument($node->args[0]->value)) {
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Arg) {
             return null;
         }
 
-        $parentVariable = $this->getParentOfGetStatusCode($node->args[1]->value);
+        if (! $this->isHttpRequestArgument($firstArg->value)) {
+            return null;
+        }
+
+        $secondArg = $node->args[1];
+        if (! $secondArg instanceof Arg) {
+            return null;
+        }
+
+        $parentVariable = $this->getParentOfGetStatusCode($secondArg->value);
         if (! $parentVariable instanceof Expr) {
             return null;
         }

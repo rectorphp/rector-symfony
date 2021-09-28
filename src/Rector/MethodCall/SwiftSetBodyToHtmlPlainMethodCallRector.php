@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
@@ -69,7 +70,12 @@ CODE_SAMPLE
         }
 
         if (count($node->args) === 2) {
-            $secondArgValue = $this->valueResolver->getValue($node->args[1]->value);
+            $firstArg = $node->args[1];
+            if (! $firstArg instanceof Arg) {
+                return null;
+            }
+
+            $secondArgValue = $this->valueResolver->getValue($firstArg->value);
             if ($secondArgValue === 'text/html') {
                 unset($node->args[1]);
                 $node->name = new Identifier('html');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -66,7 +67,12 @@ final class RedirectToRouteRector extends AbstractRector
             return null;
         }
 
-        $argumentValue = $node->args[0]->value;
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Arg) {
+            return null;
+        }
+
+        $argumentValue = $firstArg->value;
         if (! $argumentValue instanceof MethodCall) {
             return null;
         }
@@ -83,8 +89,15 @@ final class RedirectToRouteRector extends AbstractRector
      */
     private function resolveArguments(MethodCall $methodCall): array
     {
-        /** @var MethodCall $generateUrlNode */
-        $generateUrlNode = $methodCall->args[0]->value;
+        $firstArg = $methodCall->args[0];
+        if (! $firstArg instanceof Arg) {
+            return [];
+        }
+
+        $generateUrlNode = $firstArg->value;
+        if (! $generateUrlNode instanceof MethodCall) {
+            return [];
+        }
 
         $arguments = [];
         $arguments[] = $generateUrlNode->args[0];

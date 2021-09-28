@@ -74,16 +74,21 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->valueResolver->isTrueOrFalse($node->args[0]->value)) {
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Node\Arg) {
             return null;
         }
 
-        if (! $this->isObjectType($node->args[0]->value, new ObjectType('Doctrine\Common\Annotations\Reader'))) {
+        if ($this->valueResolver->isTrueOrFalse($firstArg->value)) {
             return null;
         }
 
-        $readerType = $node->args[0]->value;
-        $node->args[0]->value = $this->nodeFactory->createTrue();
+        if (! $this->isObjectType($firstArg->value, new ObjectType('Doctrine\Common\Annotations\Reader'))) {
+            return null;
+        }
+
+        $readerType = $firstArg->value;
+        $firstArg->value = $this->nodeFactory->createTrue();
 
         return $this->nodeFactory->createMethodCall($node, 'setDoctrineAnnotationReader', [$readerType]);
     }

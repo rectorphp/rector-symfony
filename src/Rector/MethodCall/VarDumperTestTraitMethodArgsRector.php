@@ -61,11 +61,17 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         if (count($node->args) <= 2) {
             return null;
         }
-        if ($node->args[2]->value instanceof ConstFetch) {
+
+        $secondArg = $node->args[2];
+        if (! $secondArg instanceof Node\Arg) {
             return null;
         }
 
-        if ($node->args[2]->value instanceof String_) {
+        if ($secondArg->value instanceof ConstFetch) {
+            return null;
+        }
+
+        if ($secondArg->value instanceof String_) {
             $node->args[3] = $node->args[2];
             $node->args[2] = $this->nodeFactory->createArg(0);
 
