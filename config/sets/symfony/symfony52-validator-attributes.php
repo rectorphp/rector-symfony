@@ -258,6 +258,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Validator\Constraints\Valid',
                     'Symfony\Component\Validator\Constraints\Valid'
                 ),
+                new AnnotationToAttribute(
+                    'Symfony\Component\Serializer\Annotation\Groups',
+                    'Symfony\Component\Serializer\Annotation\Groups'
+                ),
             ]),
         ]]);
 };
