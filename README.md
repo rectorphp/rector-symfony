@@ -32,8 +32,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SymfonySetList::SYMFONY_52);
     $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);
     $containerConfigurator->import(SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION);
-
-    $containerConfigurator->import(DoctrineSetList::DOCTRINE_ORM_29); // if you use doctrine
 };
 ```
 
