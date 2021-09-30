@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -63,7 +64,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
         }
 
         $secondArg = $node->args[2];
-        if (! $secondArg instanceof Node\Arg) {
+        if (! $secondArg instanceof Arg) {
             return null;
         }
 

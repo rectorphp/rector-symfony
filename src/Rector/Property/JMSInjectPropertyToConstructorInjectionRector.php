@@ -10,8 +10,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
@@ -34,8 +32,6 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
     private const INJECT_ANNOTATION_CLASS = 'JMS\DiExtraBundle\Annotation\Inject';
 
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PhpDocTagRemover $phpDocTagRemover,
         private JMSDITypeResolver $jmsDITypeResolver,
         private PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
     ) {

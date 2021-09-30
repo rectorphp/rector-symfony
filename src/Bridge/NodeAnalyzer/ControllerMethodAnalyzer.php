@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
@@ -26,11 +25,11 @@ final class ControllerMethodAnalyzer
         }
 
         $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($node);
-        if (Strings::endsWith($parentClassName, 'Controller')) {
+        if (\str_ends_with($parentClassName, 'Controller')) {
             return true;
         }
 
-        if (Strings::endsWith((string) $node->name, 'Action')) {
+        if (\str_ends_with((string) $node->name, 'Action')) {
             return true;
         }
 

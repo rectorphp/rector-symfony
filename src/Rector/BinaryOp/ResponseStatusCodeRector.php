@@ -90,7 +90,7 @@ final class ResponseStatusCodeRector extends AbstractRector
         511 => 'HTTP_NETWORK_AUTHENTICATION_REQUIRED',
     ];
 
-    private \PHPStan\Type\ObjectType $responseObjectType;
+    private ObjectType $responseObjectType;
 
     public function __construct()
     {

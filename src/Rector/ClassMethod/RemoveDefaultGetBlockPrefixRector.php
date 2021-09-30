@@ -85,7 +85,7 @@ CODE_SAMPLE
         }
 
         $shortClassName = $this->nodeNameResolver->getShortName($className);
-        if (Strings::endsWith($shortClassName, 'Type')) {
+        if (\str_ends_with($shortClassName, 'Type')) {
             $shortClassName = (string) Strings::before($shortClassName, 'Type');
         }
 

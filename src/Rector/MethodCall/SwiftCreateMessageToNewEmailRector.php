@@ -68,7 +68,7 @@ CODE_SAMPLE
 
         // If there is no property with a SwiftMailer type we should skip this class
         $swiftMailerProperty = $this->getSwiftMailerProperty($methodCall);
-        if ($swiftMailerProperty === null) {
+        if (! $swiftMailerProperty instanceof Property) {
             return true;
         }
 

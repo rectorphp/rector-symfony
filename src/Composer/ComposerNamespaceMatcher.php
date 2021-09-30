@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Composer;
 
-use Nette\Utils\Strings;
 use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -31,7 +30,7 @@ final class ComposerNamespaceMatcher
             }
 
             foreach ($directory as $singleDirectory) {
-                if (! Strings::startsWith($path, $singleDirectory)) {
+                if (! \str_starts_with($path, $singleDirectory)) {
                     continue;
                 }
 

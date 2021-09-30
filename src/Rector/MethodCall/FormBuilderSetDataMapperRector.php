@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
-    private \PHPStan\Type\ObjectType $dataMapperObjectType;
+    private ObjectType $dataMapperObjectType;
 
     public function __construct()
     {

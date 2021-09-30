@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
 {
-    private \PHPStan\Type\ObjectType $logoutHandlerObjectType;
+    private ObjectType $logoutHandlerObjectType;
 
     public function __construct(
         private OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
