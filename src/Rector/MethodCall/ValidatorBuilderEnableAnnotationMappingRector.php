@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -75,7 +76,7 @@ CODE_SAMPLE
         }
 
         $firstArg = $node->args[0];
-        if (! $firstArg instanceof Node\Arg) {
+        if (! $firstArg instanceof Arg) {
             return null;
         }
 

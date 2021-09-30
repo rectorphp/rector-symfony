@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\New_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -63,7 +64,7 @@ CODE_SAMPLE
         }
 
         $firstArg = $node->args[0];
-        if (! $firstArg instanceof Node\Arg) {
+        if (! $firstArg instanceof Arg) {
             return null;
         }
 
@@ -89,7 +90,7 @@ CODE_SAMPLE
         }
 
         $firstArg = $new->args[0];
-        if (! $firstArg instanceof Node\Arg) {
+        if (! $firstArg instanceof Arg) {
             return true;
         }
 

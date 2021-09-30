@@ -100,7 +100,10 @@ final class ServiceMapFactory
         $tags = $this->createTagsFromData($tags);
 
         return new ServiceDefinition(
-            strpos((string) $attrs->id, '.') === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id,
+            str_starts_with((string) $attrs->id, '.') ? Strings::substring(
+                (string) $attrs->id,
+                1
+            ) : (string) $attrs->id,
             property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null,
             ! (property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false',
             property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true',
@@ -210,10 +213,9 @@ final class ServiceMapFactory
     /**
      * @param mixed[] $value
      * @param mixed[] $data
-     * @param string|int $key
      * @return mixed[]
      */
-    private function convertedNestedArrayOrXml(array $value, array $data, $key): array
+    private function convertedNestedArrayOrXml(array $value, array $data, string|int $key): array
     {
         foreach ($value as $subKey => $subValue) {
             if ($subValue instanceof SimpleXMLElement) {

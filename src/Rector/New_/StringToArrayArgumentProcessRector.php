@@ -80,10 +80,7 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @param New_|MethodCall $node
-     */
-    private function processArgumentPosition(Node $node, int $argumentPosition): ?Node
+    private function processArgumentPosition(New_|MethodCall $node, int $argumentPosition): ?Node
     {
         if (! isset($node->args[$argumentPosition])) {
             return null;
@@ -107,10 +104,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param New_|MethodCall $expr
-     */
-    private function processStringType(Expr $expr, int $argumentPosition, Expr $firstArgumentExpr): void
+    private function processStringType(New_|MethodCall $expr, int $argumentPosition, Expr $firstArgumentExpr): void
     {
         if ($firstArgumentExpr instanceof Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);

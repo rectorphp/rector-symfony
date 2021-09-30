@@ -30,7 +30,7 @@ final class BuilderFormNodeFactory
     public function create(MethodReflection $methodReflection): ?ClassMethod
     {
         $constructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if ($constructorClassMethod === null) {
+        if (! $constructorClassMethod instanceof ClassMethod) {
             return null;
         }
 

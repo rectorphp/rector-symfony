@@ -19,8 +19,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
-use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
-use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,8 +42,6 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     private array $controllerObjectTypes = [];
 
     public function __construct(
-        private BuilderFormNodeFactory $builderFormNodeFactory,
-        private ConfigureOptionsNodeFactory $configureOptionsNodeFactory,
         private ReflectionProvider $reflectionProvider,
         private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
         private FormOptionsArrayMatcher $formOptionsArrayMatcher,

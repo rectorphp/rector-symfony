@@ -206,7 +206,6 @@ CODE_SAMPLE
         $staticType = $this->getStaticType($return->expr);
         if (! $staticType instanceof IntegerType) {
             $return->expr = new Int_($return->expr);
-            return;
         }
     }
 

@@ -149,13 +149,12 @@ final class GetSubscribedEventsClassMethodFactory
     }
 
     /**
-     * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
         string $eventName,
-        Expr $expr,
+        ClassConstFetch|String_ $expr,
         Array_ $eventsToMethodsArray
     ): void {
         $methodName = $this->resolveMethodName($methodNamesWithPriorities[0], $eventName);
@@ -168,12 +167,11 @@ final class GetSubscribedEventsClassMethodFactory
     }
 
     /**
-     * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
      */
     private function createMultipleMethods(
         array $methodNamesWithPriorities,
-        Expr $expr,
+        ClassConstFetch|String_ $expr,
         Array_ $eventsToMethodsArray,
         string $eventName
     ): void {

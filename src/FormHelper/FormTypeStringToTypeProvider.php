@@ -62,7 +62,7 @@ final class FormTypeStringToTypeProvider
     {
         $nameToTypeMap = $this->getNameToTypeMap();
 
-        if (Strings::startsWith($name, 'form.type.')) {
+        if (\str_starts_with($name, 'form.type.')) {
             $name = Strings::substring($name, strlen('form.type.'));
         }
 
