@@ -130,7 +130,7 @@ final class ThisRenderFactory
 
     private function resolveMethodCall(MethodCall $methodCall): ?Expr
     {
-        $returnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        $returnStaticType = $this->nodeTypeResolver->getType($methodCall);
         if ($returnStaticType instanceof ArrayType) {
             return $methodCall;
         }

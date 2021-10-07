@@ -151,8 +151,8 @@ CODE_SAMPLE
         }
         /** @var Expr $else */
         $else = $ternary->else;
-        $ifType = $this->getStaticType($if);
-        $elseType = $this->getStaticType($else);
+        $ifType = $this->getType($if);
+        $elseType = $this->getType($else);
 
         return $ifType instanceof IntegerType && $elseType instanceof IntegerType;
     }
@@ -203,7 +203,7 @@ CODE_SAMPLE
             }
         }
 
-        $staticType = $this->getStaticType($return->expr);
+        $staticType = $this->getType($return->expr);
         if (! $staticType instanceof IntegerType) {
             $return->expr = new Int_($return->expr);
         }

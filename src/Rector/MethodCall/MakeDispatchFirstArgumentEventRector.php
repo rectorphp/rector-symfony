@@ -170,7 +170,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $eventStaticType = $this->getStaticType($firstArg->value);
+        $eventStaticType = $this->getType($firstArg->value);
 
         if (! $eventStaticType instanceof ObjectType) {
             return false;

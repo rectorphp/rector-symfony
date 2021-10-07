@@ -149,7 +149,7 @@ CODE_SAMPLE
             }
 
             $commandName = $node->args[0]->value;
-            $commandNameStaticType = $this->getStaticType($commandName);
+            $commandNameStaticType = $this->getType($commandName);
             if (! $commandNameStaticType instanceof StringType) {
                 return null;
             }
@@ -217,7 +217,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticType = $this->getStaticType($staticCall->args[0]->value);
+        $staticType = $this->getType($staticCall->args[0]->value);
         if (! $staticType instanceof StringType) {
             return null;
         }

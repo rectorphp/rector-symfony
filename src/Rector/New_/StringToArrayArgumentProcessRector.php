@@ -97,7 +97,7 @@ CODE_SAMPLE
         }
 
         // type analyzer
-        $activeValueType = $this->getStaticType($activeArgValue);
+        $activeValueType = $this->getType($activeArgValue);
         if ($activeValueType instanceof StringType) {
             $this->processStringType($node, $argumentPosition, $activeArgValue);
         }

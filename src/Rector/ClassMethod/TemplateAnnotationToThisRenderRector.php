@@ -217,7 +217,7 @@ CODE_SAMPLE
 
         $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
 
-        $returnType = $this->getStaticType($lastReturn->expr);
+        $returnType = $this->getType($lastReturn->expr);
         return $responseObjectType->isSuperTypeOf($returnType)
             ->yes();
     }
@@ -266,7 +266,7 @@ CODE_SAMPLE
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
 
-        $returnStaticType = $this->getStaticType($lastReturnExpr);
+        $returnStaticType = $this->getType($lastReturnExpr);
 
         if (! $return->expr instanceof MethodCall) {
             if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
