@@ -91,7 +91,7 @@ CODE_SAMPLE
         $properties = $class->getProperties();
 
         foreach ($properties as $property) {
-            $propertyType = $this->nodeTypeResolver->resolve($property);
+            $propertyType = $this->nodeTypeResolver->getType($property);
             if (! $propertyType instanceof ObjectType) {
                 continue;
             }

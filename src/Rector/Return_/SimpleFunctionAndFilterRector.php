@@ -130,7 +130,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $newObjectType = $this->nodeTypeResolver->resolve($node->value);
+            $newObjectType = $this->nodeTypeResolver->getType($node->value);
             $this->processArrayItem($node, $newObjectType);
             return $node;
         });
