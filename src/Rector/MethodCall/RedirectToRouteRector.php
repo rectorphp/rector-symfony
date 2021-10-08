@@ -56,7 +56,7 @@ final class RedirectToRouteRector extends AbstractRector
         }
 
         if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')
-            || ! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')) {
+            && ! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')) {
             return null;
         }
 
