@@ -89,7 +89,8 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
-        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
+        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')
+            && ! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')) {
             return null;
         }
 
