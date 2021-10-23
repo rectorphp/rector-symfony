@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class FirstClass extends ContainerAwareParentClass
+final class FirstClass extends AbstractController
 {
     protected function execute()
     {
@@ -20,9 +20,9 @@ final class FirstClass extends ContainerAwareParentClass
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class FirstClass extends ContainerAwareParentClass
+final class FirstClass extends AbstractController
 {
     public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\Contract\SomeTranslatorInterface $someTranslator)
     {

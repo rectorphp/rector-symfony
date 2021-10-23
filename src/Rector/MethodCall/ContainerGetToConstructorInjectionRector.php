@@ -6,12 +6,13 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -19,25 +20,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\ContainerGetToConstructorInjectionRectorTest
  */
-final class ContainerGetToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
+final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @api
-     * @var string
+     * @var class-string[]
      */
-    public const CONTAINER_AWARE_PARENT_TYPES = 'container_aware_parent_types';
-
-    /**
-     * @var string[]
-     */
-    private array $containerAwareParentTypes = [
+    private const CONTAINER_AWARE_TYPES = [
         'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand',
         'Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
     ];
 
     public function __construct(
         private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
-        private ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 
@@ -46,7 +41,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector impl
         return new RuleDefinition(
             'Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeCommand extends ContainerAwareCommand
 {
@@ -60,7 +55,7 @@ final class SomeCommand extends ContainerAwareCommand
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-final class SomeCommand extends Command
+final class SomeCommand extends ContainerAwareCommand
 {
     public function __construct(SomeService $someService)
     {
@@ -75,14 +70,6 @@ final class SomeCommand extends Command
     }
 }
 CODE_SAMPLE
-,
-                    [
-                        self::CONTAINER_AWARE_PARENT_TYPES => [
-                            'ContainerAwareParentClassName',
-                            'ContainerAwareParentCommandClassName',
-                            'ThisClassCallsMethodInConstructorClassName',
-                        ],
-                    ]
                 ),
             ]
         );
@@ -112,20 +99,31 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName === null) {
-            return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
+        if (! $this->isContainerAwareSubclass($node)) {
+            return null;
         }
 
-        if (in_array($parentClassName, $this->containerAwareParentTypes, true)) {
-            return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
-        }
-
-        return null;
+        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
     }
 
-    public function configure(array $configuration): void
+    private function isContainerAwareSubclass(MethodCall $methodCall): bool
     {
-        $this->containerAwareParentTypes = $configuration[self::CONTAINER_AWARE_PARENT_TYPES] ?? [];
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        foreach (self::CONTAINER_AWARE_TYPES as $containerAwareType) {
+            if ($classReflection->isSubclassOf($containerAwareType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

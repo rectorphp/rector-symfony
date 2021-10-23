@@ -2,11 +2,11 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MyCommand extends ContainerAwareParentCommand
+final class MyCommand extends ContainerAwareCommand
 {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -20,11 +20,11 @@ final class MyCommand extends ContainerAwareParentCommand
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MyCommand extends ContainerAwareParentCommand
+final class MyCommand extends ContainerAwareCommand
 {
     public function __construct(private \stdClass $stdClass)
     {
