@@ -38,7 +38,7 @@ final class GetRequestRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
+            'Turns fetching of Request via `$this->getRequest()` to action injection',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
