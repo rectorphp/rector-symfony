@@ -8,5 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SymfonySetList::SYMFONY_52);
+    $containerConfigurator->import(SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES);
+    $containerConfigurator->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
     $containerConfigurator->import(SymfonyLevelSetList::UP_TO_SYMFONY_51);
 };
