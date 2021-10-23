@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class AppController extends SymfonyController
+class AppController extends Controller
 {
     public function indexAction()
     {
@@ -17,9 +17,9 @@ class AppController extends SymfonyController
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class AppController extends SymfonyController
+class AppController extends Controller
 {
     public function index()
     {

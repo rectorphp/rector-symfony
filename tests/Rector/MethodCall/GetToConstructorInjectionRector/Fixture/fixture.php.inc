@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService extends SymfonyController
+class ClassWithNamedService extends Controller
 {
     public function render()
     {
@@ -22,9 +22,9 @@ class ClassWithNamedService extends SymfonyController
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService extends SymfonyController
+class ClassWithNamedService extends Controller
 {
     public function __construct(private \stdClass $stdClass)
     {
