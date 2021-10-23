@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -25,7 +25,7 @@ final class DependencyInjectionMethodCallAnalyzer
     ) {
     }
 
-    public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall): ?Node
+    public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall): ?PropertyFetch
     {
         $serviceType = $this->serviceTypeMethodCallResolver->resolve($methodCall);
         if (! $serviceType instanceof ObjectType) {
