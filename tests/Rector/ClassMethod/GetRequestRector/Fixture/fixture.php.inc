@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService extends SymfonyController
+class ClassWithNamedService extends Controller
 {
     public function someAction()
     {
@@ -18,9 +18,9 @@ class ClassWithNamedService extends SymfonyController
 
 namespace Rector\Symfony\Tests\Rector\ClassMethod\GetRequestRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService extends SymfonyController
+class ClassWithNamedService extends Controller
 {
     public function someAction(\Symfony\Component\HttpFoundation\Request $request)
     {
