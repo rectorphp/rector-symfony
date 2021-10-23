@@ -26,11 +26,13 @@ final class GetToConstructorInjectionRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
+            'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class MyCommand extends ContainerAwareCommand
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+final class SomeController extend Controller
 {
     public function someMethod()
     {
@@ -41,7 +43,9 @@ class MyCommand extends ContainerAwareCommand
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class MyCommand extends Command
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+final class SomeController extend Controller
 {
     public function __construct(SomeService $someService)
     {
