@@ -23,12 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/ecs.php',
     ]);
 
-    $parameters->set(Option::SKIP, [
-        '*/Source/*', '*/Fixture/*',
-
-        // breaks annotated code - removed on symplify dev-main
-        \PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer::class,
-    ]);
+    $parameters->set(Option::SKIP, ['*/Source/*', '*/Fixture/*']);
 
     $parameters->set(Option::LINE_ENDING, "\n");
 };

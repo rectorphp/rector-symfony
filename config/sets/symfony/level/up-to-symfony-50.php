@@ -8,5 +8,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SymfonySetList::SYMFONY_50);
+    $containerConfigurator->import(SymfonySetList::SYMFONY_50_TYPES);
     $containerConfigurator->import(SymfonyLevelSetList::UP_TO_SYMFONY_44);
 };

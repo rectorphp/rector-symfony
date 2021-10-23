@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 // @see https://symfony.com/blog/new-in-symfony-5-2-constraints-as-php-attributes
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(\Rector\Symfony\Set\SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES);
+    $containerConfigurator->import(SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES);
 
     $services = $containerConfigurator->services();
 
