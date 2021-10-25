@@ -12,11 +12,13 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -85,10 +87,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $defaultNameProperty = $this->nodeFactory->createStaticProtectedPropertyWithDefault(
-            'defaultName',
-            $commandName
-        );
+        $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
 
         $node->stmts = array_merge([$defaultNameProperty], $node->stmts);
 
@@ -223,5 +222,15 @@ CODE_SAMPLE
         }
 
         return $staticCall->args[0]->value;
+    }
+
+    private function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
+    {
+        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($node);
+
+        return $propertyBuilder->getNode();
     }
 }
