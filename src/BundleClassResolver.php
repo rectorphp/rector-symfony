@@ -10,7 +10,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -19,7 +19,7 @@ final class BundleClassResolver
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
-        private Parser $parser,
+        private RectorParser $rectorParser,
         private ReflectionProvider $reflectionProvider
     ) {
     }
@@ -63,7 +63,7 @@ final class BundleClassResolver
     private function resolveClassNameFromFilePath(string $filePath): ?string
     {
         $fileInfo = new SmartFileInfo($filePath);
-        $nodes = $this->parser->parseFileInfo($fileInfo);
+        $nodes = $this->rectorParser->parseFile($fileInfo);
 
         $this->addFullyQualifiedNamesToNodes($nodes);
 
