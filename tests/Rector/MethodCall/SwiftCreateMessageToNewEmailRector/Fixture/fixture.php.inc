@@ -6,6 +6,9 @@ use Swift_Mailer;
 
 class Fixture
 {
+    /**
+     * @var Swift_Mailer
+     */
     private $swift;
 
     public function __construct(Swift_Mailer $swift)
@@ -29,6 +32,9 @@ use Swift_Mailer;
 
 class Fixture
 {
+    /**
+     * @var Swift_Mailer
+     */
     private $swift;
 
     public function __construct(Swift_Mailer $swift)
