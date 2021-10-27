@@ -11,7 +11,7 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class FormTypeStringToTypeProvider
 {
     /**
-     * @var array<string, class-string>
+     * @var array<string, string>
      */
     private const SYMFONY_CORE_NAME_TO_TYPE_MAP = [
         'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
