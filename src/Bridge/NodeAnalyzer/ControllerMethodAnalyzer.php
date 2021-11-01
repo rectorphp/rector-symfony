@@ -28,7 +28,7 @@ final class ControllerMethodAnalyzer
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
-            return null;
+            return false;
         }
 
         $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($scope);
