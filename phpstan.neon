@@ -37,3 +37,8 @@ parameters:
         # should be resolved with getArgs() and new release of phpstan
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
         - '#(.*?) expects array<PhpParser\\Node\\Arg\>, array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
+
+        # allowed on null-safe calls
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            path: src/Helper/TemplateGuesser.php
