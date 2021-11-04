@@ -65,15 +65,15 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($class)) {
+        $className = $scope->getClassReflection()?->getName();
+        if (! is_string($className)) {
             throw new ShouldNotHappenException();
         }
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
 
-        return $this->resolve($namespace, $class, $methodName);
+        return $this->resolve($namespace, $className, $methodName);
     }
 
     /**
