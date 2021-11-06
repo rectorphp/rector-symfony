@@ -8,12 +8,12 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -79,7 +79,12 @@ CODE_SAMPLE
 
         $returnedValue = $this->valueResolver->getValue($returnedExpr);
 
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
+
+        $className = $this->nodeNameResolver->getName($classLike);
         if (! is_string($className)) {
             return null;
         }
