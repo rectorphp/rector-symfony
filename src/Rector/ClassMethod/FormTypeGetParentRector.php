@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeGetParentRector extends AbstractRector
 {
     public function __construct(
-        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider
+        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
     ) {
     }
 
@@ -125,12 +124,12 @@ CODE_SAMPLE
 
     private function isClassAndMethodMatch(ClassMethod $classMethod): bool
     {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        if ($this->isObjectType($classLike, new ObjectType('Symfony\Component\Form\AbstractType'))) {
+        if ($this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'))) {
             return $this->isName($classMethod->name, 'getParent');
         }
 

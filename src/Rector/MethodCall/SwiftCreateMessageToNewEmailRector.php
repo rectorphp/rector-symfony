@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -83,7 +82,7 @@ CODE_SAMPLE
 
     private function getSwiftMailerProperty(MethodCall $classMethod): ?Property
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }

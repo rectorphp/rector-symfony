@@ -15,7 +15,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -114,13 +113,13 @@ CODE_SAMPLE
 
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
             return null;
         }
 
         $propertyMetadata = new PropertyMetadata($propertyName, new StringType(), Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }

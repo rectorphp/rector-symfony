@@ -73,12 +73,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
             return null;
         }
 
-        if (! $this->isObjectType($classLike, new ObjectType('Symfony\Component\Console\Command\Command'))) {
+        if (! $this->isObjectType($class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
             return null;
         }
 

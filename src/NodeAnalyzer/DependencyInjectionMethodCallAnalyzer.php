@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
@@ -21,7 +21,8 @@ final class DependencyInjectionMethodCallAnalyzer
         private PropertyNaming $propertyNaming,
         private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
         private NodeFactory $nodeFactory,
-        private PropertyToAddCollector $propertyToAddCollector
+        private PropertyToAddCollector $propertyToAddCollector,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -32,15 +33,15 @@ final class DependencyInjectionMethodCallAnalyzer
             return null;
         }
 
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
+        if (! $class instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }

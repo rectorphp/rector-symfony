@@ -103,8 +103,8 @@ CODE_SAMPLE
 
     private function isObjectMethodNameMatch(ClassMethod $classMethod): bool
     {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
