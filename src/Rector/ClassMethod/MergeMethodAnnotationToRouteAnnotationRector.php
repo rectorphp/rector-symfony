@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +24,7 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
 {
     public function __construct(
         private PhpDocTagRemover $phpDocTagRemover,
-        private PhpDocInfoPrinter $phpDocInfoPrinter
+        private PhpDocInfoPrinter $phpDocInfoPrinter,
     ) {
     }
 
@@ -82,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return null;
         }
