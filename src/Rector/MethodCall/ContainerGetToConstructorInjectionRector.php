@@ -87,6 +87,12 @@ CODE_SAMPLE
             return null;
         }
 
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        $className = $classLike->namespacedName->toString();
+        if (in_array('PHPUnit\Framework\TestCase', class_parents($className))) {
+            return null;
+        }
+
         return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
     }
 }
