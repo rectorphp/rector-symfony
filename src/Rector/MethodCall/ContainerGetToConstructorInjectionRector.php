@@ -6,11 +6,9 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,6 +22,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
         private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
+        private TestsNodeAnalyzer $testsNodeAnalyzer
     ) {
     }
 
@@ -90,17 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if ($classReflection->isSubclassOf('PHPUnit\Framework\TestCase')) {
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 
