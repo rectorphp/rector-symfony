@@ -73,7 +73,7 @@ final class JMSDITypeResolver
 
         $errorMessage = sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
 
-        $rectorError = new RectorError($errorMessage, $file->getSmartFileInfo(), $property->getLine());
+        $rectorError = new RectorError($errorMessage, $file->getRelativeFilePath(), $property->getLine());
         $file->addRectorError($rectorError);
     }
 
