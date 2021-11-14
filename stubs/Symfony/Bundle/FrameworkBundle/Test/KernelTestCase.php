@@ -17,4 +17,9 @@ class KernelTestCase extends TestCase
      * @var ContainerInterface
      */
     protected static $container;
+
+    public static function getContainer(): ContainerInterface
+    {
+        return static::$container;
+    }
 }

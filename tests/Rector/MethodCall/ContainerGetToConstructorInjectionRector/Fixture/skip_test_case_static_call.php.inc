@@ -4,10 +4,10 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInject
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class SkipTestCase extends KernelTestCase
+final class SkipTestCaseStaticCall extends KernelTestCase
 {
-    public function goStatic()
+    public function goMethod()
     {
-        $service = self::$container->get('some');
+        $service = static::getContainer()->get('some');
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,6 +22,7 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
         private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
+        private TestsNodeAnalyzer $testsNodeAnalyzer
     ) {
     }
 
@@ -84,6 +86,10 @@ CODE_SAMPLE
         }
 
         if (! $this->isName($node->name, 'get')) {
+            return null;
+        }
+
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
 
