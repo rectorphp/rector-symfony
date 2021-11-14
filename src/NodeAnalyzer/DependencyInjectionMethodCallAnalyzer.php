@@ -35,7 +35,7 @@ final class DependencyInjectionMethodCallAnalyzer
 
         $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $class instanceof Class_) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
