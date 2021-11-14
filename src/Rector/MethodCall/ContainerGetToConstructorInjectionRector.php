@@ -89,7 +89,7 @@ CODE_SAMPLE
 
         $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         $className = $classLike->namespacedName->toString();
-        if (in_array('PHPUnit\Framework\TestCase', class_parents($className))) {
+        if (in_array('PHPUnit\Framework\TestCase', class_parents($className), true)) {
             return null;
         }
 
