@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
@@ -35,7 +34,7 @@ final class DependencyInjectionMethodCallAnalyzer
 
         $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $class instanceof Class_) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
