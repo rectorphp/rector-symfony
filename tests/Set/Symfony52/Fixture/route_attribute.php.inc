@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SomeController
 {
-    #[\Symfony\Component\Routing\Annotation\Route]
+    #[Route]
     public function someMethod()
     {
     }
