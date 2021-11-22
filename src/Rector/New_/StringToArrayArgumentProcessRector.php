@@ -32,7 +32,7 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const ALLOWED_PROCESS_METHOD_CALLS = ['setWorkingDirectory'];
+    private const EXCLUDED_PROCESS_METHOD_CALLS = ['setWorkingDirectory'];
 
     public function __construct(
         private NodeTransformer $nodeTransformer
