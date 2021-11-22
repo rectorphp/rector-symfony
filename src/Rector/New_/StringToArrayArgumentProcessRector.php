@@ -117,7 +117,7 @@ CODE_SAMPLE
     private function shouldSkipProcessMethodCall(MethodCall $methodCall): bool
     {
         $methodName = (string) $this->nodeNameResolver->getName($methodCall->name);
-        return in_array($methodName, self::ALLOWED_PROCESS_METHOD_CALLS, true);
+        return in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, true);
     }
 
     private function processStringType(New_|MethodCall $expr, int $argumentPosition, Expr $firstArgumentExpr): void
