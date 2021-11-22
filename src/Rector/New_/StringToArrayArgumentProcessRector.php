@@ -13,16 +13,11 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Console\Input\StringInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,9 +29,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_PROCESS_METHOD_CALLS = ['setWorkingDirectory'];
+
     public function __construct(
-        private NodeTransformer $nodeTransformer,
-        private AstResolver $astResolver
+        private NodeTransformer $nodeTransformer
     ) {
     }
 
@@ -102,20 +101,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof MethodCall) {
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-            if (! $scope instanceof Scope) {
-                return null;
-            }
-
-            $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($node);
-            if (! $classMethod instanceof ClassMethod) {
-                return null;
-            }
-
-            if ($classMethod->params[$argumentPosition]->type instanceof Identifier && $classMethod->params[$argumentPosition]->type->name === 'string') {
-                return null;
-            }
+        if ($node instanceof MethodCall && $this->shouldSkipProcessMethodCall($node)) {
+            return null;
         }
 
         // type analyzer
@@ -125,6 +112,12 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function shouldSkipProcessMethodCall(MethodCall $methodCall): bool
+    {
+        $methodName = (string) $this->nodeNameResolver->getName($methodCall->name);
+        return in_array($methodName, self::ALLOWED_PROCESS_METHOD_CALLS, true);
     }
 
     private function processStringType(New_|MethodCall $expr, int $argumentPosition, Expr $firstArgumentExpr): void
