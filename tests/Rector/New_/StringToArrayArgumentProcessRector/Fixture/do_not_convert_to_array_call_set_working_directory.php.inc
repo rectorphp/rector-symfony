@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fi
 
 use Symfony\Component\Process\Process;
 
-function skipProcessInstanceMethods()
+function doNotConvertToArrayCallSetWorkingDirectory()
 {
     $process = new Process('git log --tags --simplify-by-decoration --pretty="format:%ai %d"');
     $process->setWorkingDirectory('/some/other/path');
@@ -18,7 +18,7 @@ namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fi
 
 use Symfony\Component\Process\Process;
 
-function skipProcessInstanceMethods()
+function doNotConvertToArrayCallSetWorkingDirectory()
 {
     $process = new Process(['git', 'log', '--tags', '--simplify-by-decoration', '--pretty=format:%ai %d']);
     $process->setWorkingDirectory('/some/other/path');
