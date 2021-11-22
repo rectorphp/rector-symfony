@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\AstResolver;
@@ -26,7 +27,6 @@ use Symfony\Component\Console\Input\StringInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Analyser\Scope;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
