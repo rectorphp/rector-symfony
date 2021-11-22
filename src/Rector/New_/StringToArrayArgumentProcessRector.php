@@ -29,6 +29,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const EXCLUDED_PROCESS_METHOD_CALLS = ['setWorkingDirectory'];
+
     public function __construct(
         private NodeTransformer $nodeTransformer
     ) {
@@ -96,6 +101,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node instanceof MethodCall && $this->shouldSkipProcessMethodCall($node)) {
+            return null;
+        }
+
         // type analyzer
         $activeValueType = $this->getType($activeArgValue);
         if ($activeValueType instanceof StringType) {
@@ -103,6 +112,12 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function shouldSkipProcessMethodCall(MethodCall $methodCall): bool
+    {
+        $methodName = (string) $this->nodeNameResolver->getName($methodCall->name);
+        return in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, true);
     }
 
     private function processStringType(New_|MethodCall $expr, int $argumentPosition, Expr $firstArgumentExpr): void
