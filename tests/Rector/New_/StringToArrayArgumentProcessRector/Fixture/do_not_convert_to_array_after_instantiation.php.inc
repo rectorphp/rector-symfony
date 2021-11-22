@@ -8,6 +8,8 @@ function doNotConvertToArrayCallSetWorkingDirectory()
 {
     $process = new Process('git log --tags --simplify-by-decoration --pretty="format:%ai %d"');
     $process->setWorkingDirectory('/some/other/path');
+    $process->addOutput('Test output');
+    $process->addErrorOutput('Test output');
 }
 
 ?>
@@ -22,6 +24,8 @@ function doNotConvertToArrayCallSetWorkingDirectory()
 {
     $process = new Process(['git', 'log', '--tags', '--simplify-by-decoration', '--pretty=format:%ai %d']);
     $process->setWorkingDirectory('/some/other/path');
+    $process->addOutput('Test output');
+    $process->addErrorOutput('Test output');
 }
 
 ?>
