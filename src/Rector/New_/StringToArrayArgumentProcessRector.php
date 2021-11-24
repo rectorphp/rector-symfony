@@ -107,10 +107,11 @@ CODE_SAMPLE
 
         // type analyzer
         $activeValueType = $this->getType($activeArgValue);
-        if ($activeValueType instanceof StringType) {
-            $this->processStringType($node, $argumentPosition, $activeArgValue);
+        if (! $activeValueType instanceof StringType) {
+            return null;
         }
 
+        $this->processStringType($node, $argumentPosition, $activeArgValue);
         return $node;
     }
 
@@ -124,10 +125,7 @@ CODE_SAMPLE
     {
         if ($firstArgumentExpr instanceof Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
-            if ($arrayNode !== null) {
-                $expr->args[$argumentPosition] = new Arg($arrayNode);
-            }
-
+            $expr->args[$argumentPosition] = new Arg($arrayNode);
             return;
         }
 
