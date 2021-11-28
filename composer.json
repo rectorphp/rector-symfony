@@ -11,7 +11,7 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "^1.1",
-        "rector/rector-src": "dev-main#7e0df46",
+        "rector/rector-src": "dev-main",
         "symplify/phpstan-rules": "^10.0",
         "symfony/security-core": "^5.3",
         "symfony/security-http": "^5.3",
@@ -20,7 +20,9 @@
         "symplify/easy-coding-standard": "^10.0",
         "symplify/rule-doc-generator": "^10.0",
         "phpstan/extension-installer": "^1.1",
-        "rector/phpstan-rules": "^0.4.4"
+        "rector/phpstan-rules": "^0.4.4",
+        "phpstan/phpstan-strict-rules": "^1.1",
+        "phpstan/phpstan-webmozart-assert": "^1.0"
     },
     "autoload": {
         "psr-4": {

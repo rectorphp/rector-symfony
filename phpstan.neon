@@ -42,3 +42,7 @@ parameters:
         -
             message: '#Do not use chained method calls\. Put each on separated lines#'
             path: src/Helper/TemplateGuesser.php
+
+        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)\(\)#'
+        # rector co-variant
+        - '#Parameter \#1 \$node \(PhpParser\\Node\\(.*?) of method Rector\\(.*?)\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'

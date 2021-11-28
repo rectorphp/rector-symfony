@@ -154,10 +154,6 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $node->var instanceof Variable) {
-            return false;
-        }
-
         // must be $this->getRequest() in controller
         if (! $node->var instanceof Variable) {
             return false;

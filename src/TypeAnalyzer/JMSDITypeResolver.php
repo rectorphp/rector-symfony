@@ -36,15 +36,11 @@ final class JMSDITypeResolver
     ): Type {
         $serviceMap = $this->serviceMapProvider->provide();
 
-        $serviceName = $doctrineAnnotationTagValueNode->getValueWithoutQuotes(
-            'serviceName'
-        ) ?: $doctrineAnnotationTagValueNode->getSilentValue() ?: $this->nodeNameResolver->getName($property);
+        $serviceName = $this->resolveServiceName($doctrineAnnotationTagValueNode, $property);
 
-        if ($serviceName) {
-            $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
-            if (! $serviceType instanceof MixedType) {
-                return $serviceType;
-            }
+        $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
+        if (! $serviceType instanceof MixedType) {
+            return $serviceType;
         }
 
         // 3. service is in @var annotation
@@ -94,5 +90,22 @@ final class JMSDITypeResolver
         }
 
         return new MixedType();
+    }
+
+    private function resolveServiceName(
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        Property $property
+    ): string {
+        $serviceNameParameter = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('serviceName');
+        if (is_string($serviceNameParameter)) {
+            return $serviceNameParameter;
+        }
+
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (is_string($silentValue)) {
+            return $silentValue;
+        }
+
+        return $this->nodeNameResolver->getName($property);
     }
 }

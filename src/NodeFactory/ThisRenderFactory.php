@@ -71,10 +71,8 @@ final class ThisRenderFactory
         ClassMethod $classMethod,
         DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): string {
-        $template = $templateDoctrineAnnotationTagValueNode->getValue(
-            'template'
-        ) ?: $templateDoctrineAnnotationTagValueNode->getSilentValue();
-        if ($template !== null) {
+        $template = $this->resolveTemplate($templateDoctrineAnnotationTagValueNode);
+        if (is_string($template)) {
             return $template;
         }
 
@@ -99,7 +97,7 @@ final class ThisRenderFactory
             return null;
         }
 
-        if ($return->expr instanceof Array_ && count($return->expr->items)) {
+        if ($return->expr instanceof Array_ && $return->expr->items !== []) {
             return $return->expr;
         }
 
@@ -133,6 +131,21 @@ final class ThisRenderFactory
         $returnStaticType = $this->nodeTypeResolver->getType($methodCall);
         if ($returnStaticType instanceof ArrayType) {
             return $methodCall;
+        }
+
+        return null;
+    }
+
+    private function resolveTemplate(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): string|null
+    {
+        $templateParameter = $doctrineAnnotationTagValueNode->getValue('template');
+        if (is_string($templateParameter)) {
+            return $templateParameter;
+        }
+
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (is_string($silentValue)) {
+            return $silentValue;
         }
 
         return null;

@@ -32,7 +32,7 @@ final class ServiceMapFactory
 
         // "@" intentionally
         $xml = @simplexml_load_string($fileContents);
-        if (! $xml) {
+        if ($xml === false) {
             throw new XmlContainerNotExistsException(sprintf('Container "%s" cannot be parsed', $configFilePath));
         }
 

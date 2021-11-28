@@ -12,6 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -92,12 +93,12 @@ final class ParseFileRector extends AbstractRector
         $possibleFileNodeAsString = $this->print($possibleFileNode);
 
         // is yml/yaml file
-        if (Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
+        if (StringUtils::isMatch($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
             return true;
         }
 
         // is probably a file variable
-        if (Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
+        if (StringUtils::isMatch($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
             return true;
         }
 

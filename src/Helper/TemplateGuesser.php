@@ -113,7 +113,7 @@ final class TemplateGuesser
     private function resolveController(string $class): string
     {
         $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
-        if (! $match) {
+        if ($match === null) {
             return '';
         }
 
