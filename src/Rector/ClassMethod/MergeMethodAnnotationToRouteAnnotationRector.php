@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -108,10 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $methods = $sensioDoctrineAnnotationTagValueNode->getValue(
-            'methods'
-        ) ?: $sensioDoctrineAnnotationTagValueNode->getSilentValue();
-
+        $methods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
         if ($methods === null) {
             return null;
         }
@@ -123,5 +121,32 @@ CODE_SAMPLE
         $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
         return $node;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    private function resolveMethods(
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): array|null|CurlyListNode {
+        $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
+        if (is_array($methodsParameter)) {
+            return $methodsParameter;
+        }
+
+        if ($methodsParameter instanceof CurlyListNode) {
+            return $methodsParameter;
+        }
+
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (is_array($silentValue)) {
+            return $silentValue;
+        }
+
+        if ($silentValue instanceof CurlyListNode) {
+            return $silentValue;
+        }
+
+        return null;
     }
 }

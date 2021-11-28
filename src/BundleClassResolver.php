@@ -30,7 +30,7 @@ final class BundleClassResolver
 
         // resolve bundle from existing ones
         $fileName = $classReflection->getFileName();
-        if (! $fileName) {
+        if ($fileName === null) {
             return null;
         }
 

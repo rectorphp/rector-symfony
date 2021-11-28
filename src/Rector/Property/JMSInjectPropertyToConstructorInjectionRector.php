@@ -110,11 +110,7 @@ CODE_SAMPLE
         PhpDocInfo $phpDocInfo,
         Property $property
     ): Type {
-        $serviceType = new MixedType();
-        if ($doctrineAnnotationTagValueNode !== null) {
-            $serviceType = $phpDocInfo->getVarType();
-        }
-
+        $serviceType = $phpDocInfo->getVarType();
         if (! $serviceType instanceof MixedType) {
             return $serviceType;
         }

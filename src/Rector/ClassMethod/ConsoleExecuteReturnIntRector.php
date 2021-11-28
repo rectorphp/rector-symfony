@@ -212,7 +212,7 @@ CODE_SAMPLE
     private function isSuccessfulRefactorTernaryReturn(Ternary $ternary): bool
     {
         $hasChanged = false;
-        if ($ternary->if && $this->valueResolver->isNull($ternary->if)) {
+        if ($ternary->if instanceof Expr && $this->valueResolver->isNull($ternary->if)) {
             $ternary->if = new LNumber(0);
             $hasChanged = true;
         }
