@@ -22,7 +22,7 @@ class SomeController
 {
     public function someAction(): Response
     {
-        return new Response(['foo' => 'bar'], Response::HTTP_OK);
+        return new \Symfony\Component\HttpFoundation\Response(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 
