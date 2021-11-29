@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -30,7 +31,8 @@ final class GetRequestRector extends AbstractRector
     private ?string $requestVariableAndParamName = null;
 
     public function __construct(
-        private ControllerMethodAnalyzer $controllerMethodAnalyzer
+        private ControllerMethodAnalyzer $controllerMethodAnalyzer,
+        private ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -79,17 +81,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->controllerAnalyzer->detect($node)) {
+            return null;
+        }
+
         if ($node instanceof ClassMethod) {
-            $this->requestVariableAndParamName = $this->resolveUniqueName($node, 'request');
-
-            if ($this->isActionWithGetRequestInBody($node)) {
-                $fullyQualified = new FullyQualified(self::REQUEST_CLASS);
-                $node->params[] = new Param(new Variable(
-                    $this->getRequestVariableAndParamName()
-                ), null, $fullyQualified);
-
-                return $node;
-            }
+            return $this->refactorClassMethod($node);
         }
 
         if ($this->isGetRequestInAction($node)) {
@@ -148,26 +145,24 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isGetRequestInAction(Node $node): bool
+    private function isGetRequestInAction(MethodCall $methodCall): bool
     {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
         // must be $this->getRequest() in controller
-        if (! $node->var instanceof Variable) {
+        if (! $methodCall->var instanceof Variable) {
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($node->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($methodCall->var, 'this')) {
             return false;
         }
 
-        if (! $this->isName($node->name, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
+        if (! $this->isName($methodCall->name, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters(
+            $methodCall
+        )) {
             return false;
         }
 
-        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+        $classMethod = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return false;
         }
@@ -221,5 +216,21 @@ CODE_SAMPLE
         }
 
         return $this->requestVariableAndParamName;
+    }
+
+    private function refactorClassMethod(ClassMethod $classMethod): null|ClassMethod
+    {
+        $this->requestVariableAndParamName = $this->resolveUniqueName($classMethod, 'request');
+
+        if (! $this->isActionWithGetRequestInBody($classMethod)) {
+            return null;
+        }
+
+        $fullyQualified = new FullyQualified(self::REQUEST_CLASS);
+        $classMethod->params[] = new Param(new Variable(
+            $this->getRequestVariableAndParamName()
+        ), null, $fullyQualified);
+
+        return $classMethod;
     }
 }
