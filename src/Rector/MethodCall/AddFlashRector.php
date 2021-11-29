@@ -6,12 +6,10 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,7 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddFlashRector extends AbstractRector
 {
     public function __construct(
-        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -68,20 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        // might be missing in a trait
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')
-            && ! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')) {
+        if (! $this->controllerAnalyzer->detect($node)) {
             return null;
         }
 
