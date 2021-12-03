@@ -10,6 +10,7 @@ final class TraversableClass implements \IteratorAggregate
     {
     }
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
     }

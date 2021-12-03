@@ -12,9 +12,9 @@
 @@ -91,7 +91,7 @@
          $definition->setBindings(unserialize(serialize($defaults->getBindings())));
          $definition->setChanges([]);
-
+ 
 -        $configurator = new ServiceConfigurator($this->container, $this->instanceof, true, $this, $definition, $id, $defaults->getTags(), $this->path);
 +        $configurator = new \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator($this->container, $this->instanceof, true, $this, $definition, $id, $defaults->getTags(), $this->path);
-
+ 
          return null !== $class ? $configurator->class($class) : $configurator;
      }
