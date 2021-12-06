@@ -25,14 +25,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $services = $containerConfigurator->services();
+
     $services->set(StringClassNameToClassConstantRector::class)
-        ->call('configure', [[
-            StringClassNameToClassConstantRector::CLASSES_TO_SKIP => [
-                'Symfony\*',
-                'Twig_*',
-                'Swift_*',
-            ],
-        ]]);
+        ->configure([
+            'Symfony\*',
+            'Twig_*',
+            'Swift_*',
+        ]);
 
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(SetList::CODE_QUALITY);
