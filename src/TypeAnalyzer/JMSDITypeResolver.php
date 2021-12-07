@@ -50,12 +50,12 @@ final class JMSDITypeResolver
         }
 
         // the @var is missing and service name was not found → report it
-        $this->reportServiceNotFound($serviceName, $property);
+        $this->reportServiceNotFound($serviceName);
 
         return new MixedType();
     }
 
-    private function reportServiceNotFound(?string $serviceName, Property $property): void
+    private function reportServiceNotFound(?string $serviceName): void
     {
         if ($serviceName !== null) {
             return;
