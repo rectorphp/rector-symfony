@@ -46,3 +46,8 @@ parameters:
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)\(\)#'
         # rector co-variant
         - '#Parameter \#1 \$node \(PhpParser\\Node\\(.*?) of method Rector\\(.*?)\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'
+
+        # fixed in dev-main
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            path: src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php
