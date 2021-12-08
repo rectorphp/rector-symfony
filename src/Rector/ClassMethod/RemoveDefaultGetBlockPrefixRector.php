@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Stringy\Stringy;
+use Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -94,8 +94,9 @@ CODE_SAMPLE
             $shortClassName = (string) Strings::before($shortClassName, 'Type');
         }
 
-        $stringy = new Stringy($shortClassName);
-        $underscoredClassShortName = (string) $stringy->underscored();
+        $shortClassNameUnicodeString = new UnicodeString($shortClassName);
+        $underscoredClassShortName = $shortClassNameUnicodeString->snake()
+            ->toString();
 
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
