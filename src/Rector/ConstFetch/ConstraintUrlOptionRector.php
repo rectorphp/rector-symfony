@@ -6,7 +6,9 @@ namespace Rector\Symfony\Rector\ConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -54,6 +56,10 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return null;
         }
 
+        if (! $this->isInsideNewUrl($node)) {
+            return null;
+        }
+
         $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $prevNode instanceof String_) {
             return null;
@@ -64,5 +70,24 @@ final class ConstraintUrlOptionRector extends AbstractRector
         }
 
         return $this->nodeFactory->createClassConstFetch(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
+    }
+
+    private function isInsideNewUrl(ConstFetch $constFetch): bool
+    {
+        $new = $this->betterNodeFinder->findParentType($constFetch, New_::class);
+        if (! $new instanceof New_) {
+            return false;
+        }
+
+        $newType = $this->getType($new);
+        if (! $newType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        if ($newType->getClassName() !== self::URL_CONSTRAINT_CLASS) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+namespace Rector\Symfony\Tests\Rector\ConstFetch\ConstraintUrlOptionRector\Fixture;
+
+use Symfony\Component\Validator\Constraints\Url;
+
 function constraintUrlOptionRector()
 {
     $containt = new Url(['checkDNS' => true]);
@@ -8,6 +12,10 @@ function constraintUrlOptionRector()
 ?>
 -----
 <?php
+
+namespace Rector\Symfony\Tests\Rector\ConstFetch\ConstraintUrlOptionRector\Fixture;
+
+use Symfony\Component\Validator\Constraints\Url;
 
 function constraintUrlOptionRector()
 {
