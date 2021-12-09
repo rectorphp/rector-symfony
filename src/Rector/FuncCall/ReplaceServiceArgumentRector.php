@@ -14,6 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\FuncCall\ReplaceServiceArgumentRector\ReplaceServiceArgumentRectorTest
+ */
 final class ReplaceServiceArgumentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
@@ -28,13 +31,13 @@ final class ReplaceServiceArgumentRector extends AbstractRector implements Confi
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
-use Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return service(ContainerInterface::class);
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-use Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return service('service_container');
 CODE_SAMPLE
@@ -62,8 +65,21 @@ CODE_SAMPLE
             return null;
         }
 
-        dump('__');
-        die;
+        $firstArg = $node->args[0];
+        if (! $firstArg instanceof Node\Arg) {
+            return null;
+        }
+
+        foreach ($this->replaceServiceArguments as $replaceServiceArgument) {
+            if (! $this->valueResolver->isValue($firstArg->value, $replaceServiceArgument->getOldValue())) {
+                continue;
+            }
+
+            $node->args[0] = new Node\Arg($replaceServiceArgument->getNewValueExpr());
+            return $node;
+        }
+
+        return null;
     }
 
     /**

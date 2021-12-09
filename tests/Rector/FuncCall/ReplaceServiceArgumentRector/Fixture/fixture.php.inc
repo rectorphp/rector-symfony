@@ -1,17 +1,21 @@
 <?php
 
-function constraintUrlOptionRector()
-{
-    $value = \Symfony\Component\DependencyInjection\Loader\Configurator\service(\Psr\Container\ContainerInterface::class);
-}
+namespace Rector\Symfony\Tests\Rector\FuncCall\ReplaceServiceArgumentRector\Fixture;
+
+use Psr\Container\ContainerInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+return service(ContainerInterface::class);
 
 ?>
 -----
 <?php
 
-function constraintUrlOptionRector()
-{
-    $containt = new Url(['checkDNS' => \Symfony\Component\Validator\Constraints\Url::CHECK_DNS_TYPE_ANY]);
-}
+namespace Rector\Symfony\Tests\Rector\FuncCall\ReplaceServiceArgumentRector\Fixture;
+
+use Psr\Container\ContainerInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+return service('service_container');
 
 ?>
