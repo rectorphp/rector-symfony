@@ -575,5 +575,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'normalize',
                 new UnionType([...$scalarTypes, new ObjectType('ArrayObject')])
             ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface',
+                'authenticate',
+                new ObjectType('Symfony\Component\Security\Http\Authenticator\Passport\Passport')
+            ),
         ]);
 };
