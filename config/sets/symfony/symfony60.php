@@ -5,6 +5,9 @@ declare(strict_types=1);
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
@@ -29,6 +32,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ),
         ]);
 
+    $services->set(RenameClassRector::class)
+        ->configure([
+            // @see https://github.com/symfony/symfony/pull/39484
+            'Symfony\Contracts\HttpClient\HttpClientInterface\RemoteJsonManifestVersionStrategy' => 'Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy',
+        ]);
+
     $services->set(AddParamTypeDeclarationRector::class)
         ->configure([
             new AddParamTypeDeclaration(
@@ -42,6 +51,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'configureRoutes',
                 0,
                 new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator'),
+            ),
+        ]);
+
+    $services->set(RenameMethodRector::class)
+        ->configure([
+            // @see https://github.com/symfony/symfony/pull/40403
+            new MethodCallRename(
+                'Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface',
+                'loadUserByUsername',
+                'loadUserByIdentifier'
             ),
         ]);
 };
