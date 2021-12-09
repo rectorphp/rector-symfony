@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -32,6 +33,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Symfony\Component\HttpKernel\KernelInterface',
                 'registerBundles',
                 new IterableType(),
+            ),
+            // @see https://wouterj.nl/2021/09/symfony-6-native-typing#when-upgrading-to-symfony-54
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Security\Core\User\UserInterface',
+                'getRoles',
+                new ArrayType(new MixedType(), new MixedType())
             ),
         ]);
 
