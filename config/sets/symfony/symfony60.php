@@ -7,6 +7,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
@@ -40,7 +41,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'load',
                 new MixedType(),
             ),
-            new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType(),),
+            new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\HttpKernel\KernelInterface',
                 'registerBundles',
@@ -51,6 +52,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'Symfony\Component\Security\Core\User\UserInterface',
                 'getRoles',
                 new ArrayType(new MixedType(), new MixedType())
+            ),
+            // @see https://github.com/symfony/symfony/pull/43028/files
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Console\Helper\HelperInterface',
+                'getName',
+                new StringType()
             ),
         ]);
 
