@@ -327,31 +327,41 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'countErrors',
                 new IntegerType()
             ),
-            //            new AddReturnTypeDeclaration(
-            //                'Symfony\Component\OptionsResolver\OptionsResolver',
-            //                'setNormalizer',
-            //                new StaticType()
-            //            ),
-            //            new AddReturnTypeDeclaration(
-            //                'Symfony\Component\OptionsResolver\OptionsResolver',
-            //                'setAllowedValues',
-            //                new StaticType()
-            //            ),
-            //            new AddReturnTypeDeclaration(
-            //                'Symfony\Component\OptionsResolver\OptionsResolver',
-            //                'addAllowedValues',
-            //                new StaticType()
-            //            ),
-            //            new AddReturnTypeDeclaration(
-            //                'Symfony\Component\OptionsResolver\OptionsResolver',
-            //                'setAllowedTypes',
-            //                new StaticType()
-            //            ),
-            //            new AddReturnTypeDeclaration(
-            //                'Symfony\Component\OptionsResolver\OptionsResolver',
-            //                'addAllowedTypes',
-            //                new StaticType()
-            //            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\OptionsResolver\OptionsResolver',
+                'setNormalizer',
+                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
+                    'Symfony\Component\OptionsResolver\OptionsResolver'
+                )
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\OptionsResolver\OptionsResolver',
+                'setAllowedValues',
+                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
+                    'Symfony\Component\OptionsResolver\OptionsResolver'
+                )
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\OptionsResolver\OptionsResolver',
+                'addAllowedValues',
+                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
+                    'Symfony\Component\OptionsResolver\OptionsResolver'
+                )
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\OptionsResolver\OptionsResolver',
+                'setAllowedTypes',
+                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
+                    'Symfony\Component\OptionsResolver\OptionsResolver'
+                )
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\OptionsResolver\OptionsResolver',
+                'addAllowedTypes',
+                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
+                    'Symfony\Component\OptionsResolver\OptionsResolver'
+                )
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\PropertyAccess\PropertyPathInterface',
                 'getLength',
