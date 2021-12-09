@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector;
+use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/../../../../../config/config.php');
 
     $services = $containerConfigurator->services();
-    $services->set(ConstraintUrlOptionRector::class);
+    $services->set(ReplaceServiceArgumentRector::class);
 };
