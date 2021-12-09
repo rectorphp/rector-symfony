@@ -5,11 +5,14 @@ declare(strict_types=1);
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
@@ -31,20 +34,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $iterableType = new IterableType(new MixedType(), new MixedType());
     $arrayType = new ArrayType(new MixedType(), new MixedType());
+
+    $nullableStringType = new UnionType([new NullType(), new StringType()]);
+    $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
+    $nullableArrayType = new UnionType([new NullType(), $arrayType]);
+
     $commandType = new ObjectType('Symfony\Component\Console\Command\Command');
+    $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection\RouteCollection');
     $httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
     $browserKitResponseType = new ObjectType('Symfony\Component\BrowserKit\Response');
+    $typeGuessType = new ObjectType('Symfony\Component\Form\Guess\TypeGuess');
+    $nullableValueGuessType = new UnionType([
+        new NullType(),
+        new ObjectType('Symfony\Component\Form\Guess\ValueGuess'),
+    ]);
+
+    $configurationType = new ObjectType('Symfony\Component\Config\Definition\ConfigurationInterface');
+
+    $scalarTypes = [
+        $arrayType,
+        new BooleanType(),
+        new StringType(),
+        new IntegerType(),
+        new FloatType(),
+        new NullType(),
+    ];
 
     // @see https://github.com/symfony/symfony/pull/35879
     $services->set(ReplaceServiceArgumentRector::class)
         ->configure([
             new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')),
-            new ReplaceServiceArgument('Symfony\Component\DependencyInjection\ContainerInterface', new String_(
-                'service_container'
-            )),
+            new ReplaceServiceArgument(
+                'Symfony\Component\DependencyInjection\ContainerInterface',
+                new String_('service_container')
+            ),
         ]);
 
     // @see https://github.com/symfony/symfony/pull/42064
+
     $services->set(AddReturnTypeDeclarationRector::class)
         ->configure([
             new AddReturnTypeDeclaration(
@@ -70,21 +97,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getName',
                 new StringType()
             ),
-
             new AddReturnTypeDeclaration(
                 'Symfony\Component\BrowserKit\AbstractBrowser',
                 'doRequestInProcess',
-                new \PHPStan\Type\ObjectWithoutClassType()
+                new ObjectWithoutClassType()
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\BrowserKit\AbstractBrowser',
                 'doRequest',
-                new \PHPStan\Type\ObjectWithoutClassType()
+                new ObjectWithoutClassType()
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\BrowserKit\AbstractBrowser',
                 'filterRequest',
-                new \PHPStan\Type\ObjectWithoutClassType()
+                new ObjectWithoutClassType()
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\BrowserKit\AbstractBrowser',
@@ -96,9 +122,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getConfigTreeBuilder',
                 new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
             ),
-
-            //new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocator', 'locate', string|$arrayType),
-            //new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocatorInterface', 'locate', string|$arrayType),
+            new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocator', 'locate', new UnionType([
+                new StringType(),
+                $arrayType,
+            ])),
+            new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocatorInterface', 'locate', new UnionType([
+                new StringType(),
+                $arrayType,
+            ])),
             new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\FileLoader', 'import', new MixedType()),
             new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
             new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', new MixedType()),
@@ -107,7 +138,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'supports',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'getResolver', LoaderResolverInterface),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Config\Loader\LoaderInterface',
+                'getResolver',
+                new ObjectType('Symfony\Component\Config\Loader\LoaderResolverInterface')
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Config\ResourceCheckerInterface',
                 'supports',
@@ -120,7 +155,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ),
             new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'doRun', new IntegerType()),
             new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'getLongVersion', new StringType()),
-            //new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'add', ?$commandType),
+            new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'add', new UnionType([
+                new NullType(),
+                $commandType,
+            ])),
             new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'get', $commandType),
             new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'find', $commandType),
             new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'all', $arrayType),
@@ -160,28 +198,46 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'processValue',
                 new MixedType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Container', 'getParameter', array|bool|string|int|float|null),
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\ContainerInterface', 'getParameter',, array|bool|string|int|float|null)
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface', 'getConfiguration',, ?ConfigurationInterface)
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\Extension', 'getXsdValidationBasePath', string|false),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface',
+                'getConfiguration',
+                new UnionType([new NullType(), $configurationType])
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\Extension\Extension',
+                'getXsdValidationBasePath',
+                new UnionType([new StringType(), new ConstantBooleanType(false)])
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\Extension\Extension',
                 'getNamespace',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\Extension', 'getConfiguration', ?ConfigurationInterface),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\Extension\Extension',
+                'getConfiguration',
+                new UnionType([new NullType(), $configurationType])
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
                 'getNamespace',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ExtensionInterface', 'getXsdValidationBasePath',, string|false)
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
+                'getXsdValidationBasePath',
+                new UnionType([new StringType(), new ConstantBooleanType(false)])
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
                 'getAlias',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface', 'instantiateProxy',, new \PHPStan\Type\ObjectWithoutClassType())
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface',
+                'instantiateProxy',
+                new ObjectWithoutClassType()
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\EventDispatcher\EventSubscriberInterface',
                 'getSubscribedEvents',
@@ -193,14 +249,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 $arrayType
             ),
             new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'loadTypes', $arrayType),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'loadTypeGuesser', ?FormTypeGuesserInterface),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Form\AbstractExtension',
+                'loadTypeGuesser',
+                new UnionType([new NullType(), new ObjectType('Symfony\Component\Form\FormTypeGuesserInterface')])
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Form\AbstractRendererEngine',
                 'loadResourceForBlockName',
                 new BooleanType()
             ),
             new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractType', 'getBlockPrefix', new StringType()),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractType', 'getParent', ?new StringType()),
+            new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractType', 'getParent', $nullableStringType),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Form\DataTransformerInterface',
                 'transform',
@@ -216,16 +276,32 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'renderBlock',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeGuesserInterface', 'guessType', ?Guess\TypeGuess),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeGuesserInterface', 'guessRequired', ?Guess\ValueGuess),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeGuesserInterface', 'guessMaxLength', ?Guess\ValueGuess),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeGuesserInterface', 'guessPattern', ?Guess\ValueGuess),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Form\FormTypeGuesserInterface',
+                'guessType',
+                new UnionType([new NullType(), $typeGuessType]),
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Form\FormTypeGuesserInterface',
+                'guessRequired',
+                $nullableValueGuessType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Form\FormTypeGuesserInterface',
+                'guessMaxLength',
+                $nullableValueGuessType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Form\FormTypeGuesserInterface',
+                'guessPattern',
+                $nullableValueGuessType
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Form\FormTypeInterface',
                 'getBlockPrefix',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'getParent', ?new StringType()),
+            new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'getParent', $nullableStringType),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface',
                 'isOptional',
@@ -329,18 +405,46 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'isIndex',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface', 'isReadable', ?new \PHPStan\Type\BooleanType()),
-            //new AddReturnTypeDeclaration('Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface', 'isWritable', ?new \PHPStan\Type\BooleanType()),
-            //new AddReturnTypeDeclaration('Symfony\Component\PropertyInfo\PropertyListExtractorInterface', 'getProperties', ?$arrayType),
-            //new AddReturnTypeDeclaration('Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface', 'getTypes', ?$arrayType),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
+                'isReadable',
+                $nullableBooleanType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
+                'isWritable',
+                $nullableBooleanType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\PropertyInfo\PropertyListExtractorInterface',
+                'getProperties',
+                $nullableArrayType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface',
+                'getTypes',
+                $nullableArrayType
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Routing\Loader\AnnotationClassLoader',
                 'getDefaultRouteName',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Routing\Router', 'getRouteCollection', RouteCollection),
-            //new AddReturnTypeDeclaration('Symfony\Component\Routing\RouterInterface', 'getRouteCollection', RouteCollection),
-            //new AddReturnTypeDeclaration('Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface', 'loadTokenBySeries',, PersistentTokenInterface)
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Routing\Router',
+                'getRouteCollection',
+                $routeCollectionType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Routing\RouterInterface',
+                'getRouteCollection',
+                $routeCollectionType
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface',
+                'loadTokenBySeries',
+                new ObjectType('Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface')
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface',
                 'vote',
@@ -351,13 +455,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'getMessageKey',
                 new StringType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Security\Core\User\UserProviderInterface', 'refreshUser', UserInterface),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Security\Core\User\UserProviderInterface',
+                'refreshUser',
+                new ObjectType('Symfony\Component\Security\Core\User\UserInterface')
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Security\Core\User\UserProviderInterface',
                 'supportsClass',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface', 'start', $reponseType),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface',
+                'start',
+                $httpFoundationResponseType
+            ),
             new AddReturnTypeDeclaration('Symfony\Component\Security\Http\Firewall', 'getSubscribedEvents', $arrayType),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Security\Http\FirewallMapInterface',
@@ -374,7 +486,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'supportsDecoding',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Serializer\Normalizer\AbstractNormalizer', 'getAllowedAttributes', array|new \PHPStan\Type\BooleanType()),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
+                'getAllowedAttributes',
+                new UnionType([$arrayType, new \PHPStan\Type\BooleanType()])
+            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
                 'isAllowedAttribute',
@@ -383,18 +499,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
                 'instantiateObject',
-                new \PHPStan\Type\ObjectWithoutClassType()
+                new ObjectWithoutClassType()
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
                 'supportsNormalization',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer', 'normalize',, array|string|int|float|bool|\ArrayObject|null)
+
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
                 'instantiateObject',
-                new \PHPStan\Type\ObjectWithoutClassType()
+                new ObjectWithoutClassType()
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
@@ -426,7 +542,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'supportsDenormalization',
                 new BooleanType()
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Serializer\Normalizer\NormalizerInterface', 'normalize',, array|string|int|float|bool|\ArrayObject|null)
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
                 'supportsNormalization',
@@ -447,10 +562,39 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'extractFromDirectory',
                 $iterableType
             ),
-            //new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'getDefaultOption', ?new StringType()),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Validator\Constraint',
+                'getDefaultOption',
+                $nullableStringType
+            ),
             new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'getRequiredOptions', $arrayType),
             new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'validatedBy', new StringType()),
-            //new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'getTargets', string|$arrayType),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Validator\Constraint',
+                'getTargets',
+                new UnionType([new StringType(), $arrayType])
+            ),
+
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
+                'normalize',
+                new UnionType([...$scalarTypes, new ObjectType('ArrayObject')])
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\Container',
+                'getParameter',
+                new UnionType([$scalarTypes])
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\DependencyInjection\ContainerInterface',
+                'getParameter',
+                new UnionType([$scalarTypes])
+            ),
+            new AddReturnTypeDeclaration(
+                'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+                'normalize',
+                new UnionType([...$scalarTypes, new ObjectType('ArrayObject')])
+            ),
         ]);
 
     $services->set(AddParamTypeDeclarationRector::class)
