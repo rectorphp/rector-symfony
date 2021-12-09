@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -49,7 +50,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -66,7 +67,7 @@ CODE_SAMPLE
         }
 
         $firstArg = $node->args[0];
-        if (! $firstArg instanceof Node\Arg) {
+        if (! $firstArg instanceof Arg) {
             return null;
         }
 
@@ -75,7 +76,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $node->args[0] = new Node\Arg($replaceServiceArgument->getNewValueExpr());
+            $node->args[0] = new Arg($replaceServiceArgument->getNewValueExpr());
             return $node;
         }
 

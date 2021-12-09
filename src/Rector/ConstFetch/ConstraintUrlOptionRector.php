@@ -75,7 +75,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
     private function isInsideNewUrl(ConstFetch $constFetch): bool
     {
         $new = $this->betterNodeFinder->findParentType($constFetch, New_::class);
-        if ($new === null) {
+        if (! $new instanceof New_) {
             return false;
         }
 

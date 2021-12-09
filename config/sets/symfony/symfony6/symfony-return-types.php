@@ -18,7 +18,8 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-# https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
+// https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
+// @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $iterableType = new IterableType(new MixedType(), new MixedType());
