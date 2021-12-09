@@ -347,31 +347,31 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'countErrors',
                 new IntegerType()
             ),
-            new AddReturnTypeDeclaration(
-                'Symfony\Component\OptionsResolver\OptionsResolver',
-                'setNormalizer',
-                new StaticType()
-            ),
-            new AddReturnTypeDeclaration(
-                'Symfony\Component\OptionsResolver\OptionsResolver',
-                'setAllowedValues',
-                new StaticType()
-            ),
-            new AddReturnTypeDeclaration(
-                'Symfony\Component\OptionsResolver\OptionsResolver',
-                'addAllowedValues',
-                new StaticType()
-            ),
-            new AddReturnTypeDeclaration(
-                'Symfony\Component\OptionsResolver\OptionsResolver',
-                'setAllowedTypes',
-                new StaticType()
-            ),
-            new AddReturnTypeDeclaration(
-                'Symfony\Component\OptionsResolver\OptionsResolver',
-                'addAllowedTypes',
-                new StaticType()
-            ),
+            //            new AddReturnTypeDeclaration(
+            //                'Symfony\Component\OptionsResolver\OptionsResolver',
+            //                'setNormalizer',
+            //                new StaticType()
+            //            ),
+            //            new AddReturnTypeDeclaration(
+            //                'Symfony\Component\OptionsResolver\OptionsResolver',
+            //                'setAllowedValues',
+            //                new StaticType()
+            //            ),
+            //            new AddReturnTypeDeclaration(
+            //                'Symfony\Component\OptionsResolver\OptionsResolver',
+            //                'addAllowedValues',
+            //                new StaticType()
+            //            ),
+            //            new AddReturnTypeDeclaration(
+            //                'Symfony\Component\OptionsResolver\OptionsResolver',
+            //                'setAllowedTypes',
+            //                new StaticType()
+            //            ),
+            //            new AddReturnTypeDeclaration(
+            //                'Symfony\Component\OptionsResolver\OptionsResolver',
+            //                'addAllowedTypes',
+            //                new StaticType()
+            //            ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\PropertyAccess\PropertyPathInterface',
                 'getLength',
@@ -583,12 +583,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\Container',
                 'getParameter',
-                new UnionType([$scalarTypes])
+                new UnionType($scalarTypes)
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\ContainerInterface',
                 'getParameter',
-                new UnionType([$scalarTypes])
+                new UnionType($scalarTypes)
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
