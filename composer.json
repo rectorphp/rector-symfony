@@ -32,7 +32,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Symfony\\Tests\\": "tests"
+            "Rector\\Symfony\\Tests\\": "tests",
+            "Rector\\Symfony\\Utils\\": "utils"
         },
         "classmap": [
             "stubs"
