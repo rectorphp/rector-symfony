@@ -17,6 +17,7 @@ use PHPStan\Type\UnionType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
@@ -49,6 +50,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         new FloatType(),
         new NullType(),
     ];
+
+    $scalarArrayObjectUnionedTypes = [...$scalarTypes, new ObjectType('ArrayObject')];
+
+    // cannot be crated with \PHPStan\Type\UnionTypeHelper::sortTypes() as ObjectType requires a class reflection we do not have here
+    $unionTypeReflectionClass = new ReflectionClass(UnionType::class);
+
+    /** @var UnionType $scalarArrayObjectUnionType */
+    $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
+
+    $privatesAccessor = new PrivatesAccessor();
+    $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
 
     // @see https://github.com/symfony/symfony/pull/42064
     $services = $containerConfigurator->services();
@@ -568,7 +580,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
                 'normalize',
-                new UnionType([...$scalarTypes, new ObjectType('ArrayObject')])
+                $scalarArrayObjectUnionType
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\DependencyInjection\Container',
@@ -583,7 +595,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
                 'normalize',
-                new UnionType([...$scalarTypes, new ObjectType('ArrayObject')])
+                $scalarArrayObjectUnionType
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface',
