@@ -41,7 +41,7 @@ final class MakeCommandLazyRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     public function configure()
     {
@@ -53,7 +53,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     protected static $defaultName = 'sunshine';
     public function configure()
@@ -79,6 +79,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Command\Command'))) {
+            return null;
+        }
+
+        $defaultNameProperty = $node->getProperty('defaultName');
+        if ($defaultNameProperty) {
             return null;
         }
 
