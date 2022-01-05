@@ -6,9 +6,12 @@ namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -41,7 +44,7 @@ final class MakeCommandLazyRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     public function configure()
     {
@@ -53,7 +56,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     protected static $defaultName = 'sunshine';
     public function configure()
@@ -82,10 +85,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $commandName = $this->resolveCommandNameAndRemove($node);
+        $defaultNameProperty = $node->getProperty('defaultName');
+        if ($defaultNameProperty instanceof Property) {
+            return null;
+        }
+
+        $commandName = $this->resolveCommandName($node);
         if (! $commandName instanceof Node) {
             return null;
         }
+
+        if (! $commandName instanceof String_ && ! $commandName instanceof ClassConstFetch) {
+            return null;
+        }
+
+        $this->removeConstructorIfHasOnlySetNameMethodCall($node);
 
         $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
 
@@ -94,14 +108,12 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function resolveCommandNameAndRemove(Class_ $class): ?Node
+    private function resolveCommandName(Class_ $class): ?Node
     {
         $commandName = $this->resolveCommandNameFromConstructor($class);
         if (! $commandName instanceof Node) {
-            $commandName = $this->resolveCommandNameFromSetName($class);
+            return $this->resolveCommandNameFromSetName($class);
         }
-
-        $this->removeConstructorIfHasOnlySetNameMethodCall($class);
 
         return $commandName;
     }
@@ -124,6 +136,12 @@ CODE_SAMPLE
                 return null;
             }
 
+            // only valid static property values for name
+            if (! $commandName instanceof String_ && ! $commandName instanceof ConstFetch) {
+                return null;
+            }
+
+            // remove if parent name is not string
             array_shift($node->args);
         });
 
