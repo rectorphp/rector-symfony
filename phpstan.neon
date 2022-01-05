@@ -11,6 +11,7 @@ parameters:
 
     excludePaths:
         - */Source/*
+        - */Source*/*
         - *Source/*
 
     reportUnmatchedIgnoredErrors: false

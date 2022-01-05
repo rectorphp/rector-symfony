@@ -23,6 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         RemoveDeadInstanceOfRector::class,
         '*/Fixture/*',
         '*/Source/*',
+        '*/Source*/*',
     ]);
 
     $services = $containerConfigurator->services();
