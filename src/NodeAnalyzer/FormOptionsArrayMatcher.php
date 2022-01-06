@@ -11,11 +11,12 @@ final class FormOptionsArrayMatcher
 {
     public function match(MethodCall $methodCall): ?Array_
     {
-        if (! isset($methodCall->args[2])) {
+        if (! isset($methodCall->getArgs()[2])) {
             return null;
         }
 
-        $optionsArray = $methodCall->args[2]->value;
+        $optionsArray = $methodCall->getArgs()[2]
+            ->value;
         if (! $optionsArray instanceof Array_) {
             return null;
         }

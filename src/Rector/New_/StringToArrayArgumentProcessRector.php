@@ -129,14 +129,16 @@ CODE_SAMPLE
             return;
         }
 
+        $args = $expr->getArgs();
+
         if ($firstArgumentExpr instanceof FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
             if ($arrayNode !== null) {
-                $expr->args[$argumentPosition]->value = $arrayNode;
+                $args[$argumentPosition]->value = $arrayNode;
             }
         } elseif ($firstArgumentExpr instanceof String_) {
             $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
-            $expr->args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
+            $args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
         }
 
         $this->processPreviousAssign($expr, $firstArgumentExpr);

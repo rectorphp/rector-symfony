@@ -93,7 +93,8 @@ CODE_SAMPLE
         }
 
         /** @var Array_ $formBuilderOptionsArrayNode */
-        $formBuilderOptionsArrayNode = $node->args[1]->value;
+        $formBuilderOptionsArrayNode = $node->getArgs()[1]
+            ->value;
 
         if (! $this->isSuccessfulRemovalCascadeValidationOption($node, $formBuilderOptionsArrayNode)) {
             return null;
@@ -110,11 +111,13 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! isset($methodCall->args[1])) {
+        if (! isset($methodCall->getArgs()[1])) {
             return true;
         }
 
-        return ! $methodCall->args[1]->value instanceof Array_;
+        $secondArg = $methodCall->getArgs()[1];
+
+        return ! $secondArg->value instanceof Array_;
     }
 
     private function isSuccessfulRemovalCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
@@ -155,7 +158,7 @@ CODE_SAMPLE
         while ($parentNode instanceof MethodCall) {
             if ($this->isName($parentNode->name, 'add')) {
                 /** @var Array_ $addOptionsArrayNode */
-                $addOptionsArrayNode = isset($parentNode->args[2]) ? $parentNode->args[2]->value : new Array_();
+                $addOptionsArrayNode = isset($parentNode->getArgs()[2]) ? $parentNode->getArgs()[2]->value : new Array_();
                 $addOptionsArrayNode->items[] = $constraintsArrayItem;
 
                 $parentNode->args[2] = new Arg($addOptionsArrayNode);

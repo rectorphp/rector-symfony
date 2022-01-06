@@ -97,7 +97,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $argValue = $node->args[0]->value;
+        $argValue = $node->getArgs()[0]
+            ->value;
+
         $argValue = $argValue instanceof ConstFetch
             ? $this->createNegationConsFetch($argValue)
             : new BooleanNot($argValue);

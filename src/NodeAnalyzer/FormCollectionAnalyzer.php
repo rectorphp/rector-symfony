@@ -19,7 +19,8 @@ final class FormCollectionAnalyzer
 
     public function isCollectionType(MethodCall $methodCall): bool
     {
-        $typeValue = $methodCall->args[1]->value;
+        $typeValue = $methodCall->getArgs()[1]
+            ->value;
         if (! $typeValue instanceof ClassConstFetch) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }

@@ -86,7 +86,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $argumentValue = $node->args[0]->value;
+        $argumentValue = $node->getArgs()[0]
+            ->value;
         if ($this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
@@ -98,7 +99,8 @@ CODE_SAMPLE
         $newArgumentValue = new New_(new FullyQualified($this->dataMapperObjectType->getClassName()), [
             new Arg($propertyPathAccessor),
         ]);
-        $node->args[0]->value = $newArgumentValue;
+        $node->getArgs()[0]
+            ->value = $newArgumentValue;
 
         return $node;
     }
