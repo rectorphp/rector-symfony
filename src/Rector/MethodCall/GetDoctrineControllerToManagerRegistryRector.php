@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
@@ -25,9 +26,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetDoctrineControllerToManagerRegistryRector extends AbstractRector
 {
+    /**
+     * @var array<string, string>
+     */
+    private const METHOD_NAME_TO_PROPERTY_TYPE = [
+        'getDoctrine' => 'Doctrine\Persistence\ManagerRegistry',
+    ];
+
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
+<<<<<<< HEAD
         private readonly PropertyToAddCollector $propertyToAddCollector,
+=======
+        private PropertyToAddCollector $propertyToAddCollector,
+        private PropertyNaming $propertyNaming,
+>>>>>>> make GetDoctrineControllerToManagerRegistryRector generic
     ) {
     }
 
@@ -88,22 +101,27 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isName($node->name, 'getDoctrine')) {
-            return null;
+        foreach (self::METHOD_NAME_TO_PROPERTY_TYPE as $methodName => $propertyType) {
+            if (! $this->isName($node->name, $methodName)) {
+                continue;
+            }
+
+            $propertyName = $this->propertyNaming->fqnToVariableName($propertyType);
+
+            $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+            if (! $class instanceof Class_) {
+                return null;
+            }
+
+            // add dependency
+            $propertyObjectType = new ObjectType($propertyType);
+            $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
+            $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
+
+            $thisVariable = new Variable('this');
+            return new PropertyFetch($thisVariable, $propertyName);
         }
 
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (! $class instanceof Class_) {
-            return null;
-        }
-
-        // add dependency
-        $propertyMetadata = new PropertyMetadata('managerRegistry', new ObjectType(
-            'Doctrine\Persistence\ManagerRegistry'
-        ), Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-
-        $thisVariable = new Variable('this');
-        return new PropertyFetch($thisVariable, 'managerRegistry');
+        return null;
     }
 }
