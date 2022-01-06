@@ -18,6 +18,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
+
+    // experimental
+    $parameters->set(Option::PARALLEL, true);
+
     $parameters->set(Option::SKIP, [
         // waits for phpstan to use php-parser 4.13
         RemoveDeadInstanceOfRector::class,
@@ -33,6 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Symfony\*',
             'Twig_*',
             'Swift_*',
+            'Doctrine\*',
         ]);
 
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
@@ -40,5 +45,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::DEAD_CODE);
 
     // for testing
+    $containerConfigurator->import(__DIR__ . '/config/config.php');
     $containerConfigurator->import(SymfonySetList::SYMFONY_60);
 };
