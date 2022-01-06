@@ -27,8 +27,8 @@ final class StringFormTypeToClassRector extends AbstractRector
     private const DESCRIPTION = 'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"';
 
     public function __construct(
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormTypeStringToTypeProvider $formTypeStringToTypeProvider
     ) {
     }
 

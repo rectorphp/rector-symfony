@@ -32,12 +32,12 @@ final class ChangeFileLoaderInExtensionAndKernelRector extends AbstractRector im
     /**
      * @var string
      */
-    public const FROM = 'from';
+    final public const FROM = 'from';
 
     /**
      * @var string
      */
-    public const TO = 'to';
+    final public const TO = 'to';
 
     /**
      * @var array<string, class-string<PhpFileLoader>|class-string<XmlFileLoader>|class-string<YamlFileLoader>>

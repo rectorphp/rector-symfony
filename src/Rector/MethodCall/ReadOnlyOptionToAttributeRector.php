@@ -22,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
     public function __construct(
-        private ArrayManipulator $arrayManipulator,
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormOptionsArrayMatcher $formOptionsArrayMatcher
+        private readonly ArrayManipulator $arrayManipulator,
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher
     ) {
     }
 

@@ -47,10 +47,10 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
     private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
 
     public function __construct(
-        private ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
-        private ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
-        private ThisRenderFactory $thisRenderFactory,
-        private PhpDocTagRemover $phpDocTagRemover
+        private readonly ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
+        private readonly ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
+        private readonly ThisRenderFactory $thisRenderFactory,
+        private readonly PhpDocTagRemover $phpDocTagRemover
     ) {
     }
 

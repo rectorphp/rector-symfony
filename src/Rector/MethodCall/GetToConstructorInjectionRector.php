@@ -18,8 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
-        private DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
-        private ContainerAwareAnalyzer $containerAwareAnalyzer,
+        private readonly DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
+        private readonly ContainerAwareAnalyzer $containerAwareAnalyzer,
     ) {
     }
 

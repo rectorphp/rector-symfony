@@ -7,9 +7,9 @@ namespace Rector\Symfony\ValueObject;
 final class EventNameToClassAndConstant
 {
     public function __construct(
-        private string $eventName,
-        private string $eventClass,
-        private string $eventConstant
+        private readonly string $eventName,
+        private readonly string $eventClass,
+        private readonly string $eventConstant
     ) {
     }
 

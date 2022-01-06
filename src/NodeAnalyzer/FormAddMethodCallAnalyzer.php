@@ -17,8 +17,8 @@ final class FormAddMethodCallAnalyzer
     private array $formObjectTypes = [];
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
         $this->formObjectTypes = [
             new ObjectType('Symfony\Component\Form\FormBuilderInterface'),

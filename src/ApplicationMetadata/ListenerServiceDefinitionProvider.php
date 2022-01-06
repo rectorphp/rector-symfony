@@ -25,7 +25,7 @@ final class ListenerServiceDefinitionProvider
     private array $listenerClassesToEvents = [];
 
     public function __construct(
-        private ServiceMapProvider $serviceMapProvider
+        private readonly ServiceMapProvider $serviceMapProvider
     ) {
     }
 

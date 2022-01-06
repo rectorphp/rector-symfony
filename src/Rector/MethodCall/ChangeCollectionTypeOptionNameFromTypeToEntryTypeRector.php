@@ -31,9 +31,9 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
     ];
 
     public function __construct(
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        private FormCollectionAnalyzer $formCollectionAnalyzer
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private readonly FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
     }
 

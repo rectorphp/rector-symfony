@@ -23,11 +23,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRector
 {
-    private ObjectType $successHandlerObjectType;
+    private readonly ObjectType $successHandlerObjectType;
 
     public function __construct(
-        private OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory,
-        private GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
+        private readonly OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory,
+        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
         $this->successHandlerObjectType = new ObjectType(
             'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface'

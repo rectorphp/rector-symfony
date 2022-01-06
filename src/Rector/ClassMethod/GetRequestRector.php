@@ -31,8 +31,8 @@ final class GetRequestRector extends AbstractRector
     private ?string $requestVariableAndParamName = null;
 
     public function __construct(
-        private ControllerMethodAnalyzer $controllerMethodAnalyzer,
-        private ControllerAnalyzer $controllerAnalyzer,
+        private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
+        private readonly ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->controllerAnalyzer->detect($node)) {
+        if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
 

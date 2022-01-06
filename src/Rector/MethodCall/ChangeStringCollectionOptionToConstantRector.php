@@ -26,10 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
 {
     public function __construct(
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
-        private FormCollectionAnalyzer $formCollectionAnalyzer
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private readonly FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        private readonly FormCollectionAnalyzer $formCollectionAnalyzer
     ) {
     }
 

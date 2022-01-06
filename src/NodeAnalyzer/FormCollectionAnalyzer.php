@@ -12,8 +12,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class FormCollectionAnalyzer
 {
     public function __construct(
-        private ValueResolver $valueResolver,
-        private NodeNameResolver $nodeNameResolver
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

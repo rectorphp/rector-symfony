@@ -14,8 +14,8 @@ use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 final class EventReferenceFactory
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private ReflectionProvider $reflectionProvider
+        private readonly NodeFactory $nodeFactory,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

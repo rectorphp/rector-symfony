@@ -27,7 +27,7 @@ final class GetDoctrineControllerToManagerRegistryRector extends AbstractRector
 {
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
-        private PropertyToAddCollector $propertyToAddCollector,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
     ) {
     }
 
@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->controllerAnalyzer->detect($node->var)) {
+        if (! $this->controllerAnalyzer->isController($node->var)) {
             return null;
         }
 

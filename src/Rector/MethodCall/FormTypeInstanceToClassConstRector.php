@@ -37,11 +37,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        private FormCollectionAnalyzer $formCollectionAnalyzer,
-        private ControllerAnalyzer $controllerAnalyzer,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
+        private readonly FormCollectionAnalyzer $formCollectionAnalyzer,
+        private readonly ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->controllerAnalyzer->detect($node->var) && $this->isName($node->name, 'createForm')) {
+        if ($this->controllerAnalyzer->isController($node->var) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 

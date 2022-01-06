@@ -14,7 +14,7 @@ use Rector\Core\NodeManipulator\FuncCallManipulator;
 final class ArrayFromCompactFactory
 {
     public function __construct(
-        private FuncCallManipulator $funcCallManipulator
+        private readonly FuncCallManipulator $funcCallManipulator
     ) {
     }
 

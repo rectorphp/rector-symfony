@@ -17,8 +17,8 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class ServiceTypeMethodCallResolver
 {
     public function __construct(
-        private ServiceMapProvider $serviceMapProvider,
-        private NodeNameResolver $nodeNameResolver
+        private readonly ServiceMapProvider $serviceMapProvider,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

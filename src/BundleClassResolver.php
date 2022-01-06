@@ -17,10 +17,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class BundleClassResolver
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private RectorParser $rectorParser,
-        private ReflectionProvider $reflectionProvider
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly RectorParser $rectorParser,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

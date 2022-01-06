@@ -19,8 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddFlashRector extends AbstractRector
 {
     public function __construct(
-        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        private ControllerAnalyzer $controllerAnalyzer,
+        private readonly FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
+        private readonly ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->controllerAnalyzer->detect($node)) {
+        if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
 

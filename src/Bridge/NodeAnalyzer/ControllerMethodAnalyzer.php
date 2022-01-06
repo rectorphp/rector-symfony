@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerMethodAnalyzer
 {
     public function __construct(
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private readonly ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 

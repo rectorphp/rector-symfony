@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeGetParentRector extends AbstractRector
 {
     public function __construct(
-        private FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
+        private readonly FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
     ) {
     }
 

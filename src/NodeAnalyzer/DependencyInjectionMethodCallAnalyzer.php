@@ -17,11 +17,11 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class DependencyInjectionMethodCallAnalyzer
 {
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
-        private NodeFactory $nodeFactory,
-        private PropertyToAddCollector $propertyToAddCollector,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
+        private readonly NodeFactory $nodeFactory,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

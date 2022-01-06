@@ -26,9 +26,9 @@ final class OnLogoutClassMethodFactory
     ];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
-        private ParamAnalyzer $paramAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 

@@ -16,8 +16,8 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 final class BareLogoutClassMethodFactory
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private PhpVersionProvider $phpVersionProvider
+        private readonly NodeFactory $nodeFactory,
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

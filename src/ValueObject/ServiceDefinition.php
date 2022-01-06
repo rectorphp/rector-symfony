@@ -12,12 +12,12 @@ final class ServiceDefinition
      * @param TagInterface[] $tags
      */
     public function __construct(
-        private string $id,
-        private ?string $class,
-        private bool $isPublic,
-        private bool $isSynthetic,
-        private ?string $alias,
-        private array $tags
+        private readonly string $id,
+        private readonly ?string $class,
+        private readonly bool $isPublic,
+        private readonly bool $isSynthetic,
+        private readonly ?string $alias,
+        private readonly array $tags
     ) {
     }
 

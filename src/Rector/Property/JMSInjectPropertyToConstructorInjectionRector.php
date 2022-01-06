@@ -32,8 +32,8 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
     private const INJECT_ANNOTATION_CLASS = 'JMS\DiExtraBundle\Annotation\Inject';
 
     public function __construct(
-        private JMSDITypeResolver $jmsDITypeResolver,
-        private PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
+        private readonly JMSDITypeResolver $jmsDITypeResolver,
+        private readonly PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
     ) {
     }
 

@@ -10,9 +10,9 @@ use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 final class EventReferenceToMethodNameWithPriority implements EventReferenceToMethodNameInterface
 {
     public function __construct(
-        private ClassConstFetch $classConstFetch,
-        private string $methodName,
-        private int $priority
+        private readonly ClassConstFetch $classConstFetch,
+        private readonly string $methodName,
+        private readonly int $priority
     ) {
     }
 
