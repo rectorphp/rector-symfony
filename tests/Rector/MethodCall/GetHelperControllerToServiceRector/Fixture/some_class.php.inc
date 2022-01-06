@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -16,7 +16,7 @@ final class SomeController extends AbstractController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

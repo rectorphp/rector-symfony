@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\TypeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
@@ -14,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerAnalyzer
 {
-    public function isController(Node\Expr $expr): bool
+    public function isController(Expr $expr): bool
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
