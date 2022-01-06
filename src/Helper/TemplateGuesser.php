@@ -48,8 +48,8 @@ final class TemplateGuesser
     private const ACTION_MATCH_REGEX = '#Action$#';
 
     public function __construct(
-        private BundleClassResolver $bundleClassResolver,
-        private NodeNameResolver $nodeNameResolver
+        private readonly BundleClassResolver $bundleClassResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

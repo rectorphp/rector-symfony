@@ -24,8 +24,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTagRemover $phpDocTagRemover,
-        private PhpDocInfoPrinter $phpDocInfoPrinter,
+        private readonly PhpDocTagRemover $phpDocTagRemover,
+        private readonly PhpDocInfoPrinter $phpDocInfoPrinter,
     ) {
     }
 

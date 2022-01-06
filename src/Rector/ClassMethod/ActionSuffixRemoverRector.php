@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ActionSuffixRemoverRector extends AbstractRector
 {
     public function __construct(
-        private ControllerMethodAnalyzer $controllerMethodAnalyzer,
+        private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
     ) {
     }
 

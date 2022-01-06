@@ -25,9 +25,9 @@ final class RenderMethodParamToTypeDeclarationRector extends AbstractRector
     private bool $hasChanged = false;
 
     public function __construct(
-        private ParamTypeInferer $paramTypeInferer,
-        private ParamTagRemover $paramTagRemover,
-        private ControllerRenderMethodAnalyzer $controllerRenderMethodAnalyzer,
+        private readonly ParamTypeInferer $paramTypeInferer,
+        private readonly ParamTagRemover $paramTagRemover,
+        private readonly ControllerRenderMethodAnalyzer $controllerRenderMethodAnalyzer,
     ) {
     }
 

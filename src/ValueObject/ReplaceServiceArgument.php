@@ -10,7 +10,7 @@ final class ReplaceServiceArgument
 {
     public function __construct(
         private readonly mixed $oldValue,
-        private Expr $newValueExpr
+        private readonly Expr $newValueExpr
     ) {
     }
 

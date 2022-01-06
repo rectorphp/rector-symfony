@@ -28,8 +28,8 @@ final class OptionNameRector extends AbstractRector
     ];
 
     public function __construct(
-        private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
-        private FormOptionsArrayMatcher $formOptionsArrayMatcher
+        private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
+        private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher
     ) {
     }
 

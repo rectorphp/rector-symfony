@@ -16,7 +16,7 @@ final class ContainerAwareAnalyzer
     private array $getMethodAwareObjectTypes = [];
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
         $this->getMethodAwareObjectTypes = [
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),

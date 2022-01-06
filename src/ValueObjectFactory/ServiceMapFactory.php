@@ -22,7 +22,7 @@ final class ServiceMapFactory
     private const TAG = 'tag';
 
     public function __construct(
-        private SmartFileSystem $smartFileSystem
+        private readonly SmartFileSystem $smartFileSystem
     ) {
     }
 

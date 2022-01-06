@@ -26,10 +26,10 @@ final class OnSuccessLogoutClassMethodFactory
     private const LOGOUT_EVENT = 'logoutEvent';
 
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
     ) {
     }
 

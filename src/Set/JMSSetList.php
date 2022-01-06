@@ -11,5 +11,5 @@ final class JMSSetList implements SetListInterface
     /**
      * @var string
      */
-    public const REMOVE_JMS_INJECT = __DIR__ . '/../../config/sets/jms/remove-jms-inject.php';
+    final public const REMOVE_JMS_INJECT = __DIR__ . '/../../config/sets/jms/remove-jms-inject.php';
 }

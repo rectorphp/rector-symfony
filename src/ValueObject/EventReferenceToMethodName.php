@@ -10,8 +10,8 @@ use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 final class EventReferenceToMethodName implements EventReferenceToMethodNameInterface
 {
     public function __construct(
-        private ClassConstFetch $classConstFetch,
-        private string $methodName
+        private readonly ClassConstFetch $classConstFetch,
+        private readonly string $methodName
     ) {
     }
 

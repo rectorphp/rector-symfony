@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormIsValidRector extends AbstractRector
 {
     public function __construct(
-        private MethodCallManipulator $methodCallManipulator
+        private readonly MethodCallManipulator $methodCallManipulator
     ) {
     }
 

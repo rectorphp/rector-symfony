@@ -25,11 +25,11 @@ use Rector\Symfony\Helper\TemplateGuesser;
 final class ThisRenderFactory
 {
     public function __construct(
-        private ArrayFromCompactFactory $arrayFromCompactFactory,
-        private NodeFactory $nodeFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private TemplateGuesser $templateGuesser
+        private readonly ArrayFromCompactFactory $arrayFromCompactFactory,
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TemplateGuesser $templateGuesser
     ) {
     }
 

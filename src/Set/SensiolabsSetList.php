@@ -11,5 +11,5 @@ final class SensiolabsSetList implements SetListInterface
     /**
      * @var string
      */
-    public const FRAMEWORK_EXTRA_61 = __DIR__ . '/../../config/sets/sensiolabs/framework-extra-61.php';
+    final public const FRAMEWORK_EXTRA_61 = __DIR__ . '/../../config/sets/sensiolabs/framework-extra-61.php';
 }

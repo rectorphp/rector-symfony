@@ -21,11 +21,11 @@ use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 final class JMSDITypeResolver
 {
     public function __construct(
-        private ServiceMapProvider $serviceMapProvider,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ReflectionProvider $reflectionProvider,
-        private NodeNameResolver $nodeNameResolver,
-        private CurrentFileProvider $currentFileProvider
+        private readonly ServiceMapProvider $serviceMapProvider,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 

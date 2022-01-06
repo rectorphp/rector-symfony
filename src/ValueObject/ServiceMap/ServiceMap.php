@@ -14,7 +14,7 @@ final class ServiceMap
      * @param ServiceDefinition[] $services
      */
     public function __construct(
-        private array $services
+        private readonly array $services
     ) {
     }
 

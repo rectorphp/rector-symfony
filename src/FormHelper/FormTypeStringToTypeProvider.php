@@ -54,7 +54,7 @@ final class FormTypeStringToTypeProvider
     private array $customServiceFormTypeByAlias = [];
 
     public function __construct(
-        private ServiceMapProvider $serviceMapProvider
+        private readonly ServiceMapProvider $serviceMapProvider
     ) {
     }
 

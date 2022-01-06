@@ -19,9 +19,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ReturnTypeDeclarationUpdater
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider,
-        private StaticTypeMapper $staticTypeMapper,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

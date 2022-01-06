@@ -10,13 +10,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\StringType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private ReflectionProvider $reflectionProvider,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly PropertyNaming $propertyNaming,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
@@ -82,14 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varType = $this->nodeTypeResolver->getType($node->var);
-        if (! $varType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($varType->getClassName());
-        if (! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\Controller')
-            && ! $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')) {
+        if (! $this->controllerAnalyzer->isController($node->var)) {
             return null;
         }
 

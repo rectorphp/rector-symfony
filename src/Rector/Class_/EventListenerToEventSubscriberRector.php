@@ -49,8 +49,8 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private array $eventNamesToClassConstants = [];
 
     public function __construct(
-        private ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
-        private GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
+        private readonly ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
+        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
