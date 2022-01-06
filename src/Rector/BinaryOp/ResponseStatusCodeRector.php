@@ -160,7 +160,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $statusCode = $methodCall->args[0]->value;
+        $statusCode = $methodCall->getArgs()[0]
+            ->value;
 
         if (! $statusCode instanceof LNumber) {
             return null;

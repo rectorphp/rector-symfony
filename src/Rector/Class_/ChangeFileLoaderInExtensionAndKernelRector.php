@@ -192,7 +192,8 @@ CODE_SAMPLE
     private function replaceSuffix(MethodCall $methodCall, string $from, string $to): void
     {
         // replace XML to YAML suffix in string parts
-        $fileArgument = $methodCall->args[0]->value;
+        $fileArgument = $methodCall->getArgs()[0]
+            ->value;
 
         $this->traverseNodesWithCallable([$fileArgument], function (Node $node) use ($from, $to): ?Node {
             if (! $node instanceof String_) {

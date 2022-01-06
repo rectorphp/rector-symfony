@@ -165,7 +165,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            $commandName = $node->args[0]->value;
+            $commandName = $node->getArgs()[0]
+                ->value;
             $commandNameStaticType = $this->getType($commandName);
             if (! $commandNameStaticType instanceof StringType) {
                 return null;
@@ -234,12 +235,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticType = $this->getType($staticCall->args[0]->value);
+        $firstArg = $staticCall->getArgs()[0];
+
+        $staticType = $this->getType($firstArg->value);
         if (! $staticType instanceof StringType) {
             return null;
         }
 
-        return $staticCall->args[0]->value;
+        return $firstArg->value;
     }
 
     private function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property

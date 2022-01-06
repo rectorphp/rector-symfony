@@ -121,7 +121,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $argValue = $methodCall->args[$position]->value;
+        $argValue = $methodCall->getArgs()[$position]->value;
         if (! $argValue instanceof New_) {
             return null;
         }
@@ -137,7 +137,7 @@ CODE_SAMPLE
                 $position,
                 $optionsPosition,
                 $argValue->class->toString(),
-                $argValue->args
+                $argValue->getArgs()
             );
 
             if (! $methodCall instanceof MethodCall) {
@@ -145,9 +145,10 @@ CODE_SAMPLE
             }
         }
 
-        $methodCall->args[$position]->value = $this->nodeFactory->createClassConstReference(
-            $argValue->class->toString()
-        );
+        $currentArg = $methodCall->getArgs()[$position];
+
+        $classConstReference = $this->nodeFactory->createClassConstReference($argValue->class->toString());
+        $currentArg->value = $classConstReference;
 
         return $methodCall;
     }

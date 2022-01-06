@@ -199,14 +199,15 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $methodCall->args[0]->value instanceof String_) {
+        $firstArg = $methodCall->getArgs()[0];
+
+        if (! $firstArg->value instanceof String_) {
             return false;
         }
 
-        /** @var String_ $stringValue */
-        $stringValue = $methodCall->args[0]->value;
+        $string = $firstArg->value;
 
-        return $stringValue->value === 'request';
+        return $string->value === 'request';
     }
 
     private function getRequestVariableAndParamName(): string

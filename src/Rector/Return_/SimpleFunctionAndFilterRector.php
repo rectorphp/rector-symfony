@@ -160,7 +160,7 @@ CODE_SAMPLE
             $arrayItem->key = null;
             $arrayItem->value->class = new FullyQualified($newClass);
 
-            $oldArguments = $arrayItem->value->args;
+            $oldArguments = $arrayItem->value->getArgs();
 
             $this->decorateArrayItem($arrayItem, $oldArguments, $filterName);
             break;
