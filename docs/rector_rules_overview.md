@@ -1,4 +1,4 @@
-# 54 Rules Overview
+# 55 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -469,6 +469,33 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 
 <br>
 
+## GetDoctrineControllerToManagerRegistryRector
+
+Replace `$this->getDoctrine()` calls in AbstractController with direct Doctrine\Persistence\ManagerRegistry service
+
+- class: [`Rector\Symfony\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector`](../src/Rector/MethodCall/GetDoctrineControllerToManagerRegistryRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Doctrine\Persistence\ManagerRegistry;
+
+ final class SomeController extends AbstractController
+ {
++    public function __construct(
++        private ManagerRegistry $managerRegistry
++    ) {
++    }
++
+     public function run()
+     {
+-        $productRepository = $this->getDoctrine()->getRepository(Product::class);
++        $productRepository = $this->managerRegistry->getRepository(Product::class);
+     }
+ }
+```
+
+<br>
+
 ## GetParameterToConstructorInjectionRector
 
 Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
@@ -666,7 +693,7 @@ Make Symfony commands lazy
 ```diff
  use Symfony\Component\Console\Command\Command
 
- class SunshineCommand extends Command
+ final class SunshineCommand extends Command
  {
 +    protected static $defaultName = 'sunshine';
      public function configure()
@@ -926,12 +953,14 @@ Move `@param` docs on `render()` method in Symfony controller to strict type dec
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\Routing\Annotation\Route;
 
  final class SomeController extends AbstractController
  {
--    /**
+     /**
+      * @Route()
 -     * @param string $name
--     */
+      */
 -    public function render($name)
 +    public function render(string $name)
      {

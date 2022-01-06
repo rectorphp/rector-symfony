@@ -9,6 +9,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -63,4 +64,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'loadUserByIdentifier'
             ),
         ]);
+    $services->set(GetDoctrineControllerToManagerRegistryRector::class);
 };

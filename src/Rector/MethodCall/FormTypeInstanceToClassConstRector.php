@@ -14,11 +14,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,21 +36,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
-    /**
-     * @var ObjectType[]
-     */
-    private array $controllerObjectTypes = [];
-
     public function __construct(
         private ReflectionProvider $reflectionProvider,
         private FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
         private FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        private FormCollectionAnalyzer $formCollectionAnalyzer
+        private FormCollectionAnalyzer $formCollectionAnalyzer,
+        private ControllerAnalyzer $controllerAnalyzer,
     ) {
-        $this->controllerObjectTypes = [
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
-        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -96,10 +88,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->nodeTypeResolver->isObjectTypes($node->var, $this->controllerObjectTypes) && $this->isName(
-            $node->name,
-            'createForm'
-        )) {
+        if ($this->controllerAnalyzer->detect($node->var) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
