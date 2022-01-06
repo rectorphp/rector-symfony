@@ -469,11 +469,11 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 
 <br>
 
-## GetDoctrineControllerToManagerRegistryRector
+## GetHelperControllerToServiceRector
 
-Replace `$this->getDoctrine()` calls in AbstractController with direct Doctrine\Persistence\ManagerRegistry service
+Replace `$this->getDoctrine()` and `$this->dispatchMessage()` calls in AbstractController with direct service use
 
-- class: [`Rector\Symfony\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector`](../src/Rector/MethodCall/GetDoctrineControllerToManagerRegistryRector.php)
+- class: [`Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector`](../src/Rector/MethodCall/GetHelperControllerToServiceRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

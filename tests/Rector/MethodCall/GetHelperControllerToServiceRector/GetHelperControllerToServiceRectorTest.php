@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class GetDoctrineControllerToManagerRegistryRectorTest extends AbstractRectorTestCase
+final class GetHelperControllerToServiceRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

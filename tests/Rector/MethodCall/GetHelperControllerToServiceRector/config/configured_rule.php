@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Rector\MethodCall\GetDoctrineControllerToManagerRegistryRector;
+use Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -10,5 +10,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(__DIR__ . '/../../../../../config/config.php');
 
     $services = $containerConfigurator->services();
-    $services->set(GetDoctrineControllerToManagerRegistryRector::class);
+    $services->set(GetHelperControllerToServiceRector::class);
 };
