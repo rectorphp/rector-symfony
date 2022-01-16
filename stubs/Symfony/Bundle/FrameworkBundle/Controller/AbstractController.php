@@ -13,7 +13,7 @@ if (class_exists('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')
     return;
 }
 
-abstract class AbstractController
+abstract class AbstractController implements \Symfony\Component\DependencyInjection\ContainerInterface
 {
     public function getDoctrine(): ManagerRegistry
     {
@@ -28,6 +28,14 @@ abstract class AbstractController
     }
 
     public function redirectToRoute($routeName): RedirectResponse
+    {
+    }
+
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    {
+    }
+
+    public function has(string $id)
     {
     }
 }

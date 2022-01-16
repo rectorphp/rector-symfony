@@ -7,6 +7,9 @@
         <!-- ->setAlias(alias, id) -->
         <service id="some_service" alias="stdClass"></service>
 
+        <service id="twig_extension" class="Twig_Extension"></service>
+        <service id="twig_extension_interface" class="Twig_ExtensionInterface"></service>
+
         <!-- ->register(id, class) -->
         <service id="translator.data_collector" class="Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator"></service>
 
