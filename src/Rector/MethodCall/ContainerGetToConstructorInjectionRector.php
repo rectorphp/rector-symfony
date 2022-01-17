@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
@@ -80,7 +78,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isContainerObjectType($node->var)) {
+        if (! $this->isObjectType(
+            $node->var,
+            new ObjectType('Symfony\Component\DependencyInjection\ContainerInterface')
+        )) {
             return null;
         }
 
@@ -93,21 +94,5 @@ CODE_SAMPLE
         }
 
         return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
-    }
-
-    private function isContainerObjectType(Expr $expr): bool
-    {
-        $callerType = $this->getType($expr);
-
-        if ($callerType instanceof ThisType) {
-            $callerType = $callerType->getStaticObjectType();
-        }
-
-        if (! $callerType instanceof ObjectType) {
-            return false;
-        }
-
-        return $callerType->isInstanceOf('Symfony\Component\DependencyInjection\ContainerInterface')
-            ->yes();
     }
 }

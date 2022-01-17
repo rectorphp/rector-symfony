@@ -8,7 +8,7 @@ final class TwigInterfaceUnderscore extends AbstractController
 {
     public function run()
     {
-        $twigExtension = $this->get('twig_extension_interface');
+        $twigExtension = $this->get('specific_twig_extension');
     }
 }
 
@@ -22,12 +22,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class TwigInterfaceUnderscore extends AbstractController
 {
-    public function __construct(private \Twig_ExtensionInterface $twigExtension)
+    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\SpecificTwigExtension $specificTwigExtension)
     {
     }
     public function run()
     {
-        $twigExtension = $this->twigExtension;
+        $twigExtension = $this->specificTwigExtension;
     }
 }
 

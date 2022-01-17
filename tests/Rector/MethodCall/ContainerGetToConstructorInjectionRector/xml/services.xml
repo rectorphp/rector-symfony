@@ -8,7 +8,7 @@
         <service id="some_service" alias="stdClass"></service>
 
         <service id="twig_extension" class="Twig_Extension"></service>
-        <service id="twig_extension_interface" class="Twig_ExtensionInterface"></service>
+        <service id="specific_twig_extension" class="Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\SpecificTwigExtension"></service>
 
         <!-- ->register(id, class) -->
         <service id="translator.data_collector" class="Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator"></service>
