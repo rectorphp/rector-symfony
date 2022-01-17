@@ -41,3 +41,6 @@ parameters:
 
         # generics false positive
         - '#Method Rector\\Symfony\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector\:\:refactorParam\(\) has parameter \$phpDocInfo with generic class Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo but does not specify its types\: TNode#'
+
+        # closure/callable
+        - '#Parameter \#2 \$filter of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstPrevious\(\) expects callable\(PhpParser\\Node\)\: bool, Closure\(PhpParser\\Node\)\: PhpParser\\Node\\Expr\\Assign\|null given#'
