@@ -35,13 +35,6 @@ final class ServiceMap
             return null;
         }
 
-        /** @var string[] $interfaces */
-        $interfaces = (array) class_implements($class);
-
-        foreach ($interfaces as $interface) {
-            return new ObjectType($interface);
-        }
-
         return new ObjectType($class);
     }
 
