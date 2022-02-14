@@ -31,11 +31,11 @@ abstract class AbstractController implements \Symfony\Component\DependencyInject
     {
     }
 
-    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE):?object
     {
     }
 
-    public function has(string $id)
+    public function has(string $id):bool
     {
     }
 }
