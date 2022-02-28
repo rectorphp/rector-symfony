@@ -39,11 +39,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'isMainRequest',
             ),
             new MethodCallRename(
-                'Symfony\Component\Security\Core\User\UserInterface',
-                'getUsername',
-                'getUserIdentifier',
-            ),
-            new MethodCallRename(
                 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface',
                 'getUsername',
                 'getUserIdentifier',

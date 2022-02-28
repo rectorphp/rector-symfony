@@ -63,6 +63,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'loadUserByUsername',
                 'loadUserByIdentifier'
             ),
+            // @see https://github.com/rectorphp/rector-symfony/issues/112
+            new MethodCallRename(
+                'Symfony\Component\Security\Core\User\UserInterface',
+                'getUsername',
+                'getUserIdentifier',
+            ),
         ]);
     $services->set(GetHelperControllerToServiceRector::class);
 };
