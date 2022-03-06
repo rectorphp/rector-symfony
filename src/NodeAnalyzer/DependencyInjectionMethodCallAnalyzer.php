@@ -51,7 +51,12 @@ final class DependencyInjectionMethodCallAnalyzer
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
 
-    private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1): string
+    private function resolveNewPropertyNameWhenExists(
+        Class_ $class,
+        string $originalPropertyName,
+        string $propertyName,
+        int $count = 1
+    ): string
     {
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
