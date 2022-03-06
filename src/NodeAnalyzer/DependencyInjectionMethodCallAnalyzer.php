@@ -61,8 +61,7 @@ final class DependencyInjectionMethodCallAnalyzer
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
-                ++$count;
-                $propertyName = $originalPropertyName . $count;
+                $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
                 return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
             }
         }
@@ -72,8 +71,13 @@ final class DependencyInjectionMethodCallAnalyzer
             return $propertyName;
         }
 
-        ++$count;
-        $propertyName = $originalPropertyName . $count;
+        $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
         return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
+    }
+
+    private function resolveIncrementPropertyName(string $originalPropertyName, int $count): string
+    {
+        ++$count;
+        return $originalPropertyName . $count;
     }
 }
