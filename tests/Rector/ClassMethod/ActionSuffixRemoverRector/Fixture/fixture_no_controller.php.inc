@@ -21,7 +21,7 @@ use Rector\Symfony\Tests\Rector\Source\AbstractSymfonyController;
 
 class AppController2 extends AbstractSymfonyController
 {
-    public function index()
+    public function indexAction()
     {
     }
 }

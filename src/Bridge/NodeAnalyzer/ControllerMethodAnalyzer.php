@@ -7,13 +7,13 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 
 final class ControllerMethodAnalyzer
 {
     public function __construct(
-        private readonly ParentClassScopeResolver $parentClassScopeResolver
+        private readonly ControllerAnalyzer $controllerAnalyzer
     ) {
     }
 
@@ -31,15 +31,10 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($scope);
-        if (\str_ends_with($parentClassName, 'Controller')) {
-            return true;
+        if (! $this->controllerAnalyzer->isInsideController($node)) {
+            return false;
         }
 
-        if (\str_ends_with((string) $node->name, 'Action')) {
-            return true;
-        }
-
-        return $node->isPublic();
+        return $node->isPublic() && ! $node->isStatic();
     }
 }
