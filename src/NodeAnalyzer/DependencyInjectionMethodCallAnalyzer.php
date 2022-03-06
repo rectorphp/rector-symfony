@@ -7,10 +7,14 @@ namespace Rector\Symfony\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
@@ -22,6 +26,9 @@ final class DependencyInjectionMethodCallAnalyzer
         private readonly NodeFactory $nodeFactory,
         private readonly PropertyToAddCollector $propertyToAddCollector,
         private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly VariableNaming $variableNaming,
+        private readonly PromotedPropertyResolver $promotedPropertyResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -38,10 +45,34 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+        $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName);
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
 
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
+    }
+
+    private function resolveNewPropertyNameWhenExists(Class_ $class, string $propertyName, int $count = 1): string
+    {
+        $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
+        if ($promotedPropertyParams !== []) {
+            foreach ($promotedPropertyParams as $promotedPropertyParam) {
+                if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
+                    ++$count;
+                    $propertyName = $propertyName . $count;
+                    return $this->resolveNewPropertyNameWhenExists($class, $propertyName, $count);
+                }
+            }
+        }
+
+        $property = $class->getProperty($propertyName);
+        if (! $property instanceof Property) {
+            return $propertyName;
+        }
+
+        ++$count;
+        $propertyName = $propertyName . $count;
+        return $this->resolveNewPropertyNameWhenExists($class, $propertyName, $count);
     }
 }
