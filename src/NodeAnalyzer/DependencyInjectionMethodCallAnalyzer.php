@@ -12,7 +12,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\PostRector\Collector\PropertyToAddCollector;
@@ -26,7 +25,6 @@ final class DependencyInjectionMethodCallAnalyzer
         private readonly NodeFactory $nodeFactory,
         private readonly PropertyToAddCollector $propertyToAddCollector,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly VariableNaming $variableNaming,
         private readonly PromotedPropertyResolver $promotedPropertyResolver,
         private readonly NodeNameResolver $nodeNameResolver
     ) {
@@ -56,13 +54,11 @@ final class DependencyInjectionMethodCallAnalyzer
     private function resolveNewPropertyNameWhenExists(Class_ $class, string $propertyName, int $count = 1): string
     {
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
-        if ($promotedPropertyParams !== []) {
-            foreach ($promotedPropertyParams as $promotedPropertyParam) {
-                if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
-                    ++$count;
-                    $propertyName = $propertyName . $count;
-                    return $this->resolveNewPropertyNameWhenExists($class, $propertyName, $count);
-                }
+        foreach ($promotedPropertyParams as $promotedPropertyParam) {
+            if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
+                ++$count;
+                $propertyName .= $count;
+                return $this->resolveNewPropertyNameWhenExists($class, $propertyName, $count);
             }
         }
 
@@ -72,7 +68,7 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         ++$count;
-        $propertyName = $propertyName . $count;
+        $propertyName .= $count;
         return $this->resolveNewPropertyNameWhenExists($class, $propertyName, $count);
     }
 }
