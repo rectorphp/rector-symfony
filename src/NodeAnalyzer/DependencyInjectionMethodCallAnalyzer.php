@@ -57,6 +57,12 @@ final class DependencyInjectionMethodCallAnalyzer
         string $propertyName,
         int $count = 1
     ): string {
+        $lastCount = substr($propertyName, strlen($originalPropertyName));
+
+        if (is_numeric($lastCount)) {
+            $count = (int) $lastCount;
+        }
+
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
