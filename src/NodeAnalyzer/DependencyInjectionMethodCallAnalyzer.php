@@ -56,8 +56,7 @@ final class DependencyInjectionMethodCallAnalyzer
         string $originalPropertyName,
         string $propertyName,
         int $count = 1
-    ): string
-    {
+    ): string {
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
