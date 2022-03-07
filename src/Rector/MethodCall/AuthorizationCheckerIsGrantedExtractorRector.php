@@ -90,11 +90,17 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processExtractIsGranted($node, $value);
+        return $this->processExtractIsGranted($node, $value, $args);
     }
 
-    private function processExtractIsGranted(MethodCall $methodCall, Array_ $array): MethodCall|BooleanOr|null
-    {
+    /**
+     * @param Arg[] $args
+     */
+    private function processExtractIsGranted(
+        MethodCall $methodCall,
+        Array_ $array,
+        array $args
+    ): MethodCall|BooleanOr|null {
         $exprs = [];
 
         foreach ($array->items as $item) {
@@ -107,15 +113,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $args = $methodCall->getArgs();
         $args[0]->value = $exprs[0];
         $methodCall->args = $args;
 
         if (count($exprs) === 1) {
             return $methodCall;
         }
-
-        $newMethodCallLeft = new MethodCall($methodCall->var, $methodCall->name, $args, $methodCall->getAttributes());
 
         $rightMethodCall = clone $methodCall;
         $rightMethodCall->args[0] = new Arg($exprs[1]);
@@ -126,7 +129,7 @@ CODE_SAMPLE
             $methodCall->getAttributes()
         );
 
-        $booleanOr = new BooleanOr($newMethodCallLeft, $newMethodCallRight);
+        $booleanOr = new BooleanOr($methodCall, $newMethodCallRight);
 
         foreach ($exprs as $key => $expr) {
             if ($key <= 1) {
