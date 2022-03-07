@@ -72,6 +72,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $this->nodeNameResolver->isName($node->name, 'isGranted')) {
+            return null;
+        }
+
         $args = $node->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
