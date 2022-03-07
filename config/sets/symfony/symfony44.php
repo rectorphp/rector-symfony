@@ -12,4 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     # https://github.com/symfony/symfony/pull/33775
     $services->set(ConsoleExecuteReturnIntRector::class);
+
+    # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
+    $services->set(AuthorizationCheckerIsGrantedExtractorRector::class);
 };
