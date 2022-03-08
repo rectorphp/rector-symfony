@@ -76,12 +76,7 @@ final class DependencyInjectionMethodCallAnalyzer
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
                 $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
-                return $this->resolveNewPropertyNameWhenExists(
-                    $class,
-                    $originalPropertyName,
-                    $propertyName,
-                    $count
-                );
+                return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
             }
         }
 
