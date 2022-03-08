@@ -5,13 +5,10 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInject
 use Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class SomeTranslatorExists extends AbstractController
+final class SomeTranslatorExistsDifferentName extends AbstractController
 {
-    private SomeTranslator $someTranslator;
-
-    public function __construct(SomeTranslator $someTranslator)
+    public function __construct(private readonly SomeTranslator $this_is_a_translator)
     {
-        $this->someTranslator = $someTranslator;
     }
 
     protected function execute()
@@ -31,20 +28,17 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInject
 use Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class SomeTranslatorExists extends AbstractController
+final class SomeTranslatorExistsDifferentName extends AbstractController
 {
-    private SomeTranslator $someTranslator;
-
-    public function __construct(SomeTranslator $someTranslator)
+    public function __construct(private readonly SomeTranslator $this_is_a_translator)
     {
-        $this->someTranslator = $someTranslator;
     }
 
     protected function execute()
     {
-        $someService = $this->someTranslator;
+        $someService = $this->this_is_a_translator;
 
-        $someService = $this->someTranslator->translateSomething();
+        $someService = $this->this_is_a_translator->translateSomething();
     }
 }
 

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
@@ -26,7 +27,8 @@ final class DependencyInjectionMethodCallAnalyzer
         private readonly PropertyToAddCollector $propertyToAddCollector,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly PromotedPropertyResolver $promotedPropertyResolver,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PropertyManipulator $propertyManipulator
     ) {
     }
 
@@ -42,8 +44,17 @@ final class DependencyInjectionMethodCallAnalyzer
             return null;
         }
 
-        $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType(
+            $class,
+            $serviceType
+        );
+
+        if (is_string($resolvedPropertyNameByType)) {
+            $propertyName = $resolvedPropertyNameByType;
+        } else {
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        }
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
