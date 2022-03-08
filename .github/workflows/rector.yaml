@@ -10,3 +10,6 @@ env:
 jobs:
     rector:
         uses: rectorphp/reusable-workflows/.github/workflows/rector.yaml@main
+        secrets:
+            ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
