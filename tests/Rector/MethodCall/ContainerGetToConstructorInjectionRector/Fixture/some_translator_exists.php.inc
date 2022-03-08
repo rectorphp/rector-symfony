@@ -30,15 +30,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class SomeTranslatorExists extends AbstractController
 {
-    public function __construct(private readonly SomeTranslator $someTranslator, private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator $someTranslator2)
+    public function __construct(private readonly SomeTranslator $someTranslator)
     {
     }
 
     protected function execute()
     {
-        $someService = $this->someTranslator2;
+        $someService = $this->someTranslator;
 
-        $someService = $this->someTranslator2->translateSomething();
+        $someService = $this->someTranslator->translateSomething();
     }
 }
 

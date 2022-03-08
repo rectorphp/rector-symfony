@@ -2,10 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\SomeTranslator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class SomeTranslatorExists extends AbstractController
+final class SomeTranslatorDifferentObject extends AbstractController
 {
     private SomeTranslator $someTranslator;
 
@@ -28,23 +28,23 @@ final class SomeTranslatorExists extends AbstractController
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator;
+use Rector\Symfony\Tests\Rector\MethodCall\ContainerGetToConstructorInjectionRector\Source\SomeTranslator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class SomeTranslatorExists extends AbstractController
+final class SomeTranslatorDifferentObject extends AbstractController
 {
     private SomeTranslator $someTranslator;
 
-    public function __construct(SomeTranslator $someTranslator)
+    public function __construct(SomeTranslator $someTranslator, private \Rector\Symfony\Tests\Rector\MethodCall\AbstractToConstructorInjectionRectorSource\SomeTranslator $someTranslator2)
     {
         $this->someTranslator = $someTranslator;
     }
 
     protected function execute()
     {
-        $someService = $this->someTranslator;
+        $someService = $this->someTranslator2;
 
-        $someService = $this->someTranslator->translateSomething();
+        $someService = $this->someTranslator2->translateSomething();
     }
 }
 
