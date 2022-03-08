@@ -51,7 +51,7 @@ final class DependencyInjectionMethodCallAnalyzer
         );
 
         $propertyName = is_string($resolvedPropertyNameByType)
-            ? $propertyName
+            ? $resolvedPropertyNameByType
             : $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
