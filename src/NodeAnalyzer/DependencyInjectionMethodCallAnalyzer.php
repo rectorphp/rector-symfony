@@ -69,7 +69,7 @@ final class DependencyInjectionMethodCallAnalyzer
             $class,
             $objectType
         );
-        if ($resolvedPropertyNameByType) {
+        if (is_string($resolvedPropertyNameByType)) {
             return $propertyName;
         }
 
