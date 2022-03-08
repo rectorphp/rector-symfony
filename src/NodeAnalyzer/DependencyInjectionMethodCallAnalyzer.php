@@ -44,15 +44,17 @@ final class DependencyInjectionMethodCallAnalyzer
             return null;
         }
 
-        $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
         $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType(
             $class,
             $serviceType
         );
 
-        $propertyName = is_string($resolvedPropertyNameByType)
-            ? $resolvedPropertyNameByType
-            : $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        if (is_string($resolvedPropertyNameByType)) {
+            $propertyName = $resolvedPropertyNameByType;
+        } else {
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+        }
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
