@@ -18,8 +18,6 @@ final class ServiceMapProvider
      */
     private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 
-    private $unusedProperty;
-
     public function __construct(
         private readonly ParameterProvider $parameterProvider,
         private readonly ServiceMapFactory $serviceMapFactory
