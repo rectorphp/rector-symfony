@@ -45,12 +45,14 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $propertyName = $this->resolveNewPropertyNameWhenExistsWithType(
+        $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType(
             $class,
-            $propertyName,
-            $propertyName,
             $serviceType
         );
+
+        $propertyName = is_string($resolvedPropertyNameByType)
+            ? $propertyName
+            : $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
@@ -58,21 +60,12 @@ final class DependencyInjectionMethodCallAnalyzer
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
 
-    private function resolveNewPropertyNameWhenExistsWithType(
+    private function resolveNewPropertyNameWhenExists(
         Class_ $class,
         string $originalPropertyName,
         string $propertyName,
-        ObjectType $objectType,
         int $count = 1
     ): string {
-        $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType(
-            $class,
-            $objectType
-        );
-        if (is_string($resolvedPropertyNameByType)) {
-            return $propertyName;
-        }
-
         $lastCount = substr($propertyName, strlen($originalPropertyName));
 
         if (is_numeric($lastCount)) {
@@ -83,11 +76,10 @@ final class DependencyInjectionMethodCallAnalyzer
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
                 $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
-                return $this->resolveNewPropertyNameWhenExistsWithType(
+                return $this->resolveNewPropertyNameWhenExists(
                     $class,
                     $originalPropertyName,
                     $propertyName,
-                    $objectType,
                     $count
                 );
             }
@@ -99,13 +91,7 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
-        return $this->resolveNewPropertyNameWhenExistsWithType(
-            $class,
-            $originalPropertyName,
-            $propertyName,
-            $objectType,
-            $count
-        );
+        return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
     }
 
     private function resolveIncrementPropertyName(string $originalPropertyName, int $count): string
