@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,6 +35,11 @@ final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
     private const ASSERT_SAME = 'assertSame';
 
     private ?MethodCall $getStatusCodeMethodCall = null;
+
+    public function __construct(
+        private readonly ReflectionProvider $reflectionProvider
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -144,6 +150,10 @@ CODE_SAMPLE
 
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        if (! $this->reflectionProvider->hasClass('PHPUnit\Framework\TestCase')) {
             return false;
         }
 

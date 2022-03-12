@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Twig_*',
             'Swift_*',
             'Doctrine\*',
+            'PHPUnit\Framework\TestCase',
         ]);
 
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
