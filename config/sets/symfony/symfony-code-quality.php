@@ -6,6 +6,7 @@ use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
 use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
+use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -14,5 +15,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeCommandLazyRector::class);
     $services->set(EventListenerToEventSubscriberRector::class);
     $services->set(ResponseReturnTypeControllerActionRector::class);
+<<<<<<< HEAD
     $services->set(\Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector::class);
+=======
+    $services->set(LiteralGetToRequestClassConstantRector::class);
+>>>>>>> Add LiteralGetToRequestClassConstantRector
 };

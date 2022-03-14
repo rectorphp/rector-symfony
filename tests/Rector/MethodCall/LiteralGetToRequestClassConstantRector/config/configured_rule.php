@@ -6,6 +6,11 @@ use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+<<<<<<< HEAD
+=======
+    $containerConfigurator->import(__DIR__ . '/../../../../../config/config.php');
+
+>>>>>>> Add LiteralGetToRequestClassConstantRector
     $services = $containerConfigurator->services();
     $services->set(LiteralGetToRequestClassConstantRector::class);
 };
