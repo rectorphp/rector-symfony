@@ -73,6 +73,10 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
+        if ($this->isObjectType($node->var, new ObjectType('Symfony\Component\HttpKernel\Client'))) {
+            return $this->refactorClientMethodCall($node);
+        }
+
         if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormBuilderInterface'))) {
             return null;
         }
@@ -102,6 +106,20 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $staticCall,
             1,
+            'Symfony\Component\HttpFoundation\Request',
+            SymfonyRequestConstantMap::METHOD_TO_CONST
+        );
+    }
+
+    private function refactorClientMethodCall(MethodCall $methodCall): MethodCall|null
+    {
+        if (! $this->isName($methodCall->name, 'request')) {
+            return null;
+        }
+
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
+            $methodCall,
+            0,
             'Symfony\Component\HttpFoundation\Request',
             SymfonyRequestConstantMap::METHOD_TO_CONST
         );
