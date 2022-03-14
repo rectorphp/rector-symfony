@@ -15,4 +15,8 @@ class Controller
     public function createForm(): FormInterface
     {
     }
+
+    public function redirect($url, $status = 302)
+    {
+    }
 }
