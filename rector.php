@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -23,8 +22,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PARALLEL, true);
 
     $parameters->set(Option::SKIP, [
-        // waits for phpstan to use php-parser 4.13
-        RemoveDeadInstanceOfRector::class,
         '*/Fixture/*',
         '*/Source/*',
         '*/Source*/*',
