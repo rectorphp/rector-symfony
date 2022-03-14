@@ -6,7 +6,6 @@ namespace Rector\Symfony\ValueObject\ConstantMap;
 
 final class SymfonyResponseConstantMap
 {
-
     /**
      * @var array<int, string>
      */

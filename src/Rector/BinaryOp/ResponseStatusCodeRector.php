@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -26,9 +27,8 @@ final class ResponseStatusCodeRector extends AbstractRector
     private readonly ObjectType $responseObjectType;
 
     public function __construct(
-        private ControllerAnalyzer $controllerAnalyzer,
-    )
-    {
+        private readonly ControllerAnalyzer $controllerAnalyzer,
+    ) {
         $this->responseObjectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
     }
 
@@ -76,14 +76,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [BinaryOp::class, MethodCall::class];
+        return [BinaryOp::class, MethodCall::class, New_::class];
     }
 
     /**
-     * @param BinaryOp|MethodCall $node
+     * @param BinaryOp|MethodCall|New_ $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof New_) {
+            return $this->processNew($node);
+        }
+
         if ($node instanceof MethodCall) {
             return $this->processMethodCall($node);
         }
@@ -181,6 +185,10 @@ CODE_SAMPLE
     private function processAssertMethodCall(MethodCall $methodCall): MethodCall|null
     {
         $args = $methodCall->getArgs();
+        if (! isset($args[1])) {
+            return null;
+        }
+
         $secondArg = $args[1];
 
         if (! $this->isGetStatusMethod($secondArg->value)) {
@@ -199,9 +207,19 @@ CODE_SAMPLE
         return $this->refactorArgOnPosition($methodCall, 1);
     }
 
-    private function refactorArgOnPosition(MethodCall $methodCall, int $argPosition): ?MethodCall
+    /**
+     * @template TCallLike as MethodCall|New_
+     *
+     * @param TCallLike $callLike
+     * @return TCallLike
+     */
+    private function refactorArgOnPosition(MethodCall|New_ $callLike, int $argPosition): MethodCall|New_|null
     {
-        $args = $methodCall->getArgs();
+        $args = $callLike->getArgs();
+        if (! isset($args[$argPosition])) {
+            return null;
+        }
+
         $targetArg = $args[$argPosition];
 
         // already converted
@@ -210,12 +228,21 @@ CODE_SAMPLE
         }
 
         $firstValue = $targetArg->value;
-        if (!$firstValue instanceof LNumber) {
+        if (! $firstValue instanceof LNumber) {
             return null;
         }
 
         $targetArg->value = $this->convertNumberToConstant($firstValue);
 
-        return $methodCall;
+        return $callLike;
+    }
+
+    private function processNew(New_ $new): New_|null
+    {
+        if (! $this->isObjectType($new->class, $this->responseObjectType)) {
+            return null;
+        }
+
+        return $this->refactorArgOnPosition($new, 1);
     }
 }
