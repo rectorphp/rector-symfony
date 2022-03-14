@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -17,6 +19,11 @@ final class LiteralCallLikeConstFetchReplacer
     }
 
     /**
+     * @template TCallLike as MethodCall|New_
+     *
+     * @param TCallLike $callLike
+     * @return TCallLike
+     *
      * @param array<string|int, string> $constantMap
      */
     public function replaceArgOnPosition(
@@ -25,7 +32,12 @@ final class LiteralCallLikeConstFetchReplacer
         string $className,
         array $constantMap
     ): null|CallLike {
-        $arg = $callLike->getArgs()[$argPosition];
+        $args = $callLike->getArgs();
+        if (! isset($args[$argPosition])) {
+            return null;
+        }
+
+        $arg = $args[$argPosition];
         if (! $arg->value instanceof String_ && ! $arg->value instanceof LNumber) {
             return null;
         }

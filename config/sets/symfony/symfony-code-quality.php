@@ -11,13 +11,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(ResponseStatusCodeRector::class);
     $services->set(MakeCommandLazyRector::class);
     $services->set(EventListenerToEventSubscriberRector::class);
     $services->set(ResponseReturnTypeControllerActionRector::class);
-<<<<<<< HEAD
-    $services->set(\Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector::class);
-=======
+
+    // int and string literals to const fetches
+    $services->set(ResponseStatusCodeRector::class);
     $services->set(LiteralGetToRequestClassConstantRector::class);
->>>>>>> Add LiteralGetToRequestClassConstantRector
 };
