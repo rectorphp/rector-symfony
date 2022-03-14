@@ -6,9 +6,9 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyRequestConstantMap;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class LiteralGetToRequestClassConstantRector extends AbstractRector
 {
+    public function __construct(
+        private LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer,
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace "GET" string by Symfony Request object class constants', [
@@ -71,23 +76,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $firstArg = $node->getArgs()[0];
-        if (! $firstArg->value instanceof String_) {
-            return null;
-        }
-
-        $string = $firstArg->value;
-        $constantName = SymfonyRequestConstantMap::METHOD_TO_CONST[$string->value] ?? null;
-        if ($constantName === null) {
-            return null;
-        }
-
-        $classConstFetch = $this->nodeFactory->createClassConstFetch(
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
+            $node,
+            0,
             'Symfony\Component\HttpFoundation\Request',
-            $constantName
+            SymfonyRequestConstantMap::METHOD_TO_CONST
         );
-        $firstArg->value = $classConstFetch;
-
-        return $node;
     }
 }
