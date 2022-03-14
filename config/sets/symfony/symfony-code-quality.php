@@ -14,4 +14,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MakeCommandLazyRector::class);
     $services->set(EventListenerToEventSubscriberRector::class);
     $services->set(ResponseReturnTypeControllerActionRector::class);
+    $services->set(\Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector::class);
 };

@@ -1,4 +1,4 @@
-# 56 Rules Overview
+# 57 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -585,6 +585,27 @@ Turns properties with `@inject` to private properties and constructor injection
 +{
 +    $this->someService = $someService;
 +}
+```
+
+<br>
+
+## LiteralGetToRequestClassConstantRector
+
+Replace "GET" string by Symfony Request object class constants
+
+- class: [`Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector`](../src/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php)
+
+```diff
+ use Symfony\Component\Form\FormBuilderInterface;
+
+ final class SomeClass
+ {
+     public function detail(FormBuilderInterface $formBuilder)
+     {
+-        $formBuilder->setMethod('GET');
++        $formBuilder->setMethod(\Symfony\Component\HttpFoundation\Request::GET);
+     }
+ }
 ```
 
 <br>
