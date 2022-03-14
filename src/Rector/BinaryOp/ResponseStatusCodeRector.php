@@ -102,27 +102,33 @@ final class ResponseStatusCodeRector extends AbstractRector
         return new RuleDefinition('Turns status code numbers to constants', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
+use Symfony\Component\HttpFoundation\Response;
+
 class SomeController
 {
     public function index()
     {
-        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response = new Response();
         $response->setStatusCode(200);
 
-        if ($response->getStatusCode() === 200) {}
+        if ($response->getStatusCode() === 200) {
+        }
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+use Symfony\Component\HttpFoundation\Response;
+
 class SomeController
 {
     public function index()
     {
-        $response = new \Symfony\Component\HttpFoundation\Response();
-        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_OK);
 
-        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+        if ($response->getStatusCode() === Response::HTTP_OK) {
+        }
     }
 }
 CODE_SAMPLE
@@ -152,6 +158,10 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
+        if ($this->isName($methodCall->name, 'assert*')) {
+            return $this->processAssertMethodCall($methodCall);
+        }
+
         if (! $this->isObjectType($methodCall->var, $this->responseObjectType)) {
             return null;
         }
@@ -227,5 +237,28 @@ CODE_SAMPLE
             $this->responseObjectType->getClassName(),
             self::CODE_TO_CONST[$lNumber->value]
         );
+    }
+
+    private function processAssertMethodCall(MethodCall $methodCall): MethodCall|null
+    {
+        $args = $methodCall->getArgs();
+        $secondArg = $args[1];
+
+        if (! $this->isGetStatusMethod($secondArg->value)) {
+            return null;
+        }
+
+        // already convered
+        if ($args[0]->value instanceof ClassConstFetch) {
+            return null;
+        }
+
+        $firstValue = $args[0]->value;
+        if (! $firstValue instanceof LNumber) {
+            return null;
+        }
+
+        $args[0]->value = $this->convertNumberToConstant($firstValue);
+        return $methodCall;
     }
 }

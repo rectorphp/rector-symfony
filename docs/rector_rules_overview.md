@@ -1052,16 +1052,19 @@ Turns status code numbers to constants
 - class: [`Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`](../src/Rector/BinaryOp/ResponseStatusCodeRector.php)
 
 ```diff
+ use Symfony\Component\HttpFoundation\Response;
+
  class SomeController
  {
      public function index()
      {
-         $response = new \Symfony\Component\HttpFoundation\Response();
+         $response = new Response();
 -        $response->setStatusCode(200);
-+        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
++        $response->setStatusCode(Response::HTTP_OK);
 
--        if ($response->getStatusCode() === 200) {}
-+        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+-        if ($response->getStatusCode() === 200) {
++        if ($response->getStatusCode() === Response::HTTP_OK) {
+         }
      }
  }
 ```
