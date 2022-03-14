@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
@@ -19,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LiteralGetToRequestClassConstantRector extends AbstractRector
 {
     public function __construct(
-        private LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer,
+        private readonly LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer,
     ) {
     }
 
@@ -60,14 +61,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof StaticCall) {
+            return $this->refactorStaticCall($node);
+        }
+
         if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormBuilderInterface'))) {
             return null;
         }
@@ -79,6 +84,24 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $node,
             0,
+            'Symfony\Component\HttpFoundation\Request',
+            SymfonyRequestConstantMap::METHOD_TO_CONST
+        );
+    }
+
+    private function refactorStaticCall(StaticCall $staticCall): StaticCall|null
+    {
+        if (! $this->isObjectType($staticCall->class, new ObjectType('Symfony\Component\HttpFoundation\Request'))) {
+            return null;
+        }
+
+        if (! $this->isName($staticCall->name, 'create')) {
+            return null;
+        }
+
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
+            $staticCall,
+            1,
             'Symfony\Component\HttpFoundation\Request',
             SymfonyRequestConstantMap::METHOD_TO_CONST
         );

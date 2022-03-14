@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\LiteralGetToRequestClassConstantRector\Fixture;
 
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -16,7 +16,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\LiteralGetToRequestClassConstantRector\Fixture;
 
 use Symfony\Component\Form\FormBuilderInterface;
 

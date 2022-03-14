@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -95,7 +96,7 @@ CODE_SAMPLE
         return $this->processBinaryOp($node);
     }
 
-    private function processMethodCall(MethodCall $methodCall): Node\Expr\CallLike|null
+    private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
         if ($this->isName($methodCall->name, 'assert*')) {
             return $this->processAssertMethodCall($methodCall);

@@ -7,6 +7,7 @@ namespace Rector\Symfony\NodeAnalyzer;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -19,12 +20,11 @@ final class LiteralCallLikeConstFetchReplacer
     }
 
     /**
-     * @template TCallLike as MethodCall|New_
+     * @template TCallLike as MethodCall|New_|StaticCall
      *
      * @param TCallLike $callLike
-     * @return TCallLike
-     *
      * @param array<string|int, string> $constantMap
+     * @return TCallLike
      */
     public function replaceArgOnPosition(
         CallLike $callLike,
