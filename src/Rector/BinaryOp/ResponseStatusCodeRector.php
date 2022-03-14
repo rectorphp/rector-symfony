@@ -167,10 +167,7 @@ CODE_SAMPLE
         return $this->isName($node->name, 'getStatusCode');
     }
 
-    /**
-     * @return ClassConstFetch|LNumber
-     */
-    private function convertNumberToConstant(LNumber $lNumber): Expr
+    private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber
     {
         if (! isset(SymfonyResponseConstantMap::CODE_TO_CONST[$lNumber->value])) {
             return $lNumber;
