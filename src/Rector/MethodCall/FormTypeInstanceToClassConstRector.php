@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
+use Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,8 +33,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
     public function __construct(
-        private \Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter $formInstanceToFormClassConstFetchConverter,
-//        private readonly ReflectionProvider $reflectionProvider,
+        private readonly FormInstanceToFormClassConstFetchConverter $formInstanceToFormClassConstFetchConverter,
         private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
         private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
         private readonly FormCollectionAnalyzer $formCollectionAnalyzer,

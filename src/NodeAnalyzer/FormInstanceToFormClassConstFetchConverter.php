@@ -6,21 +6,26 @@ namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
 
 final class FormInstanceToFormClassConstFetchConverter
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private NodeFactory $nodeFactory
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 
@@ -32,24 +37,20 @@ final class FormInstanceToFormClassConstFetchConverter
         }
 
         $argValue = $args[$position]->value;
-        if (! $argValue instanceof New_) {
+
+        $formClassName = $this->resolveFormClassName($argValue);
+        if ($formClassName === null) {
             return null;
         }
 
-        // we can only process direct name
-        if (! $argValue->class instanceof Name) {
-            return null;
-        }
-
-        if ($argValue->args !== []) {
+        if ($argValue instanceof New_ && $argValue->args !== []) {
             $methodCall = $this->moveArgumentsToOptions(
                 $methodCall,
                 $position,
                 $optionsPosition,
-                $argValue->class->toString(),
+                $formClassName,
                 $argValue->getArgs()
             );
-
             if (! $methodCall instanceof MethodCall) {
                 return null;
             }
@@ -57,7 +58,7 @@ final class FormInstanceToFormClassConstFetchConverter
 
         $currentArg = $methodCall->getArgs()[$position];
 
-        $classConstReference = $this->nodeFactory->createClassConstReference($argValue->class->toString());
+        $classConstReference = $this->nodeFactory->createClassConstReference($formClassName);
         $currentArg->value = $classConstReference;
 
         return $methodCall;
@@ -127,5 +128,20 @@ final class FormInstanceToFormClassConstFetchConverter
         }
 
         return $namesToArgs;
+    }
+
+    private function resolveFormClassName(Expr $expr): ?string
+    {
+        if ($expr instanceof New_) {
+            // we can only process direct name
+            return $this->nodeNameResolver->getName($expr->class);
+        }
+
+        $exprType = $this->nodeTypeResolver->getType($expr);
+        if ($exprType instanceof TypeWithClassName) {
+            return $exprType->getClassName();
+        }
+
+        return null;
     }
 }
