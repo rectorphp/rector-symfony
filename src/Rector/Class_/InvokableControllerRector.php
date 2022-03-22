@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -78,14 +79,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
+        // skip anonymous controllers
+        if (! $node->name instanceof Identifier) {
+            return null;
+        }
+
         if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
@@ -97,42 +103,17 @@ CODE_SAMPLE
 
         // 1. single action method → only rename
         if (count($actionClassMethods) === 1) {
-            $actionClassMethod = $actionClassMethods[0];
-            $actionClassMethod->name = new Identifier(MethodName::INVOKE);
-
-            return $node;
+            return $this->refactorSingleAction($actionClassMethods[0], $node);
         }
 
         // 2. multiple action methods → split + rename current based on action name
         foreach ($actionClassMethods as $actionClassMethod) {
             $actionMethodName = $actionClassMethod->name->toString();
 
-            $newClass = clone $node;
-            foreach ($newClass->stmts as $key => $classStmt) {
-                if (! $classStmt instanceof ClassMethod) {
-                    continue;
-                }
+            $newClass = $this->buildNewClassWithActionMethod($node, $actionClassMethod);
 
-                // keep current class method
-                if ($classStmt === $actionClassMethods) {
-                    continue;
-                }
-
-                if ($classStmt->isPublic()) {
-                    continue;
-                }
-
-                unset($newClass->stmts[$key]);
-            }
-
-            $controllerName = $newClass->name->toString();
-            $newControllerName = Strings::replace(
-                $controllerName,
-                '#(.*?)Controller#',
-                '$1' . ucfirst($actionMethodName) . 'Controller'
-            );
-
-            $newClass->name = new Name($newControllerName);
+            $newControllerName = $this->resolveNewControllerName($node->name, $actionMethodName);
+            $newClass->name = new Identifier($newControllerName);
 
             // print to different location
             $filePath = $this->file->getRelativeFilePath();
@@ -148,5 +129,52 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
 
         return null;
+    }
+
+    private function refactorSingleAction(ClassMethod $actionClassMethod, Class_ $class): Class_
+    {
+        $actionClassMethod->name = new Identifier(MethodName::INVOKE);
+        return $class;
+    }
+
+    private function resolveNewControllerName(Identifier $controllerIdentifier, string $actionMethodName): string
+    {
+        $oldClassName = $controllerIdentifier->toString();
+
+        if (str_starts_with($actionMethodName, 'action')) {
+            $actionMethodName = Strings::substring($actionMethodName, strlen('Action'));
+        }
+
+        if (str_ends_with($actionMethodName, 'Action')) {
+            $actionMethodName = Strings::substring($actionMethodName, 0, -strlen('Action'));
+        }
+
+        $actionMethodName = ucfirst($actionMethodName);
+
+        return Strings::replace($oldClassName, '#(.*?)Controller#', '$1' . $actionMethodName . 'Controller');
+    }
+
+    private function buildNewClassWithActionMethod(Class_ $class, ClassMethod $actionClassMethod): Class_
+    {
+        $newClass = clone $class;
+
+        foreach ($newClass->stmts as $key => $classStmt) {
+            if (! $classStmt instanceof ClassMethod) {
+                continue;
+            }
+
+            // keep current class method
+            if ($classStmt === $actionClassMethod) {
+                continue;
+            }
+
+            if (! $classStmt->isPublic()) {
+                continue;
+            }
+
+            unset($newClass->stmts[$key]);
+        }
+
+        return $newClass;
     }
 }

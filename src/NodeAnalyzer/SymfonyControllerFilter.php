@@ -21,9 +21,6 @@ final class SymfonyControllerFilter
                 continue;
             }
 
-            // @todo how to detect controller action?
-            // @todo check for return type
-
             $actionClassMethods[] = $classMethod;
         }
 
