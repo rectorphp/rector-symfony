@@ -19,8 +19,8 @@ final class SplitInvokableControllerRectorTest extends AbstractRectorTestCase
 
         $addedFileWithContents = [];
         $addedFileWithContents[] = new AddedFileWithContent(
-            $this->getFixtureTempDirectory() . '/SomeDetailController.php',
-            file_get_contents(__DIR__ . '/FixtureSplit/Expected/SomeDetailController.php')
+            $this->getFixtureTempDirectory() . '/SomeListController.php',
+            file_get_contents(__DIR__ . '/FixtureSplit/Expected/SomeListController.php')
         );
 
         $addedFileWithContents[] = new AddedFileWithContent(
@@ -31,10 +31,8 @@ final class SplitInvokableControllerRectorTest extends AbstractRectorTestCase
         $this->assertFilesWereAdded($addedFileWithContents);
 
         // 2. old file should be removed
-        $fixtureFileInfo = new SmartFileInfo(
-            $this->getFixtureTempDirectory() . '/input_907c7bce29857872b688_some_class.php'
-        );
-        $this->assertFileWasRemoved($fixtureFileInfo);
+        $removedFilesCount = $this->removedAndAddedFilesCollector->getRemovedFilesCount();
+        $this->assertSame(1, $removedFilesCount);
     }
 
     public function provideConfigFilePath(): string

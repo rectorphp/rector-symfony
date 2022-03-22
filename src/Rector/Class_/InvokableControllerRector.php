@@ -13,9 +13,10 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
+use Rector\Symfony\NodeFactory\InvokableControllerNameFactory;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,13 +25,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://symfony.com/doc/2.8/controller/service.html#referring-to-the-service
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\InvokableControllerRectorTest
+ *
+ * Inspiration @see https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
  */
 final class InvokableControllerRector extends AbstractRector
 {
     public function __construct(
-        private ControllerAnalyzer $controllerAnalyzer,
-        private SymfonyControllerFilter $symfonyControllerFilter,
-        private \Rector\Symfony\NodeFactory\InvokableControllerNameFactory $invokableControllerNameFactory
+        private readonly ControllerAnalyzer $controllerAnalyzer,
+        private readonly SymfonyControllerFilter $symfonyControllerFilter,
+        private readonly InvokableControllerNameFactory $invokableControllerNameFactory
     ) {
     }
 
@@ -124,8 +127,9 @@ CODE_SAMPLE
             $filePath = $this->file->getRelativeFilePath();
             $newFilePath = dirname($filePath) . '/' . $newControllerName . '.php';
 
-            // @todo here should be namespace too
-            $addedFile = new AddedFileWithNodes($newFilePath, [$newNamespace]);
+            $fileContent = '<?php' . PHP_EOL . PHP_EOL . $this->print($newNamespace) . PHP_EOL;
+
+            $addedFile = new AddedFileWithContent($newFilePath, $fileContent);
             $this->removedAndAddedFilesCollector->addAddedFile($addedFile);
         }
 
@@ -146,8 +150,7 @@ CODE_SAMPLE
         Class_ $class,
         ClassMethod $actionClassMethod,
         string $controllerName
-    ): Namespace_
-    {
+    ): Namespace_ {
         $actionClassMethod->name = new Identifier(MethodName::INVOKE);
 
         $classParent = $class->getAttribute(AttributeKey::PARENT_NODE);
@@ -157,25 +160,28 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
+        $newClassParent = clone $classParent;
+
         $newClass = clone $class;
 
-        foreach ($newClass->stmts as $key => $classStmt) {
+        $newClassStmts = [];
+        foreach ($class->stmts as $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
+                $newClassStmts[] = $classStmt;
                 continue;
             }
 
             if (! $classStmt->isPublic()) {
-                continue;
+                $newClassStmts[] = $classStmt;
             }
-
-            unset($newClass->stmts[$key]);
         }
 
-        $newClass->stmts[] = $actionClassMethod;
+        $newClassStmts[] = $actionClassMethod;
 
         $newClass->name = new Identifier($controllerName);
-        $classParent->stmts = [$newClass];
+        $newClass->stmts = $newClassStmts;
+        $newClassParent->stmts = [$newClass];
 
-        return $classParent;
+        return $newClassParent;
     }
 }
