@@ -135,7 +135,7 @@ CODE_SAMPLE
                 $node,
                 [Namespace_::class, FileWithoutNamespace::class]
             );
-            if (! $parentNamespace instanceof \PhpParser\Node) {
+            if (! $parentNamespace instanceof Node) {
                 throw new ShouldNotHappenException('Missing parent namespace or without namespace node');
             }
 
