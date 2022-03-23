@@ -10,13 +10,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
 use Rector\Symfony\NodeFactory\InvokableControllerNameFactory;
+use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,7 +32,8 @@ final class InvokableControllerRector extends AbstractRector
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly SymfonyControllerFilter $symfonyControllerFilter,
-        private readonly InvokableControllerNameFactory $invokableControllerNameFactory
+        private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
+        private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
     ) {
     }
 
@@ -121,16 +121,24 @@ CODE_SAMPLE
                 $actionMethodName
             );
 
-            $newNamespace = $this->buildNewClassWithActionMethod($node, $actionClassMethod, $newControllerName);
+            $newClassLike = $this->buildNewClassWithActionMethod($node, $actionClassMethod, $newControllerName);
 
-            // print to different location
-            $filePath = $this->file->getRelativeFilePath();
-            $newFilePath = dirname($filePath) . '/' . $newControllerName . '.php';
+            $parentNamespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
 
-            $fileContent = '<?php' . PHP_EOL . PHP_EOL . $this->print($newNamespace) . PHP_EOL;
+            $this->neighbourClassLikePrinter->printClassLike(
+                $newClassLike,
+                $parentNamespace,
+                $this->file->getSmartFileInfo()
+            );
 
-            $addedFile = new AddedFileWithContent($newFilePath, $fileContent);
-            $this->removedAndAddedFilesCollector->addAddedFile($addedFile);
+//            // print to different location
+//            $filePath = $this->file->getRelativeFilePath();
+//            $newFilePath = dirname($filePath) . '/' . $newControllerName . '.php';
+//
+//            $fileContent = '<?php' . PHP_EOL . PHP_EOL . $this->print($newClassLike) . PHP_EOL;
+//
+//            $addedFile = new AddedFileWithContent($newFilePath, $fileContent);
+//            $this->removedAndAddedFilesCollector->addAddedFile($addedFile);
         }
 
         // remove original file
@@ -150,17 +158,8 @@ CODE_SAMPLE
         Class_ $class,
         ClassMethod $actionClassMethod,
         string $controllerName
-    ): Namespace_ {
+    ): Class_ {
         $actionClassMethod->name = new Identifier(MethodName::INVOKE);
-
-        $classParent = $class->getAttribute(AttributeKey::PARENT_NODE);
-
-        if (! $classParent instanceof Namespace_) {
-            // we're unable to resolve namespace-less controllers
-            throw new ShouldNotHappenException();
-        }
-
-        $newClassParent = clone $classParent;
 
         $newClass = clone $class;
 
@@ -180,8 +179,10 @@ CODE_SAMPLE
 
         $newClass->name = new Identifier($controllerName);
         $newClass->stmts = $newClassStmts;
-        $newClassParent->stmts = [$newClass];
 
-        return $newClassParent;
+        return $newClass;
+//        $newClassParent->stmts = [$newClass];
+
+//        return $newClassParent;
     }
 }
