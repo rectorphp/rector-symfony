@@ -23,7 +23,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/ecs.php',
     ]);
 
-    $parameters->set(Option::SKIP, ['*/Source/*', '*/Fixture/*']);
+    $parameters->set(Option::SKIP, [
+        '*/Source/*',
+        '*/Fixture/*',
+        __DIR__ . '/tests/Rector/Class_/InvokableControllerRector/FixtureSplit/Expected',
+    ]);
 
     $parameters->set(Option::LINE_ENDING, "\n");
 };

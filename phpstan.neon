@@ -13,6 +13,7 @@ parameters:
         - */Source/*
         - */Source*/*
         - *Source/*
+        - tests/Rector/Class_/InvokableControllerRector/FixtureSplit/Expected/*
 
     reportUnmatchedIgnoredErrors: false
 
@@ -49,3 +50,11 @@ parameters:
         -
             message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
             path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
+
+        # in test, fixtures exists
+        -
+             message: '#Parameter \#2 \$fileContent of class Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent constructor expects string, string\|false given#'
+             path: tests
+
+        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
+
