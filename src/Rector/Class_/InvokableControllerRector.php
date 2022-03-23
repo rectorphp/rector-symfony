@@ -16,7 +16,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
 use Rector\Symfony\NodeFactory\InvokableControllerClassFactory;
-use Rector\Symfony\NodeFactory\InvokableControllerNameFactory;
 use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,7 +33,6 @@ final class InvokableControllerRector extends AbstractRector
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly SymfonyControllerFilter $symfonyControllerFilter,
-        private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
         private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
         private readonly InvokableControllerClassFactory $invokableControllerClassFactory
     ) {
@@ -117,17 +115,9 @@ CODE_SAMPLE
 
         // 2. multiple action methods → split + rename current based on action name
         foreach ($actionClassMethods as $actionClassMethod) {
-            $actionMethodName = $actionClassMethod->name->toString();
-
-            $newControllerName = $this->invokableControllerNameFactory->createControllerName(
-                $node->name,
-                $actionMethodName
-            );
-
-            $newClassLike = $this->invokableControllerClassFactory->createWithActionClassMethod(
+            $invokableControllerClass = $this->invokableControllerClassFactory->createWithActionClassMethod(
                 $node,
-                $actionClassMethod,
-                $newControllerName
+                $actionClassMethod
             );
 
             /** @var Namespace_|FileWithoutNamespace|null $parentNamespace */
@@ -140,7 +130,7 @@ CODE_SAMPLE
             }
 
             $this->neighbourClassLikePrinter->printClassLike(
-                $newClassLike,
+                $invokableControllerClass,
                 $parentNamespace,
                 $this->file->getSmartFileInfo()
             );

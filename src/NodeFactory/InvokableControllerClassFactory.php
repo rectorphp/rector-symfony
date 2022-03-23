@@ -8,14 +8,20 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class InvokableControllerClassFactory
 {
-    public function createWithActionClassMethod(
-        Class_ $class,
-        ClassMethod $actionClassMethod,
-        string $controllerName
-    ): Class_ {
+    public function __construct(
+        private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
+        private readonly NodeNameResolver $nodeNameResolver
+    ) {
+    }
+
+    public function createWithActionClassMethod(Class_ $class, ClassMethod $actionClassMethod): Class_
+    {
+        $controllerName = $this->createControllerName($class, $actionClassMethod);
+
         $actionClassMethod->name = new Identifier(MethodName::INVOKE);
 
         $newClass = clone $class;
@@ -23,6 +29,12 @@ final class InvokableControllerClassFactory
         $newClassStmts = [];
         foreach ($class->stmts as $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
+                $newClassStmts[] = $classStmt;
+                continue;
+            }
+
+            // avoid duplicated names
+            if ($classStmt->isMagic() && ! $this->nodeNameResolver->isName($classStmt->name, MethodName::INVOKE)) {
                 $newClassStmts[] = $classStmt;
                 continue;
             }
@@ -35,8 +47,20 @@ final class InvokableControllerClassFactory
         $newClassStmts[] = $actionClassMethod;
 
         $newClass->name = new Identifier($controllerName);
+
         $newClass->stmts = $newClassStmts;
 
         return $newClass;
+    }
+
+    private function createControllerName(Class_ $class, ClassMethod $actionClassMethod): string
+    {
+        /** @var Identifier $className */
+        $className = $class->name;
+
+        return $this->invokableControllerNameFactory->createControllerName(
+            $className,
+            $actionClassMethod->name->toString()
+        );
     }
 }

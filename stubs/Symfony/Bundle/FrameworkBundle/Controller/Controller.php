@@ -16,6 +16,10 @@ class Controller
     {
     }
 
+    public function render(string $path, array $params = []): string
+    {
+    }
+
     public function redirect($url, $status = 302)
     {
     }
