@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Fixture/*',
         '*/Source/*',
         '*/Source*/*',
-        __DIR__ . '/tests/Rector/Class_/InvokableControllerRector/FixtureSplit/Expected'
+        '*/tests/*/Fixture*/Expected/*'
     ]);
 
     $services = $containerConfigurator->services();

@@ -14,16 +14,12 @@ final class SymfonyControllerFilter
      */
     public function filterActionMethods(Class_ $class): array
     {
-        $actionClassMethods = [];
-
-        foreach ($class->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic()) {
-                continue;
+        return array_filter($class->getMethods(), function (ClassMethod $classMethod) {
+            if ($classMethod->isMagic()) {
+                return false;
             }
 
-            $actionClassMethods[] = $classMethod;
-        }
-
-        return $actionClassMethods;
+            return $classMethod->isPublic();
+        });
     }
 }

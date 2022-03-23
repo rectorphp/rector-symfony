@@ -13,7 +13,7 @@ parameters:
         - */Source/*
         - */Source*/*
         - *Source/*
-        - tests/Rector/Class_/InvokableControllerRector/FixtureSplit/Expected/*
+        - */tests/*/Fixture*/Expected/*
 
     reportUnmatchedIgnoredErrors: false
 
