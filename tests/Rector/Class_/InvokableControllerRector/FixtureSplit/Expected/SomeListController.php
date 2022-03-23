@@ -7,5 +7,6 @@ final class SomeListController extends \Symfony\Bundle\FrameworkBundle\Controlle
 {
     public function __invoke()
     {
+        echo 2;
     }
 }

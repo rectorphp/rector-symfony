@@ -12,18 +12,20 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @todo re-use in https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
+ *
+ * Printer useful for printing classes next to just-processed one.
+ * E.g. in case of extracting class to the same directory, just with different name.
  */
 final class NeighbourClassLikePrinter
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private BetterStandardPrinter $betterStandardPrinter,
-        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
     ) {
     }
 
@@ -33,11 +35,6 @@ final class NeighbourClassLikePrinter
         SmartFileInfo $smartFileInfo
     ): void {
         $declares = $this->resolveDeclares($mainNode);
-
-//        dump($declares);
-//        die;
-
-        $classLike->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         if ($mainNode instanceof FileWithoutNamespace) {
             $nodesToPrint = array_merge($declares, [$classLike]);

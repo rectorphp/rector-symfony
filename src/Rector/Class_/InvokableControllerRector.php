@@ -10,10 +10,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
+use Rector\Symfony\NodeFactory\InvokableControllerClassFactory;
 use Rector\Symfony\NodeFactory\InvokableControllerNameFactory;
 use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
@@ -34,6 +36,7 @@ final class InvokableControllerRector extends AbstractRector
         private readonly SymfonyControllerFilter $symfonyControllerFilter,
         private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
         private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
+        private readonly InvokableControllerClassFactory $invokableControllerClassFactory
     ) {
     }
 
@@ -121,24 +124,26 @@ CODE_SAMPLE
                 $actionMethodName
             );
 
-            $newClassLike = $this->buildNewClassWithActionMethod($node, $actionClassMethod, $newControllerName);
+            $newClassLike = $this->invokableControllerClassFactory->createWithActionClassMethod(
+                $node,
+                $actionClassMethod,
+                $newControllerName
+            );
 
-            $parentNamespace = $this->betterNodeFinder->findParentType($node, Namespace_::class);
+            /** @var Namespace_|FileWithoutNamespace|null $parentNamespace */
+            $parentNamespace = $this->betterNodeFinder->findParentByTypes(
+                $node,
+                [Namespace_::class, FileWithoutNamespace::class]
+            );
+            if (! $parentNamespace instanceof \PhpParser\Node) {
+                throw new ShouldNotHappenException('Missing parent namespace or without namespace node');
+            }
 
             $this->neighbourClassLikePrinter->printClassLike(
                 $newClassLike,
                 $parentNamespace,
                 $this->file->getSmartFileInfo()
             );
-
-//            // print to different location
-//            $filePath = $this->file->getRelativeFilePath();
-//            $newFilePath = dirname($filePath) . '/' . $newControllerName . '.php';
-//
-//            $fileContent = '<?php' . PHP_EOL . PHP_EOL . $this->print($newClassLike) . PHP_EOL;
-//
-//            $addedFile = new AddedFileWithContent($newFilePath, $fileContent);
-//            $this->removedAndAddedFilesCollector->addAddedFile($addedFile);
         }
 
         // remove original file
@@ -152,37 +157,5 @@ CODE_SAMPLE
     {
         $actionClassMethod->name = new Identifier(MethodName::INVOKE);
         return $class;
-    }
-
-    private function buildNewClassWithActionMethod(
-        Class_ $class,
-        ClassMethod $actionClassMethod,
-        string $controllerName
-    ): Class_ {
-        $actionClassMethod->name = new Identifier(MethodName::INVOKE);
-
-        $newClass = clone $class;
-
-        $newClassStmts = [];
-        foreach ($class->stmts as $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
-                $newClassStmts[] = $classStmt;
-                continue;
-            }
-
-            if (! $classStmt->isPublic()) {
-                $newClassStmts[] = $classStmt;
-            }
-        }
-
-        $newClassStmts[] = $actionClassMethod;
-
-        $newClass->name = new Identifier($controllerName);
-        $newClass->stmts = $newClassStmts;
-
-        return $newClass;
-//        $newClassParent->stmts = [$newClass];
-
-//        return $newClassParent;
     }
 }

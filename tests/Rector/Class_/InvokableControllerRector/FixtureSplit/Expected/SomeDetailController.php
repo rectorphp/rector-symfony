@@ -7,5 +7,6 @@ final class SomeDetailController extends \Symfony\Bundle\FrameworkBundle\Control
 {
     public function __invoke()
     {
+        echo 1;
     }
 }

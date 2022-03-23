@@ -10,9 +10,11 @@ final class SomeController extends Controller
 {
     public function detailAction()
     {
+        echo 1;
     }
 
     public function listAction()
     {
+        echo 2;
     }
 }
