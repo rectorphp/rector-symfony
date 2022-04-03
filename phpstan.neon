@@ -58,3 +58,4 @@ parameters:
 
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
 
+        - '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:getByOne\(\) expects class\-string, string given#'

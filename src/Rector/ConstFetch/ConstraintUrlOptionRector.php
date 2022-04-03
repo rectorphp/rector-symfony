@@ -83,11 +83,6 @@ final class ConstraintUrlOptionRector extends AbstractRector
         if (! $newType instanceof TypeWithClassName) {
             return false;
         }
-
-        if ($newType->getClassName() !== self::URL_CONSTRAINT_CLASS) {
-            return false;
-        }
-
-        return true;
+        return $newType->getClassName() === self::URL_CONSTRAINT_CLASS;
     }
 }
