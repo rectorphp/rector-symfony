@@ -7,14 +7,17 @@ namespace Rector\Symfony\NodeFactory;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Symfony\NodeAnalyzer\InvokableAnalyzer\ActiveClassElementsClassMethodResolver;
 
 final class InvokableControllerClassFactory
 {
     public function __construct(
         private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ActiveClassElementsClassMethodResolver $activeClassElementsClassMethodResolver,
     ) {
     }
 
@@ -27,7 +30,19 @@ final class InvokableControllerClassFactory
         $newClass = clone $class;
 
         $newClassStmts = [];
+
+        $activeClassElements = $this->activeClassElementsClassMethodResolver->resolve($actionClassMethod);
+
         foreach ($class->stmts as $classStmt) {
+            // keep only elements used in current actoin
+            if ($classStmt instanceof Property) {
+                if ($activeClassElements->hasProperty($classStmt)) {
+                    $newClassStmts[] = $classStmt;
+                }
+
+                continue;
+            }
+
             if (! $classStmt instanceof ClassMethod) {
                 $newClassStmts[] = $classStmt;
                 continue;
