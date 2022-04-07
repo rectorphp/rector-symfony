@@ -6,7 +6,7 @@ namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source;
 
 final class LeftRepository
 {
-    public function get($id): object
+    public function get($id): string
     {
     }
 }

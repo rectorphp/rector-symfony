@@ -17,6 +17,10 @@ final class DependencyDetailController extends \Symfony\Bundle\FrameworkBundle\C
     {
         $item = $this->normalRepository->get($id);
         $left = $this->leftRepository->get(self::LEFT);
-        return $this->render('detail_path.twig', ['item' => $item, 'left' => $left]);
+        return $this->render('detail_path.twig', ['item' => $item, 'left' => $left . $this->left()]);
+    }
+    private function left()
+    {
+        return 'left';
     }
 }

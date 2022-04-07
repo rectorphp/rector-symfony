@@ -17,6 +17,10 @@ final class DependencyListController extends \Symfony\Bundle\FrameworkBundle\Con
     {
         $item = $this->normalRepository->fetchAll();
         $right = $this->rightRepository->get(self::RIGHT);
-        return $this->render('list_path.twig', ['item' => $item, 'right' => $right]);
+        return $this->render('list_path.twig', ['item' => $item, 'right' => $right . $this->right()]);
+    }
+    private function right()
+    {
+        return 'right';
     }
 }
