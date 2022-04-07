@@ -39,7 +39,7 @@ final class DependencyController extends Controller
 
         return $this->render('detail_path.twig', [
             'item' => $item,
-            'left' => $left,
+            'left' => $left . $this->left(),
         ]);
     }
 
@@ -51,7 +51,17 @@ final class DependencyController extends Controller
 
         return $this->render('list_path.twig', [
             'item' => $item,
-            'right' => $right,
+            'right' => $right . $this->right(),
         ]);
+    }
+
+    private function left()
+    {
+        return 'left';
+    }
+
+    private function right()
+    {
+        return 'right';
     }
 }

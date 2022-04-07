@@ -9,13 +9,12 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\NodeAnalyzer\InvokableAnalyzer\ActiveClassElementsClassMethodResolver;
+use Rector\Symfony\NodeFactory\InvokableController\ActiveClassElementsFilter;
 use Rector\Symfony\ValueObject\InvokableController\ActiveClassElements;
 
 final class InvokableControllerClassFactory
@@ -24,6 +23,7 @@ final class InvokableControllerClassFactory
         private readonly InvokableControllerNameFactory $invokableControllerNameFactory,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly ActiveClassElementsClassMethodResolver $activeClassElementsClassMethodResolver,
+        private readonly ActiveClassElementsFilter $activeClassElementsFilter,
     ) {
     }
 
@@ -116,54 +116,22 @@ final class InvokableControllerClassFactory
     {
         $activeClassElements = $this->activeClassElementsClassMethodResolver->resolve($actionClassMethod);
 
-        $activeConstants = $this->filterConstants($class, $activeClassElements);
+        $activeClassConsts = $this->activeClassElementsFilter->filterClassConsts($class, $activeClassElements);
+        $activeProperties = $this->activeClassElementsFilter->filterProperties($class, $activeClassElements);
+        $activeClassMethods = $this->activeClassElementsFilter->filterClassMethod($class, $activeClassElements);
 
-        $activeProperties = $this->filterProperties($class, $activeClassElements);
-        $newClassStmts = array_merge($activeConstants, $activeProperties);
+        $newClassStmts = array_merge($activeClassConsts, $activeProperties);
 
         foreach ($class->getMethods() as $classMethod) {
             // avoid duplicated names
-            if ($classMethod->isMagic() && ! $this->nodeNameResolver->isName($classMethod->name, MethodName::INVOKE)) {
-                if ($this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
-                    $classMethod = $this->filterOutUnusedDependencies($classMethod, $activeClassElements);
-                }
-
-                $newClassStmts[] = $classMethod;
-                continue;
-            }
-
-            // @todo filter out only used private methods later
-            if (! $classMethod->isPublic()) {
+            if ($this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
+                $classMethod = $this->filterOutUnusedDependencies($classMethod, $activeClassElements);
                 $newClassStmts[] = $classMethod;
             }
         }
 
         $newClassStmts[] = $actionClassMethod;
 
-        return $newClassStmts;
-    }
-
-    /**
-     * @return Property[]
-     */
-    private function filterProperties(Class_ $class, ActiveClassElements $activeClassElements): array
-    {
-        return array_filter($class->getProperties(), function (Property $property) use ($activeClassElements) {
-            // keep only property used in current action
-            $propertyName = $this->nodeNameResolver->getName($property);
-            return $activeClassElements->hasPropertyName($propertyName);
-        });
-    }
-
-    /**
-     * @return ClassConst[]
-     */
-    private function filterConstants(Class_ $class, ActiveClassElements $activeClassElements): array
-    {
-        return array_filter($class->getConstants(), function (ClassConst $classConst) use ($activeClassElements) {
-            /** @var string $constantName */
-            $constantName = $this->nodeNameResolver->getName($classConst);
-            return $activeClassElements->hasConstantName($constantName);
-        });
+        return array_merge($newClassStmts, $activeClassMethods);
     }
 }

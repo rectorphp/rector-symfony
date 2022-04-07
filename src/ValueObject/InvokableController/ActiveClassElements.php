@@ -9,10 +9,12 @@ final class ActiveClassElements
     /**
      * @param string[] $propertyNames
      * @param string[] $constantNames
+     * @param string[] $methodNames
      */
     public function __construct(
         private readonly array $propertyNames,
         private readonly array $constantNames,
+        private readonly array $methodNames,
     ) {
     }
 
@@ -24,5 +26,10 @@ final class ActiveClassElements
     public function hasConstantName(string $constantName): bool
     {
         return in_array($constantName, $this->constantNames, true);
+    }
+
+    public function hasMethodName(string $methodName): bool
+    {
+        return in_array($methodName, $this->methodNames, true);
     }
 }
