@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer\InvokableAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -22,8 +23,9 @@ final class ActiveClassElementsClassMethodResolver
     public function resolve(ClassMethod $actionClassMethod): ActiveClassElements
     {
         $usedLocalPropertyNames = $this->resolveLocalUsedPropertyNames($actionClassMethod);
+        $usedLocalConstantNames = $this->resolveLocalUsedConstantNames($actionClassMethod);
 
-        return new ActiveClassElements($usedLocalPropertyNames);
+        return new ActiveClassElements($usedLocalPropertyNames, $usedLocalConstantNames);
     }
 
     /**
@@ -53,5 +55,34 @@ final class ActiveClassElementsClassMethodResolver
         });
 
         return $usedLocalPropertyNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveLocalUsedConstantNames(ClassMethod $actionClassMethod): array
+    {
+        $usedLocalConstantNames = [];
+
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (Node $node) use (
+            &$usedLocalConstantNames
+        ) {
+            if (! $node instanceof ClassConstFetch) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isName($node->class, 'self')) {
+                return null;
+            }
+
+            $constantName = $this->nodeNameResolver->getName($node->name);
+            if (! is_string($constantName)) {
+                return null;
+            }
+
+            $usedLocalConstantNames[] = $constantName;
+        });
+
+        return $usedLocalConstantNames;
     }
 }
