@@ -62,6 +62,6 @@ final class DependencyController extends Controller
 
     private function right()
     {
-        return 'left';
+        return 'right';
     }
 }
