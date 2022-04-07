@@ -6,6 +6,7 @@ namespace Rector\Symfony\NodeAnalyzer\InvokableAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -24,8 +25,9 @@ final class ActiveClassElementsClassMethodResolver
     {
         $usedLocalPropertyNames = $this->resolveLocalUsedPropertyNames($actionClassMethod);
         $usedLocalConstantNames = $this->resolveLocalUsedConstantNames($actionClassMethod);
+        $usedLocalMethodNames = $this->resolveLocalUsedMethodNames($actionClassMethod);
 
-        return new ActiveClassElements($usedLocalPropertyNames, $usedLocalConstantNames);
+        return new ActiveClassElements($usedLocalPropertyNames, $usedLocalConstantNames, $usedLocalMethodNames);
     }
 
     /**
@@ -84,5 +86,34 @@ final class ActiveClassElementsClassMethodResolver
         });
 
         return $usedLocalConstantNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveLocalUsedMethodNames(ClassMethod $actionClassMethod): array
+    {
+        $usedLocalMethodNames = [];
+
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($actionClassMethod, function (Node $node) use (
+            &$usedLocalMethodNames
+        ) {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isName($node->var, 'this')) {
+                return null;
+            }
+
+            $methodName = $this->nodeNameResolver->getName($node->name);
+            if (! is_string($methodName)) {
+                return null;
+            }
+
+            $usedLocalMethodNames[] = $methodName;
+        });
+
+        return $usedLocalMethodNames;
     }
 }

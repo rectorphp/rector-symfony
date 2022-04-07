@@ -116,10 +116,10 @@ final class InvokableControllerClassFactory
     {
         $activeClassElements = $this->activeClassElementsClassMethodResolver->resolve($actionClassMethod);
 
-        $activeConstants = $this->filterConstants($class, $activeClassElements);
-
+        $activeClassConsts = $this->filterClassConsts($class, $activeClassElements);
         $activeProperties = $this->filterProperties($class, $activeClassElements);
-        $newClassStmts = array_merge($activeConstants, $activeProperties);
+
+        $newClassStmts = array_merge($activeClassConsts, $activeProperties);
 
         foreach ($class->getMethods() as $classMethod) {
             // avoid duplicated names
@@ -148,22 +148,28 @@ final class InvokableControllerClassFactory
      */
     private function filterProperties(Class_ $class, ActiveClassElements $activeClassElements): array
     {
-        return array_filter($class->getProperties(), function (Property $property) use ($activeClassElements) {
-            // keep only property used in current action
-            $propertyName = $this->nodeNameResolver->getName($property);
-            return $activeClassElements->hasPropertyName($propertyName);
-        });
+        return array_filter(
+            $class->getProperties(),
+            function (Property $property) use ($activeClassElements) {
+                // keep only property used in current action
+                $propertyName = $this->nodeNameResolver->getName($property);
+                return $activeClassElements->hasPropertyName($propertyName);
+            }
+        );
     }
 
     /**
      * @return ClassConst[]
      */
-    private function filterConstants(Class_ $class, ActiveClassElements $activeClassElements): array
+    private function filterClassConsts(Class_ $class, ActiveClassElements $activeClassElements): array
     {
-        return array_filter($class->getConstants(), function (ClassConst $classConst) use ($activeClassElements) {
-            /** @var string $constantName */
-            $constantName = $this->nodeNameResolver->getName($classConst);
-            return $activeClassElements->hasConstantName($constantName);
-        });
+        return array_filter(
+            $class->getConstants(),
+            function (ClassConst $classConst) use ($activeClassElements) {
+                /** @var string $constantName */
+                $constantName = $this->nodeNameResolver->getName($classConst);
+                return $activeClassElements->hasConstantName($constantName);
+            }
+        );
     }
 }
