@@ -4,28 +4,50 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\FixtureDependency;
 
+use Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\LeftRepository;
 use Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\NormalRepository;
+use Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\RightRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class DependencyController extends Controller
 {
     private NormalRepository $normalRepository;
 
+    private LeftRepository $leftRepository;
+
+    private RightRepository $rightRepository;
+
     public function __construct(
-        NormalRepository $normalRepository
+        NormalRepository $normalRepository,
+        LeftRepository $leftRepository,
+        RightRepository $rightRepository
     ) {
         $this->normalRepository = $normalRepository;
+        $this->leftRepository = $leftRepository;
+        $this->rightRepository = $rightRepository;
     }
 
     public function detailAction($id)
     {
         $item = $this->normalRepository->get($id);
-        return $this->render('detail_path.twig', ['item' => $item]);
+
+        $left = $this->leftRepository->get($id);
+
+        return $this->render('detail_path.twig', [
+            'item' => $item,
+            'left' => $left,
+        ]);
     }
 
     public function listAction()
     {
         $item = $this->normalRepository->fetchAll();
-        return $this->render('list_path.twig', ['item' => $item]);
+
+        $right = $this->rightRepository->get(10);
+
+        return $this->render('list_path.twig', [
+            'item' => $item,
+            'right' => $right,
+        ]);
     }
 }
