@@ -6,13 +6,16 @@ namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\FixtureDe
 final class DependencyDetailController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
     private \Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\NormalRepository $normalRepository;
-    public function __construct(\Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\NormalRepository $normalRepository)
+    private \Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\LeftRepository $leftRepository;
+    public function __construct(\Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\NormalRepository $normalRepository, \Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector\Source\LeftRepository $leftRepository)
     {
         $this->normalRepository = $normalRepository;
+        $this->leftRepository = $leftRepository;
     }
     public function __invoke($id)
     {
         $item = $this->normalRepository->get($id);
-        return $this->render('detail_path.twig', ['item' => $item]);
+        $left = $this->leftRepository->get($id);
+        return $this->render('detail_path.twig', ['item' => $item, 'left' => $left]);
     }
 }
