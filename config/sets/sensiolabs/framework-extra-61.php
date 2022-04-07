@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity'),
             new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted'),
             new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter'),
+            new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Security'),
             new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'),
         ]);
 };
