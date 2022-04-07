@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
@@ -115,11 +116,10 @@ final class InvokableControllerClassFactory
     {
         $activeClassElements = $this->activeClassElementsClassMethodResolver->resolve($actionClassMethod);
 
-        // @todo filter out later
-        $newClassStmts = $class->getConstants();
+        $activeConstants = $this->filterConstants($class, $activeClassElements);
 
         $activeProperties = $this->filterProperties($class, $activeClassElements);
-        $newClassStmts = array_merge($newClassStmts, $activeProperties);
+        $newClassStmts = array_merge($activeConstants, $activeProperties);
 
         foreach ($class->getMethods() as $classMethod) {
             // avoid duplicated names
@@ -152,6 +152,18 @@ final class InvokableControllerClassFactory
             // keep only property used in current action
             $propertyName = $this->nodeNameResolver->getName($property);
             return $activeClassElements->hasPropertyName($propertyName);
+        });
+    }
+
+    /**
+     * @return ClassConst[]
+     */
+    private function filterConstants(Class_ $class, ActiveClassElements $activeClassElements): array
+    {
+        return array_filter($class->getConstants(), function (ClassConst $classConst) use ($activeClassElements) {
+            /** @var string $constantName */
+            $constantName = $this->nodeNameResolver->getName($classConst);
+            return $activeClassElements->hasConstantName($constantName);
         });
     }
 }

@@ -11,6 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class DependencyController extends Controller
 {
+    private const LEFT = 'left';
+
+    private const RIGHT = 'right';
+
     private NormalRepository $normalRepository;
 
     private LeftRepository $leftRepository;
@@ -31,7 +35,7 @@ final class DependencyController extends Controller
     {
         $item = $this->normalRepository->get($id);
 
-        $left = $this->leftRepository->get($id);
+        $left = $this->leftRepository->get(self::LEFT);
 
         return $this->render('detail_path.twig', [
             'item' => $item,
@@ -43,7 +47,7 @@ final class DependencyController extends Controller
     {
         $item = $this->normalRepository->fetchAll();
 
-        $right = $this->rightRepository->get(10);
+        $right = $this->rightRepository->get(self::RIGHT);
 
         return $this->render('list_path.twig', [
             'item' => $item,

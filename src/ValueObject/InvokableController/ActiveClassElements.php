@@ -8,14 +8,21 @@ final class ActiveClassElements
 {
     /**
      * @param string[] $propertyNames
+     * @param string[] $constantNames
      */
     public function __construct(
-        private readonly array $propertyNames
+        private readonly array $propertyNames,
+        private readonly array $constantNames,
     ) {
     }
 
-    public function hasPropertyName(string $propertyFetchName): bool
+    public function hasPropertyName(string $propertyName): bool
     {
-        return in_array($propertyFetchName, $this->propertyNames, true);
+        return in_array($propertyName, $this->propertyNames, true);
+    }
+
+    public function hasConstantName(string $constantName): bool
+    {
+        return in_array($constantName, $this->constantNames, true);
     }
 }
