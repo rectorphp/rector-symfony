@@ -43,7 +43,7 @@ final class DependencyController extends Controller
     {
         $item = $this->normalRepository->fetchAll();
 
-        $right = $this->leftRepository->get(100);
+        $right = $this->rightRepository->get(10);
 
         return $this->render('list_path.twig', [
             'item' => $item,
