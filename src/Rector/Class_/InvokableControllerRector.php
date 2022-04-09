@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
@@ -34,7 +35,8 @@ final class InvokableControllerRector extends AbstractRector
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly SymfonyControllerFilter $symfonyControllerFilter,
         private readonly NeighbourClassLikePrinter $neighbourClassLikePrinter,
-        private readonly InvokableControllerClassFactory $invokableControllerClassFactory
+        private readonly InvokableControllerClassFactory $invokableControllerClassFactory,
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
     ) {
     }
 
