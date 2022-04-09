@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -40,12 +41,27 @@ final class ParseFileRector extends AbstractRector
      */
     private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
 
+    public function __construct(
+        private readonly NodePrinterInterface $nodePrinter
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition(
-            'session > use_strict_mode is true by default and can be removed',
-            [new CodeSample('session > use_strict_mode: true', 'session:')]
-        );
+        return new RuleDefinition('Replaces deprecated Yaml::parse() of file argument with file contents', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+use Symfony\Component\Yaml\Yaml;
+
+$parsedFile = Yaml::parse('someFile.yml');
+CODE_SAMPLE
+            ,
+                <<<'CODE_SAMPLE'
+use Symfony\Component\Yaml\Yaml;
+
+$parsedFile = Yaml::parse(file_get_contents('someFile.yml'));
+CODE_SAMPLE
+            ), ]);
     }
 
     /**
@@ -90,7 +106,7 @@ final class ParseFileRector extends AbstractRector
 
         $possibleFileNode = $firstArg->value;
 
-        $possibleFileNodeAsString = $this->print($possibleFileNode);
+        $possibleFileNodeAsString = $this->nodePrinter->print($possibleFileNode);
 
         // is yml/yaml file
         if (StringUtils::isMatch($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
