@@ -73,6 +73,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Url'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Uuid'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Valid'),
+            new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\DiscriminatorMap'),
             new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Groups'),
+            new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Ignore'),
+            new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\MaxDepth'),
+            new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\SerializedName'),
         ]);
 };
