@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Core\Configuration\Option;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, null);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     $services->defaults()
         ->public()

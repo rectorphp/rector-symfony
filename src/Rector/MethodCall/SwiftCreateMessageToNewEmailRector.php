@@ -80,9 +80,9 @@ CODE_SAMPLE
         return ! $this->isName($var, $propertyName);
     }
 
-    private function getSwiftMailerProperty(MethodCall $classMethod): ?Property
+    private function getSwiftMailerProperty(MethodCall $methodCall): ?Property
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }

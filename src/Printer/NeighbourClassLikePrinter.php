@@ -48,8 +48,8 @@ final class NeighbourClassLikePrinter
 
         $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
 
-        $addedFileWithNodes = new AddedFileWithContent($fileDestination, $printedFileContent);
-        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithNodes);
+        $addedFileWithContent = new AddedFileWithContent($fileDestination, $printedFileContent);
+        $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
 
     private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -14,15 +15,16 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
+use Rector\Config\RectorConfig;
+use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 
-return static function (ContainerConfigurator $containerConfigurator): void {
+return static function (RectorConfig $rectorConfig): void {
     $iterableType = new IterableType(new MixedType(), new MixedType());
     $arrayType = new ArrayType(new MixedType(), new MixedType());
 
@@ -63,7 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
 
     // @see https://github.com/symfony/symfony/pull/42064
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(AddReturnTypeDeclarationRector::class)
         ->configure([
             new AddReturnTypeDeclaration(
@@ -342,37 +344,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\OptionsResolver\OptionsResolver',
                 'setNormalizer',
-                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
-                    'Symfony\Component\OptionsResolver\OptionsResolver'
-                )
+                new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\OptionsResolver\OptionsResolver',
                 'setAllowedValues',
-                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
-                    'Symfony\Component\OptionsResolver\OptionsResolver'
-                )
+                new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\OptionsResolver\OptionsResolver',
                 'addAllowedValues',
-                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
-                    'Symfony\Component\OptionsResolver\OptionsResolver'
-                )
+                new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\OptionsResolver\OptionsResolver',
                 'setAllowedTypes',
-                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
-                    'Symfony\Component\OptionsResolver\OptionsResolver'
-                )
+                new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\OptionsResolver\OptionsResolver',
                 'addAllowedTypes',
-                new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType(
-                    'Symfony\Component\OptionsResolver\OptionsResolver'
-                )
+                new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\PropertyAccess\PropertyPathInterface',
@@ -491,7 +483,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
                 'getAllowedAttributes',
-                new UnionType([$arrayType, new \PHPStan\Type\BooleanType()])
+                new UnionType([$arrayType, new BooleanType()])
             ),
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',

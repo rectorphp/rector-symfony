@@ -85,17 +85,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $injectTagNode = $phpDocInfo->getByAnnotationClass(self::INJECT_ANNOTATION_CLASS);
-        if (! $injectTagNode instanceof DoctrineAnnotationTagValueNode) {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(self::INJECT_ANNOTATION_CLASS);
+        if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $serviceType = $this->resolveServiceType($injectTagNode, $phpDocInfo, $node);
+        $serviceType = $this->resolveServiceType($doctrineAnnotationTagValueNode, $phpDocInfo, $node);
         if ($serviceType instanceof MixedType) {
             return null;
         }
 
-        $this->propertyConstructorInjectionManipulator->refactor($node, $serviceType, $injectTagNode);
+        $this->propertyConstructorInjectionManipulator->refactor($node, $serviceType, $doctrineAnnotationTagValueNode);
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             $this->removeNode($node);

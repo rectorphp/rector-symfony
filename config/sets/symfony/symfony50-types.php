@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ArrayType;
+
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -12,14 +13,14 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
+use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
 
     $arrayType = new ArrayType(new MixedType(), new MixedType());
     $iterableType = new IterableType(new MixedType(), new MixedType());

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
@@ -11,14 +13,13 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Set\SymfonySetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.4.md
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
@@ -30,7 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Sequentially'),
         ]);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(RenameMethodRector::class)
         ->configure([
             // @see https://github.com/symfony/symfony/pull/42582

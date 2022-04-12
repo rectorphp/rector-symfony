@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
  * @see https://github.com/schmittjoh/serializer/pull/1320
  * @see https://github.com/schmittjoh/serializer/pull/1332
  * @see https://github.com/schmittjoh/serializer/pull/1337
  */
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     $services->set(AnnotationToAttributeRector::class)
         ->configure([
             new AnnotationToAttribute('JMS\Serializer\Annotation\Accessor'),
