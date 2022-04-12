@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Set\SymfonySetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Config\RectorConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::SYMFONY_26);
+use Rector\Symfony\Set\SymfonySetList;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(SymfonySetList::SYMFONY_26);
 };

@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
+
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -14,16 +16,15 @@ use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
-    $containerConfigurator->import(__DIR__ . '/symfony6/symfony-return-types.php');
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
+    $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
 
     // @see https://github.com/symfony/symfony/pull/35879
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(ReplaceServiceArgumentRector::class)
         ->configure([
             new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')),

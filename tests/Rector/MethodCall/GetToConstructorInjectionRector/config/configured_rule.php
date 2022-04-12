@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Core\Configuration\Option;
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/../../../../../config/config.php');
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
 
-    $parameters = $containerConfigurator->parameters();
+    $parameters = $rectorConfig->parameters();
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/../xml/services.xml');
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
     $services->set(GetToConstructorInjectionRector::class);
 };

@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-# https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
 use PHPStan\Type\ObjectType;
+
+# https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.1.md
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -20,10 +22,9 @@ use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
     // see https://github.com/symfony/symfony/pull/36243
     $services->set(LogoutHandlerToLogoutEventSubscriberRector::class);
     $services->set(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);

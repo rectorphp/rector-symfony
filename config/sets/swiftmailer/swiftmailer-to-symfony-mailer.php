@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 // @see https://symfony.com/blog/the-end-of-swiftmailer
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
+return static function (RectorConfig $rectorConfig): void {
+    $services = $rectorConfig->services();
 
     $services->set(SwiftCreateMessageToNewEmailRector::class);
 

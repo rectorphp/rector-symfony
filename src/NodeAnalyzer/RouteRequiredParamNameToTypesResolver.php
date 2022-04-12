@@ -74,11 +74,11 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAnnotation(DoctrineAnnotationTagValueNode $routeAttrination): array
+    private function resolveFromAnnotation(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): array
     {
         $paramsToRegexes = [];
 
-        $requirementsValue = $routeAttrination->getValue('requirements');
+        $requirementsValue = $doctrineAnnotationTagValueNode->getValue('requirements');
         if (! $requirementsValue instanceof CurlyListNode) {
             return [];
         }
@@ -97,11 +97,11 @@ final class RouteRequiredParamNameToTypesResolver
     /**
      * @return array<string, string>
      */
-    private function resolveFromAttribute(Attribute $routeAttrination): array
+    private function resolveFromAttribute(Attribute $attribute): array
     {
         $paramsToRegexes = [];
 
-        foreach ($routeAttrination->args as $arg) {
+        foreach ($attribute->args as $arg) {
             if (! $this->nodeNameResolver->isName($arg, 'requirements')) {
                 continue;
             }

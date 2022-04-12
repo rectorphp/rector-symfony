@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
+
 use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::SYMFONY_60);
-    $containerConfigurator->import(SymfonyLevelSetList::UP_TO_SYMFONY_54);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(SymfonySetList::SYMFONY_60);
+    $rectorConfig->import(SymfonyLevelSetList::UP_TO_SYMFONY_54);
 };

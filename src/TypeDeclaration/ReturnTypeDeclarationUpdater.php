@@ -41,18 +41,18 @@ final class ReturnTypeDeclarationUpdater
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
 
-        $returnTagValue = $phpDocInfo->getReturnTagValue();
-        if (! $returnTagValue instanceof ReturnTagValueNode) {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (! $returnTagValueNode instanceof ReturnTagValueNode) {
             return;
         }
 
         $returnStaticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
-            $returnTagValue->type,
+            $returnTagValueNode->type,
             $classMethod
         );
 
         if ($returnStaticType instanceof ArrayType || $returnStaticType instanceof UnionType) {
-            $returnTagValue->type = new FullyQualifiedIdentifierTypeNode($className);
+            $returnTagValueNode->type = new FullyQualifiedIdentifierTypeNode($className);
         }
     }
 

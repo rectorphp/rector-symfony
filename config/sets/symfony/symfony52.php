@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
+
+use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
@@ -19,14 +21,13 @@ use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
     $services->set(PropertyPathMapperToDataMapperRector::class);

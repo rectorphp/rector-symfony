@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use Rector\Config\RectorConfig;
 
 use Rector\Core\Configuration\Option;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -9,8 +10,8 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (RectorConfig $rectorConfig): void {
+    $parameters = $rectorConfig->parameters();
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
     $parameters->set(Option::PATHS, [
@@ -25,10 +26,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Fixture/*',
         '*/Source/*',
         '*/Source*/*',
-        '*/tests/*/Fixture*/Expected/*'
+        '*/tests/*/Fixture*/Expected/*',
+        StringClassNameToClassConstantRector::class => [
+            __DIR__ . '/config',
+        ],
     ]);
 
-    $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
 
     $services->set(StringClassNameToClassConstantRector::class)
         ->configure([
@@ -38,11 +42,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'Doctrine\*',
         ]);
 
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::DEAD_CODE);
+    $rectorConfig->import(LevelSetList::UP_TO_PHP_81);
+    $rectorConfig->import(SetList::CODE_QUALITY);
+    $rectorConfig->import(SetList::DEAD_CODE);
+    $rectorConfig->import(SetList::NAMING);
 
     // for testing
-    $containerConfigurator->import(__DIR__ . '/config/config.php');
-    $containerConfigurator->import(SymfonySetList::SYMFONY_60);
+    $rectorConfig->import(__DIR__ . '/config/config.php');
+    $rectorConfig->import(SymfonySetList::SYMFONY_60);
 };
