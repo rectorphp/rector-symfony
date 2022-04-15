@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
@@ -19,8 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
  * @see \Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\CascadeValidationFormBuilderRectorTest
+ *
+ * @changelog https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
+ * @changelog https://stackoverflow.com/questions/39758392/symfony-3-validation-groups-inside-child-entity-ignored
  */
 final class CascadeValidationFormBuilderRector extends AbstractRector
 {
@@ -80,15 +83,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, ArrayItem::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|ArrayItem $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($node instanceof ArrayItem) {
+            return $this->refactorArrayItem($node);
+        }
+
+        if ($this->shouldSkipMethodCall($node)) {
             return null;
         }
 
@@ -105,7 +112,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(MethodCall $methodCall): bool
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
     {
         if (! $this->isName($methodCall->name, 'createFormBuilder')) {
             return true;
@@ -123,7 +130,7 @@ CODE_SAMPLE
     private function isSuccessfulRemovalCascadeValidationOption(MethodCall $methodCall, Array_ $optionsArrayNode): bool
     {
         foreach ($optionsArrayNode->items as $key => $arrayItem) {
-            if ($arrayItem === null) {
+            if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
 
@@ -150,8 +157,9 @@ CODE_SAMPLE
 
     private function addConstraintsOptionToFollowingAddMethodCalls(MethodCall $methodCall): void
     {
-        $new = new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid'));
-        $constraintsArrayItem = new ArrayItem($new, new String_('constraints'));
+        $array = $this->createValidConstraintsArray();
+
+        $constraintsArrayItem = new ArrayItem($array, new String_('constraints'));
 
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
 
@@ -166,5 +174,31 @@ CODE_SAMPLE
 
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
+    }
+
+    private function createValidConstraintsArray(): Array_
+    {
+        $new = new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid'));
+        return new Array_([new ArrayItem($new)]);
+    }
+
+    private function refactorArrayItem(ArrayItem $arrayItem): null|ArrayItem
+    {
+        if (! $arrayItem->key instanceof Expr) {
+            return null;
+        }
+
+        if (! $this->valueResolver->isValue($arrayItem->key, 'cascade_validation')) {
+            return null;
+        }
+
+        if (! $this->valueResolver->isValue($arrayItem->value, true)) {
+            return null;
+        }
+
+        $arrayItem->key = new String_('constraints');
+        $arrayItem->value = $this->createValidConstraintsArray();
+
+        return $arrayItem;
     }
 }
