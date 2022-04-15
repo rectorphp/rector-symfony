@@ -179,8 +179,7 @@ CODE_SAMPLE
     private function createValidConstraintsArray(): Array_
     {
         $new = new New_(new FullyQualified('Symfony\Component\Validator\Constraints\Valid'));
-        $array = new Array_([new ArrayItem($new)]);
-        return $array;
+        return new Array_([new ArrayItem($new)]);
     }
 
     private function refactorArrayItem(ArrayItem $arrayItem): null|ArrayItem
