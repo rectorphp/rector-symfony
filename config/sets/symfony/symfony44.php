@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 
