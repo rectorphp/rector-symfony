@@ -11,6 +11,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -32,9 +33,10 @@ final class NeighbourClassLikePrinter
     public function printClassLike(
         ClassLike $classLike,
         Namespace_ | FileWithoutNamespace $mainNode,
-        SmartFileInfo $smartFileInfo
+        SmartFileInfo $smartFileInfo,
+        ?File $file = null
     ): void {
-        $declares = $this->resolveDeclares($mainNode);
+        $declares = $this->resolveDeclares($mainNode, $file);
 
         if ($mainNode instanceof FileWithoutNamespace) {
             $nodesToPrint = array_merge($declares, [$classLike]);
@@ -61,9 +63,9 @@ final class NeighbourClassLikePrinter
     /**
      * @return Declare_[]
      */
-    private function resolveDeclares(FileWithoutNamespace|Namespace_ $mainNode): array
+    private function resolveDeclares(FileWithoutNamespace|Namespace_ $mainNode, ?File $file = null): array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class], $file);
         if ($declare instanceof Declare_) {
             return [$declare];
         }

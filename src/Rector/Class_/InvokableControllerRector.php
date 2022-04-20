@@ -134,7 +134,8 @@ CODE_SAMPLE
             $this->neighbourClassLikePrinter->printClassLike(
                 $invokableControllerClass,
                 $parentNamespace,
-                $this->file->getSmartFileInfo()
+                $this->file->getSmartFileInfo(),
+                $this->file
             );
         }
 
