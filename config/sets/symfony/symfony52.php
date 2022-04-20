@@ -25,6 +25,8 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
+
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
     $rectorConfig->rule(PropertyPathMapperToDataMapperRector::class);
 
@@ -179,5 +181,4 @@ return static function (RectorConfig $rectorConfig): void {
                 'firewallName'
             ),
         ]);
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

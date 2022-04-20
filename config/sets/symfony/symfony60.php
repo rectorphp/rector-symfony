@@ -20,6 +20,8 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
+
     $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
     $rectorConfig
         ->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
@@ -68,5 +70,4 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
     $rectorConfig->rule(GetHelperControllerToServiceRector::class);
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

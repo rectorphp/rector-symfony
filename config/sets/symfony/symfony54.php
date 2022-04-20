@@ -16,6 +16,8 @@ use Rector\Symfony\Set\SymfonySetList;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.4.md
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
+
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
     $rectorConfig
@@ -67,5 +69,4 @@ return static function (RectorConfig $rectorConfig): void {
             // @see https://github.com/symfony/symfony/pull/42050
             'Symfony\Component\Security\Http\Event\DeauthenticatedEvent' => 'Symfony\Component\Security\Http\Event\TokenDeauthenticatedEvent',
         ]);
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };
