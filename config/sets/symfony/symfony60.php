@@ -21,7 +21,7 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
-    
+
     $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
     $rectorConfig
         ->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
