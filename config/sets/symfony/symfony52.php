@@ -181,5 +181,4 @@ return static function (RectorConfig $rectorConfig): void {
                 'firewallName'
             ),
         ]);
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };
