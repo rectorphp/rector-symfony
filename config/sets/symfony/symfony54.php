@@ -17,7 +17,7 @@ use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
-    
+
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
     $rectorConfig
