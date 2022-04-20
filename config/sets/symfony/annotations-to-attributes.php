@@ -10,7 +10,7 @@ use Rector\Symfony\Set\SymfonySetList;
 // @see https://symfony.com/blog/new-in-symfony-5-2-constraints-as-php-attributes
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES]);
-    
+
     $rectorConfig
         ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             // @see https://symfony.com/blog/new-in-symfony-5-2-php-8-attributes
