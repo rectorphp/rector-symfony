@@ -10,10 +10,8 @@ use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
             new MethodCallRename(
                 'Symfony\Component\Console\Helper\TableStyle',
@@ -52,8 +50,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
             'Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector' => 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector',
             'Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface' => 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface',

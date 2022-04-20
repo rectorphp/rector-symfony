@@ -8,7 +8,5 @@ use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
 
-    $services = $rectorConfig->services();
-
-    $services->set(MakeDispatchFirstArgumentEventRector::class);
+    $rectorConfig->rule(MakeDispatchFirstArgumentEventRector::class);
 };

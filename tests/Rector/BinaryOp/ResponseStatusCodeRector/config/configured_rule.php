@@ -7,7 +7,5 @@ use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
-
-    $services = $rectorConfig->services();
-    $services->set(ResponseStatusCodeRector::class);
+    $rectorConfig->rule(ResponseStatusCodeRector::class);
 };

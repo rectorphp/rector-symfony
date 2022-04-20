@@ -25,29 +25,28 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
-
-    $services = $rectorConfig->services();
-
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
-    $services->set(PropertyPathMapperToDataMapperRector::class);
+    $rectorConfig->rule(PropertyPathMapperToDataMapperRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
-    $services->set(BinaryFileResponseCreateToNewInstanceRector::class);
+    $rectorConfig->rule(BinaryFileResponseCreateToNewInstanceRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
-    $services->set(RenameMethodRector::class)
-        ->configure([new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            RenameMethodRector::class,
+            [new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create')]
+        );
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
-    $services->set(PropertyAccessorCreationBooleanToFlagsRector::class);
+    $rectorConfig->rule(PropertyAccessorCreationBooleanToFlagsRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
-    $services->set(ReflectionExtractorEnableMagicCallExtractorRector::class);
+    $rectorConfig->rule(ReflectionExtractorEnableMagicCallExtractorRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
-    $services->set(RenameClassConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassConstFetchRector::class, [
             new RenameClassAndConstFetch(
                 'Symfony\Component\Security\Http\Firewall\AccessListener',
                 'PUBLIC_ACCESS',
@@ -56,8 +55,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename(
                 'Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken',
                 'setProviderKey',
@@ -111,17 +110,17 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
-    $services->set(DefinitionAliasSetPrivateToSetPublicRector::class);
+    $rectorConfig->rule(DefinitionAliasSetPrivateToSetPublicRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
-    $services->set(FormBuilderSetDataMapperRector::class);
+    $rectorConfig->rule(FormBuilderSetDataMapperRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
-    $services->set(ValidatorBuilderEnableAnnotationMappingRector::class);
+    $rectorConfig->rule(ValidatorBuilderEnableAnnotationMappingRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             new AddParamTypeDeclaration(
                 'Symfony\Component\Notifier\NotifierInterface',
                 'send',
@@ -149,8 +148,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             new AddParamTypeDeclaration(
                 'Symfony\Component\Notifier\Notification\ChatNotificationInterface',
                 'asChatMessage',
@@ -172,12 +171,13 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
-    $services->set(RenamePropertyRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenamePropertyRector::class, [
             new RenameProperty(
                 'Symfony\Component\Security\Http\RememberMe\AbstractRememberMeServices',
                 'providerKey',
                 'firewallName'
             ),
         ]);
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

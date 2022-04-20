@@ -16,13 +16,11 @@ use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
-    $services->set(SimplifyWebTestCaseAssertionsRector::class);
+    $rectorConfig->rule(SimplifyWebTestCaseAssertionsRector::class);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
             new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
             # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L55
@@ -39,10 +37,10 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(MakeDispatchFirstArgumentEventRector::class);
+    $rectorConfig->rule(MakeDispatchFirstArgumentEventRector::class);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
             # Browser Kit
             'Symfony\Component\BrowserKit\Client' => 'Symfony\Component\BrowserKit\AbstractBrowser',
@@ -88,8 +86,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
-    $services->set(ArgumentAdderRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ArgumentAdderRector::class, [
             new ArgumentAdder(
                 'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
                 'setMarking',
@@ -99,8 +97,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(AddMethodParentCallRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddMethodParentCallRector::class, [
             'Symfony\Component\EventDispatcher\EventDispatcher' => MethodName::CONSTRUCT,
         ]);
 };

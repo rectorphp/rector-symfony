@@ -63,11 +63,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     $privatesAccessor = new PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
-
-    // @see https://github.com/symfony/symfony/pull/42064
-    $services = $rectorConfig->services();
-    $services->set(AddReturnTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Config\Loader\LoaderInterface',
                 'load',

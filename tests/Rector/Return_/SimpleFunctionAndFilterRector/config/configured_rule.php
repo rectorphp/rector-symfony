@@ -7,7 +7,5 @@ use Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
-
-    $services = $rectorConfig->services();
-    $services->set(SimpleFunctionAndFilterRector::class);
+    $rectorConfig->rule(SimpleFunctionAndFilterRector::class);
 };

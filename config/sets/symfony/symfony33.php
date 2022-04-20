@@ -12,10 +12,8 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(ArgumentAdderRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ArgumentAdderRector::class, [
             new ArgumentAdder(
                 'Symfony\Component\DependencyInjection\ContainerBuilder',
                 'compile',
@@ -39,10 +37,10 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(ConsoleExceptionToErrorEventConstantRector::class);
+    $rectorConfig->rule(ConsoleExceptionToErrorEventConstantRector::class);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             # console
             'Symfony\Component\Console\Event\ConsoleExceptionEvent' => 'Symfony\Component\Console\Event\ConsoleErrorEvent',
             # debug
@@ -59,8 +57,8 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass' => 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass',
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename('Symfony\Component\DependencyInjection\Container', 'isFrozen', 'isCompiled'),
         ]);
 };

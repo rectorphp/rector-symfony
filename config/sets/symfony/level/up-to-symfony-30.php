@@ -7,6 +7,5 @@ use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::SYMFONY_30);
-    $rectorConfig->import(SymfonyLevelSetList::UP_TO_SYMFONY_28);
+    $rectorConfig->sets([SymfonySetList::SYMFONY_30, SymfonyLevelSetList::UP_TO_SYMFONY_28]);
 };

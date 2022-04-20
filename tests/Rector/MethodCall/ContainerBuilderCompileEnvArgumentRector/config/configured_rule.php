@@ -8,7 +8,5 @@ use Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
 
-    $services = $rectorConfig->services();
-
-    $services->set(ContainerBuilderCompileEnvArgumentRector::class);
+    $rectorConfig->rule(ContainerBuilderCompileEnvArgumentRector::class);
 };

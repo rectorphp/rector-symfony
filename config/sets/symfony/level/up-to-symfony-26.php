@@ -6,5 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::SYMFONY_26);
+    $rectorConfig->sets([SymfonySetList::SYMFONY_26]);
 };
