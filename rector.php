@@ -22,18 +22,21 @@ return static function (RectorConfig $rectorConfig): void {
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
     ]);
 
-    $rectorConfig
-        ->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
-            'Symfony\*',
-            'Twig_*',
-            'Swift_*',
-            'Doctrine\*',
-        ]);
+    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
+        'Symfony\*',
+        'Twig_*',
+        'Swift_*',
+        'Doctrine\*',
+    ]);
 
     // for testing
     $rectorConfig->import(__DIR__ . '/config/config.php');
 
-    $rectorConfig->sets(
-        [LevelSetList::UP_TO_PHP_81, SetList::CODE_QUALITY, SetList::DEAD_CODE, SetList::NAMING, SymfonySetList::SYMFONY_60]
-    );
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_81,
+        SetList::CODE_QUALITY,
+        SetList::DEAD_CODE,
+        SetList::NAMING,
+        SymfonySetList::SYMFONY_60,
+    ]);
 };
