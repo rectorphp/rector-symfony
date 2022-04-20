@@ -9,12 +9,10 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\StaticCall\ParseFileRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
+    $rectorConfig->rule(ParseFileRector::class);
 
-    $services->set(ParseFileRector::class);
-
-    $services->set(ReplaceArgumentDefaultValueRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
             // https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
             new ReplaceArgumentDefaultValue(
                 'Symfony\Component\Routing\Generator\UrlGeneratorInterface',

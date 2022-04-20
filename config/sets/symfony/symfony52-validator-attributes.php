@@ -8,10 +8,8 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 // @see https://symfony.com/blog/new-in-symfony-5-2-constraints-as-php-attributes
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Bic'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Blank'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Callback'),

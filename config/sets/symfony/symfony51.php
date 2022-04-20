@@ -24,19 +24,18 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
     // see https://github.com/symfony/symfony/pull/36243
-    $services->set(LogoutHandlerToLogoutEventSubscriberRector::class);
-    $services->set(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig->rule(LogoutHandlerToLogoutEventSubscriberRector::class);
+    $rectorConfig->rule(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
             'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => 'Symfony\Component\Form\Util\ServerParams',
             // see https://github.com/symfony/symfony/pull/35092
             'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
         ]);
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename(
                 'Symfony\Component\Config\Definition\BaseNode',
                 'getDeprecationMessage',
@@ -53,18 +52,21 @@ return static function (RectorConfig $rectorConfig): void {
                 'getDeprecation'
             ),
         ]);
-    $services->set(RenameFunctionRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameFunctionRector::class, [
             'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
             'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
         ]);
 
     // https://github.com/symfony/symfony/pull/35308
-    $services->set(NewArgToMethodCallRector::class)
-        ->configure([new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv')]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            NewArgToMethodCallRector::class,
+            [new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv')]
+        );
 
-    $services->set(RenameClassConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassConstFetchRector::class, [
             new RenameClassAndConstFetch(
                 'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
                 'ROUND_FLOOR',
@@ -110,8 +112,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     // see https://github.com/symfony/symfony/pull/36943
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             new AddParamTypeDeclaration(
                 'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
                 'configureRoutes',
@@ -119,19 +121,19 @@ return static function (RectorConfig $rectorConfig): void {
                 new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator')
             ),
         ]);
-    $services->set(StaticCallToNewRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(StaticCallToNewRector::class, [
             new StaticCallToNew('Symfony\Component\HttpFoundation\Response', 'create'),
             new StaticCallToNew('Symfony\Component\HttpFoundation\JsonResponse', 'create'),
             new StaticCallToNew('Symfony\Component\HttpFoundation\RedirectResponse', 'create'),
             new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create'),
         ]);
 
-    $services->set(RenameStringRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameStringRector::class, [
             // @see https://github.com/symfony/symfony/pull/35858
             'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
         ]);
 
-    $services->set(RouteCollectionBuilderToRoutingConfiguratorRector::class);
+    $rectorConfig->rule(RouteCollectionBuilderToRoutingConfiguratorRector::class);
 };

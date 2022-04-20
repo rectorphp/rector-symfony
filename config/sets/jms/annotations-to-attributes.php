@@ -12,9 +12,8 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
  * @see https://github.com/schmittjoh/serializer/pull/1337
  */
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             new AnnotationToAttribute('JMS\Serializer\Annotation\Accessor'),
             new AnnotationToAttribute('JMS\Serializer\Annotation\AccessorOrder'),
             new AnnotationToAttribute('JMS\Serializer\Annotation\AccessType'),

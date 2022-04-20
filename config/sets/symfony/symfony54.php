@@ -16,23 +16,17 @@ use Rector\Symfony\Set\SymfonySetList;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.4.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
-
-    $services = $rectorConfig->services();
-
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AnnotationToAttributeRector::class, [
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Collection'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\AtLeastOneOf'),
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Sequentially'),
         ]);
-
-    $services = $rectorConfig->services();
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             // @see https://github.com/symfony/symfony/pull/42582
             new MethodCallRename(
                 'Symfony\Bundle\SecurityBundle\Security\FirewallConfig',
@@ -41,8 +35,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassConstFetchRector::class, [
             new RenameClassAndConstFetch(
                 'Symfony\Component\Security\Core\AuthenticationEvents',
                 'AUTHENTICATION_SUCCESS',
@@ -68,9 +62,10 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             // @see https://github.com/symfony/symfony/pull/42050
             'Symfony\Component\Security\Http\Event\DeauthenticatedEvent' => 'Symfony\Component\Security\Http\Event\TokenDeauthenticatedEvent',
         ]);
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

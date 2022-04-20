@@ -17,11 +17,8 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 # https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.3.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
-
-    $services = $rectorConfig->services();
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             // @see https://github.com/symfony/symfony/pull/40536
             new MethodCallRename(
                 'Symfony\Component\HttpFoundation\RequestStack',
@@ -66,8 +63,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             'Symfony\Component\Security\Core\Exception\UsernameNotFoundException' => 'Symfony\Component\Security\Core\Exception\UserNotFoundException',
             // @see https://github.com/symfony/symfony/pull/39802
             'Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface' => 'Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface',
@@ -83,8 +80,8 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface' => 'Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface',
         ]);
 
-    $services->set(AddReturnTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
             new AddReturnTypeDeclaration(
                 'Symfony\Component\Mailer\Transport\AbstractTransportFactory',
                 'getEndpoint',
@@ -93,8 +90,8 @@ return static function (RectorConfig $rectorConfig): void {
         ]);
 
     // rename constant
-    $services->set(RenameClassConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassConstFetchRector::class, [
             // @see https://github.com/symfony/symfony/pull/40536
             new RenameClassConstFetch(
                 'Symfony\Component\HttpKernel\HttpKernelInterface',
@@ -102,4 +99,5 @@ return static function (RectorConfig $rectorConfig): void {
                 'MAIN_REQUEST'
             ),
         ]);
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

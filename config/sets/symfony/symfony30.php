@@ -20,28 +20,26 @@ use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     # resources:
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
     # php
-    $services->set(GetRequestRector::class);
-    $services->set(FormTypeGetParentRector::class);
-    $services->set(OptionNameRector::class);
-    $services->set(ReadOnlyOptionToAttributeRector::class);
+    $rectorConfig->rule(GetRequestRector::class);
+    $rectorConfig->rule(FormTypeGetParentRector::class);
+    $rectorConfig->rule(OptionNameRector::class);
+    $rectorConfig->rule(ReadOnlyOptionToAttributeRector::class);
 
     # forms
-    $services->set(FormTypeInstanceToClassConstRector::class);
-    $services->set(StringFormTypeToClassRector::class);
-    $services->set(CascadeValidationFormBuilderRector::class);
-    $services->set(RemoveDefaultGetBlockPrefixRector::class);
+    $rectorConfig->rule(FormTypeInstanceToClassConstRector::class);
+    $rectorConfig->rule(StringFormTypeToClassRector::class);
+    $rectorConfig->rule(CascadeValidationFormBuilderRector::class);
+    $rectorConfig->rule(RemoveDefaultGetBlockPrefixRector::class);
 
     # forms - collection
-    $services->set(ChangeStringCollectionOptionToConstantRector::class);
-    $services->set(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
+    $rectorConfig->rule(ChangeStringCollectionOptionToConstantRector::class);
+    $rectorConfig->rule(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
 
-    $services->set(RenameClassConstFetchRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassConstFetchRector::class, [
             new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
             new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
             new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
@@ -62,8 +60,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
 
             new MethodCallRename(
                 'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
@@ -166,8 +164,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             # class loader
             # partial with method rename
             'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => 'Symfony\Component\ClassLoader\ClassLoader',

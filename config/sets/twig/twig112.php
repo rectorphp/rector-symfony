@@ -8,10 +8,8 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 # see https://stackoverflow.com/a/43495506/1348344
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             'Twig_Function_Node' => 'Twig_SimpleFunction',
             'Twig_Function' => 'Twig_SimpleFunction',
             'Twig_Filter' => 'Twig_SimpleFilter',

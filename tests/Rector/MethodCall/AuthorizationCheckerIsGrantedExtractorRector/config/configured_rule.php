@@ -8,7 +8,5 @@ use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRecto
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
 
-    $services = $rectorConfig->services();
-
-    $services->set(AuthorizationCheckerIsGrantedExtractorRector::class);
+    $rectorConfig->rule(AuthorizationCheckerIsGrantedExtractorRector::class);
 };

@@ -8,8 +8,6 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     $renamedClasses = [
         'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
         'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
@@ -167,11 +165,14 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_NodeInterface' => 'Twig\Node\Node',
     ];
 
-    $services->set(RenameClassRector::class)
-        ->configure($renamedClasses);
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, $renamedClasses);
 
     $oldClasses = array_keys($renamedClasses);
 
-    $services->set(PseudoNamespaceToNamespaceRector::class)
-        ->configure([new PseudoNamespaceToNamespace('Twig_', $oldClasses)]);
+    $rectorConfig
+        ->ruleWithConfiguration(
+            PseudoNamespaceToNamespaceRector::class,
+            [new PseudoNamespaceToNamespace('Twig_', $oldClasses)]
+        );
 };

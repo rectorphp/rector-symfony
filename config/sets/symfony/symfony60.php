@@ -20,13 +20,9 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
     $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
-
-    // @see https://github.com/symfony/symfony/pull/35879
-    $services = $rectorConfig->services();
-    $services->set(ReplaceServiceArgumentRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
             new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')),
             new ReplaceServiceArgument(
                 'Symfony\Component\DependencyInjection\ContainerInterface',
@@ -34,14 +30,14 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameClassRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameClassRector::class, [
             // @see https://github.com/symfony/symfony/pull/39484
             'Symfony\Contracts\HttpClient\HttpClientInterface\RemoteJsonManifestVersionStrategy' => 'Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy',
         ]);
 
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             new AddParamTypeDeclaration(
                 'Symfony\Component\Config\Loader\LoaderInterface',
                 'load',
@@ -56,8 +52,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             // @see https://github.com/symfony/symfony/pull/40403
             new MethodCallRename(
                 'Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface',
@@ -71,5 +67,6 @@ return static function (RectorConfig $rectorConfig): void {
                 'getUserIdentifier',
             ),
         ]);
-    $services->set(GetHelperControllerToServiceRector::class);
+    $rectorConfig->rule(GetHelperControllerToServiceRector::class);
+    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 };

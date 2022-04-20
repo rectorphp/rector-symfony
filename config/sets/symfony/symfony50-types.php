@@ -20,15 +20,13 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 # see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
     $arrayType = new ArrayType(new MixedType(), new MixedType());
     $iterableType = new IterableType(new MixedType(), new MixedType());
 
     $nullableStringType = new UnionType([new StringType(), new NullType()]);
 
-    $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             // see https://github.com/symfony/symfony/issues/32179
             new AddParamTypeDeclaration(
                 'Symfony\Component\EventDispatcher\EventDispatcherInterface',

@@ -11,7 +11,5 @@ return static function (RectorConfig $rectorConfig): void {
 
     $parameters = $rectorConfig->parameters();
     $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/../xml/services.xml');
-
-    $services = $rectorConfig->services();
-    $services->set(ContainerGetToConstructorInjectionRector::class);
+    $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
 };

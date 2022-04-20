@@ -7,10 +7,8 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(RenameMethodRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename('Twig_Node', 'getLine', 'getTemplateLine'),
             new MethodCallRename('Twig_Node', 'getFilename', 'getTemplateName'),
             new MethodCallRename('Twig_Template', 'getSource', 'getSourceContext'),

@@ -8,10 +8,8 @@ use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $services = $rectorConfig->services();
-
-    $services->set(ArgumentRemoverRector::class)
-        ->configure([
+    $rectorConfig
+        ->ruleWithConfiguration(ArgumentRemoverRector::class, [
             new ArgumentRemover(
                 'Symfony\Component\Yaml\Yaml',
                 'parse',
@@ -20,5 +18,5 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $services->set(MergeMethodAnnotationToRouteAnnotationRector::class);
+    $rectorConfig->rule(MergeMethodAnnotationToRouteAnnotationRector::class);
 };
