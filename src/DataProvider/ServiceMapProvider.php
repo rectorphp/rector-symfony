@@ -14,6 +14,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ServiceMapProvider
 {
     /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::symfonyContainerXml() instead
      * @var string
      */
     private const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';

@@ -8,9 +8,6 @@ use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
-    $parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, null);
-
     $services = $rectorConfig->services();
 
     $services->defaults()
