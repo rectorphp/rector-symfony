@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class WebTestCaseAssertIsSuccessfulRector extends AbstractRector
 {
     public function __construct(
-        private SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
-        private TestsNodeAnalyzer $testsNodeAnalyzer,
+        private readonly SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
+        private readonly TestsNodeAnalyzer $testsNodeAnalyzer,
     ) {
     }
 

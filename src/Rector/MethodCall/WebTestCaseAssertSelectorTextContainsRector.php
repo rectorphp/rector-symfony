@@ -7,7 +7,6 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
@@ -23,8 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
 {
     public function __construct(
-        private SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
-        private TestsNodeAnalyzer $testsNodeAnalyzer,
+        private readonly SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
+        private readonly TestsNodeAnalyzer $testsNodeAnalyzer,
     ) {
     }
 
@@ -34,23 +33,27 @@ final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class SomeTest extends WebTestCase
 {
     public function testContains()
     {
-        $this->assertContains('Hello World', $this->crawler->filter('h1')->text());
+        $crawler = new Symfony\Component\DomCrawler\Crawler();
+        $this->assertContains('Hello World', $crawler->filter('h1')->text());
     }
 }
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class SomeTest extends WebTestCase
 {
     public function testContains()
     {
+        $crawler = new Symfony\Component\DomCrawler\Crawler();
         $this->assertSelectorTextContains('h1', 'Hello World');
     }
 }
@@ -76,27 +79,33 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->testsNodeAnalyzer->isAssertMethodCallName($node, 'assertSame')) {
+        if (! $this->testsNodeAnalyzer->isAssertMethodCallName($node, 'assertContains')) {
             return null;
         }
 
         $args = $node->getArgs();
-        if (! $this->valueResolver->isValue($args[0]->value, 200)) {
+        $firstArgValue = $args[1]->value;
+        if (! $firstArgValue instanceof MethodCall) {
             return null;
         }
 
-        $secondArg = $args[1]->value;
-        if (! $secondArg instanceof MethodCall) {
+        $methodCall = $firstArgValue;
+
+        if (! $this->isName($methodCall->name, 'text')) {
             return null;
         }
 
-        if (! $this->isName($secondArg->name, 'getStatusCode')) {
+        if (! $methodCall->var instanceof MethodCall) {
             return null;
         }
 
-        $node->name = new Identifier('assertResponseIsSuccessful');
-        $node->args = [];
+        $nestedMethodCall = $methodCall->var;
+        if (! $this->isName($nestedMethodCall->name, 'filter')) {
+            return null;
+        }
 
-        return $node;
+        $newArgs = [$nestedMethodCall->args[0], $args[0]];
+
+        return $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $newArgs);
     }
 }

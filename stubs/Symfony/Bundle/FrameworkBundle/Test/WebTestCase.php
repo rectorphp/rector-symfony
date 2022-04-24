@@ -15,5 +15,10 @@ abstract class WebTestCase extends KernelTestCase
     /**
      * @var Client
      */
-    protected $client;
+    protected static $client;
+
+    public static function getClient(): Client
+    {
+        return self::$client;
+    }
 }
