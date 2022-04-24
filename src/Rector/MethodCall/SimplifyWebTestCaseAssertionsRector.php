@@ -9,32 +9,27 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
- * @see https://github.com/symfony/symfony/pull/30813/files
+ * @changelog https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
+ * @changelog https://github.com/symfony/symfony/pull/30813
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\SimplifyWebTestCaseAssertionsRectorTest
+ *
+ * @todo possibly split into 2/3 rules?
  */
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ASSERT_SAME = 'assertSame';
-
-    private ?MethodCall $getStatusCodeMethodCall = null;
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify use of assertions in WebTestCase', [
@@ -44,11 +39,6 @@ use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
 {
-    public function test()
-    {
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-    }
-
     public function testUrl()
     {
         $this->assertSame(301, $client->getResponse()->getStatusCode());
@@ -67,11 +57,6 @@ use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
 {
-    public function test()
-    {
-         $this->assertResponseIsSuccessful();
-    }
-
     public function testUrl()
     {
         $this->assertResponseRedirects('https://example.com', 301);
@@ -92,11 +77,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [FunctionLike::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param FunctionLike $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -104,40 +89,41 @@ CODE_SAMPLE
             return null;
         }
 
-        $clientGetResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
-        $this->getStatusCodeMethodCall = $this->nodeFactory->createMethodCall(
-            $clientGetResponseMethodCall,
-            'getStatusCode'
-        );
+        $getStatusCodeMethodCall = $this->createGetStatusMethodCall();
 
-        // assertResponseIsSuccessful
-        $args = [];
-        $args[] = new Arg(new LNumber(200));
-        $args[] = new Arg($this->getGetStatusCodeMethodCall());
+        foreach ($node->getStmts() as $key => $stmt) {
+            if (! $stmt instanceof Expression) {
+                continue;
+            }
 
-        $methodCall = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
-        if ($this->nodeComparator->areNodesEqual($node, $methodCall)) {
-            return $this->nodeFactory->createLocalMethodCall('assertResponseIsSuccessful');
+            $expr = $stmt->expr;
+            if (! $expr instanceof MethodCall) {
+                continue;
+            }
+
+            // assertResponseStatusCodeSame
+            $newMethodCall = $this->processAssertResponseStatusCodeSame($expr, $getStatusCodeMethodCall);
+            if ($newMethodCall !== null) {
+                $stmt->expr = $newMethodCall;
+                continue;
+            }
+
+            // assertSelectorTextContains
+            $args = $this->matchAssertContainsCrawlerArg($expr);
+            if ($args !== null) {
+                $stmt->expr = $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $args);
+                continue;
+            }
+
+            return $this->processAssertResponseRedirects($expr, $getStatusCodeMethodCall);
         }
 
-        // assertResponseStatusCodeSame
-        $newNode = $this->processAssertResponseStatusCodeSame($node);
-        if ($newNode !== null) {
-            return $newNode;
-        }
-
-        // assertSelectorTextContains
-        $args = $this->matchAssertContainsCrawlerArg($node);
-        if ($args !== null) {
-            return $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $args);
-        }
-
-        return $this->processAssertResponseRedirects($node);
+        return $node;
     }
 
-    private function isInWebTestCase(MethodCall $methodCall): bool
+    private function isInWebTestCase(FunctionLike $functionLike): bool
     {
-        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
+        $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;
         }
@@ -150,9 +136,11 @@ CODE_SAMPLE
         return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
-    private function processAssertResponseStatusCodeSame(MethodCall $methodCall): ?MethodCall
-    {
-        if (! $this->isName($methodCall->name, self::ASSERT_SAME)) {
+    private function processAssertResponseStatusCodeSame(
+        MethodCall $methodCall,
+        MethodCall $getStatusCodeMethodCall
+    ): ?MethodCall {
+        if (! $this->isName($methodCall->name, 'assertSame')) {
             return null;
         }
 
@@ -161,7 +149,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($secondArg->value, $this->getGetStatusCodeMethodCall())) {
+        if (! $this->nodeComparator->areNodesEqual($secondArg->value, $getStatusCodeMethodCall)) {
             return null;
         }
 
@@ -224,8 +212,10 @@ CODE_SAMPLE
         return $args;
     }
 
-    private function processAssertResponseRedirects(MethodCall $methodCall): ?Node
-    {
+    private function processAssertResponseRedirects(
+        MethodCall $methodCall,
+        MethodCall $getStatusCodeMethodCall
+    ): ?MethodCall {
         /** @var Expression|null $previousStatement */
         $previousStatement = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if (! $previousStatement instanceof Expression) {
@@ -239,9 +229,9 @@ CODE_SAMPLE
 
         $args = [];
         $args[] = new Arg(new LNumber(301));
-        $args[] = new Arg($this->getGetStatusCodeMethodCall());
+        $args[] = new Arg($getStatusCodeMethodCall);
 
-        $match = $this->nodeFactory->createLocalMethodCall(self::ASSERT_SAME, $args);
+        $match = $this->nodeFactory->createLocalMethodCall('assertSame', $args);
 
         if ($this->nodeComparator->areNodesEqual($previousNode, $match)) {
             $getResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
@@ -266,8 +256,6 @@ CODE_SAMPLE
                 $args[] = $methodCall->args[0];
                 $args[] = $previousNode->args[0];
 
-                $this->removeNode($previousNode);
-
                 return $this->nodeFactory->createLocalMethodCall('assertResponseRedirects', $args);
             }
         }
@@ -275,12 +263,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getGetStatusCodeMethodCall(): MethodCall
+    private function createGetStatusMethodCall(): MethodCall
     {
-        if ($this->getStatusCodeMethodCall === null) {
-            throw new ShouldNotHappenException();
-        }
+        $clientGetResponseMethodCall = $this->nodeFactory->createMethodCall('client', 'getResponse');
 
-        return $this->getStatusCodeMethodCall;
+        return $this->nodeFactory->createMethodCall($clientGetResponseMethodCall, 'getStatusCode');
     }
 }
