@@ -95,12 +95,12 @@ CODE_SAMPLE
 
     private function getRootMethodCallNode(New_ $new): ?Node
     {
-        $expression = $new->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($expression === null) {
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($new);
+        if ($currentStmt === null) {
             return null;
         }
 
-        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+        $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }
