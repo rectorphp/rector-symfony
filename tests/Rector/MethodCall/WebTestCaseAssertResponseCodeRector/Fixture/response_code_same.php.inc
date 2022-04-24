@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -8,7 +8,8 @@ final class ResponseCodeSame extends WebTestCase
 {
     public function test()
     {
-        $this->assertSame(362, $client->getResponse()->getStatusCode());
+        $response = self::$client->getResponse();
+        $this->assertSame(362, $response->getStatusCode());
     }
 }
 
@@ -16,7 +17,7 @@ final class ResponseCodeSame extends WebTestCase
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -24,6 +25,7 @@ final class ResponseCodeSame extends WebTestCase
 {
     public function test()
     {
+        $response = self::$client->getResponse();
         $this->assertResponseStatusCodeSame(362);
     }
 }
