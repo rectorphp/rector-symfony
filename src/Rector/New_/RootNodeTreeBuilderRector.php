@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -95,12 +96,12 @@ CODE_SAMPLE
 
     private function getRootMethodCallNode(New_ $new): ?Node
     {
-        $expression = $new->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        if ($expression === null) {
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($new);
+        if (! $currentStmt instanceof Stmt) {
             return null;
         }
 
-        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
+        $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }
