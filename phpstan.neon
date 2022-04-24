@@ -59,3 +59,7 @@ parameters:
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
 
         - '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:getByOne\(\) expects class\-string, string given#'
+
+        # move later at once
+        - '#Class "Rector\\Symfony\\Rector\\MethodCall\\WebTestCaseAssertResponseCodeRector" has invalid namespace category "MethodCall"\. Pick one of\: "FunctionLike"#'
+

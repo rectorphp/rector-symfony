@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCase
+final class WebTestCaseAssertIsSuccessfulRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

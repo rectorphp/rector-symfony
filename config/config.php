@@ -17,6 +17,7 @@ return static function (RectorConfig $rectorConfig): void {
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')
         ->exclude([__DIR__ . '/../src/{Rector,ValueObject}']);
 
-    $services->set(RenameClassNonPhpRector::class);
+    $rectorConfig->rule(RenameClassNonPhpRector::class);
+
     $services->set(SmartFileSystem::class);
 };
