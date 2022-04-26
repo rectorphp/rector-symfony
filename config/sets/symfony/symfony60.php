@@ -62,6 +62,11 @@ return static function (RectorConfig $rectorConfig): void {
                 'loadUserByUsername',
                 'loadUserByIdentifier'
             ),
+            new MethodCallRename(
+                'Symfony\Component\Security\Core\User\UserProviderInterface',
+                'loadUserByUsername',
+                'loadUserByIdentifier',
+            ),
             // @see https://github.com/rectorphp/rector-symfony/issues/112
             new MethodCallRename(
                 'Symfony\Component\Security\Core\User\UserInterface',
