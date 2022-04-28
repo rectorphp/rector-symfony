@@ -10,6 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
@@ -33,7 +34,8 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
 
     public function __construct(
         private readonly JMSDITypeResolver $jmsDITypeResolver,
-        private readonly PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator
+        private readonly PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 
