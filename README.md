@@ -17,7 +17,6 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\Symfony\Set\SymfonySetList` class and pick one of constants:
 
 ```php
-use Rector\Core\Configuration\Option;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Config\RectorConfig;
 
