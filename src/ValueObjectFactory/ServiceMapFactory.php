@@ -82,9 +82,7 @@ final class ServiceMapFactory
 
         $tags = [];
         if (is_array($def[self::TAG])) {
-            foreach ($def[self::TAG] as $tag) {
-                $tags[] = $tag;
-            }
+            $tags = $def[self::TAG];
         } else {
             $tags[] = $def[self::TAG];
         }

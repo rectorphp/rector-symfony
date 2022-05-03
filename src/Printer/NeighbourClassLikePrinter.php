@@ -36,7 +36,7 @@ final class NeighbourClassLikePrinter
         SmartFileInfo $smartFileInfo,
         ?File $file = null
     ): void {
-        $declares = $this->resolveDeclares($mainNode, $file);
+        $declares = $this->resolveDeclares($mainNode);
 
         if ($mainNode instanceof FileWithoutNamespace) {
             $nodesToPrint = array_merge($declares, [$classLike]);
@@ -63,9 +63,9 @@ final class NeighbourClassLikePrinter
     /**
      * @return Declare_[]
      */
-    private function resolveDeclares(FileWithoutNamespace|Namespace_ $mainNode, ?File $file = null): array
+    private function resolveDeclares(FileWithoutNamespace|Namespace_ $mainNode): array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class], $file);
+        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
         if ($declare instanceof Declare_) {
             return [$declare];
         }
