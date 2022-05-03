@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
@@ -21,6 +22,7 @@ final class LiteralGetToRequestClassConstantRector extends AbstractRector
 {
     public function __construct(
         private readonly LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -73,7 +75,12 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
 
-        if ($this->isObjectType($node->var, new ObjectType('Symfony\Component\HttpKernel\Client'))) {
+        // for client, the transitional dependency to browser-kit might be missing and cause fatal error on PHPStan reflection
+        // in most cases that should be skipped, @see https://github.com/rectorphp/rector/issues/7135
+        if (
+            $this->reflectionProvider->hasClass('Symfony\Component\BrowserKit\AbstractBrowser') &&
+            $this->isObjectType($node->var, new ObjectType('Symfony\Component\HttpKernel\Client'))
+        ) {
             return $this->refactorClientMethodCall($node);
         }
 
