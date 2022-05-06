@@ -44,11 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
                 'getUserIdentifier',
             ),
             new MethodCallRename(
-                'Symfony\Component\Security\Core\User\UserProviderInterface',
-                'loadUserByUsername',
-                'loadUserByIdentifier',
-            ),
-            new MethodCallRename(
                 'Symfony\Component\Security\Core\Exception\UsernameNotFoundException',
                 'getUsername',
                 'getUserIdentifier'
