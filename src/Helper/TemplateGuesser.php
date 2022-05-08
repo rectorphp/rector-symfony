@@ -53,7 +53,7 @@ final class TemplateGuesser
     ) {
     }
 
-    public function resolveFromClassMethodNode(ClassMethod $classMethod): string
+    public function resolveFromClassMethod(ClassMethod $classMethod): string
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {

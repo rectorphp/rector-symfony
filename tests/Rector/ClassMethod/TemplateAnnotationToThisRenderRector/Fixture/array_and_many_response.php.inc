@@ -1,4 +1,4 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace AppBundle\Controller;
 
@@ -35,7 +35,7 @@ final class ClassWithArrayAndManyResponseController extends AbstractController
 
 ?>
 -----
-<?php declare (strict_types=1);
+<?php
 
 namespace AppBundle\Controller;
 
