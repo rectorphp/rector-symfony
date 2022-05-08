@@ -34,14 +34,14 @@ final class ThisRenderFactory
     }
 
     public function create(
-        ClassMethod $classMethod,
         ?Return_ $return,
-        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
+        ClassMethod $classMethod
     ): MethodCall {
         $renderArguments = $this->resolveRenderArguments(
-            $classMethod,
             $return,
-            $templateDoctrineAnnotationTagValueNode
+            $templateDoctrineAnnotationTagValueNode,
+            $classMethod
         );
 
         return $this->nodeFactory->createMethodCall('this', 'render', $renderArguments);
@@ -51,9 +51,9 @@ final class ThisRenderFactory
      * @return Arg[]
      */
     private function resolveRenderArguments(
-        ClassMethod $classMethod,
         ?Return_ $return,
-        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
+        ClassMethod $classMethod
     ): array {
         $templateNameString = $this->resolveTemplateName($classMethod, $templateDoctrineAnnotationTagValueNode);
 
@@ -76,7 +76,7 @@ final class ThisRenderFactory
             return $template;
         }
 
-        return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
+        return $this->templateGuesser->resolveFromClassMethod($classMethod);
     }
 
     private function resolveParametersExpr(
