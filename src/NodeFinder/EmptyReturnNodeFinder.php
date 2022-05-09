@@ -19,7 +19,7 @@ final class EmptyReturnNodeFinder
     public function hasNoOrEmptyReturns(ClassMethod $classMethod): bool
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
 
         if ($returns === []) {
             return true;
