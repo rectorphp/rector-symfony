@@ -13,6 +13,7 @@ final class SymfonyTestCaseAnalyzer
     public function __construct(private readonly ReflectionResolver $reflectionResolver)
     {
     }
+
     public function isInWebTestCase(Node $node): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
