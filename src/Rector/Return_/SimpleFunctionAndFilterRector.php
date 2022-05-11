@@ -13,12 +13,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,6 +35,10 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         'Twig_Function_Method' => 'Twig_SimpleFunction',
         'Twig_Filter_Method' => 'Twig_SimpleFilter',
     ];
+
+    public function __construct(private readonly ReflectionResolver $reflectionResolver)
+    {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -102,11 +105,10 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Scope $scope */
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        /** @var ClassReflection $classReflection */
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
 
         if (! $classReflection->isSubclassOf('Twig_Extension')) {
             return null;
