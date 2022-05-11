@@ -11,10 +11,15 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerAnalyzer
 {
+    public function __construct(private readonly ReflectionResolver $reflectionResolver)
+    {
+    }
+
     public function isController(Expr $expr): bool
     {
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
@@ -47,14 +52,7 @@ final class ControllerAnalyzer
 
     public function isInsideController(Node $node): bool
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        // might be missing in a trait
-        if (! $scope instanceof Scope) {
-            return false;
-        }
-
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
