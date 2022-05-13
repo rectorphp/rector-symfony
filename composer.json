@@ -16,6 +16,7 @@
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.4.4",
         "rector/rector-src": "dev-main",
+        "symfony/routing": "^5.4",
         "symfony/security-core": "^5.4",
         "symfony/security-http": "^5.4",
         "symplify/easy-coding-standard": "^10.2",
