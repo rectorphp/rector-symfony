@@ -1,0 +1,32 @@
+{
+    "all": {
+        "path": "\/all\/{foo}\/{page}",
+        "host": "m.example.com",
+        "schemes": [
+            "http",
+            "https"
+        ],
+        "methods": [
+            "GET",
+            "POST"
+        ],
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction"
+        },
+        "requirements": {
+            "page": "\\d+"
+        },
+        "condition": "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '\/firefox\/i'"
+    },
+    "minimal": {
+        "path": "\/",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::minimalAction"
+        },
+        "requirements": [],
+        "condition": ""
+    }
+}

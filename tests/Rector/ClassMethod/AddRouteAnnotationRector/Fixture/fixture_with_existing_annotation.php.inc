@@ -1,0 +1,46 @@
+<?php
+
+namespace Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\Fixture;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class AppController extends Controller
+{
+    /**
+     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
+     */
+    public function allAction()
+    {
+    }
+
+    public function minimalAction()
+    {
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\Fixture;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class AppController extends Controller
+{
+    /**
+     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
+     */
+    public function allAction()
+    {
+    }
+
+    /**
+     * @\Symfony\Component\Routing\Annotation\Route(path="/", name="minimal")
+     */
+    public function minimalAction()
+    {
+    }
+}
+
+?>

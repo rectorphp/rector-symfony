@@ -55,3 +55,8 @@ parameters:
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
 
         - '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:getByOne\(\) expects class\-string, string given#'
+
+        -
+            message: "#^Call to an undefined method Symfony\\\\Component\\\\Routing\\\\RouterInterface\\:\\:getRouteCollection\\(\\)\\.$#"
+            count: 1
+            path: src/Command/RectorRoutesExportCommand.php
