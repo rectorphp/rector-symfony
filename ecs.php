@@ -2,28 +2,13 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::COMMON);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
+return static function (ECSConfig $ecsConfig): void {
+    $ecsConfig->sets([SetList::PSR_12, SetList::SYMPLIFY, SetList::COMMON, SetList::CLEAN_CODE]);
 
-    $parameters = $containerConfigurator->parameters();
+    $ecsConfig->paths([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/config', __DIR__ . '/ecs.php']);
 
-    $parameters->set(Option::PARALLEL, true);
-
-    $parameters->set(Option::PATHS, [
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
-        __DIR__ . '/config',
-        __DIR__ . '/ecs.php',
-    ]);
-
-    $parameters->set(Option::SKIP, ['*/Source/*', '*/Fixture/*', '*/Expected/*']);
-
-    $parameters->set(Option::LINE_ENDING, "\n");
+    $ecsConfig->skip(['*/Source/*', '*/Fixture/*', '*/Expected/*']);
 };
