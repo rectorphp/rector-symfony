@@ -11,7 +11,9 @@
             "POST"
         ],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction"
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
+            "foo": "foo123",
+            "page": 1
         },
         "requirements": {
             "page": "\\d+"
@@ -25,6 +27,17 @@
         "methods": [],
         "defaults": {
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::minimalAction"
+        },
+        "requirements": [],
+        "condition": ""
+    },
+    "short": {
+        "path": "\/short",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::shortAction"
         },
         "requirements": [],
         "condition": ""
