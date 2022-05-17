@@ -9,6 +9,10 @@ class AppController extends Controller
     public function allAction()
     {
     }
+
+    public function shortAction()
+    {
+    }
 }
 
 ?>
@@ -25,6 +29,13 @@ class AppController extends Controller
      * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
      */
     public function allAction()
+    {
+    }
+
+    /**
+     * @\Symfony\Component\Routing\Annotation\Route(path="/short", name="short")
+     */
+    public function shortAction()
     {
     }
 }

@@ -28,5 +28,16 @@
         },
         "requirements": [],
         "condition": ""
+    },
+    "short": {
+        "path": "\/short",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::shortAction"
+        },
+        "requirements": [],
+        "condition": ""
     }
 }
