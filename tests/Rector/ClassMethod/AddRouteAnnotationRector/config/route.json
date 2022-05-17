@@ -11,7 +11,9 @@
             "POST"
         ],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction"
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
+            "foo": "foo123",
+            "page": 1
         },
         "requirements": {
             "page": "\\d+"
