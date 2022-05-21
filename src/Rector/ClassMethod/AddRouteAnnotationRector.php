@@ -51,7 +51,7 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        if (! $this->symfonyRoutesProvider->provide()) {
+        if ($this->symfonyRoutesProvider->provide() === []) {
             return null;
         }
 
@@ -70,32 +70,7 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        $items = [
-            'path' => sprintf('"%s"', $symfonyRouteMetadata->getPath()),
-            'name' => sprintf('"%s"', $symfonyRouteMetadata->getName()),
-        ];
-
-        $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
-        if ($defaultsWithoutController !== []) {
-            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
-        }
-
-        if ($symfonyRouteMetadata->getHost() !== '') {
-            $items['host'] = sprintf('"%s"', $symfonyRouteMetadata->getHost());
-        }
-
-        if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = $this->createSchemes($symfonyRouteMetadata);
-        }
-
-        if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = $this->createMethods($symfonyRouteMetadata);
-        }
-
-        if ($symfonyRouteMetadata->getCondition() !== '') {
-            $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
-        }
-
+        $items = $this->createRouteItems($symfonyRouteMetadata);
         $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
 
         $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
@@ -178,5 +153,38 @@ CODE_SAMPLE
                 $symfonyRouteMetadata->getMethods()
             )
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
+    {
+        $items = [
+            'path' => sprintf('"%s"', $symfonyRouteMetadata->getPath()),
+            'name' => sprintf('"%s"', $symfonyRouteMetadata->getName()),
+        ];
+
+        $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
+        if ($defaultsWithoutController !== []) {
+            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
+        }
+
+        if ($symfonyRouteMetadata->getHost() !== '') {
+            $items['host'] = sprintf('"%s"', $symfonyRouteMetadata->getHost());
+        }
+
+        if ($symfonyRouteMetadata->getSchemes() !== []) {
+            $items['schemes'] = $this->createSchemes($symfonyRouteMetadata);
+        }
+
+        if ($symfonyRouteMetadata->getMethods() !== []) {
+            $items['methods'] = $this->createMethods($symfonyRouteMetadata);
+        }
+
+        if ($symfonyRouteMetadata->getCondition() !== '') {
+            $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
+        }
+        return $items;
     }
 }

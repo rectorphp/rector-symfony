@@ -16,6 +16,6 @@ return static function (RectorConfig $rectorConfig): void {
     $services = $rectorConfig->services();
     $services->set(DummySymfonyRoutesProvider::class);
 
-    // give this service autowiriting preferences
+    // give this service autowiring preferences
     $services->alias(SymfonyRoutesProviderInterface::class, DummySymfonyRoutesProvider::class);
 };
