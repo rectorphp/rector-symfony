@@ -8,7 +8,7 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 
-return static function (RectorConfigSymfony\Component\Routing\RouterInterface $rectorConfig): void {
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
 
