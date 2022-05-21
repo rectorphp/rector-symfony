@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 
 final class RouteRequiredParamNameToTypesResolver
 {
@@ -33,10 +34,7 @@ final class RouteRequiredParamNameToTypesResolver
             return [];
         }
 
-        $routeAttrination = $this->attrinationFinder->getByOne(
-            $classMethod,
-            'Symfony\Component\Routing\Annotation\Route'
-        );
+        $routeAttrination = $this->attrinationFinder->getByOne($classMethod, SymfonyAnnotation::ROUTE);
 
         $paramsToRegexes = $this->resolveParamsToRegexes($routeAttrination);
         if ($paramsToRegexes === []) {

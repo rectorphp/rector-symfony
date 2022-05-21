@@ -6,6 +6,7 @@ namespace Rector\Symfony\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 
 final class SymfonyRouteTagValueNodeFactory
 {
@@ -15,7 +16,7 @@ final class SymfonyRouteTagValueNodeFactory
     public function createFromItems(array $items): DoctrineAnnotationTagValueNode
     {
         return new DoctrineAnnotationTagValueNode(
-            new IdentifierTypeNode('Symfony\Component\Routing\Annotation\Route'),
+            new IdentifierTypeNode(SymfonyAnnotation::ROUTE),
             null,
             $items,
             'path'

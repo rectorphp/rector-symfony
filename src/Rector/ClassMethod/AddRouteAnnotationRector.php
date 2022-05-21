@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Bridge\Symfony\Routing\SymfonyRoutesProvider;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,13 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
  */
-class AddRouteAnnotationRector extends AbstractRector
+final class AddRouteAnnotationRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ROUTE_ANNOTATION_CLASS = 'Symfony\\Component\\Routing\\Annotation\\Route';
-
     public function __construct(
         private readonly SymfonyRoutesProvider $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
@@ -67,7 +63,7 @@ class AddRouteAnnotationRector extends AbstractRector
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(self::ROUTE_ANNOTATION_CLASS);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
 
         if ($doctrineAnnotationTagValueNode !== null) {
             return null;

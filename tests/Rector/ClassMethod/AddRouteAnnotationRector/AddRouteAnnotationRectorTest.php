@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class AddRouteAnnotationRectorTest extends AbstractRectorTestCase
+final class AddRouteAnnotationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
