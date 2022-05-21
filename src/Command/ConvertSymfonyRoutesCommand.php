@@ -34,7 +34,7 @@ final class ConvertSymfonyRoutesCommand extends Command
         Assert::fileExists($symfonyContainerPhp);
 
         $container = require_once $symfonyContainerPhp;
-        Assert::isInstanceOf('Psr\Container\ContainerInterface', $container);
+        Assert::isInstanceOf($container, 'Psr\Container\ContainerInterface');
 
         /** @var ContainerInterface $container */
         if (! $container->has('router')) {
