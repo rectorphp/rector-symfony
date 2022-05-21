@@ -30,7 +30,7 @@ final class DummySymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 
         $symfonyRoutesMetadatas = array_map(
             static fn (array $route): SymfonyRouteMetadata => new SymfonyRouteMetadata(
-                name: '?',
+                name: $route['name'],
                 path: $route['path'],
                 defaults: $route['defaults'],
                 requirements: $route['requirements'],

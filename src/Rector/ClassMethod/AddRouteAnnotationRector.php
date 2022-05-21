@@ -13,6 +13,7 @@ use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterfac
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -107,7 +108,7 @@ final class AddRouteAnnotationRector extends AbstractRector
         return new RuleDefinition(
             'Collect routes from Symfony project router and add Route annotation to controller action',
             [
-                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

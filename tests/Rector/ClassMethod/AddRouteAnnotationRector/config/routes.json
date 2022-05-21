@@ -1,5 +1,6 @@
 {
     "all": {
+        "name": "all",
         "path": "\/all\/{foo}\/{page}",
         "host": "m.example.com",
         "schemes": [
@@ -21,6 +22,7 @@
         "condition": "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '\/firefox\/i'"
     },
     "minimal": {
+        "name": "minimal",
         "path": "\/",
         "host": "",
         "schemes": [],
@@ -32,6 +34,7 @@
         "condition": ""
     },
     "short": {
+        "name": "short",
         "path": "\/short",
         "host": "",
         "schemes": [],
