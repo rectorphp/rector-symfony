@@ -30,6 +30,7 @@ return static function (RectorConfig $rectorConfig): void {
         // loaded from project itself
         'Psr\Container\ContainerInterface',
         'Symfony\Component\Routing\RouterInterface',
+        'Symfony\Component\DependencyInjection\Container',
     ]);
 
     // for testing
