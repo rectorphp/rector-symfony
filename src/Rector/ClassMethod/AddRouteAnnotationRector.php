@@ -35,14 +35,17 @@ class AddRouteAnnotationRector extends AbstractRector
         return [ClassMethod::class];
     }
 
+    /**
+     * @param ClassMethod $node
+     */
     public function refactor(Node $node): ?Node
     {
-        if (! $node instanceof ClassMethod) {
+        // only public methods can be controller routes
+        if (! $node->isPublic()) {
             return null;
         }
 
-        // only public methods can be controller routes
-        if (! $node->isPublic()) {
+        if ($node->isStatic()) {
             return null;
         }
 
