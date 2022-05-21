@@ -15,10 +15,7 @@ return static function (RectorConfig $rectorConfig): void {
         ->autoconfigure();
 
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')
-        ->exclude([
-            __DIR__ . '/../src/Rector',
-            __DIR__ . '/../src/ValueObject',
-        ]);
+        ->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/ValueObject']);
 
     $rectorConfig->rule(RenameClassNonPhpRector::class);
 
