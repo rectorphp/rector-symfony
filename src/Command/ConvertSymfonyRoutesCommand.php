@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Command;
 
 use Nette\Utils\Json;
-use Psr\Container\ContainerInterface;
-use Rector\Core\Configuration\RectorConfigProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,7 +14,7 @@ use Webmozart\Assert\Assert;
 final class ConvertSymfonyRoutesCommand extends Command
 {
     public function __construct(
-        private readonly RectorConfigProvider $rectorConfigProvider
+        private readonly ContainerServiceProvider $containerServiceProvider,
     ) {
         parent::__construct();
     }
@@ -29,23 +27,7 @@ final class ConvertSymfonyRoutesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // @todo extract method
-        $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
-        Assert::fileExists($symfonyContainerPhp);
-
-        $container = require_once $symfonyContainerPhp;
-
-        // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-        Assert::isInstanceOf($container, 'Symfony\Component\DependencyInjection\Container');
-
-        /** @var ContainerInterface $container */
-        if (! $container->has('router')) {
-            throw new ShouldNotHappenException(
-                sprintf('Symfony container has no service "%s", maybe it is private', 'router')
-            );
-        }
-
-        $router = $container->get('router');
+        $router = $this->containerServiceProvider->provideByName('router');
         Assert::isInstanceOf($router, 'Symfony\Component\Routing\RouterInterface');
 
         $routeCollection = $router->getRouteCollection();
