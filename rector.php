@@ -27,6 +27,7 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_*',
         'Swift_*',
         'Doctrine\*',
+        'Psr\Container\ContainerInterface',
     ]);
 
     // for testing
