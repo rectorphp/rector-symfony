@@ -8,7 +8,7 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 
-return static function (RectorConfig $rectorConfig): void {
+return static function (RectorConfigSymfony\Component\Routing\RouterInterface $rectorConfig): void {
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
 
@@ -27,7 +27,9 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_*',
         'Swift_*',
         'Doctrine\*',
+        // loaded from project itself
         'Psr\Container\ContainerInterface',
+        'Symfony\Component\Routing\RouterInterface',
     ]);
 
     // for testing

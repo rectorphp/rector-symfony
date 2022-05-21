@@ -44,6 +44,7 @@ final class ConvertSymfonyRoutesCommand extends Command
         }
 
         $router = $container->get('router');
+        Assert::isInstanceOf('Symfony\Component\Routing\RouterInterface', $router);
 
         $routeCollection = $router->getRouteCollection();
 
