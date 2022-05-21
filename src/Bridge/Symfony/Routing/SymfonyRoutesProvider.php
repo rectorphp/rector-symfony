@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Bridge\Symfony\Routing;
 
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
+use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRouterProviderInterface;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Webmozart\Assert\Assert;
 
-final class SymfonyRoutesProvider
+final class SymfonyRoutesProvider implements SymfonyRouterProviderInterface
 {
     /**
      * @var SymfonyRouteMetadata[]
