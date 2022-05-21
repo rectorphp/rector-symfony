@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\Bridge\Symfony\Routing\SymfonyRoutesProvider;
+use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddRouteAnnotationRector extends AbstractRector
 {
     public function __construct(
-        private readonly SymfonyRoutesProvider $symfonyRoutesProvider,
+        private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
     ) {
     }
@@ -50,7 +50,7 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        if (! $this->symfonyRoutesProvider->hasRoutes()) {
+        if (! $this->symfonyRoutesProvider->provide()) {
             return null;
         }
 

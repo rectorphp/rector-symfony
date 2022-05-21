@@ -6,14 +6,12 @@ namespace Rector\Symfony\Contract\Bridge\Symfony\Routing;
 
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 
-interface SymfonyRouterProviderInterface
+interface SymfonyRoutesProviderInterface
 {
     /**
      * @return SymfonyRouteMetadata[]
      */
     public function provide(): array;
-
-    public function hasRoutes(): bool;
 
     /**
      * @param string $classMethodReference Format <class>::<method>

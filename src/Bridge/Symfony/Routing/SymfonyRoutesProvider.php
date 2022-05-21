@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Bridge\Symfony\Routing;
 
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
-use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRouterProviderInterface;
+use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Webmozart\Assert\Assert;
 
-final class SymfonyRoutesProvider implements SymfonyRouterProviderInterface
+final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**
      * @var SymfonyRouteMetadata[]
@@ -52,11 +52,6 @@ final class SymfonyRoutesProvider implements SymfonyRouterProviderInterface
         $this->symfonyRouteMetadatas = $symfonyRoutesMetadatas;
 
         return $symfonyRoutesMetadatas;
-    }
-
-    public function hasRoutes(): bool
-    {
-        return $this->symfonyRouteMetadatas !== [];
     }
 
     /**
