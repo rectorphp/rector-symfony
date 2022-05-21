@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\DataProvider\RouteMapProvider;
+use Rector\Symfony\Bridge\Symfony\Routing\SymfonyRoutesProvider;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,8 +19,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 class AddRouteAnnotationRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ROUTE_ANNOTATION_CLASS = 'Symfony\\Component\\Routing\\Annotation\\Route';
+
     public function __construct(
-        private readonly RouteMapProvider $routeMapProvider,
+        private readonly SymfonyRoutesProvider $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
     ) {
     }
@@ -36,31 +41,30 @@ class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        $routeMap = $this->routeMapProvider->provide();
-        if (! $routeMap->hasRoutes()) {
+        // only public methods can be controller routes
+        if (! $node->isPublic()) {
             return null;
         }
 
         $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-
         if (! $class instanceof Class_) {
             return null;
         }
 
-        $className = $this->nodeNameResolver->getName($class);
-        $methodName = $this->nodeNameResolver->getName($node);
+        if (! $this->symfonyRoutesProvider->hasRoutes()) {
+            return null;
+        }
 
-        $fqcnAndMethodName = sprintf('%s::%s', $className, $methodName);
-        $symfonyRouteMetadata = $routeMap->getRouteByMethod($fqcnAndMethodName);
+        $classMethodReference = $this->resolveClassMethodReference($class, $node);
 
+        // is there a route for this annotation?
+        $symfonyRouteMetadata = $this->symfonyRoutesProvider->getRouteByClassMethodReference($classMethodReference);
         if (! $symfonyRouteMetadata instanceof SymfonyRouteMetadata) {
             return null;
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
-            'Symfony\\Component\\Routing\\Annotation\\Route'
-        );
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(self::ROUTE_ANNOTATION_CLASS);
 
         if ($doctrineAnnotationTagValueNode !== null) {
             return null;
@@ -71,15 +75,9 @@ class AddRouteAnnotationRector extends AbstractRector
             'name' => sprintf('"%s"', $symfonyRouteMetadata->getName()),
         ];
 
-        $defaults = $symfonyRouteMetadata->getDefaults();
-        unset($defaults['_controller']);
-        if ($defaults !== []) {
-            $items['defaults'] = new CurlyListNode(
-                array_map(static fn (mixed $default): mixed => match (true) {
-                    is_string($default) => sprintf('"%s"', $default),
-                    default => $default,
-                }, $defaults)
-            );
+        $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
+        if ($defaultsWithoutController !== []) {
+            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
@@ -87,34 +85,98 @@ class AddRouteAnnotationRector extends AbstractRector
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = new CurlyListNode(
-                array_map(
-                    static fn (string $scheme): string => sprintf('"%s"', $scheme),
-                    $symfonyRouteMetadata->getSchemes()
-                )
-            );
+            $items['schemes'] = $this->createSchemes($symfonyRouteMetadata);
         }
 
         if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = new CurlyListNode(
-                array_map(
-                    static fn (string $scheme): string => sprintf('"%s"', $scheme),
-                    $symfonyRouteMetadata->getMethods()
-                )
-            );
+            $items['methods'] = $this->createMethods($symfonyRouteMetadata);
         }
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
             $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
         }
 
-        $phpDocInfo->addTagValueNode($this->symfonyRouteTagValueNodeFactory->createFromItems($items));
+        $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
+
+        $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
 
         return $node;
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add route annotation to controller action', []);
+        return new RuleDefinition(
+            'Collect routes from Symfony project router and add Route annotation to controller action',
+            [
+                new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                    <<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+final class SomeController extends AbstractController
+{
+    public function index()
+    {
+    }
+}
+CODE_SAMPLE
+                ,
+                    <<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+
+final class SomeController extends AbstractController
+{
+    /**
+     * @Route(name="homepage", path="/welcome")
+     */
+    public function index()
+    {
+    }
+}
+CODE_SAMPLE
+                ),
+            ]
+        );
+    }
+
+    private function resolveClassMethodReference(Class_ $class, ClassMethod $classMethod): string
+    {
+        $className = $this->nodeNameResolver->getName($class);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        return $className . '::' . $methodName;
+    }
+
+    /**
+     * @param array<string, mixed> $defaults
+     */
+    private function createDefaults(array $defaults): CurlyListNode
+    {
+        return new CurlyListNode(
+            array_map(static fn (mixed $default): mixed => match (true) {
+                is_string($default) => sprintf('"%s"', $default),
+                default => $default,
+            }, $defaults)
+        );
+    }
+
+    private function createSchemes(SymfonyRouteMetadata $symfonyRouteMetadata): CurlyListNode
+    {
+        return new CurlyListNode(
+            array_map(
+                static fn (string $scheme): string => sprintf('"%s"', $scheme),
+                $symfonyRouteMetadata->getSchemes()
+            )
+        );
+    }
+
+    private function createMethods(SymfonyRouteMetadata $symfonyRouteMetadata): CurlyListNode
+    {
+        return new CurlyListNode(
+            array_map(
+                static fn (string $scheme): string => sprintf('"%s"', $scheme),
+                $symfonyRouteMetadata->getMethods()
+            )
+        );
     }
 }
