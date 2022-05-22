@@ -55,10 +55,11 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        $classMethodReference = $this->resolveClassMethodReference($class, $node);
+        $controllerReference = $this->resolveControllerReference($class, $node);
 
         // is there a route for this annotation?
-        $symfonyRouteMetadata = $this->symfonyRoutesProvider->getRouteByClassMethodReference($classMethodReference);
+        $symfonyRouteMetadata = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
+
         if (! $symfonyRouteMetadata instanceof SymfonyRouteMetadata) {
             return null;
         }
@@ -114,7 +115,7 @@ CODE_SAMPLE
         );
     }
 
-    private function resolveClassMethodReference(Class_ $class, ClassMethod $classMethod): string
+    private function resolveControllerReference(Class_ $class, ClassMethod $classMethod): string
     {
         $className = $this->nodeNameResolver->getName($class);
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -177,5 +178,16 @@ CODE_SAMPLE
         }
 
         return $items;
+    }
+
+    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): ?SymfonyRouteMetadata
+    {
+        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadata) {
+            if ($symfonyRouteMetadata->getControllerReference() === $controllerReference) {
+                return $symfonyRouteMetadata;
+            }
+        }
+
+        return null;
     }
 }

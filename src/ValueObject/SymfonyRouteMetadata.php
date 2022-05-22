@@ -7,6 +7,11 @@ namespace Rector\Symfony\ValueObject;
 class SymfonyRouteMetadata
 {
     /**
+     * Format <class>::<method>
+     */
+    private readonly string $controllerReference;
+
+    /**
      * @param array<string, mixed> $defaults
      * @param array<string, mixed> $requirements
      * @param string[] $schemes
@@ -22,6 +27,7 @@ class SymfonyRouteMetadata
         private readonly array $methods,
         private readonly string $condition
     ) {
+        $this->controllerReference = $defaults['_controller'];
     }
 
     public function getName(): string
@@ -90,5 +96,13 @@ class SymfonyRouteMetadata
     public function getCondition(): string
     {
         return $this->condition;
+    }
+
+    /**
+     * Format <class>::<method>
+     */
+    public function getControllerReference(): string
+    {
+        return $this->controllerReference;
     }
 }

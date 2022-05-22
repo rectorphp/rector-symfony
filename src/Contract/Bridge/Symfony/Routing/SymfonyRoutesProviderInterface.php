@@ -12,9 +12,4 @@ interface SymfonyRoutesProviderInterface
      * @return SymfonyRouteMetadata[]
      */
     public function provide(): array;
-
-    /**
-     * @param string $classMethodReference Format <class>::<method>
-     */
-    public function getRouteByClassMethodReference(string $classMethodReference): ?SymfonyRouteMetadata;
 }
