@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AppController extends Controller
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", defaults={foo="foo123", page=1}, host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
+     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", defaults={foo="foo123", page=1}, host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'", requirements={page="\d+"})
      */
     public function allAction()
     {
