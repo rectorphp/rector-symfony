@@ -7,6 +7,7 @@ namespace Rector\Symfony\Bridge\Symfony\Routing;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
+use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
 final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
@@ -33,21 +34,24 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
         $router = $this->containerServiceProvider->provideByName('router');
         Assert::isInstanceOf($router, 'Symfony\Component\Routing\RouterInterface');
 
+        $symfonyRoutesMetadatas = [];
+
+        /** @var RouterInterface $router */
         $routeCollection = $router->getRouteCollection();
 
-        $symfonyRoutesMetadatas = array_map(
-            static fn ($route): SymfonyRouteMetadata => new SymfonyRouteMetadata(
-                name: '?',
-                path: $route->getPath(),
-                defaults: $route->getDefaults(),
-                requirements: $route->getRequirements(),
-                host: $route->getHost(),
-                schemes: $route->getSchemes(),
-                methods: $route->getMethods(),
-                condition: $route->getCondition()
-            ),
-            $routeCollection->all()
-        );
+        // route name is hidden in the key - https://github.com/symfony/symfony/blob/4dde1619d6c65b662170a6a3cbbdc7092eeb1fa2/src/Symfony/Component/Routing/RouteCollection.php#L99
+        foreach ($routeCollection->all() as $routeName => $route) {
+            $symfonyRoutesMetadatas[] = new SymfonyRouteMetadata(
+                $routeName,
+                $route->getPath(),
+                $route->getDefaults(),
+                $route->getRequirements(),
+                $route->getHost(),
+                $route->getSchemes(),
+                $route->getMethods(),
+                $route->getCondition()
+            );
+        }
 
         $this->symfonyRouteMetadatas = $symfonyRoutesMetadatas;
 
