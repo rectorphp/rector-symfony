@@ -177,6 +177,10 @@ CODE_SAMPLE
             $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
         }
 
+        if ($symfonyRouteMetadata->getRequirements() !== []) {
+            $items['requirements'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getRequirements());
+        }
+
         return $items;
     }
 
