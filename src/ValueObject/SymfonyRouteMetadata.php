@@ -7,20 +7,20 @@ namespace Rector\Symfony\ValueObject;
 class SymfonyRouteMetadata
 {
     /**
-     * @param mixed[]  $defaults
-     * @param string[]  $requirements
-     * @param string[]  $schemes
-     * @param string[]  $methods
+     * @param array<string, mixed> $defaults
+     * @param array<string, mixed> $requirements
+     * @param string[] $schemes
+     * @param string[] $methods
      */
     public function __construct(
         private readonly string $name,
         private readonly string $path,
-        private readonly array $defaults = [],
-        private readonly array $requirements = [],
-        private readonly string $host = '',
-        private readonly array $schemes = [],
-        private readonly array $methods = [],
-        private readonly string $condition = ''
+        private readonly array $defaults,
+        private readonly array $requirements,
+        private readonly string $host,
+        private readonly array $schemes,
+        private readonly array $methods,
+        private readonly string $condition
     ) {
     }
 
@@ -35,11 +35,22 @@ class SymfonyRouteMetadata
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getDefaults(): array
     {
         return $this->defaults;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getDefaultsWithoutController(): array
+    {
+        $defaults = $this->defaults;
+        unset($defaults['_controller']);
+
+        return $defaults;
     }
 
     public function getDefault(string $name): mixed
@@ -48,7 +59,7 @@ class SymfonyRouteMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function getRequirements(): array
     {

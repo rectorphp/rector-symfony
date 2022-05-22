@@ -23,4 +23,11 @@ class Router implements RouterInterface
     private function getGenerator(): UrlGeneratorInterface
     {
     }
+
+    /**
+     * @return RouteCollection
+     */
+    public function getRouteCollection()
+    {
+    }
 }

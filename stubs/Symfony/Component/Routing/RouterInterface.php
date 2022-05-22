@@ -12,5 +12,8 @@ if (interface_exists('Symfony\Component\Routing\RouterInterface')) {
 
 interface RouterInterface extends UrlGeneratorInterface
 {
-
+    /**
+     * @return RouteCollection
+     */
+    public function getRouteCollection();
 }
