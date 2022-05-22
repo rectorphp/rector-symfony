@@ -146,7 +146,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string}
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
     {
