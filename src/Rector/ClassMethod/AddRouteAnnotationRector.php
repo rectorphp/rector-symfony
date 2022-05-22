@@ -55,10 +55,11 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        $classMethodReference = $this->resolveClassMethodReference($class, $node);
+        $controllerReference = $this->resolveControllerReference($class, $node);
 
         // is there a route for this annotation?
-        $symfonyRouteMetadata = $this->symfonyRoutesProvider->getRouteByClassMethodReference($classMethodReference);
+        $symfonyRouteMetadata = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
+
         if (! $symfonyRouteMetadata instanceof SymfonyRouteMetadata) {
             return null;
         }
@@ -114,7 +115,7 @@ CODE_SAMPLE
         );
     }
 
-    private function resolveClassMethodReference(Class_ $class, ClassMethod $classMethod): string
+    private function resolveControllerReference(Class_ $class, ClassMethod $classMethod): string
     {
         $className = $this->nodeNameResolver->getName($class);
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -135,28 +136,18 @@ CODE_SAMPLE
         );
     }
 
-    private function createSchemes(SymfonyRouteMetadata $symfonyRouteMetadata): CurlyListNode
+    /**
+     * @param string[] $items
+     */
+    private function createCurlyListNodeFromItems(array $items): CurlyListNode
     {
-        return new CurlyListNode(
-            array_map(
-                static fn (string $scheme): string => sprintf('"%s"', $scheme),
-                $symfonyRouteMetadata->getSchemes()
-            )
-        );
-    }
+        $quotedItems = array_map(static fn (string $item): string => sprintf('"%s"', $item), $items);
 
-    private function createMethods(SymfonyRouteMetadata $symfonyRouteMetadata): CurlyListNode
-    {
-        return new CurlyListNode(
-            array_map(
-                static fn (string $scheme): string => sprintf('"%s"', $scheme),
-                $symfonyRouteMetadata->getMethods()
-            )
-        );
+        return new CurlyListNode($quotedItems);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string}
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
     {
@@ -175,16 +166,28 @@ CODE_SAMPLE
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = $this->createSchemes($symfonyRouteMetadata);
+            $items['schemes'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getSchemes());
         }
 
         if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = $this->createMethods($symfonyRouteMetadata);
+            $items['methods'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getMethods());
         }
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
             $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
         }
+
         return $items;
+    }
+
+    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): ?SymfonyRouteMetadata
+    {
+        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadata) {
+            if ($symfonyRouteMetadata->getControllerReference() === $controllerReference) {
+                return $symfonyRouteMetadata;
+            }
+        }
+
+        return null;
     }
 }

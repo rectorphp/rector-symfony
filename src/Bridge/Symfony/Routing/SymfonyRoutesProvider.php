@@ -57,18 +57,4 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 
         return $symfonyRoutesMetadatas;
     }
-
-    /**
-     * @param string $classMethodReference Format <class>::<method>
-     */
-    public function getRouteByClassMethodReference(string $classMethodReference): ?SymfonyRouteMetadata
-    {
-        foreach ($this->symfonyRouteMetadatas as $symfonyRouteMetadata) {
-            if ($symfonyRouteMetadata->getDefault('_controller') === $classMethodReference) {
-                return $symfonyRouteMetadata;
-            }
-        }
-
-        return null;
-    }
 }

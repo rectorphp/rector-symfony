@@ -20,6 +20,11 @@ return static function (RectorConfig $rectorConfig): void {
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+
+        \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
+            // "data" => "datum" false positive
+            __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
+        ]
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
