@@ -105,7 +105,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM());
+            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
             $param->type = $paramTypeNode;
 
             $hasChanged = true;

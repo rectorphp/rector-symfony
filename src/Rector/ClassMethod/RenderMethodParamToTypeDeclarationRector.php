@@ -113,7 +113,7 @@ CODE_SAMPLE
 
         $inferedType = $this->paramTypeInferer->inferParam($param);
 
-        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM());
+        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM);
 
         if (! $paramType instanceof Node) {
             return;
