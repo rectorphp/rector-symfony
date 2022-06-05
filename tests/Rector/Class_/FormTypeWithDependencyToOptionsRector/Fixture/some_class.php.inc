@@ -35,10 +35,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class FormTypeWithDependency extends AbstractType
 {
+    public function __construct()
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $agent = $options['agent'];
-
         if ($agent) {
             $builder->add('agent', TextType::class);
         }
