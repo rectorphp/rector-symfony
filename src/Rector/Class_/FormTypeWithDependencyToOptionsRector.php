@@ -14,6 +14,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\FormType\BuildFormOptionAssignsFactory;
+use Rector\Symfony\NodeFactory\FormType\ConfigureDefaultsFactory;
 use Rector\Symfony\NodeRemover\ConstructorDependencyRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,6 +29,7 @@ final class FormTypeWithDependencyToOptionsRector extends AbstractRector
     public function __construct(
         private readonly BuildFormOptionAssignsFactory $buildFormOptionAssignsFactory,
         private readonly ConstructorDependencyRemover $constructorDependencyRemover,
+        private readonly ConfigureDefaultsFactory $configureDefaultsFactory,
     ) {
     }
 
@@ -138,6 +140,10 @@ CODE_SAMPLE
         $this->constructorDependencyRemover->removeParamsByName($constructorClassMethod, $paramNames);
 
         $this->replacePropertyFetchesByVariables($buildFormClassMethod, $paramNames);
+
+        // 4. add configure options class method
+        $classMethod = $this->configureDefaultsFactory->create($paramNames);
+        $node->stmts[] = $classMethod;
 
         return $node;
     }

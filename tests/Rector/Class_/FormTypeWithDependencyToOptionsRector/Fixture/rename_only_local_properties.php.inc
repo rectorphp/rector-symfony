@@ -58,6 +58,10 @@ final class RenameOnlyLocalProperties extends AbstractType
             $builder->add('another_agent', TextType::class);
         }
     }
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setDefaults(['agent' => null]);
+    }
 }
 
 ?>
