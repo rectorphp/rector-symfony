@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 use ReflectionMethod;
 
 final class FormInstanceToFormClassConstFetchConverter
@@ -20,11 +21,11 @@ final class FormInstanceToFormClassConstFetchConverter
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
         private readonly NodeFactory $nodeFactory,
-        private \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver $formTypeClassResolver,
+        private readonly FormTypeClassResolver $formTypeClassResolver,
     ) {
     }
 
-    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?Node
+    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?MethodCall
     {
         $args = $methodCall->getArgs();
         if (! isset($args[$position])) {
@@ -49,12 +50,13 @@ final class FormInstanceToFormClassConstFetchConverter
             if (! $methodCall instanceof MethodCall) {
                 return null;
             }
+        } else {
+            // some args
+            dump('aaa');
+            die;
         }
 
         $currentArg = $methodCall->getArgs()[$position];
-
-        dump_node($currentArg);
-        die;
 
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
         $currentArg->value = $classConstFetch;
