@@ -27,7 +27,6 @@ final class FormTypeWithDependencyToOptionsRector extends AbstractRector
 {
     public function __construct(
         private readonly BuildFormOptionAssignsFactory $buildFormOptionAssignsFactory,
-        // private readonly ComplexNodeRemover $complexNodeRemover,
         private readonly ConstructorDependencyRemover $constructorDependencyRemover,
     ) {
     }
@@ -94,8 +93,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $formTypeObject = new ObjectType('Symfony\Component\Form\AbstractType');
-        if (! $this->isObjectType($node, $formTypeObject)) {
+        $formObjectType = new ObjectType('Symfony\Component\Form\AbstractType');
+        if (! $this->isObjectType($node, $formObjectType)) {
             return null;
         }
 
