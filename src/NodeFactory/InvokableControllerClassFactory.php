@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\NodeAnalyzer\InvokableAnalyzer\ActiveClassElementsClassMethodResolver;
@@ -45,11 +46,12 @@ final class InvokableControllerClassFactory
 
     private function createControllerName(Class_ $class, ClassMethod $actionClassMethod): string
     {
-        /** @var Identifier $className */
-        $className = $class->name;
+        if (! $class->name instanceof Identifier) {
+            throw new ShouldNotHappenException();
+        }
 
         return $this->invokableControllerNameFactory->createControllerName(
-            $className,
+            $class->name,
             $actionClassMethod->name->toString()
         );
     }

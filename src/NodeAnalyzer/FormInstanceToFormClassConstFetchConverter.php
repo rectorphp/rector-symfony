@@ -115,9 +115,9 @@ final class FormInstanceToFormClassConstFetchConverter
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        $reflectionClass = $classReflection->getNativeReflection();
+        $nativeReflection = $classReflection->getNativeReflection();
 
-        $constructorReflectionMethod = $reflectionClass->getConstructor();
+        $constructorReflectionMethod = $nativeReflection->getConstructor();
         if (! $constructorReflectionMethod instanceof ReflectionMethod) {
             return [];
         }
