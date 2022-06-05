@@ -61,8 +61,7 @@ final class FormTypeWithDependency extends AbstractType
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -71,7 +70,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return array(\PhpParser\Node\Stmt\Class_::class);
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
 
     /**

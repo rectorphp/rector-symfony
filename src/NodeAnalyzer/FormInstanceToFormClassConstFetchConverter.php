@@ -6,17 +6,13 @@ namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionMethod;
 
 final class FormInstanceToFormClassConstFetchConverter
@@ -24,8 +20,7 @@ final class FormInstanceToFormClassConstFetchConverter
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
         private readonly NodeFactory $nodeFactory,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver
+        private \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver $formTypeClassResolver,
     ) {
     }
 
@@ -38,7 +33,7 @@ final class FormInstanceToFormClassConstFetchConverter
 
         $argValue = $args[$position]->value;
 
-        $formClassName = $this->resolveFormClassName($argValue);
+        $formClassName = $this->formTypeClassResolver->resolveFromExpr($argValue);
         if ($formClassName === null) {
             return null;
         }
@@ -57,6 +52,9 @@ final class FormInstanceToFormClassConstFetchConverter
         }
 
         $currentArg = $methodCall->getArgs()[$position];
+
+        dump_node($currentArg);
+        die;
 
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
         $currentArg->value = $classConstFetch;
@@ -128,20 +126,5 @@ final class FormInstanceToFormClassConstFetchConverter
         }
 
         return $namesToArgs;
-    }
-
-    private function resolveFormClassName(Expr $expr): ?string
-    {
-        if ($expr instanceof New_) {
-            // we can only process direct name
-            return $this->nodeNameResolver->getName($expr->class);
-        }
-
-        $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof TypeWithClassName) {
-            return $exprType->getClassName();
-        }
-
-        return null;
     }
 }
