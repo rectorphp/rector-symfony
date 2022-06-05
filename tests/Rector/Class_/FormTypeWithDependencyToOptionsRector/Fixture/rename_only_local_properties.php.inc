@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class FormTypeWithDependency extends AbstractType
+final class RenameOnlyLocalProperties extends AbstractType
 {
     private Agent $agent;
 
@@ -17,8 +17,14 @@ final class FormTypeWithDependency extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $another = $options['another'];
+
         if ($this->agent) {
             $builder->add('agent', TextType::class);
+        }
+
+        if ($another->agent) {
+            $builder->add('another_agent', TextType::class);
         }
     }
 }
@@ -33,7 +39,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-final class FormTypeWithDependency extends AbstractType
+final class RenameOnlyLocalProperties extends AbstractType
 {
     public function __construct()
     {
@@ -42,8 +48,14 @@ final class FormTypeWithDependency extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $agent = $options['agent'];
+        $another = $options['another'];
+
         if ($agent) {
             $builder->add('agent', TextType::class);
+        }
+
+        if ($another->agent) {
+            $builder->add('another_agent', TextType::class);
         }
     }
 }

@@ -15,8 +15,6 @@ final class FormTypeWithDependencyToOptionsRectorTest extends AbstractRectorTest
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        $this->markTestSkipped('Fix in next PR');
-
         $this->doTestFileInfo($fileInfo);
     }
 
