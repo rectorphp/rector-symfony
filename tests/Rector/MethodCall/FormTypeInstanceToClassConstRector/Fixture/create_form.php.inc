@@ -5,7 +5,7 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRec
 use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends Controller
+final class SomeController extends Controller
 {
     public function action()
     {
@@ -22,7 +22,7 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRec
 use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends Controller
+final class SomeController extends Controller
 {
     public function action()
     {

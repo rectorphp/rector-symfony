@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Symfony\Bundle\FrameworkBundle\Controller;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 
 if (class_exists('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
     return;
 }
 
-class Controller
+abstract class Controller
 {
-    public function createForm(): FormInterface
+    /**
+     * @param string|AbstractType|FormInterface $formType
+     */
+    public function createForm($formType): FormInterface
     {
     }
 
