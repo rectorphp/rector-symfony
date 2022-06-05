@@ -13,8 +13,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormTypeClassResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

@@ -47,4 +47,8 @@ parameters:
              message: '#Parameter \#2 \$fileContent of class Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent constructor expects string, string\|false given#'
              path: tests
 
-        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
+        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)(.*?)\(\)#'
+
+        -
+            path: tests/*
+            message: '#Unreachable statement \- code above always terminates#'

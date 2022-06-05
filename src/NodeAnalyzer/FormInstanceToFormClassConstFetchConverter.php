@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeAnalyzer;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -40,46 +41,25 @@ final class FormInstanceToFormClassConstFetchConverter
             return null;
         }
 
-        if ($argValue instanceof New_ && $argValue->args !== []) {
+        $formNew = $this->resolveFormNew($argValue);
+
+        if ($formNew instanceof New_ && $formNew->getArgs() !== []) {
             $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions(
                 $methodCall,
                 $position,
                 $optionsPosition,
                 $formClassName,
-                $argValue->getArgs()
+                $formNew->getArgs()
             );
             if (! $methodCall instanceof MethodCall) {
                 throw new ShouldNotHappenException();
             }
-        } else {
-            // some args
-            if (! $argValue instanceof ClassConstFetch) {
-                $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
-                if ($previousAssign instanceof Assign) {
-                    if ($previousAssign->expr instanceof New_) {
-                        $previousAssignNew = $previousAssign->expr;
+        }
 
-                        // cleanup assign, we don't need it anymore
-                        $this->nodeRemover->removeNode($previousAssign);
-
-                        $assignArgs = $previousAssignNew->getArgs();
-                        if ($assignArgs !== []) {
-                            // turn to 3rd parameter
-                            $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions(
-                                $methodCall,
-                                $position,
-                                $optionsPosition,
-                                $formClassName,
-                                $assignArgs
-                            );
-
-                            if (! $methodCall instanceof MethodCall) {
-                                throw new ShouldNotHappenException();
-                            }
-                        }
-                    }
-                }
-            }
+        // remove previous assign
+        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
+        if ($previousAssign instanceof Assign) {
+            $this->nodeRemover->removeNode($previousAssign);
         }
 
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
@@ -88,5 +68,25 @@ final class FormInstanceToFormClassConstFetchConverter
         $currentArg->value = $classConstFetch;
 
         return $methodCall;
+    }
+
+    private function resolveFormNew(Expr $expr): ?New_
+    {
+        if ($expr instanceof New_) {
+            return $expr;
+        }
+
+        if ($expr instanceof Variable) {
+            $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
+            if (! $previousAssign instanceof Assign) {
+                return null;
+            }
+
+            if ($previousAssign->expr instanceof New_) {
+                return $previousAssign->expr;
+            }
+        }
+
+        return null;
     }
 }

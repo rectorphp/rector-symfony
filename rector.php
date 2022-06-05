@@ -7,6 +7,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
@@ -26,7 +27,10 @@ return static function (RectorConfig $rectorConfig): void {
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
         ],
 
-        \Rector\Renaming\Rector\Name\RenameClassRector::class,
+        // marked as skipped
+        ReturnNeverTypeRector::class => [
+            '*/tests/*'
+        ]
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [

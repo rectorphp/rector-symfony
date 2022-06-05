@@ -10,11 +10,12 @@ use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(MakeCommandLazyRector::class);
-    $rectorConfig->rule(EventListenerToEventSubscriberRector::class);
-    $rectorConfig->rule(ResponseReturnTypeControllerActionRector::class);
-
-    // int and string literals to const fetches
-    $rectorConfig->rule(ResponseStatusCodeRector::class);
-    $rectorConfig->rule(LiteralGetToRequestClassConstantRector::class);
+    $rectorConfig->rules([
+        MakeCommandLazyRector::class,
+        EventListenerToEventSubscriberRector::class,
+        ResponseReturnTypeControllerActionRector::class,
+        // int and string literals to const fetches
+        ResponseStatusCodeRector::class,
+        LiteralGetToRequestClassConstantRector::class,
+    ]);
 };
