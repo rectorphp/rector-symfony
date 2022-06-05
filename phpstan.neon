@@ -42,19 +42,13 @@ parameters:
         # closure/callable
         - '#Parameter \#2 \$filter of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstPrevious\(\) expects callable\(PhpParser\\Node\)\: bool, Closure\(PhpParser\\Node\)\: PhpParser\\Node\\Expr\\Assign\|null given#'
 
-        # on purpose, string object to avoid prefixing
-        -
-            message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
-            path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
-
         # in test, fixtures exists
         -
              message: '#Parameter \#2 \$fileContent of class Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent constructor expects string, string\|false given#'
              path: tests
 
-        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:assert(.*?)\(\)#'
+        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)(.*?)\(\)#'
 
-        - '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:getByOne\(\) expects class\-string, string given#'
-
-        # using external service
-        - '#Call to an undefined method Symfony\\Component\\Routing\\RouterInterface\:\:getRouteCollection\(\)#'
+        -
+            path: tests/*
+            message: '#Unreachable statement \- code above always terminates#'

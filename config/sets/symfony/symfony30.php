@@ -22,21 +22,24 @@ use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
 return static function (RectorConfig $rectorConfig): void {
     # resources:
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
-    # php
-    $rectorConfig->rule(GetRequestRector::class);
-    $rectorConfig->rule(FormTypeGetParentRector::class);
-    $rectorConfig->rule(OptionNameRector::class);
-    $rectorConfig->rule(ReadOnlyOptionToAttributeRector::class);
 
-    # forms
-    $rectorConfig->rule(FormTypeInstanceToClassConstRector::class);
-    $rectorConfig->rule(StringFormTypeToClassRector::class);
-    $rectorConfig->rule(CascadeValidationFormBuilderRector::class);
-    $rectorConfig->rule(RemoveDefaultGetBlockPrefixRector::class);
+    $rectorConfig->rules([
+        // php
+        GetRequestRector::class,
+        FormTypeGetParentRector::class,
+        OptionNameRector::class,
+        ReadOnlyOptionToAttributeRector::class,
 
-    # forms - collection
-    $rectorConfig->rule(ChangeStringCollectionOptionToConstantRector::class);
-    $rectorConfig->rule(ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
+        // forms
+        FormTypeInstanceToClassConstRector::class,
+        StringFormTypeToClassRector::class,
+        CascadeValidationFormBuilderRector::class,
+        RemoveDefaultGetBlockPrefixRector::class,
+
+        // forms - collection
+        ChangeStringCollectionOptionToConstantRector::class,
+        ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
+    ]);
 
     $rectorConfig
         ->ruleWithConfiguration(RenameClassConstFetchRector::class, [

@@ -6,7 +6,7 @@ use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\So
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherControllerWithArgs extends Controller
+final class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
@@ -24,7 +24,7 @@ use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\So
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherControllerWithArgs extends Controller
+final class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
