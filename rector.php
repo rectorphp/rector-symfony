@@ -24,7 +24,9 @@ return static function (RectorConfig $rectorConfig): void {
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
-        ]
+        ],
+
+        \Rector\Renaming\Rector\Name\RenameClassRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [

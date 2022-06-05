@@ -23,7 +23,8 @@
         "symplify/easy-coding-standard": "^10.2",
         "symplify/phpstan-extensions": "^10.2",
         "symplify/phpstan-rules": "^10.2",
-        "symplify/rule-doc-generator": "^10.2"
+        "symplify/rule-doc-generator": "^10.2",
+        "symplify/vendor-patches": "^10.2"
     },
     "autoload": {
         "psr-4": {
