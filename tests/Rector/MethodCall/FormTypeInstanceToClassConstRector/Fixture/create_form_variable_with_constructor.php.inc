@@ -3,13 +3,14 @@
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AgentRequiringFormType;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\Requirements\Agent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class CreateFormVariableWithConstructor extends Controller
 {
     public function action()
     {
-        $agent = '007';
+        $agent = new Agent();
 
         $someType = new AgentRequiringFormType($agent);
         $form = $this->createForm($someType);
@@ -22,17 +23,16 @@ final class CreateFormVariableWithConstructor extends Controller
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AgentRequiringFormType;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\Requirements\Agent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class CreateFormVariableWithConstructor extends Controller
 {
     public function action()
     {
-        $agent = '007';
-
-        $form = $this->createForm(\Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AgentRequiringFormType::class, null, [
-            'agent' => $agent
-        ]);
+        $agent = new Agent();
+        $form = $this->createForm(\Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AgentRequiringFormType::class, null, ['agent' => $agent]);
     }
 }
 

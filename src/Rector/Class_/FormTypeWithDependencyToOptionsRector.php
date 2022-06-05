@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://speakerdeck.com/webmozart/symfony-forms-101?slide=24
  *
- * @see \Rector\Tests\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector\FormTypeWithDependencyToOptionsRectorTest
+ * @see \Rector\Symfony\Tests\Rector\Class_\FormTypeWithDependencyToOptionsRector\FormTypeWithDependencyToOptionsRectorTest
  */
 final class FormTypeWithDependencyToOptionsRector extends AbstractRector
 {

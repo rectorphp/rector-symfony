@@ -27,7 +27,6 @@ final class CreateFormVariable extends Controller
 {
     public function action()
     {
-        $someType = new SomeFormType();
         $form = $this->createForm(\Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\SomeFormType::class);
     }
 }

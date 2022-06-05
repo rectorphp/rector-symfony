@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Class_\FormTypeWithDependencyToOptionsRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FormTypeWithDependencyToOptionsRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo): void
+    public function test(SmartFileInfo $fileInfo): void
     {
         $this->doTestFileInfo($fileInfo);
     }
 
     /**
-     * @return \Iterator<\Symplify\SmartFileSystem\SmartFileInfo>
+     * @return Iterator<SmartFileInfo>
      */
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
