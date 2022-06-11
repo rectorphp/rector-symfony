@@ -18,7 +18,7 @@ final class DoctrineAnnotationKeyToValuesResolver
     }
 
     /**
-     * @return array<string|null, mixed>
+     * @return array<string|null, mixed>|mixed[]
      */
     public function resolveFromExpr(Expr $expr): array
     {
@@ -37,6 +37,10 @@ final class DoctrineAnnotationKeyToValuesResolver
 
                 $annotationKeyToValues[$key] = $value;
             }
+        } else {
+            $singleValue = $this->valueResolver->getValue($expr);
+            $singleValue = $this->wrapStringValuesInQuotes($singleValue, null);
+            return [$singleValue];
         }
 
         return $annotationKeyToValues;

@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
- * @Assert\Callback
+ * @Assert\Callback("validatePostalCode")
  */
 final class ClassValidation
 {
