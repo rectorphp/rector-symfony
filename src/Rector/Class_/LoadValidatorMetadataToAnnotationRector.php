@@ -109,7 +109,7 @@ CODE_SAMPLE
         }
 
         // remove empty class method
-        if (count((array) $loadValidatorMetadataClassMethod->stmts) === 0) {
+        if ((array) $loadValidatorMetadataClassMethod->stmts === []) {
             $this->removeNode($loadValidatorMetadataClassMethod);
         }
 
