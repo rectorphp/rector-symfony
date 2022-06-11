@@ -27,11 +27,6 @@ parameters:
 
         - '#Parameter \#1 \$class of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:(.*?)\(\) expects class\-string, string given#'
 
-        # allowed on null-safe calls
-        -
-            message: '#Do not use chained method calls\. Put each on separated lines#'
-            path: src/Helper/TemplateGuesser.php
-
         # rector co-variant
         - '#Parameter \#1 \$node \(PhpParser\\Node\\(.*?) of method Rector\\(.*?)\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'
 
@@ -50,5 +45,5 @@ parameters:
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)(.*?)\(\)#'
 
         -
-            path: tests/*
-            message: '#Unreachable statement \- code above always terminates#'
+            path: "src/ValueObjectFactory/ServiceMapFactory.php"
+            message: '#@simplexml_load_string(.*?) is forbidden to use#'
