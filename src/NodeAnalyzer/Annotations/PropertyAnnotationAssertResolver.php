@@ -7,33 +7,23 @@ namespace Rector\Symfony\NodeAnalyzer\Annotations;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
-use Rector\Symfony\ValueObject\PropertyAndAnnotation;
+use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndAnnotation;
 
 final class PropertyAnnotationAssertResolver
 {
     public function __construct(
         private readonly ValueResolver $valueResolver,
         private readonly DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory,
-        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StmtMethodCallMatcher $stmtMethodCallMatcher,
     ) {
     }
 
     public function resolve(Stmt $stmt): ?PropertyAndAnnotation
     {
-        if (! $stmt instanceof Expression) {
-            return null;
-        }
-
-        if (! $stmt->expr instanceof MethodCall) {
-            return null;
-        }
-
-        $methodCall = $stmt->expr;
-        if (! $this->nodeNameResolver->isName($methodCall->name, 'addPropertyConstraint')) {
+        $methodCall = $this->stmtMethodCallMatcher->match($stmt, 'addPropertyConstraint');
+        if (! $methodCall instanceof MethodCall) {
             return null;
         }
 

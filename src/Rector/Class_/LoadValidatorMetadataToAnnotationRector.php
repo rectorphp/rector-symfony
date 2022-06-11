@@ -8,11 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver;
 use Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver;
 use Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver;
-use Rector\Symfony\ValueObject\ClassMethodAndAnnotation;
-use Rector\Symfony\ValueObject\PropertyAndAnnotation;
+use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndAnnotation;
+use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndAnnotation;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +28,8 @@ final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
 {
     public function __construct(
         private readonly MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver,
-        private readonly PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver
+        private readonly PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver,
+        private readonly ClassAnnotationAssertResolver $classAnnotationAssertResolver,
     ) {
     }
 
@@ -87,6 +90,18 @@ CODE_SAMPLE
         }
 
         foreach ((array) $loadValidatorMetadataClassMethod->stmts as $stmtKey => $classStmt) {
+            // 1. class
+            $doctrineAnnotationTagValueNode = $this->classAnnotationAssertResolver->resolve($classStmt);
+            if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+                $this->refactorClassAnnotation(
+                    $node,
+                    $doctrineAnnotationTagValueNode,
+                    $loadValidatorMetadataClassMethod,
+                    $stmtKey
+                );
+            }
+
+            // 2. class methods
             $classMethodAndAnnotation = $this->methodCallAnnotationAssertResolver->resolve($classStmt);
             if ($classMethodAndAnnotation instanceof ClassMethodAndAnnotation) {
                 $this->refactorClassMethodAndAnnotation(
@@ -97,6 +112,7 @@ CODE_SAMPLE
                 );
             }
 
+            // 3. properties
             $propertyAndAnnotation = $this->propertyAnnotationAssertResolver->resolve($classStmt);
             if ($propertyAndAnnotation instanceof PropertyAndAnnotation) {
                 $this->refactorPropertyAndAnnotation(
@@ -147,6 +163,17 @@ CODE_SAMPLE
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $propertyPhpDocInfo->addTagValueNode($propertyAndAnnotation->getDoctrineAnnotationTagValueNode());
 
+        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
+    }
+
+    private function refactorClassAnnotation(
+        Class_ $class,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        ClassMethod $loadValidatorMetadataClassMethod,
+        int $stmtKey
+    ): void {
+        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+        $classPhpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
         unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
     }
 }
