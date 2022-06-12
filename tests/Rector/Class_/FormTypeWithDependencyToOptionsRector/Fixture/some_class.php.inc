@@ -46,6 +46,10 @@ final class FormTypeWithDependency extends AbstractType
             $builder->add('agent', TextType::class);
         }
     }
+    public function configureOptions(\Symfony\Component\OptionsResolver\OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setDefaults(['agent' => null]);
+    }
 }
 
 ?>
