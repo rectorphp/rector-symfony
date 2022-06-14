@@ -31,6 +31,7 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
     private const DATAMAPPER_CLASS = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
 
     private readonly ObjectType $dataMapperInterface;
+
     private readonly ObjectType $dataMapperObjectType;
 
     public function __construct()
@@ -100,7 +101,10 @@ CODE_SAMPLE
 
         $argumentValue = $node->getArgs()[0]
             ->value;
-        if ($this->isObjectType($argumentValue, $this->dataMapperInterface) || $this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
+        if ($this->isObjectType($argumentValue, $this->dataMapperInterface) || $this->isObjectType(
+            $argumentValue,
+            $this->dataMapperObjectType
+        )) {
             return null;
         }
 
