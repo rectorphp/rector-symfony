@@ -16,7 +16,6 @@
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.5",
         "rector/rector-src": "dev-main",
-        "symfony/form": "^6.0",
         "symfony/routing": "^6.0",
         "symfony/security-core": "^6.0",
         "symfony/security-http": "^6.0",
