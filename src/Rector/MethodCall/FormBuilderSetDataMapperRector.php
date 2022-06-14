@@ -20,8 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
-    private readonly ObjectType $dataMapperObjectType;
-
     /**
      * @var string
      */
@@ -31,6 +29,8 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
      * @var string
      */
     private const DATAMAPPER_CLASS = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
+
+    private readonly ObjectType $dataMapperObjectType;
 
     public function __construct()
     {
