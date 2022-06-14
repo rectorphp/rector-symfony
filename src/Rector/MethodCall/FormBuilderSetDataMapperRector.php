@@ -20,11 +20,24 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormBuilderSetDataMapperRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const DATAMAPPER_INTERFACE = 'Symfony\Component\Form\DataMapperInterface';
+
+    /**
+     * @var string
+     */
+    private const DATAMAPPER_CLASS = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
+
+    private readonly ObjectType $dataMapperInterface;
+
     private readonly ObjectType $dataMapperObjectType;
 
     public function __construct()
     {
-        $this->dataMapperObjectType = new ObjectType('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper');
+        $this->dataMapperInterface = new ObjectType(self::DATAMAPPER_INTERFACE);
+        $this->dataMapperObjectType = new ObjectType(self::DATAMAPPER_CLASS);
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -88,7 +101,10 @@ CODE_SAMPLE
 
         $argumentValue = $node->getArgs()[0]
             ->value;
-        if ($this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
+        if ($this->isObjectType($argumentValue, $this->dataMapperInterface) || $this->isObjectType(
+            $argumentValue,
+            $this->dataMapperObjectType
+        )) {
             return null;
         }
 
@@ -96,7 +112,7 @@ CODE_SAMPLE
             'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'
         ));
 
-        $newArgumentValue = new New_(new FullyQualified($this->dataMapperObjectType->getClassName()), [
+        $newArgumentValue = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [
             new Arg($propertyPathAccessor),
         ]);
         $node->getArgs()[0]
