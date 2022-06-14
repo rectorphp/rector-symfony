@@ -22,9 +22,19 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
 {
     private readonly ObjectType $dataMapperObjectType;
 
+    /**
+     * @var string
+     */
+    private const DATAMAPPER_INTERFACE = 'Symfony\Component\Form\DataMapperInterface';
+
+    /**
+     * @var string
+     */
+    private const DATAMAPPER_CLASS = 'Symfony\Component\Form\Extension\Core\DataMapper\DataMapper';
+
     public function __construct()
     {
-        $this->dataMapperObjectType = new ObjectType('Symfony\Component\Form\Extension\Core\DataMapper\DataMapper');
+        $this->dataMapperObjectType = new ObjectType(self::DATAMAPPER_INTERFACE);
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -96,7 +106,7 @@ CODE_SAMPLE
             'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'
         ));
 
-        $newArgumentValue = new New_(new FullyQualified($this->dataMapperObjectType->getClassName()), [
+        $newArgumentValue = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [
             new Arg($propertyPathAccessor),
         ]);
         $node->getArgs()[0]
