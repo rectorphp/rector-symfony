@@ -7,13 +7,13 @@ namespace Rector\Symfony\NodeFactory\Annotations;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
 final class DoctrineAnnotationKeyToValuesResolver
 {
     public function __construct(
-        private readonly ValueResolver $valueResolver
+        private readonly ValueResolver $valueResolver,
+        private StringValueQuoteWrapper $stringValueQuoteWrapper,
     ) {
     }
 
@@ -33,7 +33,7 @@ final class DoctrineAnnotationKeyToValuesResolver
                 $key = $this->resolveKey($arrayItem);
 
                 $value = $this->valueResolver->getValue($arrayItem->value);
-                $value = $this->wrapStringValuesInQuotes($value, $key);
+                $value = $this->stringValueQuoteWrapper->wrap($value, $key);
 
                 // implicit key with no name
                 if ($key === null) {
@@ -44,7 +44,7 @@ final class DoctrineAnnotationKeyToValuesResolver
             }
         } else {
             $singleValue = $this->valueResolver->getValue($expr);
-            $singleValue = $this->wrapStringValuesInQuotes($singleValue, null);
+            $singleValue = $this->stringValueQuoteWrapper->wrap($singleValue, null);
             return [$singleValue];
         }
 
@@ -58,28 +58,5 @@ final class DoctrineAnnotationKeyToValuesResolver
         }
 
         return $this->valueResolver->getValue($arrayItem->key);
-    }
-
-    /**
-     * @return mixed|CurlyListNode|string
-     */
-    private function wrapStringValuesInQuotes(mixed $value, ?string $key): mixed
-    {
-        if (is_string($value)) {
-            return '"' . $value . '"';
-        }
-
-        if (is_array($value)) {
-            // include quotes in groups
-            if ($key === 'groups') {
-                foreach ($value as $nestedKey => $nestedValue) {
-                    $value[$nestedKey] = '"' . $nestedValue . '"';
-                }
-            }
-
-            return new CurlyListNode($value);
-        }
-
-        return $value;
     }
 }
