@@ -35,7 +35,12 @@ final class DoctrineAnnotationKeyToValuesResolver
                 $value = $this->valueResolver->getValue($arrayItem->value);
                 $value = $this->wrapStringValuesInQuotes($value, $key);
 
-                $annotationKeyToValues[$key] = $value;
+                // implicit key with no name
+                if ($key === null) {
+                    $annotationKeyToValues[] = $value;
+                } else {
+                    $annotationKeyToValues[$key] = $value;
+                }
             }
         } else {
             $singleValue = $this->valueResolver->getValue($expr);
