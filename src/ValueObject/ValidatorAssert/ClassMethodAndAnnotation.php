@@ -12,7 +12,7 @@ final class ClassMethodAndAnnotation
      * @param string[] $possibleMethodNames
      */
     public function __construct(
-        private readonly array                          $possibleMethodNames,
+        private readonly array $possibleMethodNames,
         private readonly DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ) {
     }
