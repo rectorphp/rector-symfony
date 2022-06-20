@@ -36,6 +36,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
         'Symfony\*',
         'Twig_*',
+        'Twig*',
         'Swift_*',
         'Doctrine\*',
         // loaded from project itself
