@@ -13,7 +13,7 @@ final class DoctrineAnnotationKeyToValuesResolver
 {
     public function __construct(
         private readonly ValueResolver $valueResolver,
-        private StringValueQuoteWrapper $stringValueQuoteWrapper,
+        private readonly StringValueQuoteWrapper $stringValueQuoteWrapper,
     ) {
     }
 
