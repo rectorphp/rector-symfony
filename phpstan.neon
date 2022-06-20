@@ -47,3 +47,11 @@ parameters:
         -
             path: "src/ValueObjectFactory/ServiceMapFactory.php"
             message: '#@simplexml_load_string(.*?) is forbidden to use#'
+
+        # known type
+        - '#Parameter \#1 \$className of method Rector\\Core\\Reflection\\ReflectionResolver\:\:resolveMethodReflection\(\) expects class\-string, string given#'
+
+        # known array
+        -
+            message: '#Property PhpParser\\Node\\Expr\\Closure\:\:\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node\\Stmt>\|null#'
+            path: src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
