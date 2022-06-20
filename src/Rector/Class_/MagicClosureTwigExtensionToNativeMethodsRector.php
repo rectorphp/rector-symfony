@@ -22,6 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\MagicClosureTwigExtensionToNativeMethodsRectorTest
+ *
+ * @see PHP 8.1 way to handle functions/filters https://github.com/symfony/symfony/blob/e0ad2eead3513a558c09d8aa3ae9e867fb10b419/src/Symfony/Bridge/Twig/Extension/CodeExtension.php#L41-L52
  */
 final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRector
 {
@@ -29,7 +31,6 @@ final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRecto
         private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
-        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 
@@ -163,8 +164,6 @@ CODE_SAMPLE
                     // inline and remove method
                     $closure->stmts = $localClassMethod->stmts;
                     $this->removeNode($localClassMethod);
-                } else {
-                    $this->visibilityManipulator->makePrivate($localClassMethod);
                 }
             }
 

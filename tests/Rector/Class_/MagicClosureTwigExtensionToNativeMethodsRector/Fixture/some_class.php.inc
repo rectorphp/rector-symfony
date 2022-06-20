@@ -41,7 +41,7 @@ final class TerminologyExtension extends AbstractExtension
         ];
     }
 
-    private function resolve($value)
+    public function resolve($value)
     {
         $value++;
         return $value + 100;
