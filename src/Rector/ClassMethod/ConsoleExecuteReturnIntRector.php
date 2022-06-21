@@ -15,9 +15,11 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\TryCatchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,6 +31,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
+    public function __construct(private readonly TryCatchAnalyzer $tryCatchAnalyzer)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Returns int from Command::execute command', [
@@ -161,6 +167,16 @@ CODE_SAMPLE
     {
         if ($hasReturn) {
             return;
+        }
+
+        $stmts = (array) $classMethod->stmts;
+        if ($stmts !== []) {
+            $lastStmtKey = array_key_last($stmts);
+            $lastNode = $stmts[$lastStmtKey];
+
+            if ($lastNode instanceof TryCatch && $this->tryCatchAnalyzer->isAlwaysTerminated($lastNode)) {
+                return;
+            }
         }
 
         $classMethod->stmts[] = new Return_(new LNumber(0));
