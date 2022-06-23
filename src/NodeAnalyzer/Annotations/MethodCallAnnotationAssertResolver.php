@@ -34,9 +34,9 @@ final class MethodCallAnnotationAssertResolver
 
         // based on https://github.com/symfony/symfony/blob/7d4b42cbeef195e0a01272b9c5f464f0afe52542/src/Symfony/Component/Validator/Mapping/GetterMetadata.php#L45-L47
         $possibleMethodNames = [
-            'get' . ucfirst($propertyName),
-            'is' . ucfirst($propertyName),
-            'has' . ucfirst($propertyName),
+            'get' . ucfirst((string) $propertyName),
+            'is' . ucfirst((string) $propertyName),
+            'has' . ucfirst((string) $propertyName),
         ];
 
         $secondArgValue = $args[1]->value;
