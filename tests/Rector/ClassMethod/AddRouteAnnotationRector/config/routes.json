@@ -44,5 +44,15 @@
         },
         "requirements": [],
         "condition": ""
+    },
+    "path_only": {
+        "name": "path_only",
+        "path": "\/path_only.png",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "defaults": {},
+        "requirements": [],
+        "condition": ""
     }
 }
