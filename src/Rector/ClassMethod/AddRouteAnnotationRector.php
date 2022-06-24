@@ -124,16 +124,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $defaults
+     * @param array<string, mixed> $items
      */
-    private function createDefaults(array $defaults): CurlyListNode
+    private function createCurlyListNodeFromIndexedItems(array $items): CurlyListNode
     {
-        return new CurlyListNode(
-            array_map(static fn (mixed $default): mixed => match (true) {
-                is_string($default) => sprintf('"%s"', $default),
-                default => $default,
-            }, $defaults)
-        );
+        $quotedItems = [];
+
+        foreach ($items as $name => $value) {
+            $quotedItems[sprintf('"%s"', $name)] = match (true) {
+                is_string($value) => sprintf('"%s"', $value),
+                default => $value,
+            };
+        }
+
+        return new CurlyListNode($quotedItems);
     }
 
     /**
@@ -158,7 +162,7 @@ CODE_SAMPLE
 
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
-            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
+            $items['defaults'] = $this->createCurlyListNodeFromIndexedItems($defaultsWithoutController);
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
@@ -178,7 +182,9 @@ CODE_SAMPLE
         }
 
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $items['requirements'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getRequirements());
+            $items['requirements'] = $this->createCurlyListNodeFromIndexedItems(
+                $symfonyRouteMetadata->getRequirements()
+            );
         }
 
         return $items;
