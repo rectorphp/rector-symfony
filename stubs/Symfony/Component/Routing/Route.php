@@ -14,8 +14,8 @@ class Route
      * @return string[]
      */
     public function getSchemes(): array
-    {}
-
+    {
+    }
 
     public function getCondition(): string
     {
@@ -41,6 +41,10 @@ class Route
     }
 
     public function getPath(): string
+    {
+    }
+
+    public function getOptions(): array
     {
     }
 }
