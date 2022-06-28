@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\NodeFactory\Annotations\ValueQuoteWrapper;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,7 +24,8 @@ final class AddRouteAnnotationRector extends AbstractRector
 {
     public function __construct(
         private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
-        private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory
+        private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
+        private readonly ValueQuoteWrapper $valueQuoteWrapper
     ) {
     }
 
@@ -124,61 +126,38 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $defaults
-     */
-    private function createDefaults(array $defaults): CurlyListNode
-    {
-        return new CurlyListNode(
-            array_map(static fn (mixed $default): mixed => match (true) {
-                is_string($default) => sprintf('"%s"', $default),
-                default => $default,
-            }, $defaults)
-        );
-    }
-
-    /**
-     * @param string[] $items
-     */
-    private function createCurlyListNodeFromItems(array $items): CurlyListNode
-    {
-        $quotedItems = array_map(static fn (string $item): string => sprintf('"%s"', $item), $items);
-
-        return new CurlyListNode($quotedItems);
-    }
-
-    /**
      * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string}
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
     {
         $items = [
-            'path' => sprintf('"%s"', $symfonyRouteMetadata->getPath()),
-            'name' => sprintf('"%s"', $symfonyRouteMetadata->getName()),
+            'path' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getPath()),
+            'name' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getName()),
         ];
 
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
-            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
+            $items['defaults'] = $this->valueQuoteWrapper->wrap($defaultsWithoutController);
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
-            $items['host'] = sprintf('"%s"', $symfonyRouteMetadata->getHost());
+            $items['host'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getHost());
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getSchemes());
+            $items['schemes'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getSchemes());
         }
 
         if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getMethods());
+            $items['methods'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getMethods());
         }
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
-            $items['condition'] = sprintf('"%s"', $symfonyRouteMetadata->getCondition());
+            $items['condition'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getCondition());
         }
 
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $items['requirements'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getRequirements());
+            $items['requirements'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getRequirements());
         }
 
         return $items;
