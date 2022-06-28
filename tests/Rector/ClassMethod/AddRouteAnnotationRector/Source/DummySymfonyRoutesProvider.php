@@ -37,7 +37,8 @@ final class DummySymfonyRoutesProvider implements SymfonyRoutesProviderInterface
                 host: $route['host'],
                 schemes: $route['schemes'],
                 methods: $route['methods'],
-                condition: $route['condition']
+                condition: $route['condition'],
+                options: $route['options'],
             ),
             $routesJson
         );

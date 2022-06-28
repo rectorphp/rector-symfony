@@ -49,7 +49,8 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
                 $route->getHost(),
                 $route->getSchemes(),
                 $route->getMethods(),
-                $route->getCondition()
+                $route->getCondition(),
+                $route->getOptions(),
             );
         }
 

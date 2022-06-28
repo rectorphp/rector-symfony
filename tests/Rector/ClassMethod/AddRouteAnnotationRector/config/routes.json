@@ -19,7 +19,13 @@
         "requirements": {
             "page": "\\d+"
         },
-        "condition": "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '\/firefox\/i'"
+        "condition": "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '\/firefox\/i'",
+        "options": {
+            "compiler_class": "App\\Routing\\Utf8RouteCompiler",
+            "expose": true,
+            "foo1": 5,
+            "foo2": "bar"
+        }
     },
     "minimal": {
         "name": "minimal",
@@ -31,7 +37,10 @@
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::minimalAction"
         },
         "requirements": [],
-        "condition": ""
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        }
     },
     "short": {
         "name": "short",
@@ -43,7 +52,10 @@
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::shortAction"
         },
         "requirements": [],
-        "condition": ""
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        }
     },
     "path_only": {
         "name": "path_only",
@@ -53,6 +65,9 @@
         "methods": [],
         "defaults": {},
         "requirements": [],
-        "condition": ""
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        }
     }
 }

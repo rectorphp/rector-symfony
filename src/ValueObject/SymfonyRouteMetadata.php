@@ -16,6 +16,7 @@ class SymfonyRouteMetadata
      * @param array<string, mixed> $requirements
      * @param string[] $schemes
      * @param string[] $methods
+     * @param array<string, mixed> $options
      */
     public function __construct(
         private readonly string $name,
@@ -25,7 +26,8 @@ class SymfonyRouteMetadata
         private readonly string $host,
         private readonly array $schemes,
         private readonly array $methods,
-        private readonly string $condition
+        private readonly string $condition,
+        private readonly array $options,
     ) {
         $this->controllerReference = $defaults['_controller'] ?? null;
     }
@@ -96,6 +98,29 @@ class SymfonyRouteMetadata
     public function getCondition(): string
     {
         return $this->condition;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptionsWithoutDefaultCompilerClass(): array
+    {
+        $options = $this->options;
+
+        $compilerClass = $options['compiler_class'] ?? null;
+        if ($compilerClass === 'Symfony\Component\Routing\RouteCompiler') {
+            unset($options['compiler_class']);
+        }
+
+        return $options;
     }
 
     /**
