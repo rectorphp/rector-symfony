@@ -33,13 +33,6 @@ return static function (RectorConfig $rectorConfig): void {
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
     $rectorConfig->rule(BinaryFileResponseCreateToNewInstanceRector::class);
 
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
-    $rectorConfig
-        ->ruleWithConfiguration(
-            RenameMethodRector::class,
-            [new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create')]
-        );
-
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
     $rectorConfig->rule(PropertyAccessorCreationBooleanToFlagsRector::class);
 
@@ -59,6 +52,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig
         ->ruleWithConfiguration(RenameMethodRector::class, [
+            # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
+            new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create'),
+
             new MethodCallRename(
                 'Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken',
                 'setProviderKey',
