@@ -143,11 +143,6 @@ return static function (RectorConfig $rectorConfig): void {
                 1,
                 new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')
             ),
-        ]);
-
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
-    $rectorConfig
-        ->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
             new AddParamTypeDeclaration(
                 'Symfony\Component\Notifier\Notification\ChatNotificationInterface',
                 'asChatMessage',
