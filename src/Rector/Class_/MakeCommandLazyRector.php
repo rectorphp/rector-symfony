@@ -110,12 +110,12 @@ CODE_SAMPLE
 
     private function resolveCommandName(Class_ $class): ?Node
     {
-        $commandName = $this->resolveCommandNameFromConstructor($class);
-        if (! $commandName instanceof Node) {
+        $node = $this->resolveCommandNameFromConstructor($class);
+        if (! $node instanceof Node) {
             return $this->resolveCommandNameFromSetName($class);
         }
 
-        return $commandName;
+        return $node;
     }
 
     private function resolveCommandNameFromConstructor(Class_ $class): ?Node
