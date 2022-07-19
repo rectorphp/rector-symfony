@@ -100,12 +100,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentVariable = $this->getParentOfGetStatusCode($secondArg->value);
-        if (! $parentVariable instanceof Expr) {
+        $expr = $this->getParentOfGetStatusCode($secondArg->value);
+        if (! $expr instanceof Expr) {
             return null;
         }
 
-        $getContentMethodCall = new MethodCall($parentVariable, 'getContent');
+        $getContentMethodCall = new MethodCall($expr, 'getContent');
 
         $node->args[2] = new Arg($getContentMethodCall);
 
