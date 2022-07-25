@@ -137,8 +137,8 @@ return static function (RectorConfig $rectorConfig): void {
             new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'warn', 'warning'),
             // property access
             new MethodCallRename(
-                'getPropertyAccessor',
                 'Symfony\Component\PropertyAccess\PropertyAccess',
+                'getPropertyAccessor',
                 'createPropertyAccessor'
             ),
             // translator
