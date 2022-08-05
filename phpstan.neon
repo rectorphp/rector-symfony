@@ -55,3 +55,7 @@ parameters:
         -
             message: '#Property PhpParser\\Node\\Expr\\Closure\:\:\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node\\Stmt>\|null#'
             path: src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
+
+        -
+            message: '#Parameter \#\d \$.+ of class .+ constructor expects class\-string, string given#'
+            path: config
