@@ -57,6 +57,7 @@ parameters:
             path: src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
 
         # this needs stubs for classes to detect string is a class-string
+        # @see https://github.com/rectorphp/rector-src/pull/2726
         -
             message: '#Parameter \#\d \$.+ of class .+ constructor expects class\-string, string given#'
             path: config
