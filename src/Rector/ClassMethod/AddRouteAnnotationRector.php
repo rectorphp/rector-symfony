@@ -97,7 +97,7 @@ final class SomeController extends AbstractController
     }
 }
 CODE_SAMPLE
-                ,
+                    ,
                     <<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

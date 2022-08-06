@@ -30,7 +30,7 @@ final class SwiftCreateMessageToNewEmailRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 $email = $this->swift->createMessage('message');
 CODE_SAMPLE
-,
+                    ,
                     <<<'CODE_SAMPLE'
 $email = new \Symfony\Component\Mime\Email();
 CODE_SAMPLE
