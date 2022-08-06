@@ -58,14 +58,16 @@ CODE_SAMPLE
             return null;
         }
 
-        $authorizationChecker = new ObjectType('Symfony\Component\Validator\Context\ExecutionContextInterface');
-        if (! $authorizationChecker->isSuperTypeOf($objectType)->yes()) {
+        $executionContext = new ObjectType('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        if (! $executionContext->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
 
         if (! $this->nodeNameResolver->isName($node->name, 'addViolationAt')) {
             return null;
         }
+
+        die('here');
 
         return $node;
     }
