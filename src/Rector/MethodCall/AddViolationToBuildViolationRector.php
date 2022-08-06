@@ -80,6 +80,9 @@ CODE_SAMPLE
         $node->args = [$message];
         $node = new MethodCall($node, 'atPath', [$path]);
         $node = $this->buildFluentWithParameters($node, $args);
+        $node = $this->buildFluentWithInvalidValue($node, $args);
+        //$node = $this->buildFluentWithPlural($node, $args);
+        //$node = $this->buildFluentWithCode($node, $args);
 
         $node = new MethodCall($node, 'addViolation');
         return $node;
@@ -99,6 +102,18 @@ CODE_SAMPLE
                     ]);
                 }
             }
+        }
+
+        return $methodCall;
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function buildFluentWithInvalidValue(MethodCall $methodCall, array $args): MethodCall
+    {
+        if (isset($args[3])) {
+            $methodCall = new MethodCall($methodCall, 'setInvalidValue', [new Arg($args[3]->value)]);
         }
 
         return $methodCall;
