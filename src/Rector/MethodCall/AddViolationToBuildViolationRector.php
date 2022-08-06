@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $authorizationChecker = new ObjectType('Symfony\Component\Validator\ExecutionContext');
+        $authorizationChecker = new ObjectType('Symfony\Component\Validator\Context\ExecutionContextInterface');
         if (! $authorizationChecker->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
