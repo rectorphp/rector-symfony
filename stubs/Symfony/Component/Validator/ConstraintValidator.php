@@ -11,7 +11,7 @@ if (class_exists('Symfony\Component\Validator\ConstraintValidator')) {
 abstract class ConstraintValidator
 {
     /**
-     * @var ExecutionContextInterface
+     * @var Context\ExecutionContextInterface
      */
     protected $context;
 }
