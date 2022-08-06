@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -76,7 +77,7 @@ CODE_SAMPLE
         $message = $args[1];
         $parameters = $args[2];
 
-        $node->name->name = 'buildViolation';
+        $node->name = new Identifier('buildViolation');
         $node->args = [$message];
         $node = new MethodCall($node, 'atPath', [$path]);
 
