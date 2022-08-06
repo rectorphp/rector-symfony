@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -67,7 +70,27 @@ CODE_SAMPLE
             return null;
         }
 
-        die('here');
+        $args = $node->getArgs();
+        $path = $args[0];
+        $message = $args[1];
+        $parameters = $args[2];
+
+        $node->name->name = 'buildViolation';
+        $node->args = [$message];
+        $node = new MethodCall($node, 'atPath', [$path]);
+
+        if ($parameters->value instanceof Array_) {
+            foreach ($parameters->value->items as $item) {
+                if ($item instanceof ArrayItem && $item->key instanceof Expr) {
+                    $node = new MethodCall(
+                        $node,
+                        'setParameter',
+                    );
+                }
+            }
+        }
+
+//        $node = new MethodCall($node, )
 
         return $node;
     }
