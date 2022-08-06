@@ -82,7 +82,7 @@ CODE_SAMPLE
         $node = $this->buildFluentWithParameters($node, $args);
         $node = $this->buildFluentWithInvalidValue($node, $args);
         $node = $this->buildFluentWithPlural($node, $args);
-        //$node = $this->buildFluentWithCode($node, $args);
+        $node = $this->buildFluentWithCode($node, $args);
 
         $node = new MethodCall($node, 'addViolation');
         return $node;
@@ -126,6 +126,18 @@ CODE_SAMPLE
     {
         if (isset($args[4])) {
             $methodCall = new MethodCall($methodCall, 'setPlural', [new Arg($args[4]->value)]);
+        }
+
+        return $methodCall;
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function buildFluentWithCode(MethodCall $methodCall, array $args): MethodCall
+    {
+        if (isset($args[5])) {
+            $methodCall = new MethodCall($methodCall, 'setCode', [new Arg($args[5]->value)]);
         }
 
         return $methodCall;
