@@ -22,10 +22,7 @@ class ProtocolClassValidator extends \Symfony\Component\Validator\ConstraintVali
 {
     public function validate($protocol, \Symfony\Component\Validator\Constraint $constraint)
     {
-        $this->context->buildViolation('The value {{ value }} is invalid.')
-            ->atPath('property')
-            ->setParameter('{{ value }}', $invalidValue)
-            ->addViolation();
+        $this->context->buildViolation('The value {{ value }} is invalid.')->atPath('property')->setParameter('{{ value }}', $invalidValue)->addViolation();
     }
 }
 

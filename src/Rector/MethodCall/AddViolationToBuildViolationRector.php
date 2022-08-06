@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -85,13 +86,13 @@ CODE_SAMPLE
                     $node = new MethodCall(
                         $node,
                         'setParameter',
+                        [new Arg($item->key), new Arg($item->value)]
                     );
                 }
             }
         }
 
-//        $node = new MethodCall($node, )
-
+        $node = new MethodCall($node, 'addViolation');
         return $node;
     }
 }
