@@ -83,11 +83,7 @@ CODE_SAMPLE
         if ($parameters->value instanceof Array_) {
             foreach ($parameters->value->items as $item) {
                 if ($item instanceof ArrayItem && $item->key instanceof Expr) {
-                    $node = new MethodCall(
-                        $node,
-                        'setParameter',
-                        [new Arg($item->key), new Arg($item->value)]
-                    );
+                    $node = new MethodCall($node, 'setParameter', [new Arg($item->key), new Arg($item->value)]);
                 }
             }
         }
