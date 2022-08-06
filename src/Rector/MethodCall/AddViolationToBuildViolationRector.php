@@ -75,21 +75,32 @@ CODE_SAMPLE
         $args = $node->getArgs();
         $path = $args[0];
         $message = $args[1];
-        $parameters = $args[2];
 
         $node->name = new Identifier('buildViolation');
         $node->args = [$message];
         $node = new MethodCall($node, 'atPath', [$path]);
+        $node = $this->buildFluentWithParameters($node, $args);
 
-        if ($parameters->value instanceof Array_) {
-            foreach ($parameters->value->items as $item) {
+        $node = new MethodCall($node, 'addViolation');
+        return $node;
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function buildFluentWithParameters(MethodCall $methodCall, array $args): MethodCall
+    {
+        if (isset($args[2]) && $args[2]->value instanceof Array_) {
+            foreach ($args[2]->value->items as $item) {
                 if ($item instanceof ArrayItem && $item->key instanceof Expr) {
-                    $node = new MethodCall($node, 'setParameter', [new Arg($item->key), new Arg($item->value)]);
+                    $methodCall = new MethodCall($methodCall, 'setParameter', [
+                        new Arg($item->key),
+                        new Arg($item->value),
+                    ]);
                 }
             }
         }
 
-        $node = new MethodCall($node, 'addViolation');
-        return $node;
+        return $methodCall;
     }
 }
