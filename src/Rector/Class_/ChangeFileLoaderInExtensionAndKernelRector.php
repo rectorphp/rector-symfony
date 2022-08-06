@@ -72,7 +72,7 @@ final class SomeExtension extends Extension
     }
 }
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -89,7 +89,7 @@ final class SomeExtension extends Extension
     }
 }
 CODE_SAMPLE
-    ,
+                ,
                 [
                     self::FROM => 'xml',
                     self::TO => 'yaml',

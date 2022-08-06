@@ -55,7 +55,7 @@ use Symfony\Component\Yaml\Yaml;
 
 $parsedFile = Yaml::parse('someFile.yml');
 CODE_SAMPLE
-            ,
+                ,
                 <<<'CODE_SAMPLE'
 use Symfony\Component\Yaml\Yaml;
 

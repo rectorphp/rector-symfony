@@ -55,7 +55,7 @@ final class SunshineCommand extends Command
     public static $defaultName = 'sunshine';
 }
 CODE_SAMPLE
-                , <<<'CODE_SAMPLE'
+                    , <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 

@@ -1,4 +1,4 @@
-# 66 Rules Overview
+# 67 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1330,6 +1330,25 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 +        $routes->add('admin_dashboard', '/admin')
 +            ->controller('App\Controller\AdminController::dashboard')
 +    }}
+```
+
+<br>
+
+## ServiceSetStringNameToClassNameRector
+
+Change `$service->set()` string names to class-type-based names, to allow `$container->get()` by types in Symfony 2.8
+
+- class: [`Rector\Symfony\Rector\MethodCall\ServiceSetStringNameToClassNameRector`](../src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+-    $services->set('some_name', App\SomeClass::class);
++    $services->set('app\\someclass', App\SomeClass::class);
+ };
 ```
 
 <br>

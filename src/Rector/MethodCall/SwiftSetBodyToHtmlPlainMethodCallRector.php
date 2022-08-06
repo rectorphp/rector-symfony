@@ -34,7 +34,7 @@ $message->setBody('...', 'text/html');
 $message->setBody('...', 'text/plain');
 $message->setBody('...');
 CODE_SAMPLE
-,
+                    ,
                     <<<'CODE_SAMPLE'
 $message = new Swift_Message();
 
