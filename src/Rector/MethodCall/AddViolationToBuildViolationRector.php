@@ -119,7 +119,7 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-        /**
+    /**
      * @param Arg[] $args
      */
     private function buildFluentWithPlural(MethodCall $methodCall, array $args): MethodCall
