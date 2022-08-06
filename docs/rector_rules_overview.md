@@ -1,4 +1,4 @@
-# 67 Rules Overview
+# 68 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -62,6 +62,24 @@ Collect routes from Symfony project router and add Route annotation to controlle
      {
      }
  }
+```
+
+<br>
+
+## AddViolationToBuildViolationRector
+
+Change `$context->addViolationAt` to `$context->buildViolation` on Validator ExecutionContext
+
+- class: [`Rector\Symfony\Rector\MethodCall\AddViolationToBuildViolationRector`](../src/Rector/MethodCall/AddViolationToBuildViolationRector.php)
+
+```diff
+-$context->addViolationAt('property', 'The value {{ value }} is invalid.', array(
+-    '{{ value }}' => $invalidValue,
+-));
++$context->buildViolation('The value {{ value }} is invalid.')
++    ->atPath('property')
++    ->setParameter('{{ value }}', $invalidValue)
++    ->addViolation();
 ```
 
 <br>
