@@ -6,6 +6,9 @@ namespace Rector\Symfony\Set;
 
 use Rector\Set\Contract\SetListInterface;
 
+/**
+ * @deprecated Use the constants of SymfonySetList instead.
+ */
 final class SymfonyLevelSetList implements SetListInterface
 {
     /**

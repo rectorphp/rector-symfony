@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -12,7 +11,7 @@ return static function (RectorConfig $rectorConfig): void {
             SymfonySetList::SYMFONY_52,
             SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES,
             SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
-            SymfonyLevelSetList::UP_TO_SYMFONY_51,
+            SymfonySetList::UP_TO_SYMFONY_51,
         ]
     );
 };
