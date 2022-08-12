@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
 
         $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextExpression === null) {
+        if (! $nextExpression instanceof Node) {
             return null;
         }
 
