@@ -19,5 +19,3 @@ class ChoiceType extends AbstractType
         return 'something';
     }
 }
-
-?>
