@@ -114,12 +114,12 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $classReflection->isSubclassOf('Symfony\Component\Form\AbstractType')) {
+        // refactoring only direct inheritors, so allow override of custom children
+        $parentClassReflection = $classReflection->getParentClass();
+        if (! $parentClassReflection instanceof ClassReflection) {
             return false;
         }
 
-        // refactoring only direct inheritors, so allow override of custom children
-        $parentClassReflection = $classReflection->getParentClass();
         if ($parentClassReflection->getName() !== 'Symfony\Component\Form\AbstractType') {
             return false;
         }
