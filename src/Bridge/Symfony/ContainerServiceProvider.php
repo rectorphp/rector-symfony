@@ -26,7 +26,7 @@ final class ContainerServiceProvider
         Assert::isInstanceOf($container, 'Symfony\Component\DependencyInjection\Container');
 
         if (! $container->has($serviceName)) {
-            $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', 'router');
+            $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
             throw new ShouldNotHappenException($errorMessage);
         }
 
