@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
@@ -124,6 +125,15 @@ CODE_SAMPLE
         }
 
         $nestedMethodCall = $secondArg->value;
+
+        // caller must be a response object
+        if (! $this->isObjectType(
+            $nestedMethodCall->var,
+            new ObjectType('Symfony\Component\HttpFoundation\Response')
+        )) {
+            return null;
+        }
+
         if (! $this->nodeNameResolver->isName($nestedMethodCall->name, 'getStatusCode')) {
             return null;
         }
@@ -133,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // handled by another methods
+        // handled by another method
         if ($statusCode === 200) {
             return null;
         }
