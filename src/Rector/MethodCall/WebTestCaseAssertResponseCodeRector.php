@@ -112,10 +112,7 @@ CODE_SAMPLE
         return $this->valueResolver->isValue($firstArg->value, 'Location');
     }
 
-    /**
-     * @param StaticCall|MethodCall $methodCall
-     */
-    private function processAssertResponseStatusCodeSame(Expr\CallLike $methodCall): ?Expr\CallLike
+    private function processAssertResponseStatusCodeSame(StaticCall|MethodCall $methodCall): MethodCall|StaticCall|null
     {
         if (! $this->isName($methodCall->name, 'assertSame')) {
             return null;
@@ -159,7 +156,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', [$methodCall->args[0]]);
     }
 
-    private function processAssertResponseRedirects(Expr\CallLike $methodCall): ?Expr\CallLike
+    private function processAssertResponseRedirects(MethodCall|StaticCall $methodCall): MethodCall|StaticCall|null
     {
         if (! $this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, ['assertSame'])) {
             return null;
