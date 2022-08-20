@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
@@ -136,29 +137,21 @@ CODE_SAMPLE
         $arrayItemNodes[] = new ArrayItemNode(
             $symfonyRouteMetadata->getPath(),
             'path',
-            Node\Scalar\String_::KIND_DOUBLE_QUOTED
+            String_::KIND_DOUBLE_QUOTED
         );
         $arrayItemNodes[] = new ArrayItemNode(
             $symfonyRouteMetadata->getName(),
             'name',
-            Node\Scalar\String_::KIND_DOUBLE_QUOTED
+            String_::KIND_DOUBLE_QUOTED
         );
-
-//        $items = [
-//            'path' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getPath()),
-//            'name' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getName()),
-//        ];
 
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
             $arrayItemNodes[] = new ArrayItemNode($defaultsWithoutController, 'defaults');
-            // $items['defaults'] = $this->valueQuoteWrapper->wrap($defaultsWithoutController);
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
             $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getHost(), 'host');
-
-//            $items['host'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getHost());
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
