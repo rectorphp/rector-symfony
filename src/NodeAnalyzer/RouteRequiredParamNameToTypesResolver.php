@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
@@ -77,16 +78,25 @@ final class RouteRequiredParamNameToTypesResolver
         $paramsToRegexes = [];
 
         $requirementsValue = $doctrineAnnotationTagValueNode->getValue('requirements');
-        if (! $requirementsValue instanceof CurlyListNode) {
+        if (! $requirementsValue instanceof ArrayItemNode) {
+            return [];
+        }
+        if (! $requirementsValue->value instanceof CurlyListNode) {
             return [];
         }
 
-        foreach ($requirementsValue->getValuesWithExplicitSilentAndWithoutQuotes() as $paramName => $paramRegex) {
-            if (! is_string($paramName)) {
+        foreach ($requirementsValue->value->getValuesWithSilentKey() as $nestedArrayItemNode) {
+            if (! is_string($nestedArrayItemNode->value)) {
                 continue;
             }
 
-            $paramsToRegexes[$paramName] = (string) $paramRegex;
+            if (! is_string($nestedArrayItemNode->key)) {
+                continue;
+            }
+
+            $paramName = $nestedArrayItemNode->key;
+            $paramRegex = $nestedArrayItemNode->value;
+            $paramsToRegexes[$paramName] = $paramRegex;
         }
 
         return $paramsToRegexes;

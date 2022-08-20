@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -83,14 +84,17 @@ final class ThisRenderFactory
         ?Return_ $return,
         DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
     ): ?Expr {
-        $vars = $templateDoctrineAnnotationTagValueNode->getValue('vars');
+        $vars = [];
 
-        if ($vars instanceof CurlyListNode) {
-            $vars = $vars->getValuesWithExplicitSilentAndWithoutQuotes();
+        $varsArrayItemNode = $templateDoctrineAnnotationTagValueNode->getValue('vars');
+        if ($varsArrayItemNode instanceof ArrayItemNode) {
+            if ($varsArrayItemNode->value instanceof CurlyListNode) {
+                $vars = $varsArrayItemNode->value->getValues();
+            }
         }
 
-        if (is_array($vars) && $vars !== []) {
-            return $this->createArrayFromVars($vars);
+        if ($vars !== []) {
+            return $this->createArrayFromArrayItemNodes($vars);
         }
 
         if ($return === null) {
@@ -114,13 +118,13 @@ final class ThisRenderFactory
     }
 
     /**
-     * @param string[] $vars
+     * @param ArrayItemNode[] $arrayItemNodes
      */
-    private function createArrayFromVars(array $vars): Array_
+    private function createArrayFromArrayItemNodes(array $arrayItemNodes): Array_
     {
         $arrayItems = [];
-        foreach ($vars as $var) {
-            $arrayItems[] = new ArrayItem(new Variable($var), new String_($var));
+        foreach ($arrayItemNodes as $arrayItemNode) {
+            $arrayItems[] = new ArrayItem(new Variable($arrayItemNode->value), new String_($arrayItemNode->value));
         }
 
         return new Array_($arrayItems);
@@ -139,13 +143,13 @@ final class ThisRenderFactory
     private function resolveTemplate(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): string|null
     {
         $templateParameter = $doctrineAnnotationTagValueNode->getValue('template');
-        if (is_string($templateParameter)) {
-            return $templateParameter;
+        if ($templateParameter instanceof ArrayItemNode && is_string($templateParameter->value)) {
+            return $templateParameter->value;
         }
 
         $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if (is_string($silentValue)) {
-            return $silentValue;
+        if ($silentValue instanceof ArrayItemNode && is_string($silentValue->value)) {
+            return $silentValue->value;
         }
 
         return null;

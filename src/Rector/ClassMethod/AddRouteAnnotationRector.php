@@ -7,7 +7,8 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -25,7 +26,7 @@ final class AddRouteAnnotationRector extends AbstractRector
     public function __construct(
         private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
-        private readonly ValueQuoteWrapper $valueQuoteWrapper
+        private readonly ArrayParser $arrayParser
     ) {
     }
 
@@ -126,46 +127,63 @@ CODE_SAMPLE
     }
 
     /**
-     * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string, options?: CurlyListNode}
+     * @return ArrayItemNode[]
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata): array
     {
-        $items = [
-            'path' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getPath()),
-            'name' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getName()),
-        ];
+        $arrayItemNodes = [];
+
+        $arrayItemNodes[] = new ArrayItemNode(
+            $symfonyRouteMetadata->getPath(),
+            'path',
+            Node\Scalar\String_::KIND_DOUBLE_QUOTED
+        );
+        $arrayItemNodes[] = new ArrayItemNode(
+            $symfonyRouteMetadata->getName(),
+            'name',
+            Node\Scalar\String_::KIND_DOUBLE_QUOTED
+        );
+
+//        $items = [
+//            'path' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getPath()),
+//            'name' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getName()),
+//        ];
 
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
-            $items['defaults'] = $this->valueQuoteWrapper->wrap($defaultsWithoutController);
+            $arrayItemNodes[] = new ArrayItemNode($defaultsWithoutController, 'defaults');
+            // $items['defaults'] = $this->valueQuoteWrapper->wrap($defaultsWithoutController);
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
-            $items['host'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getHost());
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getHost(), 'host');
+
+//            $items['host'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getHost());
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getSchemes());
+            $schemesArrayItemNodes = $this->arrayParser->createArrayFromValues($symfonyRouteMetadata->getSchemes());
+            $arrayItemNodes[] = new ArrayItemNode($schemesArrayItemNodes, 'schemes');
         }
 
         if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getMethods());
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getMethods(), 'methods');
         }
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
-            $items['condition'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getCondition());
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getCondition(), 'condition');
         }
 
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $items['requirements'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getRequirements());
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getRequirements(), 'requirements');
         }
 
         $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
         if ($optionsWithoutDefaultCompilerClass !== []) {
-            $items['options'] = $this->valueQuoteWrapper->wrap($optionsWithoutDefaultCompilerClass);
+            $arrayItemNodes[] = new ArrayItemNode($optionsWithoutDefaultCompilerClass, 'options');
         }
 
-        return $items;
+        return $arrayItemNodes;
     }
 
     private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): ?SymfonyRouteMetadata
