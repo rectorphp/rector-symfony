@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 
 final class StringValueQuoteWrapper
 {
+    public function __construct(
+        private ArrayParser $arrayParser
+    ) {
+    }
+
     /**
      * @return mixed|CurlyListNode|string
      */
@@ -40,6 +46,7 @@ final class StringValueQuoteWrapper
             }
         }
 
-        return new CurlyListNode($value);
+        $arrayItemNodes = $this->arrayParser->createArrayFromValues($value);
+        return new CurlyListNode($arrayItemNodes);
     }
 }
