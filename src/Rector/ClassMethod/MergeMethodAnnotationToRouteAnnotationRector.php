@@ -132,15 +132,13 @@ CODE_SAMPLE
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): array|null|CurlyListNode {
         $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
-        if ($methodsParameter instanceof ArrayItemNode) {
-            if ($methodsParameter->value instanceof CurlyListNode) {
-                return $methodsParameter->value;
-            }
+        if ($methodsParameter instanceof ArrayItemNode && $methodsParameter->value instanceof CurlyListNode) {
+            return $methodsParameter->value;
         }
 
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if ($silentValue instanceof ArrayItemNode) {
-            return $silentValue->value;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode) {
+            return $arrayItemNode->value;
         }
 
         return null;

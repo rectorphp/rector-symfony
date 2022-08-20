@@ -99,9 +99,9 @@ final class JMSDITypeResolver
             return $serviceNameParameter->value;
         }
 
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if ($silentValue instanceof ArrayItemNode && is_string($silentValue->value)) {
-            return $silentValue->value;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode && is_string($arrayItemNode->value)) {
+            return $arrayItemNode->value;
         }
 
         return $this->nodeNameResolver->getName($property);

@@ -87,10 +87,8 @@ final class ThisRenderFactory
         $vars = [];
 
         $varsArrayItemNode = $templateDoctrineAnnotationTagValueNode->getValue('vars');
-        if ($varsArrayItemNode instanceof ArrayItemNode) {
-            if ($varsArrayItemNode->value instanceof CurlyListNode) {
-                $vars = $varsArrayItemNode->value->getValues();
-            }
+        if ($varsArrayItemNode instanceof ArrayItemNode && $varsArrayItemNode->value instanceof CurlyListNode) {
+            $vars = $varsArrayItemNode->value->getValues();
         }
 
         if ($vars !== []) {
@@ -147,9 +145,9 @@ final class ThisRenderFactory
             return $templateParameter->value;
         }
 
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if ($silentValue instanceof ArrayItemNode && is_string($silentValue->value)) {
-            return $silentValue->value;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode && is_string($arrayItemNode->value)) {
+            return $arrayItemNode->value;
         }
 
         return null;
