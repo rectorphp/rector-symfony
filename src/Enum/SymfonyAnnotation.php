@@ -10,4 +10,9 @@ final class SymfonyAnnotation
      * @var string
      */
     public const ROUTE = 'Symfony\Component\Routing\Annotation\Route';
+
+    /**
+     * @var string
+     */
+    public const SENSIO_METHOD = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method';
 }
