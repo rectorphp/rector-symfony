@@ -2,11 +2,11 @@
 
 namespace Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\UniqueServiceType;
+use Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(UniqueServiceType::class);
+    $services->set('here_just_once_but_used_in_container_twice', SomeServiceType::class);
 };
