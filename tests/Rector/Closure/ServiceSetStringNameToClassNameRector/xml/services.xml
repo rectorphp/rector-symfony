@@ -3,5 +3,7 @@
     <services>
         <service id="first_use" class="Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType"></service>
         <service id="second_use" class="Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType"></service>
+
+        <service id="some_unique_name" class="Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\UniqueServiceType"></service>
     </services>
 </container>

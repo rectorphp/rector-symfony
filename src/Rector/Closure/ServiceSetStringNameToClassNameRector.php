@@ -8,10 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\DataProvider\DuplicatedTypeContainerAnalyzer;
+use Rector\Symfony\DataProvider\ServiceNameToTypeUniqueProvider;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-use Rector\Symfony\NodeFinder\ServicesSetMethodCallFinder;
-use Rector\Symfony\ValueObject\ServiceSetMethodCallMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,15 +20,14 @@ final class ServiceSetStringNameToClassNameRector extends AbstractRector
 {
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
-        private readonly ServicesSetMethodCallFinder $servicesSetMethodCallFinder,
-        private readonly DuplicatedTypeContainerAnalyzer $duplicatedTypeContainerAnalyzer,
+        private readonly ServiceNameToTypeUniqueProvider $serviceNameToTypeUniqueProvider
     ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change $service->set() string names to class-type-based names, to allow $container->get() by types in Symfony 2.8',
+            'Change $service->set() string names to class-type-based names, to allow $container->get() by types in Symfony 2.8. Provide XML config via $rectorConfig->symfonyContainerXml(...);',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -78,24 +75,30 @@ CODE_SAMPLE
             return null;
         }
 
-        $serviceSetMethodCallMetadatas = $this->findUniqueServiceSetMethodCallMetadatas($node);
+        $serviceNamesToType = $this->serviceNameToTypeUniqueProvider->provide();
 
-        foreach ($serviceSetMethodCallMetadatas as $serviceSetMethodCallMetadata) {
-            $serviceName = $serviceSetMethodCallMetadata->getServiceName();
+        $hasChanged = false;
 
-            // already FQN class renamed
-            if (str_contains($serviceName, '\\')) {
-                continue;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+            $serviceNamesToType,
+            &$hasChanged
+        ) {
+            if (! $node instanceof String_) {
+                return null;
             }
 
-            $setMethodCall = $serviceSetMethodCallMetadata->getMethodCall();
-            $args = $setMethodCall->getArgs();
+            foreach ($serviceNamesToType as $serviceName => $serviceType) {
+                if ($node->value !== $serviceName) {
+                    continue;
+                }
 
-            $firstArg = $args[0];
-            $firstArg->value = $this->createTypedServiceName($serviceSetMethodCallMetadata->getServiceType());
+                $hasChanged = true;
 
-            $hasChanged = true;
-        }
+                return $this->createTypedServiceName($serviceType);
+            }
+
+            return null;
+        });
 
         if ($hasChanged) {
             return $node;
@@ -109,35 +112,5 @@ CODE_SAMPLE
         $typedServiceName = strtolower($serviceType);
 
         return String_::fromString("'" . $typedServiceName . "'");
-    }
-
-    /**
-     * @return ServiceSetMethodCallMetadata[]
-     */
-    private function findUniqueServiceSetMethodCallMetadatas(Closure $closure): array
-    {
-        $serviceSetMethodCallMetadatas = $this->servicesSetMethodCallFinder->find($closure->stmts);
-        if ($serviceSetMethodCallMetadatas === []) {
-            return [];
-        }
-
-        $duplicatedTypes = $this->duplicatedTypeContainerAnalyzer->getDuplicatedTypes();
-
-        // collect all service types
-        return $this->filterOutDuplicatedTypes($serviceSetMethodCallMetadatas, $duplicatedTypes);
-    }
-
-    /**
-     * @param ServiceSetMethodCallMetadata[] $serviceSetMethodCallMetadatas
-     * @param string[] $duplicatedTypes
-     * @return ServiceSetMethodCallMetadata[]
-     */
-    private function filterOutDuplicatedTypes(array $serviceSetMethodCallMetadatas, array $duplicatedTypes): array
-    {
-        return array_filter(
-            $serviceSetMethodCallMetadatas,
-            fn (ServiceSetMethodCallMetadata $serviceSetMethodCallMetadata)
-            => ! in_array($serviceSetMethodCallMetadata->getServiceType(), $duplicatedTypes, true)
-        );
     }
 }

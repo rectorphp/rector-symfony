@@ -8,9 +8,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set('some_name', UniqueServiceType::class);
+    $services->set('some_unique_name', UniqueServiceType::class);
 
-    $services->alias('first_one', 'some_name');
+    $services->alias('first_one', 'some_unique_name');
 };
 
 ?>
