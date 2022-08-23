@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 final class StringValueQuoteWrapper
 {
     public function __construct(
-        private ArrayParser $arrayParser
+        private readonly ArrayParser $arrayParser
     ) {
     }
 

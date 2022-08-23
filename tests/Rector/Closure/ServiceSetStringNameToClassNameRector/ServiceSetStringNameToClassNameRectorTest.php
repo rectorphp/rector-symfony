@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\ServiceSetStringNameToClassNameRector;
+namespace Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
