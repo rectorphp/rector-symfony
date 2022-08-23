@@ -9,6 +9,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set('some_name', UniqueServiceType::class);
+
+    $services->alias('first_one', 'some_name');
 };
 
 ?>
@@ -24,6 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set('rector\symfony\tests\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype', UniqueServiceType::class);
+
+    $services->alias('first_one', 'rector\symfony\tests\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype');
 };
 
 ?>
