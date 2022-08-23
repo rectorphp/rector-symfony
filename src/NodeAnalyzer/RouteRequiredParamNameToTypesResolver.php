@@ -77,15 +77,15 @@ final class RouteRequiredParamNameToTypesResolver
     {
         $paramsToRegexes = [];
 
-        $requirementsValue = $doctrineAnnotationTagValueNode->getValue('requirements');
-        if (! $requirementsValue instanceof ArrayItemNode) {
+        $requirementsArrayItemNode = $doctrineAnnotationTagValueNode->getValue('requirements');
+        if (! $requirementsArrayItemNode instanceof ArrayItemNode) {
             return [];
         }
-        if (! $requirementsValue->value instanceof CurlyListNode) {
+        if (! $requirementsArrayItemNode->value instanceof CurlyListNode) {
             return [];
         }
 
-        foreach ($requirementsValue->value->getValuesWithSilentKey() as $nestedArrayItemNode) {
+        foreach ($requirementsArrayItemNode->value->getValuesWithSilentKey() as $nestedArrayItemNode) {
             if (! is_string($nestedArrayItemNode->value)) {
                 continue;
             }
