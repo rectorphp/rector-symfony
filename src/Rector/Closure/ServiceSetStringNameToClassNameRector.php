@@ -85,6 +85,7 @@ CODE_SAMPLE
             }
 
             foreach ($serviceSetMethodCallMetadatas as $serviceSetMethodCallMetadata) {
+                /** @var ServiceSetMethodCallMetadata $serviceSetMethodCallMetadata */
                 $serviceName = $serviceSetMethodCallMetadata->getServiceName();
 
                 // already FQN class renamed
@@ -96,7 +97,7 @@ CODE_SAMPLE
                 $args = $setMethodCall->getArgs();
 
                 $firstArg = $args[0];
-                $firstArg->value = $this->createTypedServiceName($serviceSetMethodCallMetadata);
+                $firstArg->value = $this->createTypedServiceName($serviceSetMethodCallMetadata->getServiceType());
 
                 $hasChanged = true;
             }
@@ -109,9 +110,8 @@ CODE_SAMPLE
         return null;
     }
 
-    private function createTypedServiceName(ServiceSetMethodCallMetadata $serviceSetMethodCallMetadata): String_
+    private function createTypedServiceName(string $serviceType): String_
     {
-        $serviceType = $serviceSetMethodCallMetadata->getServiceType();
         $typedServiceName = strtolower($serviceType);
 
         return String_::fromString("'" . $typedServiceName . "'");
