@@ -37,11 +37,12 @@ final class FormAddMethodCallAnalyzer
         }
 
         // just one argument
-        if (! isset($methodCall->getArgs()[1])) {
+        $args = $methodCall->getArgs();
+        if (! isset($args[1])) {
             return false;
         }
 
-        return $methodCall->getArgs()[1]
-            ->value !== null;
+        $firstArg = $args[1];
+        return $firstArg->value !== null;
     }
 }
