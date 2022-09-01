@@ -6,7 +6,6 @@ namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Php80Test extends AbstractRectorTestCase
 {
@@ -14,17 +13,14 @@ final class Php80Test extends AbstractRectorTestCase
      * @requires PHP 8.0
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $fileInfo): void
+    public function test(string $filePath): void
     {
-        $this->doTestFileInfo($fileInfo);
+        $this->doTestFile($filePath);
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp80');
+        return $this->yieldFilePathsFromDirectory(__DIR__ . '/FixturePhp80');
     }
 
     public function provideConfigFilePath(): string

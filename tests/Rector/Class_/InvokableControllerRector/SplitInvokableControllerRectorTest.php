@@ -6,14 +6,13 @@ namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector;
 
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class SplitInvokableControllerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $someClassFileInfo = new SmartFileInfo(__DIR__ . '/FixtureSplit/some_class.php.inc');
-        $this->doTestFileInfo($someClassFileInfo);
+        $someClassFile = __DIR__ . '/FixtureSplit/some_class.php.inc';
+        $this->doTestFile($someClassFile);
 
         // 1. here the file should be split into 2 new ones
 
