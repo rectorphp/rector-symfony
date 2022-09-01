@@ -13,17 +13,14 @@ final class WithContainerTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $fileInfo): void
+    public function test(string $filePath): void
     {
-        $this->doTestFileInfo($fileInfo);
+        $this->doTestFile($filePath);
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithContainer');
+        return $this->yieldFilePathsFromDirectory(__DIR__ . '/FixtureWithContainer');
     }
 
     public function provideConfigFilePath(): string

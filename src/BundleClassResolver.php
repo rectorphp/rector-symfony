@@ -62,8 +62,7 @@ final class BundleClassResolver
 
     private function resolveClassNameFromFilePath(string $filePath): ?string
     {
-        $fileInfo = new SmartFileInfo($filePath);
-        $nodes = $this->rectorParser->parseFile($fileInfo);
+        $nodes = $this->rectorParser->parseFile($filePath);
 
         $this->addFullyQualifiedNamesToNodes($nodes);
 
