@@ -6,7 +6,6 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\StringFormTypeToClassRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class WithContainerTest extends AbstractRectorTestCase
 {
