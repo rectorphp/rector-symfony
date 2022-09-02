@@ -19,7 +19,7 @@ final class WithContainerTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilePathsFromDirectory(__DIR__ . '/FixtureWithContainer');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithContainer');
     }
 
     public function provideConfigFilePath(): string
