@@ -20,7 +20,7 @@ return static function (RectorConfig $rectorConfig): void {
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        StringClassNameToClassConstantRector::class,
+        StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
 
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
@@ -34,6 +34,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
+        'Error',
+        'Exception',
         'Symfony\*',
         'Twig_*',
         'Twig*',
