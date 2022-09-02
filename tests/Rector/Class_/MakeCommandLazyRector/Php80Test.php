@@ -20,7 +20,7 @@ final class Php80Test extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilePathsFromDirectory(__DIR__ . '/FixturePhp80');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp80');
     }
 
     public function provideConfigFilePath(): string
