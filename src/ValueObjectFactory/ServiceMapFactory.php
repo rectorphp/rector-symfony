@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObjectFactory;
 
+use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
@@ -21,14 +22,9 @@ final class ServiceMapFactory
      */
     private const TAG = 'tag';
 
-    public function __construct(
-        private readonly SmartFileSystem $smartFileSystem
-    ) {
-    }
-
     public function createFromFileContent(string $configFilePath): ServiceMap
     {
-        $fileContents = $this->smartFileSystem->readFile($configFilePath);
+        $fileContents = FileSystem::read($configFilePath);
 
         // "@" intentionally
         $xml = @simplexml_load_string($fileContents);
