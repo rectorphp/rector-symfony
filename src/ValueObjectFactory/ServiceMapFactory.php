@@ -13,7 +13,6 @@ use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use SimpleXMLElement;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ServiceMapFactory
 {
