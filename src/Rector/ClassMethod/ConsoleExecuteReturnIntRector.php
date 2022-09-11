@@ -171,11 +171,11 @@ CODE_SAMPLE
         $lastKey = array_key_last((array) $classMethod->stmts);
 
         $return = new Return_(new LNumber(0));
-        if (is_int($lastKey) && $this->terminatedNodeAnalyzer->isAlwaysTerminated(
+        if ($lastKey !== null && (isset($classMethod->stmts[$lastKey]) && $this->terminatedNodeAnalyzer->isAlwaysTerminated(
             $classMethod,
             $classMethod->stmts[$lastKey],
             $return
-        )) {
+        ))) {
             return;
         }
 
