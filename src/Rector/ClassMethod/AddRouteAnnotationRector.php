@@ -152,7 +152,11 @@ CODE_SAMPLE
         }
 
         if ($symfonyRouteMetadata->getHost() !== '') {
-            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getHost(), 'host');
+            $arrayItemNodes[] = new ArrayItemNode(
+                $symfonyRouteMetadata->getHost(),
+                'host',
+                String_::KIND_DOUBLE_QUOTED
+            );
         }
 
         if ($symfonyRouteMetadata->getSchemes() !== []) {
@@ -208,12 +212,18 @@ CODE_SAMPLE
         $curlyListNode = new CurlyListNode($methodsArrayItems);
 
         foreach ($curlyListNode->values as $nestedMethodsArrayItem) {
-            if (! is_numeric($nestedMethodsArrayItem->value)) {
+            if (is_string($nestedMethodsArrayItem->value)) {
                 $nestedMethodsArrayItem->kindValueQuoted = String_::KIND_DOUBLE_QUOTED;
             }
 
             if (is_string($nestedMethodsArrayItem->key)) {
                 $nestedMethodsArrayItem->kindKeyQuoted = String_::KIND_DOUBLE_QUOTED;
+            }
+
+            if ($nestedMethodsArrayItem->value === null) {
+                $nestedMethodsArrayItem->value = 'null';
+            } elseif (is_bool($nestedMethodsArrayItem->value)) {
+                $nestedMethodsArrayItem->value = $nestedMethodsArrayItem->value ? 'true' : 'false';
             }
         }
 
