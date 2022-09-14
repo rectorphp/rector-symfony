@@ -1,7 +1,7 @@
 {
     "all": {
         "name": "all",
-        "path": "\/all\/{foo}\/{page}",
+        "path": "\/all\/{foo}\/{page}\/{optionalNull}",
         "host": "m.example.com",
         "schemes": [
             "http",
@@ -14,7 +14,8 @@
         "defaults": {
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
             "foo": "foo123",
-            "page": 1
+            "page": 1,
+            "optional": null
         },
         "requirements": {
             "page": "\\d+"
