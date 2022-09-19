@@ -14,7 +14,10 @@
         "defaults": {
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
             "foo": "foo123",
-            "page": 1
+            "page": 1,
+            "nullableDefault": null,
+            "booleanDefaultTrue": true,
+            "booleanDefaultFalse": false
         },
         "requirements": {
             "page": "\\d+"
@@ -68,6 +71,23 @@
         "condition": "",
         "options": {
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        }
+    },
+    "null_as_default": {
+        "name": "null_as_default",
+        "path": "\/null\/as\/default\/{nullableDefault}",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::nullAction",
+            "nullableDefault": null
+        },
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
+            "nullableOption": null
         }
     }
 }
