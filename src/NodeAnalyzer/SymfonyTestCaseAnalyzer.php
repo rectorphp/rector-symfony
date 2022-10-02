@@ -10,8 +10,9 @@ use Rector\Core\Reflection\ReflectionResolver;
 
 final class SymfonyTestCaseAnalyzer
 {
-    public function __construct(private readonly ReflectionResolver $reflectionResolver)
-    {
+    public function __construct(
+        private readonly ReflectionResolver $reflectionResolver
+    ) {
     }
 
     public function isInWebTestCase(Node $node): bool
