@@ -16,8 +16,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerAnalyzer
 {
-    public function __construct(private readonly ReflectionResolver $reflectionResolver)
-    {
+    public function __construct(
+        private readonly ReflectionResolver $reflectionResolver
+    ) {
     }
 
     public function isController(Expr $expr): bool

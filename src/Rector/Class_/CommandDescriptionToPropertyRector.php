@@ -23,8 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommandDescriptionToPropertyRector extends AbstractRector
 {
-    public function __construct(private readonly ExprAnalyzer $exprAnalyzer)
-    {
+    public function __construct(
+        private readonly ExprAnalyzer $exprAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
