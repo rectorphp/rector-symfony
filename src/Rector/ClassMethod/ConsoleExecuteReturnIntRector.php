@@ -30,8 +30,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
-    public function __construct(private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
-    {
+    public function __construct(
+        private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
