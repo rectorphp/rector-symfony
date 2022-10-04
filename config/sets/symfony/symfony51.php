@@ -16,6 +16,7 @@ use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
+use Rector\Symfony\Rector\Return_\CommandConstantReturnCodeRector;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
@@ -27,6 +28,9 @@ return static function (RectorConfig $rectorConfig): void {
     // see https://github.com/symfony/symfony/pull/36243
     $rectorConfig->rule(LogoutHandlerToLogoutEventSubscriberRector::class);
     $rectorConfig->rule(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
+
+    // see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
+    $rectorConfig->rule(CommandConstantReturnCodeRector::class);
     $rectorConfig
         ->ruleWithConfiguration(RenameClassRector::class, [
             'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
