@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Return_;
+namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -69,6 +69,8 @@ CODE_SAMPLE
     }
 
     /**
+     * @param ClassMethod $node
+     *
      * @param Return_ $node
      */
     public function refactor(Node $node): ?Node
@@ -86,25 +88,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->findReturnStatement($node->stmts);
+        foreach ($this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, [Return_::class]) as $returnNode) {
+            if (!$returnNode instanceof Return_) {
+                continue;
+            }
+            if (!$returnNode->expr instanceof LNumber) {
+                continue;
+            }
+            $returnNode->expr = $this->convertNumberToConstant($returnNode->expr);
+        }
 
         return $node;
-    }
-
-    private function findReturnStatement(array $stmts)
-    {
-        foreach ($stmts as $stmt) {
-            if (property_exists($stmt, 'stmts') && $stmt->stmts !== null) {
-                $this->findReturnStatement($stmt->stmts);
-            }
-            if (! $stmt instanceof Return_) {
-                continue;
-            }
-            if (! $stmt->expr instanceof LNumber) {
-                continue;
-            }
-            $stmt->expr = $this->convertNumberToConstant($stmt->expr);
-        }
     }
 
     private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber

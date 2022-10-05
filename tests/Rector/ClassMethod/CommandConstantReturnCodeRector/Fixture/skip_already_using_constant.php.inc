@@ -1,23 +1,16 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\ClassMethod\CommandConstantReturnCodeRector\Fixture;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SkipOtherFunctionCallReturnInt extends Command
+class SkipAlreadyUsingConstant extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->executeCommandStuff();
-
         return Command::SUCCESS;
-    }
-
-    private function executeCommandStuff(): int
-    {
-        return 0;
     }
 }
 
