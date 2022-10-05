@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
  *
- * @see \Rector\Symfony\Tests\Rector\Return_\CommandConstantReturnCodeRector\CommandConstantReturnCodeRectorTest
+ * @see \Rector\Symfony\Tests\Rector\ClassMethod\CommandConstantReturnCodeRector\CommandConstantReturnCodeRectorTest
  */
 final class CommandConstantReturnCodeRector extends AbstractRector
 {
@@ -71,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      *
-     * @param Return_ $node
+     * @return Node|null
      */
     public function refactor(Node $node): ?Node
     {
@@ -89,10 +89,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, [Return_::class]) as $returnNode) {
-            if (!$returnNode instanceof Return_) {
-                continue;
-            }
-            if (!$returnNode->expr instanceof LNumber) {
+            if (! $returnNode->expr instanceof LNumber) {
                 continue;
             }
             $returnNode->expr = $this->convertNumberToConstant($returnNode->expr);

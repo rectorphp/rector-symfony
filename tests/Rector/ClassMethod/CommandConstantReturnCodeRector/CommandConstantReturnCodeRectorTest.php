@@ -19,11 +19,11 @@ final class CommandConstantReturnCodeRectorTest extends AbstractRectorTestCase
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__.'/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__.'/config/configured_rule.php';
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

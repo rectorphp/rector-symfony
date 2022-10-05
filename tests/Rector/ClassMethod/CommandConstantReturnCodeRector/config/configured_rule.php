@@ -6,6 +6,6 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(__DIR__.'/../../../../../config/config.php');
+    $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
     $rectorConfig->rule(CommandConstantReturnCodeRector::class);
 };
