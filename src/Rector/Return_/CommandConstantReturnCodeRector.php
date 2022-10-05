@@ -7,12 +7,12 @@ namespace Rector\Symfony\Rector\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyCommandConstantMap;
-use Symfony\Component\Console\Command\Command;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CommandConstantReturnCodeRector extends AbstractRector
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver,
     ) {
     }
 
@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Return_::class];
+        return [ClassMethod::class];
     }
 
     /**
@@ -82,17 +82,29 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $classReflection->hasMethod('execute')) {
+        if (! $this->nodeNameResolver->isName($node, 'execute')) {
             return null;
         }
 
-        if (! $node->expr instanceof LNumber) {
-            return null;
-        }
-
-        $node->expr = $this->convertNumberToConstant($node->expr);
+        $this->findReturnStatement($node->stmts);
 
         return $node;
+    }
+
+    private function findReturnStatement(array $stmts)
+    {
+        foreach ($stmts as $stmt) {
+            if (property_exists($stmt, 'stmts') && $stmt->stmts !== null) {
+                $this->findReturnStatement($stmt->stmts);
+            }
+            if (! $stmt instanceof Return_) {
+                continue;
+            }
+            if (! $stmt->expr instanceof LNumber) {
+                continue;
+            }
+            $stmt->expr = $this->convertNumberToConstant($stmt->expr);
+        }
     }
 
     private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber
