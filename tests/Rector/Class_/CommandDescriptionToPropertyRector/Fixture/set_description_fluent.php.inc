@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\Fixture;
 
 class SetDescriptionFluent extends \Symfony\Component\Console\Command\Command
 {
@@ -16,7 +16,7 @@ class SetDescriptionFluent extends \Symfony\Component\Console\Command\Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\Fixture;
 
 class SetDescriptionFluent extends \Symfony\Component\Console\Command\Command
 {

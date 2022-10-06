@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\Fixture;
 
 class SetDescriptionFluentChain extends \Symfony\Component\Console\Command\Command
 {
@@ -17,7 +17,7 @@ class SetDescriptionFluentChain extends \Symfony\Component\Console\Command\Comma
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\Fixture;
 
 class SetDescriptionFluentChain extends \Symfony\Component\Console\Command\Command
 {
