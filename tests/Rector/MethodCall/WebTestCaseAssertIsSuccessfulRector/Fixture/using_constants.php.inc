@@ -22,6 +22,7 @@ final class UsingConstant extends WebTestCase
 namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 final class UsingConstant extends WebTestCase
 {
