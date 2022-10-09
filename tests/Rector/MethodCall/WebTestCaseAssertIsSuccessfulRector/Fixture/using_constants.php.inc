@@ -3,12 +3,15 @@
 namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
-final class SomeClass extends WebTestCase
+final class UsingConstant extends WebTestCase
 {
     public function test()
     {
-        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        $client = $this->client;
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 }
 
@@ -19,11 +22,14 @@ final class SomeClass extends WebTestCase
 namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
-final class SomeClass extends WebTestCase
+final class UsingConstant extends WebTestCase
 {
     public function test()
     {
+        $client = $this->client;
+        $response = $client->getResponse();
         $this->assertResponseIsSuccessful();
     }
 }
