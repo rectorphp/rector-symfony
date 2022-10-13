@@ -80,11 +80,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->controllerAnalyzer->isInsideController($node)) {
+        if (! $node->isPublic()) {
             return null;
         }
 
-        if (! $node->isPublic()) {
+        if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
 
