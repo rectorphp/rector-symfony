@@ -61,9 +61,7 @@ return static function (RectorConfig $rectorConfig): void {
             ),
         ]);
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameMethodRector::class, [
-
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
             new MethodCallRename(
                 'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
                 'registerNamespaces',
@@ -101,8 +99,8 @@ return static function (RectorConfig $rectorConfig): void {
             ),
             // form
             new MethodCallRename('Symfony\Component\Form\AbstractType', 'getName', 'getBlockPrefix'),
-            new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions'),
             new MethodCallRename('Symfony\Component\Form\FormTypeInterface', 'getName', 'getBlockPrefix'),
+
             new MethodCallRename(
                 'Symfony\Component\Form\FormTypeInterface',
                 'setDefaultOptions',
