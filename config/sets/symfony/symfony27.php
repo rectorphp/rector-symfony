@@ -13,7 +13,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // @see https://symfony.com/blog/new-in-symfony-2-7-form-and-validator-updates#deprecated-setdefaultoptions-in-favor-of-configureoptions
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions')
+        new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions'),
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
