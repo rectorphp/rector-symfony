@@ -42,6 +42,7 @@ CODE_SAMPLE
 
                 ,
                 <<<'CODE_SAMPLE'
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class SomeController extends Controller
