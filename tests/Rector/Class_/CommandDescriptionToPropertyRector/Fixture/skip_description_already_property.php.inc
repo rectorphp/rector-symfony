@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\Fixture;
 
 final class SkipDescriptionAlreadyProperty extends Symfony\Component\Console\Command\Command
 {

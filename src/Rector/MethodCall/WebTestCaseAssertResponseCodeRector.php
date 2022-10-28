@@ -139,7 +139,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $statusCode = $this->valueResolver->getValue($args[0]->value);
+        $statusCode = $this->valueResolver->getValue($args[0]->value, true);
         if ($statusCode === null) {
             return null;
         }

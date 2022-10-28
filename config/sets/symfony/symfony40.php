@@ -24,9 +24,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->rule(ProcessBuilderGetProcessRector::class);
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameClassRector::class, [
-            'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
-            'Symfony\Component\Process\ProcessBuilder' => 'Symfony\Component\Process\Process',
-        ]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
+        'Symfony\Component\Process\ProcessBuilder' => 'Symfony\Component\Process\Process',
+    ]);
 };
