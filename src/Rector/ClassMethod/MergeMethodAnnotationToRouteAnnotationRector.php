@@ -51,14 +51,6 @@ class DefaultController extends Controller
     public function show($id)
     {
     }
-
-    /**
-     * @Route("/post/{id}")
-     * @Method("POST")
-     */
-    public function post($id)
-    {
-    }
 }
 CODE_SAMPLE
                     ,
@@ -71,13 +63,6 @@ class DefaultController extends Controller
      * @Route("/show/{id}", methods={"GET","HEAD"})
      */
     public function show($id)
-    {
-    }
-
-    /**
-     * @Route("/post/{id}", methods={"POST"})
-     */
-    public function post($id)
     {
     }
 }
