@@ -5,13 +5,14 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAn
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController
+class SingleMethodController
 {
+
     /**
-     * @Route("/show/{id}")
-     * @Method({"GET", "HEAD"})
+     * @Route("/post/{id}")
+     * @Method("POST")
      */
-    public function show($id)
+    public function post($id)
     {
     }
 }
@@ -25,12 +26,13 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAn
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController
+class SingleMethodController
 {
+
     /**
-     * @Route("/show/{id}", methods={"GET", "HEAD"})
+     * @Route("/post/{id}", methods={"POST"})
      */
-    public function show($id)
+    public function post($id)
     {
     }
 }
