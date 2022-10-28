@@ -14,6 +14,14 @@ class DefaultController
     public function show($id)
     {
     }
+
+    /**
+     * @Route("/post/{id}")
+     * @Method("POST")
+     */
+    public function post($id)
+    {
+    }
 }
 
 ?>
@@ -31,6 +39,13 @@ class DefaultController
      * @Route("/show/{id}", methods={"GET", "HEAD"})
      */
     public function show($id)
+    {
+    }
+
+    /**
+     * @Route("/post/{id}", methods={"POST"})
+     */
+    public function post($id)
     {
     }
 }
