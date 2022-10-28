@@ -55,7 +55,7 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
         'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
     ]);
-    
+
     // see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
     $rectorConfig->rule(CommandConstantReturnCodeRector::class);
 
