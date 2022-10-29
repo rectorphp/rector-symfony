@@ -15,6 +15,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
+use Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
@@ -54,6 +55,9 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
         'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
     ]);
+
+    // see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
+    $rectorConfig->rule(CommandConstantReturnCodeRector::class);
 
     // https://github.com/symfony/symfony/pull/35308
     $rectorConfig->ruleWithConfiguration(
