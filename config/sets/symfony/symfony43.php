@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\MethodName;
