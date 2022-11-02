@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
-
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\Config\RectorConfig;
