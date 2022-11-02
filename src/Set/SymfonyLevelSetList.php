@@ -107,4 +107,9 @@ final class SymfonyLevelSetList implements SetListInterface
      * @var string
      */
     final public const UP_TO_SYMFONY_60 = __DIR__ . '/../../config/sets/symfony/level/up-to-symfony-60.php';
+
+    /**
+     * @var string
+     */
+    final public const UP_TO_SYMFONY_62 = __DIR__ . '/../../config/sets/symfony/level/up-to-symfony-62.php';
 }
