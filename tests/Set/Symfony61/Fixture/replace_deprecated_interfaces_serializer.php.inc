@@ -21,7 +21,7 @@ class ReplaceDepricatedInterfacesSerializer implements DecoderInterface, Denorma
 
 namespace Rector\Symfony\Tests\Set\Symfony61\Fixture;
 
-
+use Symfony\Component\Serializer\Normalizer\ContextAwareDecoderInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareEncoderInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
