@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector;
+use Rector\Symfony\Rector\Class_\CommandPropertyToAttributeRector;
 
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.1.md
 
 return static function (RectorConfig $rectorConfig): void {
-    // @see https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
-    $rectorConfig->rule(CommandDescriptionToPropertyRector::class);
+    $rectorConfig->rule(CommandPropertyToAttributeRector::class);
 
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
