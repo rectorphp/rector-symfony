@@ -15,9 +15,7 @@ return static function (RectorConfig $rectorConfig): void {
         RenameClassRector::class,
         [
             // @see https://github.com/symfony/symfony/pull/43982
-            'Symfony\Component\Serializer\Normalizer\ContextAwareDecoderInterface' => 'Symfony\Component\Serializer\Normalizer\DecoderInterface',
             'Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface' => 'Symfony\Component\Serializer\Normalizer\DenormalizerInterface',
-            'Symfony\Component\Serializer\Normalizer\ContextAwareEncoderInterface' => 'Symfony\Component\Serializer\Normalizer\EncoderInterface',
             'Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
         ],
     );
