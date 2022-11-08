@@ -145,6 +145,17 @@ CODE_SAMPLE
             String_::KIND_DOUBLE_QUOTED
         );
 
+        if ($symfonyRouteMetadata->getRequirements() !== []) {
+            $requriementsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
+            $arrayItemNodes[] = new ArrayItemNode($requriementsCurlyList, 'requirements');
+        }
+
+        $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
+        if ($optionsWithoutDefaultCompilerClass !== []) {
+            $optionsCurlyQuoted = $this->createCurlyQuoted($optionsWithoutDefaultCompilerClass);
+            $arrayItemNodes[] = new ArrayItemNode($optionsCurlyQuoted, 'options');
+        }
+
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
             $defaultsWithoutControllerCurlyList = $this->createCurlyQuoted($defaultsWithoutController);
@@ -159,14 +170,14 @@ CODE_SAMPLE
             );
         }
 
-        if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $schemesArrayItemNodes = $this->createCurlyQuoted($symfonyRouteMetadata->getSchemes());
-            $arrayItemNodes[] = new ArrayItemNode($schemesArrayItemNodes, 'schemes');
-        }
-
         if ($symfonyRouteMetadata->getMethods() !== []) {
             $methodsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getMethods());
             $arrayItemNodes[] = new ArrayItemNode($methodsCurlyList, 'methods');
+        }
+
+        if ($symfonyRouteMetadata->getSchemes() !== []) {
+            $schemesArrayItemNodes = $this->createCurlyQuoted($symfonyRouteMetadata->getSchemes());
+            $arrayItemNodes[] = new ArrayItemNode($schemesArrayItemNodes, 'schemes');
         }
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
@@ -175,17 +186,6 @@ CODE_SAMPLE
                 'condition',
                 String_::KIND_DOUBLE_QUOTED
             );
-        }
-
-        if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $requriementsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
-            $arrayItemNodes[] = new ArrayItemNode($requriementsCurlyList, 'requirements');
-        }
-
-        $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
-        if ($optionsWithoutDefaultCompilerClass !== []) {
-            $optionsCurlyQuoted = $this->createCurlyQuoted($optionsWithoutDefaultCompilerClass);
-            $arrayItemNodes[] = new ArrayItemNode($optionsCurlyQuoted, 'options');
         }
 
         return $arrayItemNodes;
