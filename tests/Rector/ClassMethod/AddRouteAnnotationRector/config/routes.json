@@ -89,5 +89,35 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler",
             "nullableOption": null
         }
+    },
+    "all_duplicate": {
+        "name": "duplicate_all",
+        "path": "/duplicate/{foo}/{page}",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        },
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
+        }
+    },
+    "duplicate_all_short": {
+        "name": "duplicate_all_short",
+        "path": "\/duplicate\/{foo}",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        },
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
+        }
     }
 }

@@ -62,23 +62,23 @@ final class AddRouteAnnotationRector extends AbstractRector
         $controllerReference = $this->resolveControllerReference($class, $node);
 
         // is there a route for this annotation?
-        $symfonyRouteMetadata = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
-
-        if (! $symfonyRouteMetadata instanceof SymfonyRouteMetadata) {
+        $symfonyRoutes = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
+        if ($symfonyRoutes === []) {
             return null;
         }
 
+        // skip if already has an annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
-
         if ($doctrineAnnotationTagValueNode !== null) {
             return null;
         }
 
-        $items = $this->createRouteItems($symfonyRouteMetadata);
-        $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
-
-        $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
+        foreach ($symfonyRoutes as $symfonyRoute) {
+            $items = $this->createRouteItems($symfonyRoute);
+            $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
+            $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
+        }
 
         return $node;
     }
@@ -191,15 +191,20 @@ CODE_SAMPLE
         return $arrayItemNodes;
     }
 
-    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): ?SymfonyRouteMetadata
+    /**
+     * @return SymfonyRouteMetadata[]
+     */
+    private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): array
     {
+        $matches = [];
+
         foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadata) {
             if ($symfonyRouteMetadata->getControllerReference() === $controllerReference) {
-                return $symfonyRouteMetadata;
+                $matches[] = $symfonyRouteMetadata;
             }
         }
 
-        return null;
+        return $matches;
     }
 
     /**
