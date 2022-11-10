@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AppController extends Controller
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="/null/as/default/{nullableDefault}", name="null_as_default", defaults={"nullableDefault" = null}, options={"nullableOption" = null})
+     * @\Symfony\Component\Routing\Annotation\Route(path="/null/as/default/{nullableDefault}", name="null_as_default", options={"nullableOption" = null}, defaults={"nullableDefault" = null})
      */
     public function nullAction()
     {
