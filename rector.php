@@ -34,6 +34,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
+        'Error',
+        'Exception',
         'Symfony\*',
         'Twig_*',
         'Twig*',

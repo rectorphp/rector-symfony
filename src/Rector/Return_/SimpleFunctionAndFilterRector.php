@@ -36,8 +36,9 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         'Twig_Filter_Method' => 'Twig_SimpleFilter',
     ];
 
-    public function __construct(private readonly ReflectionResolver $reflectionResolver)
-    {
+    public function __construct(
+        private readonly ReflectionResolver $reflectionResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

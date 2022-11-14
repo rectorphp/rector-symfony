@@ -13,7 +13,6 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @todo re-use in https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
@@ -33,7 +32,7 @@ final class NeighbourClassLikePrinter
     public function printClassLike(
         ClassLike $classLike,
         Namespace_ | FileWithoutNamespace $mainNode,
-        SmartFileInfo $smartFileInfo,
+        string $filePath,
         ?File $file = null
     ): void {
         $declares = $this->resolveDeclares($mainNode);
@@ -46,7 +45,7 @@ final class NeighbourClassLikePrinter
             $nodesToPrint = array_merge($declares, [$mainNode]);
         }
 
-        $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
+        $fileDestination = $this->createClassLikeFileDestination($classLike, $filePath);
 
         $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
 
@@ -54,9 +53,9 @@ final class NeighbourClassLikePrinter
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
 
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
+    private function createClassLikeFileDestination(ClassLike $classLike, string $filePath): string
     {
-        $currentDirectory = dirname($smartFileInfo->getRealPath());
+        $currentDirectory = dirname($filePath);
         return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
     }
 

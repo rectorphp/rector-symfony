@@ -134,14 +134,13 @@ CODE_SAMPLE
             $this->neighbourClassLikePrinter->printClassLike(
                 $invokableControllerClass,
                 $parentNamespace,
-                $this->file->getSmartFileInfo(),
+                $this->file->getFilePath(),
                 $this->file
             );
         }
 
         // remove original file
-        $smartFileInfo = $this->file->getSmartFileInfo();
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->removeFile($this->file->getFilePath());
 
         return null;
     }

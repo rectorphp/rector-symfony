@@ -7,6 +7,8 @@ namespace Rector\Symfony\ValueObject\ConstantMap;
 final class SymfonyResponseConstantMap
 {
     /**
+     * @see https://github.com/symfony/symfony/blob/8e8207bb72d7f2cb8be355994ad2fcfa97c00f74/src/Symfony/Component/HttpFoundation/Response.php#L24-L86
+     *
      * @var array<int, string>
      */
     public const CODE_TO_CONST = [

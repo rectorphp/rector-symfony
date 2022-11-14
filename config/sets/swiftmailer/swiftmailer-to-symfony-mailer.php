@@ -10,15 +10,14 @@ use Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(SwiftCreateMessageToNewEmailRector::class);
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameClassRector::class, [
-            'Swift_Mailer' => 'Symfony\Component\Mailer\MailerInterface',
-            'Swift_Message' => 'Symfony\Component\Mime\Email',
-            // message
-            'Swift_Mime_SimpleMessage' => 'Symfony\Component\Mime\RawMessage',
-            // transport
-            'Swift_SmtpTransport' => 'Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport',
-            'Swift_FailoverTransport' => 'Symfony\Component\Mailer\Transport\FailoverTransport',
-            'Swift_SendmailTransport' => 'Symfony\Component\Mailer\Transport\SendmailTransport',
-        ]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Swift_Mailer' => 'Symfony\Component\Mailer\MailerInterface',
+        'Swift_Message' => 'Symfony\Component\Mime\Email',
+        // message
+        'Swift_Mime_SimpleMessage' => 'Symfony\Component\Mime\RawMessage',
+        // transport
+        'Swift_SmtpTransport' => 'Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport',
+        'Swift_FailoverTransport' => 'Symfony\Component\Mailer\Transport\FailoverTransport',
+        'Swift_SendmailTransport' => 'Symfony\Component\Mailer\Transport\SendmailTransport',
+    ]);
 };

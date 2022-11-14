@@ -7,21 +7,17 @@ namespace Rector\Symfony\Tests\Set\TwigExtensionNamespace;
 use Iterator;
 use Rector\Symfony\Set\TwigSetList;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TwigExtensionNamespaceTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $fileInfo): void
+    public function test(string $filePath): void
     {
-        $this->doTestFileInfo($fileInfo);
+        $this->doTestFile($filePath);
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');

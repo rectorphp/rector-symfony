@@ -9,6 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -93,14 +94,14 @@ final class JMSDITypeResolver
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
         Property $property
     ): string {
-        $serviceNameParameter = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('serviceName');
-        if (is_string($serviceNameParameter)) {
-            return $serviceNameParameter;
+        $serviceNameParameter = $doctrineAnnotationTagValueNode->getValue('serviceName');
+        if ($serviceNameParameter instanceof ArrayItemNode && is_string($serviceNameParameter->value)) {
+            return $serviceNameParameter->value;
         }
 
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if (is_string($silentValue)) {
-            return $silentValue;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode && is_string($arrayItemNode->value)) {
+            return $arrayItemNode->value;
         }
 
         return $this->nodeNameResolver->getName($property);

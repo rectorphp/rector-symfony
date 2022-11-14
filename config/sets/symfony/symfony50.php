@@ -12,14 +12,12 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony50-types.php');
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameClassRector::class, [
-            'Symfony\Component\Debug\Debug' => 'Symfony\Component\ErrorHandler\Debug',
-        ]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Symfony\Component\Debug\Debug' => 'Symfony\Component\ErrorHandler\Debug',
+    ]);
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameMethodRector::class, [
-            new MethodCallRename('Symfony\Component\Console\Application', 'renderException', 'renderThrowable'),
-            new MethodCallRename('Symfony\Component\Console\Application', 'doRenderException', 'doRenderThrowable'),
-        ]);
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
+        new MethodCallRename('Symfony\Component\Console\Application', 'renderException', 'renderThrowable'),
+        new MethodCallRename('Symfony\Component\Console\Application', 'doRenderException', 'doRenderThrowable'),
+    ]);
 };

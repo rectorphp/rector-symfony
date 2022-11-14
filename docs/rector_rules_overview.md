@@ -1,4 +1,4 @@
-# 68 Rules Overview
+# 72 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -246,6 +246,51 @@ Change type in CollectionType from alias string to class reference
 +            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
          ]);
      }
+ }
+```
+
+<br>
+
+## CommandConstantReturnCodeRector
+
+Changes int return from execute to use Symfony Command constants.
+
+-
+class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../src/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
+
+```diff
+ use Symfony\Component\Console\Command\Command;
+
+ class SomeCommand extends Command
+ {
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+-         return 0;
++         return Command::SUCCESS;
+     }
+ }
+```
+
+<br>
+
+## CommandDescriptionToPropertyRector
+
+Moves Command description setter to defaultDescription property
+
+-
+class: [`Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector`](../src/Rector/Class_/CommandDescriptionToPropertyRector.php)
+
+```diff
+ use Symfony\Component\Console\Command\Command;
+
+ final class SunshineCommand extends Command
+ {
+    protected static $defaultName = 'sunshine';
++   protected static $defaultDescription = 'sunshine description';
+    public function configure()
+    {
+-        $this->setDescription('sunshine description');
+    }
  }
 ```
 
@@ -714,6 +759,27 @@ Turns properties with `@inject` to private properties and constructor injection
 
 <br>
 
+## KernelTestCaseContainerPropertyDeprecationRector
+
+Simplify use of assertions in WebTestCase
+
+- class: [`Rector\Symfony\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector`](../src/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+ class SomeTest extends KernelTestCase
+ {
+     protected function setUp(): void
+     {
+-        $container = self::$container;
++        $container = self::getContainer();
+     }
+ }
+```
+
+<br>
+
 ## LiteralGetToRequestClassConstantRector
 
 Replace "GET" string by Symfony Request object class constants
@@ -923,6 +989,23 @@ Make event object a first argument of `dispatch()` method, event name as second
 +        $eventDispatcher->dispatch(new Event(), 'event_name');
      }
  }
+```
+
+<br>
+
+## MaxLengthSymfonyFormOptionToAttrRector
+
+Change form option "max_length" to a form "attr" > "max_length"
+
+- class: [`Rector\Symfony\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector`](../src/Rector/MethodCall/MaxLengthSymfonyFormOptionToAttrRector.php)
+
+```diff
+ $formBuilder = new Symfony\Component\Form\FormBuilder();
+
+ $form = $formBuilder->create('name', 'text', [
+-    'max_length' => 123,
++    'attr' => ['maxlength' => 123],
+ ]);
 ```
 
 <br>
@@ -1174,6 +1257,28 @@ Remove service from Sensio `@Route`
 
 <br>
 
+## RemoveUnusedRequestParamRector
+
+Remove unused $request parameter from controller action
+
+- class: [`Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector`](../src/Rector/ClassMethod/RemoveUnusedRequestParamRector.php)
+
+```diff
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+final class SomeController extends Controller
+{
+-    public function run(Request $request, int $id)
++    public function run(int $id)
+    {
+        echo $id;
+    }
+ }
+```
+
+<br>
+
 ## RenderMethodParamToTypeDeclarationRector
 
 Move `@param` docs on `render()` method in Symfony controller to strict type declaration
@@ -1354,9 +1459,9 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 
 ## ServiceSetStringNameToClassNameRector
 
-Change `$service->set()` string names to class-type-based names, to allow `$container->get()` by types in Symfony 2.8
+Change `$service->set()` string names to class-type-based names, to allow `$container->get()` by types in Symfony 2.8. Provide XML config via `$rectorConfig->symfonyContainerXml(...);`
 
-- class: [`Rector\Symfony\Rector\MethodCall\ServiceSetStringNameToClassNameRector`](../src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php)
+- class: [`Rector\Symfony\Rector\Closure\ServiceSetStringNameToClassNameRector`](../src/Rector/Closure/ServiceSetStringNameToClassNameRector.php)
 
 ```diff
  use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

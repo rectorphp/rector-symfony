@@ -10,5 +10,7 @@ if (class_exists('Symfony\Component\Form\FormBuilder')) {
 
 class FormBuilder implements FormBuilderInterface
 {
-
+    public function add()
+    {
+    }
 }

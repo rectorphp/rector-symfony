@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -94,56 +96,54 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
-        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method'
-        );
-
+        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::SENSIO_METHOD);
         if (! $sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
         $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
-
         if (! $symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
 
-        $methods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
-        if ($methods === null) {
+        $sensioMethods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
+        if ($sensioMethods === null) {
             return null;
         }
 
-        $symfonyDoctrineAnnotationTagValueNode->changeValue('methods', $methods);
+        if (is_string($sensioMethods)) {
+            $sensioMethods = new CurlyListNode([new ArrayItemNode($sensioMethods, null, String_::KIND_DOUBLE_QUOTED)]);
+        }
+
+        $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
+
+        // value is already filled, do not enter anything
+        if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+
+        $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
 
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
-
         $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
 
         return $node;
     }
 
     /**
-     * @return string[]|null|CurlyListNode
+     * @return string|string[]|null|CurlyListNode
      */
     private function resolveMethods(
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
-    ): array|null|CurlyListNode {
+    ): string|array|null|CurlyListNode {
         $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
-        if (is_array($methodsParameter)) {
-            return $methodsParameter;
+        if ($methodsParameter instanceof ArrayItemNode && $methodsParameter->value instanceof CurlyListNode) {
+            return $methodsParameter->value;
         }
 
-        if ($methodsParameter instanceof CurlyListNode) {
-            return $methodsParameter;
-        }
-
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if (is_array($silentValue)) {
-            return $silentValue;
-        }
-
-        if ($silentValue instanceof CurlyListNode) {
-            return $silentValue;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode) {
+            return $arrayItemNode->value;
         }
 
         return null;

@@ -165,14 +165,12 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_NodeInterface' => 'Twig\Node\Node',
     ];
 
-    $rectorConfig
-        ->ruleWithConfiguration(RenameClassRector::class, $renamedClasses);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, $renamedClasses);
 
     $oldClasses = array_keys($renamedClasses);
 
-    $rectorConfig
-        ->ruleWithConfiguration(
-            PseudoNamespaceToNamespaceRector::class,
-            [new PseudoNamespaceToNamespace('Twig_', $oldClasses)]
-        );
+    $rectorConfig->ruleWithConfiguration(
+        PseudoNamespaceToNamespaceRector::class,
+        [new PseudoNamespaceToNamespace('Twig_', $oldClasses)]
+    );
 };

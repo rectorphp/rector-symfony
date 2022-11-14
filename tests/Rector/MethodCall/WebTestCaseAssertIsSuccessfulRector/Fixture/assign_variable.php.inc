@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -18,7 +18,7 @@ final class AssignVariable extends WebTestCase
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

@@ -6,21 +6,17 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\ParamTypeFromRouteRequiredRege
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ParamTypeFromRouteRequiredRegexRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(SmartFileInfo $fileInfo): void
+    public function test(string $filePath): void
     {
-        $this->doTestFileInfo($fileInfo);
+        $this->doTestFile($filePath);
     }
 
-    /**
-     * @return Iterator<SmartFileInfo>
-     */
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
