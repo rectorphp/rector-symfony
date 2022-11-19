@@ -149,7 +149,7 @@ CODE_SAMPLE
      */
     private function splitProcessCommandToItems(string $process): array
     {
-        $privatesCaller = new PrivatesCaller();
+        $privatesCaller = new \Rector\Core\Util\Reflection\PrivatesAccessor();
         return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
     }
 
