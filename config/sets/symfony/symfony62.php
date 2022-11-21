@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 
 return static function (RectorConfig $rectorConfig): void {
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
@@ -34,11 +35,19 @@ return static function (RectorConfig $rectorConfig): void {
         RenameMethodRector::class,
         [
             // @see https://github.com/symfony/symfony/pull/46854
-            'renderForm' => 'render',
+            new MethodCallRename(
+                'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+                'renderForm',
+                'render'
+            ),
             // @see https://github.com/symfony/symfony/pull/45034
-            'getContentType' => 'getContentTypeFormat',
+            new MethodCallRename(
+                'Symfony\Component\HttpFoundation\Request',
+                'getContentType',
+                'getContentTypeFormat'
+            ),
             // @see https://github.com/symfony/symfony/pull/47711
-            'attachPart' => 'addPart',
+            new MethodCallRename('Symfony\Component\Mime\Email', 'attachPart', 'addPart'),
         ],
     );
 };
