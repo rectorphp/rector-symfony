@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -16,6 +17,28 @@ return static function (RectorConfig $rectorConfig): void {
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache' => 'Symfony\Component\HttpKernel\Attribute\Cache',
             // @see https://github.com/symfony/symfony/pull/46906
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => 'Symfony\Bridge\Twig\Attribute\Template',
+            // @see https://github.com/symfony/symfony/pull/46714
+            'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpApiTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceApiTransport',
+            'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpSmtpTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceSmtpTransport',
+            'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpTransportFactory' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory',
+            // @see https://github.com/symfony/symfony/pull/47363
+            'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface' => 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface',
+            // @see https://github.com/symfony/symfony/pull/46094
+            'Symfony\Component\Security\Core\Security' => 'Symfony\Bundle\SecurityBundle\Security\Security',
+            // @see https://github.com/symfony/symfony/pull/46161
+            'Symfony\Component\Translation\Extractor\PhpAstExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
+        ],
+    );
+
+    $rectorConfig->ruleWithConfiguration(
+        RenameMethodRector::class,
+        [
+            // @see https://github.com/symfony/symfony/pull/46854
+            'renderForm' => 'render',
+            // @see https://github.com/symfony/symfony/pull/45034
+            'getContentType' => 'getContentTypeFormat',
+            // @see https://github.com/symfony/symfony/pull/47711
+            'attachPart' => 'addPart',
         ],
     );
 };
