@@ -16,6 +16,8 @@ return static function (RectorConfig $rectorConfig): void {
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache' => 'Symfony\Component\HttpKernel\Attribute\Cache',
             // @see https://github.com/symfony/symfony/pull/46906
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => 'Symfony\Bridge\Twig\Attribute\Template',
+            // @see https://github.com/symfony/symfony/pull/46094 + https://github.com/symfony/symfony/pull/47760
+            'Symfony\Component\Security\Core\Security' => 'Symfony\Bundle\SecurityBundle\Security',
         ],
     );
 };
