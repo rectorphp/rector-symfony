@@ -49,7 +49,7 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Translation\TranslatorInterface' => 'Symfony\Contracts\Translation\TranslatorInterface',
     ]);
 
-    # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, see https://github.com/rectorphp/rector/issues/1629
+    # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, @see https://github.com/rectorphp/rector/issues/1629
     $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
 
     # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
