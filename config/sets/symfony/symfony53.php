@@ -59,6 +59,17 @@ return static function (RectorConfig $rectorConfig): void {
             'getUsername',
             'getUserIdentifier'
         ),
+        // @see https://github.com/symfony/symfony/pull/39020
+        new MethodCallRename(
+            'Symfony\Component\PropertyInfo\Type',
+            'getCollectionKeyType',
+            'getCollectionKeyTypes'
+        ),
+        new MethodCallRename(
+            'Symfony\Component\PropertyInfo\Type',
+            'getCollectionValueType',
+            'getCollectionValueTypes'
+        ),
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
