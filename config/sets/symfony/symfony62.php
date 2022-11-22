@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -31,6 +33,9 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Security\Core\Security' => 'Symfony\Bundle\SecurityBundle\Security\Security',
             // @see https://github.com/symfony/symfony/pull/46161
             'Symfony\Component\Translation\Extractor\PhpAstExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
+            // @see https://github.com/symfony/symfony/pull/47595
+            'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
+            'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ChainRequestMatcher',
         ],
     );
 
@@ -51,6 +56,20 @@ return static function (RectorConfig $rectorConfig): void {
             ),
             // @see https://github.com/symfony/symfony/pull/47711
             new MethodCallRename('Symfony\Component\Mime\Email', 'attachPart', 'addPart'),
+            // @see https://github.com/symfony/symfony/pull/47363
+            new MethodCallRename(
+                'Symfony\Component\HttpFoundation\Request',
+                'supports',
+                'resolve'
+            ),
         ],
     );
+
+    // @see https://github.com/symfony/symfony/pull/46094
+    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
+        new RenameClassAndConstFetch('Symfony\Component\Security\Core\Security', 'ACCESS_DENIED_ERROR', 'Symfony\Bundle\SecurityBundle\Security', 'ACCESS_DENIED_ERROR'),
+        new RenameClassAndConstFetch('Symfony\Component\Security\Core\Security', 'AUTHENTICATION_ERROR', 'Symfony\Bundle\SecurityBundle\Security', 'AUTHENTICATION_ERROR'),
+        new RenameClassAndConstFetch('Symfony\Component\Security\Core\Security', 'LAST_USERNAME', 'Symfony\Bundle\SecurityBundle\Security', 'LAST_USERNAME'),
+        new RenameClassAndConstFetch('Symfony\Component\Security\Core\Security', 'MAX_USERNAME_LENGTH', 'Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge', 'MAX_USERNAME_LENGTH'),
+    ]);
 };
