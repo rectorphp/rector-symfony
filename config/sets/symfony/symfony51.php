@@ -51,11 +51,7 @@ return static function (RectorConfig $rectorConfig): void {
             'getDeprecation'
         ),
         // @see https://github.com/symfony/symfony/pull/35828
-        new MethodCallRename(
-            'Symfony\Component\Notifier\Bridge\Slack\Slack',
-            'channel',
-            'recipient'
-        ),
+        new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
