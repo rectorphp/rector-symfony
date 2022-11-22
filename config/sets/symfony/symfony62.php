@@ -6,8 +6,11 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector;
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->rule(SimplifyFormRenderingRector::class);
+
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
