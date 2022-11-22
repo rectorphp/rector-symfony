@@ -85,16 +85,32 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->args[1] instanceof Arg) {
+        /** @var Arg $arg */
+        $arg = $node->args[1];
+        if (! $arg->value instanceof Array_) {
             return null;
         }
 
-        if (! $node->args[1]->value instanceof Array_) {
+        $methodCallOrNull = $this->processRemoveCreateView($arg->value->items);
+
+        if ($methodCallOrNull === null) {
             return null;
         }
 
+        $arg->value->items = $methodCallOrNull;
+
+        return $node;
+    }
+
+    /**
+     * @param ArrayItem[]|null[] $arrayItems
+     *
+     * @return array<ArrayItem|null>|null
+     */
+    private function processRemoveCreateView(array $arrayItems): ?array
+    {
         $replaced = false;
-        foreach ($node->args[1]->value->items as $arrayItem) {
+        foreach ($arrayItems as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
@@ -112,6 +128,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $node;
+        return $arrayItems;
     }
 }
