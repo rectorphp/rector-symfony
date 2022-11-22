@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
@@ -72,11 +73,23 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+
         if (! $this->isName($node->name, 'render')) {
             return null;
         }
 
-        if (! isset($node->args[1], $node->args[1]->value) || ! $node->args[1]->value instanceof Array_) {
+        if (! isset($node->args[1])) {
+            return null;
+        }
+
+        if (! $node->args[1] instanceof Arg) {
+            return null;
+        }
+
+        if (! $node->args[1]->value instanceof Array_) {
             return null;
         }
 
@@ -85,7 +98,7 @@ CODE_SAMPLE
             if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if (! isset($arrayItem->value->var)) {
+            if (! $arrayItem->value instanceof MethodCall) {
                 continue;
             }
             if (! $this->isObjectType($arrayItem->value->var, new ObjectType('Symfony\Component\Form\FormInterface'))) {
