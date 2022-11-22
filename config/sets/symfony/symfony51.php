@@ -25,13 +25,13 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    // see https://github.com/symfony/symfony/pull/36243
+    // @see https://github.com/symfony/symfony/pull/36243
     $rectorConfig->rule(LogoutHandlerToLogoutEventSubscriberRector::class);
     $rectorConfig->rule(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
         'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => 'Symfony\Component\Form\Util\ServerParams',
-        // see https://github.com/symfony/symfony/pull/35092
+        // @see https://github.com/symfony/symfony/pull/35092
         'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
     ]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
@@ -50,16 +50,18 @@ return static function (RectorConfig $rectorConfig): void {
             'getDeprecationMessage',
             'getDeprecation'
         ),
+        // @see https://github.com/symfony/symfony/pull/35828
+        new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
         'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
     ]);
 
-    // see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
+    // @see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
     $rectorConfig->rule(CommandConstantReturnCodeRector::class);
 
-    // https://github.com/symfony/symfony/pull/35308
+    // @see https://github.com/symfony/symfony/pull/35308
     $rectorConfig->ruleWithConfiguration(
         NewArgToMethodCallRector::class,
         [new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv')]
@@ -110,7 +112,7 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ]);
 
-    // see https://github.com/symfony/symfony/pull/36943
+    // @see https://github.com/symfony/symfony/pull/36943
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
