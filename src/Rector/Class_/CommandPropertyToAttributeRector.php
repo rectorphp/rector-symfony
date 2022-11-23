@@ -214,6 +214,10 @@ CODE_SAMPLE),
                 return null;
             }
 
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+
             if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
@@ -222,13 +226,13 @@ CODE_SAMPLE),
                 return null;
             }
 
-            $firstArgValue = $node->getArgs()[0]
-->value;
-            if (! $firstArgValue instanceof Array_) {
+            /** @var Arg $arg */
+            $arg = $node->args[0];
+            if (! $arg->value instanceof Array_) {
                 return null;
             }
 
-            $commandAliases = $firstArgValue;
+            $commandAliases = $arg->value;
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
@@ -249,6 +253,10 @@ CODE_SAMPLE),
                 return null;
             }
 
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+
             if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
@@ -257,13 +265,13 @@ CODE_SAMPLE),
                 return null;
             }
 
-            $firstArgValue = $node->getArgs()[0]
-->value;
-            if (! $firstArgValue instanceof ConstFetch) {
+            /** @var Arg $arg */
+            $arg = $node->args[0];
+            if (! $arg->value instanceof ConstFetch) {
                 return null;
             }
 
-            $commandHidden = $firstArgValue;
+            $commandHidden = $arg->value;
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
