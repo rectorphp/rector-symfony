@@ -56,8 +56,6 @@ return static function (RectorConfig $rectorConfig): void {
             ),
             // @see https://github.com/symfony/symfony/pull/47711
             new MethodCallRename('Symfony\Component\Mime\Email', 'attachPart', 'addPart'),
-            // @see https://github.com/symfony/symfony/pull/47363
-            new MethodCallRename('Symfony\Component\HttpFoundation\Request', 'supports', 'resolve'),
         ],
     );
 
