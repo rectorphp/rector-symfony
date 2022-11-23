@@ -222,12 +222,13 @@ CODE_SAMPLE),
                 return null;
             }
 
-            if (! $node->getArgs()[0]->value instanceof Array_) {
+            $firstArgValue = $node->getArgs()[0]
+->value;
+            if (! $firstArgValue instanceof Array_) {
                 return null;
             }
 
-            $commandAliases = $node->getArgs()[0]
-->value;
+            $commandAliases = $firstArgValue;
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
@@ -256,12 +257,13 @@ CODE_SAMPLE),
                 return null;
             }
 
-            if (! $node->getArgs()[0]->value instanceof ConstFetch) {
+            $firstArgValue = $node->getArgs()[0]
+->value;
+            if (! $firstArgValue instanceof ConstFetch) {
                 return null;
             }
 
-            $commandHidden = $node->getArgs()[0]
-->value;
+            $commandHidden = $firstArgValue;
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
