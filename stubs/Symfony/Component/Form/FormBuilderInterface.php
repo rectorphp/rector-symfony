@@ -10,4 +10,10 @@ if (interface_exists('Symfony\Component\Form\FormBuilderInterface')) {
 
 interface FormBuilderInterface
 {
+    /**
+     * Creates the form.
+     *
+     * @return FormInterface
+     */
+    public function getForm();
 }

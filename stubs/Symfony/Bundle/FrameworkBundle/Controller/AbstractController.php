@@ -6,6 +6,8 @@ namespace Symfony\Bundle\FrameworkBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,6 +38,10 @@ abstract class AbstractController implements \Symfony\Component\DependencyInject
     }
 
     public function has(string $id):bool
+    {
+    }
+
+    public function createFormBuilder($data = null, array $options = []): FormBuilderInterface
     {
     }
 }

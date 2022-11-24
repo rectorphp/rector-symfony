@@ -12,7 +12,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(ParseFileRector::class);
 
     $rectorConfig->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
-        // https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
+        // @see https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
         new ReplaceArgumentDefaultValue(
             'Symfony\Component\Routing\Generator\UrlGeneratorInterface',
             'generate',

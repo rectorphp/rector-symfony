@@ -49,7 +49,6 @@ final class SomeClass extends WebTestCase
     }
 }
 
-
 ?>
 -----
 <?php
@@ -102,6 +101,5 @@ final class SomeClass extends WebTestCase
         ];
     }
 }
-
 
 ?>
