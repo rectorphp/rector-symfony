@@ -13,7 +13,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -210,6 +212,10 @@ CODE_SAMPLE),
     private function resolveAliases(Class_ $class): ?Array_
     {
         $commandAliases = null;
+        $classMethod = $class->getMethod('configure');
+        if (! $classMethod instanceof ClassMethod) {
+            return null;
+        }
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandAliases) {
             if (! $node instanceof MethodCall) {
                 return null;
@@ -241,6 +247,8 @@ CODE_SAMPLE),
             } else {
                 $this->removeNode($node);
             }
+
+            return NodeTraverser::STOP_TRAVERSAL;
         });
 
         return $commandAliases;
@@ -249,6 +257,10 @@ CODE_SAMPLE),
     private function resolveHidden(Class_ $class): ?ConstFetch
     {
         $commandHidden = null;
+        $classMethod = $class->getMethod('configure');
+        if (! $classMethod instanceof ClassMethod) {
+            return null;
+        }
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandHidden) {
             if (! $node instanceof MethodCall) {
                 return null;
@@ -273,6 +285,8 @@ CODE_SAMPLE),
             } else {
                 $this->removeNode($node);
             }
+
+            return NodeTraverser::STOP_TRAVERSAL;
         });
 
         return $commandHidden;
