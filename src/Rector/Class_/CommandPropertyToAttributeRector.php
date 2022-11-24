@@ -266,18 +266,7 @@ CODE_SAMPLE),
                 return null;
             }
 
-            if (! isset($node->args[0])) {
-                $commandHidden = new ConstFetch(new Name('true'));
-            } else {
-                /** @var Arg $arg */
-                $arg = $node->args[0];
-                if (! $arg->value instanceof ConstFetch) {
-                    return null;
-                }
-
-                $commandHidden = $arg->value;
-            }
-
+            $commandHidden = $this->getCommandHiddenValue($node);
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
                 $parentNode->var = $node->var;
@@ -287,5 +276,20 @@ CODE_SAMPLE),
         });
 
         return $commandHidden;
+    }
+
+    private function getCommandHiddenValue(MethodCall $methodCall): ?ConstFetch
+    {
+        if (! isset($methodCall->args[0])) {
+            return new ConstFetch(new Name('true'));
+        }
+
+        /** @var Arg $arg */
+        $arg = $methodCall->args[0];
+        if (! $arg->value instanceof ConstFetch) {
+            return null;
+        }
+
+        return $arg->value;
     }
 }
