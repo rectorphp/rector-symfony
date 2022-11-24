@@ -10,6 +10,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -265,13 +266,17 @@ CODE_SAMPLE),
                 return null;
             }
 
-            /** @var Arg $arg */
-            $arg = $node->args[0];
-            if (! $arg->value instanceof ConstFetch) {
-                return null;
-            }
+            if (! isset($node->args[0])) {
+                $commandHidden = new ConstFetch(new Name('true'));
+            } else {
+                /** @var Arg $arg */
+                $arg = $node->args[0];
+                if (! $arg->value instanceof ConstFetch) {
+                    return null;
+                }
 
-            $commandHidden = $arg->value;
+                $commandHidden = $arg->value;
+            }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {

@@ -10,7 +10,7 @@ class CommandWithHidden extends \Symfony\Component\Console\Command\Command
     public function configure(): void
     {
         $this
-            ->setHidden(false);
+            ->setHidden();
     }
 }
 
@@ -20,7 +20,7 @@ class CommandWithHidden extends \Symfony\Component\Console\Command\Command
 
 namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
-#[\Symfony\Component\Console\Attribute\AsCommand('sunshine', null, [], false)]
+#[\Symfony\Component\Console\Attribute\AsCommand('sunshine', null, [], true)]
 class CommandWithHidden extends \Symfony\Component\Console\Command\Command
 {
     public function configure(): void
