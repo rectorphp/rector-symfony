@@ -86,20 +86,35 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, [Return_::class]) as $returnNode) {
-            if (! $returnNode->expr instanceof LNumber) {
+        $hasChanged = false;
+
+        /** @var Return_[] $returns */
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, [Return_::class]);
+
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof LNumber) {
                 continue;
             }
-            $returnNode->expr = $this->convertNumberToConstant($returnNode->expr);
+            $classConstFetch = $this->convertNumberToConstant($return->expr);
+            if (! $classConstFetch instanceof ClassConstFetch) {
+                continue;
+            }
+
+            $hasChanged = true;
+            $return->expr = $classConstFetch;
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
-    private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber
+    private function convertNumberToConstant(LNumber $lNumber): ?ClassConstFetch
     {
         if (! isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value])) {
-            return $lNumber;
+            return null;
         }
 
         return $this->nodeFactory->createShortClassConstFetch(

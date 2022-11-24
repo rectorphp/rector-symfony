@@ -30,6 +30,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
+    private bool $hasChanged = false;
+
     public function __construct(
         private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer
     ) {
@@ -91,7 +93,11 @@ CODE_SAMPLE
         $this->refactorReturnTypeDeclaration($node);
         $this->addReturn0ToMethod($node);
 
-        return $node;
+        if ($this->hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     private function refactorReturnTypeDeclaration(ClassMethod $classMethod): void
@@ -102,6 +108,7 @@ CODE_SAMPLE
         }
 
         $classMethod->returnType = new Identifier('int');
+        $this->hasChanged = true;
     }
 
     private function addReturn0ToMethod(ClassMethod $classMethod): void
@@ -141,6 +148,7 @@ CODE_SAMPLE
             }
 
             $this->setReturnTo0InsteadOfNull($node);
+            $this->hasChanged = true;
 
             return null;
         });
