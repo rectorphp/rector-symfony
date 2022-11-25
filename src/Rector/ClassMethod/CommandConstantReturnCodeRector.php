@@ -50,7 +50,7 @@ class SomeCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return Command::SUCCESS;
+        return Symfony\Component\Console\Command\Command::SUCCESS;
     }
 
 }
@@ -118,7 +118,7 @@ CODE_SAMPLE
         }
 
         return $this->nodeFactory->createShortClassConstFetch(
-            'Command',
+            'Symfony\Component\Console\Command\Command',
             SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value]
         );
     }
