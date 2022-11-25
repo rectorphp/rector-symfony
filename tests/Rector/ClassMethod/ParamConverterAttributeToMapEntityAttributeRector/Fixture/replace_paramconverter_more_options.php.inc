@@ -30,7 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReplaceParamConverterWithMoreOptions
 {
     #[Route('/blog/{date}/{slug}')]
-    public function show(#[\Symfony\Bridge\Doctrine\Attribute\MapEntity(exclude: ['date'], entity_manager: 'foo')] Post $post, \DateTime $date): Response
+    public function show(#[\Symfony\Bridge\Doctrine\Attribute\MapEntity(exclude: ['date'], entity_manager: 'foo')]
+    Post $post, \DateTime $date): Response
     {
         return new Response();
     }

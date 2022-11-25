@@ -35,7 +35,8 @@ class ReplaceParamConverterWithMapping
     #[Route('/blog/{blogSlug}', name: 'blog_detail')]
     public function convert(
         Request $request,
-        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['blogSlug' => 'slug'])] stdClass $blog
+        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['blogSlug' => 'slug'])]
+        stdClass $blog,
     ): Response
     {
         return new Response();
