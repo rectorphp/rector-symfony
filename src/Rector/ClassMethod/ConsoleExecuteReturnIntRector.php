@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
@@ -229,6 +230,9 @@ CODE_SAMPLE
         }
 
         $staticType = $this->getType($return->expr);
+        if ($staticType instanceof ErrorType) {
+            return;
+        }
         if (! $staticType instanceof IntegerType) {
             $return->expr = new Int_($return->expr);
         }
