@@ -29,7 +29,7 @@ class ReplaceFail extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return Symfony\Component\Console\Command\Command::FAILURE;
+        return \Symfony\Component\Console\Command\Command::FAILURE;
     }
 
 }

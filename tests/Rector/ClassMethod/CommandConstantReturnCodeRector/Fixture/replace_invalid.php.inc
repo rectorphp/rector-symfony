@@ -29,7 +29,7 @@ class ReplaceInvalid extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return Symfony\Component\Console\Command\Command::INVALID;
+        return \Symfony\Component\Console\Command\Command::INVALID;
     }
 
 }
