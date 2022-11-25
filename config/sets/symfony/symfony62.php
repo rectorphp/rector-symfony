@@ -87,4 +87,6 @@ return static function (RectorConfig $rectorConfig): void {
             'MAX_USERNAME_LENGTH'
         ),
     ]);
+
+    $rectorConfig->rule(ParamConverterAttributeToMapEntityAttributeRector::class);
 };
