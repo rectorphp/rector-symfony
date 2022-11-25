@@ -6,7 +6,6 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
@@ -15,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -35,7 +33,6 @@ final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRe
 
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly AttributeFinder $attributeFinder,
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
@@ -107,34 +104,44 @@ CODE_SAMPLE
 
     private function refactorParamConverter(ClassMethod $classMethod): ?Node
     {
-        $attribute = $this->attributeFinder->findAttributeByClass($classMethod, self::PARAM_CONVERTER_CLASS);
-        if (! $attribute instanceof Attribute) {
-            return null;
+        foreach ($classMethod->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($this->isName($attr, self::PARAM_CONVERTER_CLASS)) {
+                    $foundAttribute[] = $attr;
+                }
+            }
+        }
+
+        foreach ($foundAttribute as $attr) {
+            if ($attr->args[1]->name->name !== 'options') {
+                return null;
+            }
+
+            $mapping = $attr->args[1]->value;
+
+            if (! $mapping instanceof Array_) {
+                return null;
+            }
+
+            $name = $attr->args[0]->value->value;
+            $this->removeNode($attr->args[0]);
+
+            $newArguments = [];
+            foreach ($mapping->items as $item) {
+                $newArguments[] = new Arg($item->value, name: new Identifier($item->key->value));
+            }
+
+            $attr->args = $newArguments;
+
+            $node = $attr->getAttribute(AttributeKey::PARENT_NODE);
+
+            $this->addMapEntityAttribute($classMethod, $name, $node);
+            $this->removeNode($node);
         }
 
         $this->renamedClassesDataCollector->addOldToNewClasses([
             self::PARAM_CONVERTER_CLASS => self::MAP_ENTITY_CLASS,
         ]);
-
-        if ($attribute->args[1]->name->name !== 'options') {
-            return null;
-        }
-
-        $mapping = $attribute->args[1]->value;
-
-        if (! $mapping instanceof Array_) {
-            return null;
-        }
-
-        $name = $attribute->args[0]->value->value;
-        $this->removeNode($attribute->args[0]);
-
-        $attribute->args = [new Arg($mapping->items[0]->value, name: new Identifier($mapping->items[0]->key->value))];
-
-        $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
-
-        $this->addMapEntityAttribute($classMethod, $name, $node);
-        $this->removeNode($node);
 
         return $classMethod;
     }
