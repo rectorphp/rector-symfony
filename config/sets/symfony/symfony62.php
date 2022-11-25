@@ -8,6 +8,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
+use Rector\Symfony\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector;
 
 return static function (RectorConfig $rectorConfig): void {
