@@ -6,7 +6,9 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -28,18 +30,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     private const PARAM_CONVERTER_CLASS = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter';
-    private const MAP_ENTITY_CLASS = 'Symfony\Bridge\Doctrine\Attribute\MapEntity';
 
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
-    }
+    private const MAP_ENTITY_CLASS = 'Symfony\Bridge\Doctrine\Attribute\MapEntity';
 
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private readonly AttributeFinder $attributeFinder,
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -91,11 +94,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ( ! $this->phpAttributeAnalyzer->hasPhpAttribute($node, self::PARAM_CONVERTER_CLASS)) {
+        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($node, self::PARAM_CONVERTER_CLASS)) {
             return null;
         }
 
-        if ( ! $node->isPublic()) {
+        if (! $node->isPublic()) {
             return null;
         }
 
@@ -105,7 +108,7 @@ CODE_SAMPLE
     private function refactorParamConverter(ClassMethod $classMethod): ?Node
     {
         $attribute = $this->attributeFinder->findAttributeByClass($classMethod, self::PARAM_CONVERTER_CLASS);
-        if ( ! $attribute instanceof Node\Attribute) {
+        if (! $attribute instanceof Attribute) {
             return null;
         }
 
@@ -113,13 +116,13 @@ CODE_SAMPLE
             self::PARAM_CONVERTER_CLASS => self::MAP_ENTITY_CLASS,
         ]);
 
-        if ('options' !== $attribute->args[1]->name->name) {
+        if ($attribute->args[1]->name->name !== 'options') {
             return null;
         }
 
         $mapping = $attribute->args[1]->value;
 
-        if ( ! $mapping instanceof Node\Expr\Array_) {
+        if (! $mapping instanceof Array_) {
             return null;
         }
 
@@ -128,19 +131,21 @@ CODE_SAMPLE
 
         $attribute->args = [new Arg($mapping->items[0]->value, name: new Identifier($mapping->items[0]->key->value))];
 
+        $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
 
-        $attributeGroup = $attribute->getAttribute(AttributeKey::PARENT_NODE);
-
-        $this->addMapEntityAttribute($classMethod, $name, $attributeGroup);
-        $this->removeNode($attributeGroup);
+        $this->addMapEntityAttribute($classMethod, $name, $node);
+        $this->removeNode($node);
 
         return $classMethod;
     }
 
-    private function addMapEntityAttribute(ClassMethod $classMethod, string $variableName, AttributeGroup $attributeGroup)
-    {
+    private function addMapEntityAttribute(
+        ClassMethod $classMethod,
+        string $variableName,
+        AttributeGroup $attributeGroup
+    ): void {
         foreach ($classMethod->params as $param) {
-            if ( ! $param->var instanceof Variable) {
+            if (! $param->var instanceof Variable) {
                 continue;
             }
             if ($variableName === $param->var->name) {
