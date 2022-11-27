@@ -15,7 +15,7 @@ parameters:
         - *Source/*
         - */tests/*/Fixture*/Expected/*
 
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
 
     ignoreErrors:
         -
