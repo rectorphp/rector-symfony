@@ -17,6 +17,7 @@ final class SomeClass extends WebTestCase
     {
         $response = self::getClient()->getResponse();
 
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame(HttpCode::FOUND, $response->getStatusCode());
         $this->assertSame('https://example.com', $response->headers->get('Location'));
     }
@@ -63,6 +64,7 @@ final class SomeClass extends WebTestCase
     {
         $response = self::getClient()->getResponse();
 
+        $this->assertResponseStatusCodeSame(302);
         $this->assertResponseStatusCodeSame(HttpCode::FOUND);
         $this->assertResponseRedirects('https://example.com');
     }
