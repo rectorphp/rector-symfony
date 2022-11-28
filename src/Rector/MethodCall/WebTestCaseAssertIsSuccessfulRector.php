@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
@@ -94,8 +96,14 @@ CODE_SAMPLE
             return null;
         }
 
+        $newArgs = [];
+        // When we had a custom message argument we want to add it to the new assert.
+        if (isset($args[2])) {
+            $newArgs[] = new Arg(new String_($this->valueResolver->getValue($args[2]->value, true)));
+        }
+
         $node->name = new Identifier('assertResponseIsSuccessful');
-        $node->args = [];
+        $node->args = $newArgs;
 
         return $node;
     }

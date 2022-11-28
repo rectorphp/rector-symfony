@@ -4,12 +4,12 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextCo
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ContainsCrawler extends WebTestCase
+final class HandleStaticCalls extends WebTestCase
 {
     public function testContains()
     {
         $crawler = self::getClient()->getCrawler();
-        $this->assertContains('Hello World', $crawler->filter('h1')->text(), 'Custom message');
+        self::assertContains('Hello World', $crawler->filter('h1')->text(), 'Custom message');
     }
 }
 
@@ -21,12 +21,12 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextCo
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ContainsCrawler extends WebTestCase
+final class HandleStaticCalls extends WebTestCase
 {
     public function testContains()
     {
         $crawler = self::getClient()->getCrawler();
-        $this->assertSelectorTextContains('h1', 'Hello World', 'Custom message');
+        self::assertSelectorTextContains('h1', 'Hello World', 'Custom message');
     }
 }
 
