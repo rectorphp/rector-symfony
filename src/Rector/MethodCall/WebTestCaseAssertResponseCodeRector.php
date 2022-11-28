@@ -146,11 +146,17 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($methodCall instanceof StaticCall) {
-            return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', [$methodCall->args[0]]);
+        $newArguments = [$methodCall->args[0]];
+        // When we had a second argument we want to add it to the new assert.
+        if (isset($args[2])) {
+            $newArguments[] = $this->valueResolver->getValue($args[2]->value, true);
         }
 
-        return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', [$methodCall->args[0]]);
+        if ($methodCall instanceof StaticCall) {
+            return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', $newArguments);
+        }
+
+        return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', $newArguments);
     }
 
     private function processAssertResponseRedirects(MethodCall|StaticCall $methodCall): MethodCall|StaticCall|null

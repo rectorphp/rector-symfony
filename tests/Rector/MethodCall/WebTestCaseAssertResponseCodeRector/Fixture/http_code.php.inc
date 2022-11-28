@@ -13,13 +13,6 @@ class HttpCode
 
 final class SomeClass extends WebTestCase
 {
-    public function testOk()
-    {
-        $response = self::getClient()->getResponse();
-
-        $this->assertSame(HttpCode::OK, $response->getStatusCode(), 'message');
-    }
-
     public function testFound()
     {
         $response = self::getClient()->getResponse();
@@ -66,13 +59,6 @@ class HttpCode
 
 final class SomeClass extends WebTestCase
 {
-    public function testOk()
-    {
-        $response = self::getClient()->getResponse();
-
-        $this->assertResponseStatusCodeSame(HttpCode::OK, 'message');
-    }
-
     public function testFound()
     {
         $response = self::getClient()->getResponse();
