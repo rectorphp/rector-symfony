@@ -6,18 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HttpCode
 {
-    public const FOUND = 301;
+    public const OK = 200;
+    public const CREATED = 201;
+    public const FOUND = 302;
 }
 
 final class SomeClass extends WebTestCase
 {
-    public function test()
+    public function testFound()
     {
-        $client = self::getClient();
-        $client->request('POST', 'some.url');
-        $response = $client->getResponse();
+        $response = self::getClient()->getResponse();
 
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame(HttpCode::FOUND, $response->getStatusCode());
         $this->assertSame('https://example.com', $response->headers->get('Location'));
     }
@@ -31,14 +31,14 @@ final class SomeClass extends WebTestCase
         $client->request('POST', $url);
         $response = $client->getResponse();
 
-        $this->assertSame($expectedHttpCode, $response->getStatusCode());
+        $this->assertSame($expectedHttpCode, $response->getStatusCode(), 'message');
     }
 
     public function provideDataProvider(): array
     {
         return [
-            'success' => ['first.url', 200],
-            'fail' => ['second.url', 301],
+            'success' => ['first.url', HttpCode::OK],
+            'fail' => ['second.url', HttpCode::CREATED],
         ];
     }
 }
@@ -53,18 +53,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HttpCode
 {
-    public const FOUND = 301;
+    public const OK = 200;
+    public const CREATED = 201;
+    public const FOUND = 302;
 }
 
 final class SomeClass extends WebTestCase
 {
-    public function test()
+    public function testFound()
     {
-        $client = self::getClient();
-        $client->request('POST', 'some.url');
-        $response = $client->getResponse();
+        $response = self::getClient()->getResponse();
 
-        $this->assertResponseStatusCodeSame(301);
+        $this->assertResponseStatusCodeSame(302);
         $this->assertResponseStatusCodeSame(HttpCode::FOUND);
         $this->assertResponseRedirects('https://example.com');
     }
@@ -78,14 +78,14 @@ final class SomeClass extends WebTestCase
         $client->request('POST', $url);
         $response = $client->getResponse();
 
-        $this->assertResponseStatusCodeSame($expectedHttpCode);
+        $this->assertResponseStatusCodeSame($expectedHttpCode, 'message');
     }
 
     public function provideDataProvider(): array
     {
         return [
-            'success' => ['first.url', 200],
-            'fail' => ['second.url', 301],
+            'success' => ['first.url', HttpCode::OK],
+            'fail' => ['second.url', HttpCode::CREATED],
         ];
     }
 }
