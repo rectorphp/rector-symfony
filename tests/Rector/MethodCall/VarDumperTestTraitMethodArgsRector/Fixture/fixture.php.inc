@@ -5,8 +5,8 @@ use Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\So
 function varDumperTrait()
 {
     $trait = new ClassWithVarDumperTrait();
-    $trait->assertDumpEquals($dump, $data, 'Some message');
-    $trait->assertDumpMatchesFormat($dump, $data, 'Some message');
+    $trait->assertDumpEquals($dump, $data, 'Custom message');
+    $trait->assertDumpMatchesFormat($dump, $data, 'Custom message');
 }
 
 ?>
@@ -18,8 +18,8 @@ use Rector\Symfony\Tests\Rector\MethodCall\VarDumperTestTraitMethodArgsRector\So
 function varDumperTrait()
 {
     $trait = new ClassWithVarDumperTrait();
-    $trait->assertDumpEquals($dump, $data, 0, 'Some message');
-    $trait->assertDumpMatchesFormat($dump, $data, 0, 'Some message');
+    $trait->assertDumpEquals($dump, $data, 0, 'Custom message');
+    $trait->assertDumpMatchesFormat($dump, $data, 0, 'Custom message');
 }
 
 ?>
