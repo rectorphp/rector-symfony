@@ -216,7 +216,7 @@ CODE_SAMPLE),
         if (! $classMethod instanceof ClassMethod) {
             return null;
         }
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandAliases) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$commandAliases) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -261,7 +261,7 @@ CODE_SAMPLE),
         if (! $classMethod instanceof ClassMethod) {
             return null;
         }
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandHidden) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$commandHidden) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
