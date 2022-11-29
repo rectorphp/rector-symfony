@@ -115,7 +115,7 @@ CODE_SAMPLE
         if (! $classMethod instanceof ClassMethod) {
             return null;
         }
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandDescription) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$commandDescription) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
