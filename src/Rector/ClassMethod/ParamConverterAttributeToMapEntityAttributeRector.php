@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -36,7 +37,7 @@ final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRe
 
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly RenamedClassesDataCollector $renamedClassesDataCollector
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 
@@ -86,14 +87,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Use_::class, ClassMethod::class];
     }
 
-    /**
-     * @param ClassMethod $node
-     */
     public function refactor(Node $node): ?Node
     {
+        if (($node instanceof Use_) && $this->isName($node, self::PARAM_CONVERTER_CLASS)) {
+            $this->removeNode($node);
+        }
+
         if (
             ! $node instanceof ClassMethod ||
             ! $node->isPublic() ||
