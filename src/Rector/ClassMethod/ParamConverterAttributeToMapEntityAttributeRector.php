@@ -6,10 +6,13 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
@@ -91,52 +94,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($node, self::PARAM_CONVERTER_CLASS)) {
-            return null;
-        }
-
-        if (! $node->isPublic()) {
+        if (
+            ! $node instanceof ClassMethod ||
+            ! $node->isPublic() ||
+            ! $this->phpAttributeAnalyzer->hasPhpAttribute($node, self::PARAM_CONVERTER_CLASS)
+        ) {
             return null;
         }
 
         return $this->refactorParamConverter($node);
     }
 
-    private function refactorParamConverter(ClassMethod $classMethod): ?Node
+    private function refactorParamConverter(ClassMethod $classMethod): Node
     {
         foreach ($classMethod->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
                 if ($this->isName($attr, self::PARAM_CONVERTER_CLASS)) {
-                    $foundAttribute[] = $attr;
+                    $this->refactorAttribute($classMethod, $attr);
                 }
             }
-        }
-
-        foreach ($foundAttribute as $attr) {
-            if ($attr->args[1]->name->name !== 'options') {
-                return null;
-            }
-
-            $mapping = $attr->args[1]->value;
-
-            if (! $mapping instanceof Array_) {
-                return null;
-            }
-
-            $name = $attr->args[0]->value->value;
-            $this->removeNode($attr->args[0]);
-
-            $newArguments = [];
-            foreach ($mapping->items as $item) {
-                $newArguments[] = new Arg($item->value, name: new Identifier($item->key->value));
-            }
-
-            $attr->args = $newArguments;
-
-            $node = $attr->getAttribute(AttributeKey::PARENT_NODE);
-
-            $this->addMapEntityAttribute($classMethod, $name, $node);
-            $this->removeNode($node);
         }
 
         $this->renamedClassesDataCollector->addOldToNewClasses([
@@ -159,5 +135,47 @@ CODE_SAMPLE
                 $param->attrGroups = [$attributeGroup];
             }
         }
+    }
+
+    private function refactorAttribute(ClassMethod $classMethod, Attribute $attribute): void
+    {
+        if (
+            $attribute->args === [] ||
+            ! $attribute->args[1]->name instanceof Identifier ||
+            $attribute->args[1]->name->name !== 'options' ||
+            ! $attribute->args[0]->value instanceof String_
+        ) {
+            return;
+        }
+
+        $name = $attribute->args[0]->value->value;
+
+        $mapping = $attribute->args[1]->value;
+
+        if (! $mapping instanceof Array_) {
+            return;
+        }
+        $this->removeNode($attribute->args[0]);
+
+        $newArguments = [];
+        foreach ($mapping->items as $item) {
+            if (
+                ! $item instanceof ArrayItem ||
+                ! $item->key instanceof String_
+            ) {
+                continue;
+            }
+            $newArguments[] = new Arg($item->value, name: new Identifier($item->key->value));
+        }
+
+        $attribute->args = $newArguments;
+
+        $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $node instanceof AttributeGroup) {
+            return;
+        }
+
+        $this->addMapEntityAttribute($classMethod, $name, $node);
+        $this->removeNode($node);
     }
 }
