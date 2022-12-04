@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
@@ -79,11 +80,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->controllerAnalyzer->isInsideController($node)) {
+        // already filled return type
+        if ($node->returnType !== null) {
             return null;
         }
 
-        if ($node->returnType !== null) {
+        if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
 
@@ -91,7 +93,31 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
+        // has redirect return response
+        if ($this->hasRedirectReturnResponse($node)) {
+            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
+        } else {
+            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
+        }
+
         return $node;
+    }
+
+    private function hasRedirectReturnResponse(ClassMethod $classMethod): bool
+    {
+        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Node\Stmt\Return_::class);
+
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof MethodCall) {
+                return false;
+            }
+
+            $methodCall = $return->expr;
+            if (! $this->isName($methodCall->name, 'redirectToRoute')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
