@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -105,7 +106,7 @@ CODE_SAMPLE
 
     private function hasRedirectReturnResponse(ClassMethod $classMethod): bool
     {
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
 
         foreach ($returns as $return) {
             if (! $return->expr instanceof MethodCall) {
