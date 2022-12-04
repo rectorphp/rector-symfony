@@ -94,6 +94,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $this->hasReturn($node)) {
+            return null;
+        }
+
         // has redirect return response
         if ($this->hasRedirectReturnResponse($node)) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
@@ -120,5 +124,10 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function hasReturn(ClassMethod $classMethod): bool
+    {
+        return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
     }
 }
