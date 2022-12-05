@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -118,10 +119,35 @@ CODE_SAMPLE
 
             return $node;
         }
+        if ($this->isResponseReturn($node)) {
+            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
 
-        $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
+            return $node;
+        }
 
         return $node;
+    }
+
+    private function isResponseReturn(ClassMethod $classMethod): bool
+    {
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
+
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof MethodCall) {
+                return false;
+            }
+
+            $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
+            $functionName = $this->getName($methodCall->name);
+            if (! in_array($functionName, ['render', 'forward', 'renderForm'], true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function isRedirectResponseReturn(ClassMethod $classMethod): bool
@@ -134,6 +160,9 @@ CODE_SAMPLE
             }
 
             $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
             $functionName = $this->getName($methodCall->name);
             if (! in_array($functionName, ['redirectToRoute', 'redirect'], true)) {
                 return false;
@@ -153,6 +182,9 @@ CODE_SAMPLE
             }
 
             $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
             if (! $this->isName($methodCall->name, 'file')) {
                 return false;
             }
@@ -171,6 +203,9 @@ CODE_SAMPLE
             }
 
             $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
             if (! $this->isName($methodCall->name, 'json')) {
                 return false;
             }
@@ -189,6 +224,9 @@ CODE_SAMPLE
             }
 
             $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
             if (! $this->isName($methodCall->name, 'stream')) {
                 return false;
             }
