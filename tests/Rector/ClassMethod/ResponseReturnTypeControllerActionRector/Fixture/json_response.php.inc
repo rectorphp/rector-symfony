@@ -5,12 +5,12 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\ResponseReturnTypeControllerAc
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SomeController extends AbstractController
+final class JsonResponse extends AbstractController
 {
     #[Route]
-    public function detail()
+    public function jsonAction()
     {
-        return $this->render('some_template');
+        return $this->json('');
     }
 }
 
@@ -23,12 +23,12 @@ namespace Rector\Symfony\Tests\Rector\ClassMethod\ResponseReturnTypeControllerAc
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SomeController extends AbstractController
+final class JsonResponse extends AbstractController
 {
     #[Route]
-    public function detail(): \Symfony\Component\HttpFoundation\Response
+    public function jsonAction(): \Symfony\Component\HttpFoundation\JsonResponse
     {
-        return $this->render('some_template');
+        return $this->json('');
     }
 }
 

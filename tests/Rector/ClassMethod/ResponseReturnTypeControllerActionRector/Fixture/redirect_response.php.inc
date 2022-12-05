@@ -8,7 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class RedirectResponse extends AbstractController
 {
     #[Route]
-    public function detail()
+    public function redirectAction()
+    {
+        return $this->redirect('/');
+    }
+
+    #[Route]
+    public function redirectToRouteAction()
     {
         return $this->redirectToRoute('some_template');
     }
@@ -26,7 +32,13 @@ use Symfony\Component\Routing\Annotation\Route;
 final class RedirectResponse extends AbstractController
 {
     #[Route]
-    public function detail(): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function redirectAction(): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        return $this->redirect('/');
+    }
+
+    #[Route]
+    public function redirectToRouteAction(): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         return $this->redirectToRoute('some_template');
     }
