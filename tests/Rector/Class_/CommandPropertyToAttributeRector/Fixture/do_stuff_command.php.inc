@@ -12,11 +12,3 @@ use Symfony\Component\Console\Command\Command;
  }
 ?>
 -----
-<?php
-
-namespace Rector\Tests\Symfony\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
-
-// what is expected code?
-// should remain the same? delete part below ----- (included)
-
-?>
