@@ -107,6 +107,41 @@ CODE_SAMPLE
             return $node;
         }
 
+        return $this->refactorResponse($node);
+    }
+
+    /**
+     * @param array<string>       $methods
+     */
+    private function isResponseReturnMethod(ClassMethod $classMethod, array $methods): bool
+    {
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
+
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof MethodCall) {
+                return false;
+            }
+
+            $methodCall = $return->expr;
+            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
+                return false;
+            }
+            $functionName = $this->getName($methodCall->name);
+            if (! in_array($functionName, $methods, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function hasReturn(ClassMethod $classMethod): bool
+    {
+        return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
+    }
+
+    private function refactorResponse(ClassMethod $node): Node
+    {
         if ($this->isResponseReturnMethod($node, ['redirectToRoute', 'redirect'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
 
@@ -134,32 +169,5 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function isResponseReturnMethod(ClassMethod $classMethod, array $methods): bool
-    {
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-
-        foreach ($returns as $return) {
-            if (! $return->expr instanceof MethodCall) {
-                return false;
-            }
-
-            $methodCall = $return->expr;
-            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
-                return false;
-            }
-            $functionName = $this->getName($methodCall->name);
-            if (! in_array($functionName, $methods, true)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function hasReturn(ClassMethod $classMethod): bool
-    {
-        return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
     }
 }
