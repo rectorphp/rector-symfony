@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -97,6 +98,13 @@ CODE_SAMPLE
 
         if (! $this->hasReturn($node)) {
             return null;
+        }
+
+        if (
+            $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::SENSIO_TEMPLATE) ||
+            $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
+            $node->returnType = new Identifier('array');
+            return $node;
         }
 
         if ($this->isResponseReturnMethod($node, ['redirectToRoute', 'redirect'])) {
