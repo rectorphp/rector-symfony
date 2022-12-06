@@ -141,34 +141,34 @@ CODE_SAMPLE
         return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
     }
 
-    private function refactorResponse(ClassMethod $node): Node
+    private function refactorResponse(ClassMethod $classMethod): Node
     {
-        if ($this->isResponseReturnMethod($node, ['redirectToRoute', 'redirect'])) {
-            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
+        if ($this->isResponseReturnMethod($classMethod, ['redirectToRoute', 'redirect'])) {
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
 
-            return $node;
+            return $classMethod;
         }
-        if ($this->isResponseReturnMethod($node, ['file'])) {
-            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\BinaryFileResponse');
+        if ($this->isResponseReturnMethod($classMethod, ['file'])) {
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\BinaryFileResponse');
 
-            return $node;
+            return $classMethod;
         }
-        if ($this->isResponseReturnMethod($node, ['json'])) {
-            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\JsonResponse');
+        if ($this->isResponseReturnMethod($classMethod, ['json'])) {
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\JsonResponse');
 
-            return $node;
+            return $classMethod;
         }
-        if ($this->isResponseReturnMethod($node, ['stream'])) {
-            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\StreamedResponse');
+        if ($this->isResponseReturnMethod($classMethod, ['stream'])) {
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\StreamedResponse');
 
-            return $node;
+            return $classMethod;
         }
-        if ($this->isResponseReturnMethod($node, ['render', 'forward', 'renderForm'])) {
-            $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
+        if ($this->isResponseReturnMethod($classMethod, ['render', 'forward', 'renderForm'])) {
+            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
 
-            return $node;
+            return $classMethod;
         }
 
-        return $node;
+        return $classMethod;
     }
 }
