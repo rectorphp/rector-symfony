@@ -99,27 +99,27 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isRedirectResponseReturn($node)) {
+        if ($this->isResponseReturnMethod($node, ['redirectToRoute', 'redirect'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
 
             return $node;
         }
-        if ($this->isBinaryFileResponseReturn($node)) {
+        if ($this->isResponseReturnMethod($node, ['file'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\BinaryFileResponse');
 
             return $node;
         }
-        if ($this->isJsonResponseReturn($node)) {
+        if ($this->isResponseReturnMethod($node, ['json'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\JsonResponse');
 
             return $node;
         }
-        if ($this->isStreamedResponseReturn($node)) {
+        if ($this->isResponseReturnMethod($node, ['stream'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\StreamedResponse');
 
             return $node;
         }
-        if ($this->isResponseReturn($node)) {
+        if ($this->isResponseReturnMethod($node, ['render', 'forward', 'renderForm'])) {
             $node->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
 
             return $node;
@@ -128,7 +128,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isResponseReturn(ClassMethod $classMethod): bool
+    private function isResponseReturnMethod(ClassMethod $classMethod, array $methods): bool
     {
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
 
@@ -142,92 +142,7 @@ CODE_SAMPLE
                 return false;
             }
             $functionName = $this->getName($methodCall->name);
-            if (! in_array($functionName, ['render', 'forward', 'renderForm'], true)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function isRedirectResponseReturn(ClassMethod $classMethod): bool
-    {
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-
-        foreach ($returns as $return) {
-            if (! $return->expr instanceof MethodCall) {
-                return false;
-            }
-
-            $methodCall = $return->expr;
-            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
-                return false;
-            }
-            $functionName = $this->getName($methodCall->name);
-            if (! in_array($functionName, ['redirectToRoute', 'redirect'], true)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function isBinaryFileResponseReturn(ClassMethod $classMethod): bool
-    {
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-
-        foreach ($returns as $return) {
-            if (! $return->expr instanceof MethodCall) {
-                return false;
-            }
-
-            $methodCall = $return->expr;
-            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
-                return false;
-            }
-            if (! $this->isName($methodCall->name, 'file')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function isJsonResponseReturn(ClassMethod $classMethod): bool
-    {
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-
-        foreach ($returns as $return) {
-            if (! $return->expr instanceof MethodCall) {
-                return false;
-            }
-
-            $methodCall = $return->expr;
-            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
-                return false;
-            }
-            if (! $this->isName($methodCall->name, 'json')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function isStreamedResponseReturn(ClassMethod $classMethod): bool
-    {
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-
-        foreach ($returns as $return) {
-            if (! $return->expr instanceof MethodCall) {
-                return false;
-            }
-
-            $methodCall = $return->expr;
-            if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
-                return false;
-            }
-            if (! $this->isName($methodCall->name, 'stream')) {
+            if (! in_array($functionName, $methods, true)) {
                 return false;
             }
         }
