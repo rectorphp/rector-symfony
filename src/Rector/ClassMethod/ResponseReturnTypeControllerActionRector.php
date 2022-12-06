@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -103,7 +104,7 @@ CODE_SAMPLE
         if (
             $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::SENSIO_TEMPLATE) ||
             $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
-            $node->returnType = new Identifier('array');
+            $node->returnType = new NullableType(new Identifier('array'));
             return $node;
         }
 
