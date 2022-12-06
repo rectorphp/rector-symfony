@@ -49,3 +49,8 @@ parameters:
         -
             message: '#Property PhpParser\\Node\\Expr\\Closure\:\:\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node\\Stmt>\|null#'
             path: src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
+
+        -
+            message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
+            path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
+
