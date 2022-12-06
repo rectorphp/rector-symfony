@@ -112,7 +112,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string>       $methods
+     * @param array<string> $methods
      */
     private function isResponseReturnMethod(ClassMethod $classMethod, array $methods): bool
     {
