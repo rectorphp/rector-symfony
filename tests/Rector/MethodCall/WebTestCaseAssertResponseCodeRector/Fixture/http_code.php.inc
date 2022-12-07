@@ -19,6 +19,7 @@ final class SomeClass extends WebTestCase
 
         $this->assertSame(302, $response->getStatusCode(), 'Custom message');
         $this->assertSame(HttpCode::FOUND, $response->getStatusCode(), 'Custom message');
+        $this->assertSame('https://example.com', $response->headers->get('Location'));
         $this->assertSame('https://example.com', $response->headers->get('Location'), 'Custom message');
     }
 
@@ -66,7 +67,8 @@ final class SomeClass extends WebTestCase
 
         $this->assertResponseStatusCodeSame(302, 'Custom message');
         $this->assertResponseStatusCodeSame(HttpCode::FOUND, 'Custom message');
-        $this->assertResponseRedirects('https://example.com', 'Custom message');
+        $this->assertResponseRedirects('https://example.com');
+        $this->assertResponseRedirects('https://example.com', null, 'Custom message');
     }
 
     /**

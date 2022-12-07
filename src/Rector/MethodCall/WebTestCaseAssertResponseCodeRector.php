@@ -173,8 +173,9 @@ CODE_SAMPLE
         }
 
         $newArgs = [$methodCall->args[0]];
-        // When we had a custom message argument we want to add it to the new assert.
         if (isset($args[2])) {
+            // When we had a $message argument we want to add it to the new assert together with $expectedCode null.
+            $newArgs[] = null;
             $newArgs[] = $this->valueResolver->getValue($args[2]->value, true);
         }
 
