@@ -32,7 +32,7 @@ final class SomeClass extends WebTestCase
         $client->request('POST', $url);
         $response = $client->getResponse();
 
-        $this->assertSame($expectedHttpCode, $response->getStatusCode(), sprintf('Custom message from url: %s', $url));
+        $this->assertSame($expectedHttpCode, $response->getStatusCode(), 'Custom message');
     }
 
     public function provideDataProvider(): array
@@ -80,7 +80,7 @@ final class SomeClass extends WebTestCase
         $client->request('POST', $url);
         $response = $client->getResponse();
 
-        $this->assertResponseStatusCodeSame($expectedHttpCode, sprintf('Custom message from url: %s', $url));
+        $this->assertResponseStatusCodeSame($expectedHttpCode, 'Custom message');
     }
 
     public function provideDataProvider(): array
