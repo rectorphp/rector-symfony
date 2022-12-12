@@ -8,7 +8,7 @@ final class SomeClass extends WebTestCase
 {
     public function test()
     {
-        $this->assertSame(200, $this->client->getResponse()->getStatusCode(), 'Custom message');
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode(), sprintf('Custom message: %s', 'Custom message'));
     }
 }
 
@@ -24,7 +24,7 @@ final class SomeClass extends WebTestCase
 {
     public function test()
     {
-        $this->assertResponseIsSuccessful('Custom message');
+        $this->assertResponseIsSuccessful(sprintf('Custom message: %s', 'Custom message'));
     }
 }
 
