@@ -60,23 +60,24 @@ return static function (RectorConfig $rectorConfig): void {
     );
 
     // @see https://github.com/symfony/symfony/pull/46094
+    // @see https://github.com/symfony/symfony/pull/48554
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Core\Security',
             'ACCESS_DENIED_ERROR',
-            'Symfony\Bundle\SecurityBundle\Security',
+            'Symfony\Component\Security\Http\SecurityRequestAttributes',
             'ACCESS_DENIED_ERROR'
         ),
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Core\Security',
             'AUTHENTICATION_ERROR',
-            'Symfony\Bundle\SecurityBundle\Security',
+            'Symfony\Component\Security\Http\SecurityRequestAttributes',
             'AUTHENTICATION_ERROR'
         ),
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Core\Security',
             'LAST_USERNAME',
-            'Symfony\Bundle\SecurityBundle\Security',
+            'Symfony\Component\Security\Http\SecurityRequestAttributes',
             'LAST_USERNAME'
         ),
         new RenameClassAndConstFetch(
