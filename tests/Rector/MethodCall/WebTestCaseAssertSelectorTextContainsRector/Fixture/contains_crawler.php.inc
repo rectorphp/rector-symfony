@@ -9,7 +9,7 @@ final class ContainsCrawler extends WebTestCase
     public function testContains()
     {
         $crawler = self::getClient()->getCrawler();
-        $this->assertContains('Hello World', $crawler->filter('h1')->text(), 'Custom message');
+        $this->assertContains('Hello World', $crawler->filter('h1')->text(), sprintf('Custom message: %s', 'custom message'));
     }
 }
 
@@ -26,7 +26,7 @@ final class ContainsCrawler extends WebTestCase
     public function testContains()
     {
         $crawler = self::getClient()->getCrawler();
-        $this->assertSelectorTextContains('h1', 'Hello World', 'Custom message');
+        $this->assertSelectorTextContains('h1', 'Hello World', sprintf('Custom message: %s', 'custom message'));
     }
 }
 
