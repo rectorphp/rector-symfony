@@ -143,7 +143,7 @@ CODE_SAMPLE
             }
 
             // is there return without nesting?
-            if ($this->nodeComparator->areSameNode($parentNode, $classMethod)) {
+            if ($parentNode instanceof Node && $this->nodeComparator->areSameNode($parentNode, $classMethod)) {
                 $hasReturn = true;
             }
 
