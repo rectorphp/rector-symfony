@@ -210,7 +210,7 @@ CODE_SAMPLE
             $classMethod
         );
 
-        $this->refactorNoReturn($classMethod, $thisRenderMethodCall, $templateDoctrineAnnotationTagValueNode,);
+        $this->refactorNoReturn($classMethod, $thisRenderMethodCall, $templateDoctrineAnnotationTagValueNode);
     }
 
     private function hasLastReturnResponse(ClassMethod $classMethod): bool

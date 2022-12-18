@@ -28,7 +28,7 @@ return static function (RectorConfig $rectorConfig): void {
             'getMasterRequest',
             'getMainRequest',
         ),
-        new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width',),
+        new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'),
         new MethodCallRename(
             'Symfony\Component\Console\Helper\Helper',
             'strlenWithoutDecoration',

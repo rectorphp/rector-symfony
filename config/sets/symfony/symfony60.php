@@ -36,7 +36,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        new AddParamTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', 0, new MixedType(),),
+        new AddParamTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', 0, new MixedType()),
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
             'configureRoutes',

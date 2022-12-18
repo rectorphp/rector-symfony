@@ -24,7 +24,7 @@ final class StringValueQuoteWrapper
         }
 
         if (is_array($value)) {
-            return $this->wrapArray($value, $key,);
+            return $this->wrapArray($value, $key);
         }
 
         return $value;
