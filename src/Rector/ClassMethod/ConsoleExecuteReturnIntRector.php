@@ -116,7 +116,12 @@ CODE_SAMPLE
             &$hasReturn
         ): ?int {
             if ($node instanceof FunctionLike) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+
+            // skip anonymous class
+            if ($node instanceof Class_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -129,8 +134,11 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->expr instanceof Int_) {
-                return null;
+            if ($node->expr instanceof Expr) {
+                $returnedType = $this->getType($node->expr);
+                if ($returnedType instanceof IntegerType) {
+                    return null;
+                }
             }
 
             if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
