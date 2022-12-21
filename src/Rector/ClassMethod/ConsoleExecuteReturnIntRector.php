@@ -69,29 +69,25 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'execute')) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\Console\Command\Command'))) {
             return null;
         }
 
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (! $class instanceof Class_) {
+        $executeClassMethod = $node->getMethod('execute');
+        if (! $executeClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        if (! $this->isObjectType($class, new ObjectType('Symfony\Component\Console\Command\Command'))) {
-            return null;
-        }
-
-        $this->refactorReturnTypeDeclaration($node);
-        $this->addReturn0ToMethod($node);
+        $this->refactorReturnTypeDeclaration($executeClassMethod);
+        $this->addReturn0ToMethod($executeClassMethod);
 
         if ($this->hasChanged) {
             return $node;

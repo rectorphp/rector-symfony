@@ -54,3 +54,5 @@ parameters:
             message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
             path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
 
+        # keep for BC
+        - '#Class "Rector\\Symfony\\Rector\\ClassMethod\\ConsoleExecuteReturnIntRector" has invalid namespace category "ClassMethod"\. Pick one of\: "Class_"#'
