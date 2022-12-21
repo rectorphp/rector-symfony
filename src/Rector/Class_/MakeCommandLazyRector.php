@@ -203,8 +203,7 @@ CODE_SAMPLE
             $onlyNode = $onlyNode->expr;
         }
 
-        /** @var Expr|null $onlyNode */
-        if ($onlyNode === null) {
+        if (! $onlyNode instanceof Expr) {
             return;
         }
 
