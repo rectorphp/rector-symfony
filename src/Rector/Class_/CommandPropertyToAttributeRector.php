@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\Class_;
 
+use PhpParser\Node\Attribute;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
@@ -105,12 +106,14 @@ CODE_SAMPLE),
         $defaultDescription = $this->resolveDefaultDescription($node);
         $array = $this->resolveAliases($node);
         $constFetch = $this->resolveHidden($node);
-        $node->attrGroups[] = $this->createAttributeGroup($defaultName, $defaultDescription, $array, $constFetch);
 
-        return $node;
+        return $this->replaceAsCommandAttribute(
+            $node,
+            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $array, $constFetch)
+        );
     }
 
-    private function createAttributeGroup(
+    private function createAttributeGroupAsCommand(
         string $defaultName,
         ?string $defaultDescription,
         ?Array_ $array,
@@ -167,31 +170,38 @@ CODE_SAMPLE),
 
         // Get DefaultName from attribute
         if ($defaultName === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
-            $defaultName = $this->getDefaultNameFromAttribute($class);
+            $defaultNameFromArgument = $this->getArgumentValueFromAttribute($class, 0);
+            if (is_string($defaultNameFromArgument)) {
+                $defaultName = $defaultNameFromArgument;
+            }
         }
 
         return $defaultName;
     }
 
-    private function getDefaultNameFromAttribute(Class_ $class): ?string
+    private function getArgumentValueFromAttribute(Class_ $class, int $argumentIndexKey): string|ConstFetch|Array_|null
     {
-        $defaultName = null;
+        $argumentValue = null;
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
                 if (! $this->nodeNameResolver->isName($attribute->name, self::ATTRIBUTE)) {
                     continue;
                 }
 
-                $arg = $attribute->args[0];
-                if (! $arg->value instanceof String_) {
+                if (! isset($attribute->args[$argumentIndexKey])) {
                     continue;
                 }
-                $defaultName = $arg->value->value;
-                $this->removeNode($attrGroup);
+
+                $arg = $attribute->args[$argumentIndexKey];
+                if ($arg->value instanceof String_) {
+                    $argumentValue = $arg->value->value;
+                } elseif ($arg->value instanceof ConstFetch || $arg->value instanceof Array_) {
+                    $argumentValue = $arg->value;
+                }
             }
         }
 
-        return $defaultName;
+        return $argumentValue;
     }
 
     private function resolveDefaultDescription(Class_ $class): ?string
@@ -206,6 +216,18 @@ CODE_SAMPLE),
             }
         }
 
+        return $this->resolveDefaultDescriptionFromAttribute($class, $defaultDescription);
+    }
+
+    private function resolveDefaultDescriptionFromAttribute(Class_ $class, ?string $defaultDescription): ?string
+    {
+        if ($defaultDescription === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
+            $defaultDescriptionFromArgument = $this->getArgumentValueFromAttribute($class, 1);
+            if (is_string($defaultDescriptionFromArgument)) {
+                $defaultDescription = $defaultDescriptionFromArgument;
+            }
+        }
+
         return $defaultDescription;
     }
 
@@ -214,7 +236,7 @@ CODE_SAMPLE),
         $commandAliases = null;
         $classMethod = $class->getMethod('configure');
         if (! $classMethod instanceof ClassMethod) {
-            return null;
+            return $this->resolveAliasesFromAttribute($class);
         }
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$commandAliases) {
             if (! $node instanceof MethodCall) {
@@ -254,12 +276,25 @@ CODE_SAMPLE),
         return $commandAliases;
     }
 
+    private function resolveAliasesFromAttribute(Class_ $class): ?Array_
+    {
+        $commandAliases = null;
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
+            $commandAliasesFromArgument = $this->getArgumentValueFromAttribute($class, 2);
+            if ($commandAliasesFromArgument instanceof Array_) {
+                $commandAliases = $commandAliasesFromArgument;
+            }
+        }
+
+        return $commandAliases;
+    }
+
     private function resolveHidden(Class_ $class): ?ConstFetch
     {
         $commandHidden = null;
         $classMethod = $class->getMethod('configure');
         if (! $classMethod instanceof ClassMethod) {
-            return null;
+            return $this->resolveHiddenFromAttribute($class);
         }
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$commandHidden) {
             if (! $node instanceof MethodCall) {
@@ -292,6 +327,19 @@ CODE_SAMPLE),
         return $commandHidden;
     }
 
+    private function resolveHiddenFromAttribute(Class_ $class): ?ConstFetch
+    {
+        $commandHidden = null;
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
+            $commandHiddenFromArgument = $this->getArgumentValueFromAttribute($class, 3);
+            if ($commandHiddenFromArgument instanceof ConstFetch) {
+                $commandHidden = $commandHiddenFromArgument;
+            }
+        }
+
+        return $commandHidden;
+    }
+
     private function getCommandHiddenValue(MethodCall $methodCall): ?ConstFetch
     {
         if (! isset($methodCall->args[0])) {
@@ -305,5 +353,52 @@ CODE_SAMPLE),
         }
 
         return $arg->value;
+    }
+
+    private function replaceAsCommandAttribute(Class_ $class, AttributeGroup $createAttributeGroup): ?Class_
+    {
+        $hasAsCommandAttribute = false;
+        $replacedAsCommandAttribute = false;
+        foreach ($class->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if ($this->nodeNameResolver->isName($attribute->name, self::ATTRIBUTE)) {
+                    $hasAsCommandAttribute = true;
+                    $replacedAsCommandAttribute = $this->replaceArguments($attribute, $createAttributeGroup);
+                }
+            }
+        }
+
+        if ($hasAsCommandAttribute === false) {
+            $class->attrGroups[] = $createAttributeGroup;
+            $replacedAsCommandAttribute = true;
+        }
+        if ($replacedAsCommandAttribute === false) {
+            return null;
+        }
+
+        return $class;
+    }
+
+    private function replaceArguments(Attribute $attribute, AttributeGroup $createAttributeGroup): bool
+    {
+        $replacedAsCommandAttribute = false;
+        if (!$attribute->args[0]->value instanceof String_) {
+            $attribute->args[0] = $createAttributeGroup->attrs[0]->args[0];
+            $replacedAsCommandAttribute = true;
+        }
+        if ((!isset($attribute->args[1])) && isset($createAttributeGroup->attrs[0]->args[1])) {
+            $attribute->args[1] = $createAttributeGroup->attrs[0]->args[1];
+            $replacedAsCommandAttribute = true;
+        }
+        if ((!isset($attribute->args[2])) && isset($createAttributeGroup->attrs[0]->args[2])) {
+            $attribute->args[2] = $createAttributeGroup->attrs[0]->args[2];
+            $replacedAsCommandAttribute = true;
+        }
+        if ((!isset($attribute->args[3])) && isset($createAttributeGroup->attrs[0]->args[3])) {
+            $attribute->args[3] = $createAttributeGroup->attrs[0]->args[3];
+            $replacedAsCommandAttribute = true;
+        }
+
+        return $replacedAsCommandAttribute;
     }
 }
