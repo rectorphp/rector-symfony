@@ -134,11 +134,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->expr instanceof Expr) {
-                $returnedType = $this->getType($node->expr);
-                if ($returnedType instanceof IntegerType) {
-                    return null;
-                }
+            if ($this->isReturnIntegerType($node->expr)) {
+                return null;
             }
 
             if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
@@ -158,6 +155,18 @@ CODE_SAMPLE
         });
 
         $this->processReturn0ToMethod($hasReturn, $classMethod);
+    }
+
+    private function isReturnIntegerType(?Expr $expr): bool
+    {
+        if ($expr instanceof Expr) {
+            $returnedType = $this->getType($expr);
+            if ($returnedType instanceof IntegerType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isIntegerTernaryIfElse(Ternary $ternary): bool
