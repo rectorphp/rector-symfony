@@ -183,7 +183,7 @@ CODE_SAMPLE
             }
 
             foreach (NodeTypeGroup::STMTS_AWARE as $stmtsAwareType) {
-                if (! is_a($node, $stmtsAwareType, true)) {
+                if (! $node instanceof $stmtsAwareType) {
                     continue;
                 }
 
