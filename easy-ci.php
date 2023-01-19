@@ -8,6 +8,11 @@ use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterfac
 use Symplify\EasyCI\Config\EasyCIConfig;
 
 return static function (EasyCIConfig $easyCIConfig): void {
+    $easyCIConfig->paths([
+         __DIR__ . '/config',
+         __DIR__ . '/src',
+    ]);
+
     $easyCIConfig->typesToSkip([
         SymfonyRoutesProviderInterface::class,
         SetListInterface::class,
