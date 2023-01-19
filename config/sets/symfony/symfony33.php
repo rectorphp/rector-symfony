@@ -13,7 +13,13 @@ use Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRe
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [
-        new ArgumentAdder('Symfony\Component\DependencyInjection\ContainerBuilder', 'compile', 0, 'resolveEnvPlaceholders', false),
+        new ArgumentAdder(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            'compile',
+            0,
+            'resolveEnvPlaceholders',
+            false
+        ),
         new ArgumentAdder(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'addCompilerPass',
