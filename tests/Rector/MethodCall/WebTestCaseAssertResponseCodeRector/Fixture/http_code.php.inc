@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -48,7 +48,7 @@ final class SomeClass extends WebTestCase
 -----
 <?php
 
-namespace Rector\Tests\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
+namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
