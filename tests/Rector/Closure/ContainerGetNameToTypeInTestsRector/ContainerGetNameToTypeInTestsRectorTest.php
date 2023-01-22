@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ContainerGetNameToTypeInTestsRectorTest extends AbstractRectorTestCase
@@ -17,9 +18,9 @@ final class ContainerGetNameToTypeInTestsRectorTest extends AbstractRectorTestCa
     }
 
     /**
-     * @return \Iterator<string>
+     * @return Iterator<string>
      */
-    public function provideData(): \Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
