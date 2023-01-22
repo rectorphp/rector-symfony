@@ -62,8 +62,8 @@ final class AddRouteAnnotationRector extends AbstractRector
         $controllerReference = $this->resolveControllerReference($class, $node);
 
         // is there a route for this annotation?
-        $symfonyRoutes = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
-        if ($symfonyRoutes === []) {
+        $symfonyRouteMetadatas = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
+        if ($symfonyRouteMetadatas === []) {
             return null;
         }
 
@@ -74,8 +74,8 @@ final class AddRouteAnnotationRector extends AbstractRector
             return null;
         }
 
-        foreach ($symfonyRoutes as $symfonyRoute) {
-            $items = $this->createRouteItems($symfonyRoute);
+        foreach ($symfonyRouteMetadatas as $symfonyRouteMetadata) {
+            $items = $this->createRouteItems($symfonyRouteMetadata);
             $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
             $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
         }

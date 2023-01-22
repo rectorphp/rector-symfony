@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObject;
 
-class SymfonyRouteMetadata
+final class SymfonyRouteMetadata
 {
     /**
      * Format <class>::<method>
@@ -98,14 +98,6 @@ class SymfonyRouteMetadata
     public function getCondition(): string
     {
         return $this->condition;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
     }
 
     /**

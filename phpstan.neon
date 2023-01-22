@@ -16,6 +16,11 @@ parameters:
         property_type: 100
         print_suggestions: true
 
+    unused_public:
+        methods: true
+        properties: true
+        constants: true
+
     scanDirectories:
         - stubs
 
