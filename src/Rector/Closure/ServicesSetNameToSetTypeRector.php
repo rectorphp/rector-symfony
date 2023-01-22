@@ -209,7 +209,7 @@ CODE_SAMPLE
     {
         $this->servicesNamesByType = [];
 
-        $this->traverseNodesWithCallable($closure, function (\PhpParser\Node $node) {
+        $this->traverseNodesWithCallable($closure, function (Node $node) {
             if (! $node instanceof MethodCall) {
                 return null;
             }
@@ -237,12 +237,12 @@ CODE_SAMPLE
 
         $duplicatedTypeNames = [];
 
-        foreach ($this->servicesNamesByType as $serviceType => $serviceNames) {
-            if (count($serviceNames) <= 1) {
+        foreach ($this->servicesNamesByType as $servicesNames) {
+            if (count($servicesNames) <= 1) {
                 continue;
             }
 
-            $duplicatedTypeNames = array_merge($duplicatedTypeNames, $serviceNames);
+            $duplicatedTypeNames = array_merge($duplicatedTypeNames, $servicesNames);
         }
 
         return $duplicatedTypeNames;
