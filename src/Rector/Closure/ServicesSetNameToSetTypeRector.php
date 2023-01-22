@@ -180,6 +180,7 @@ CODE_SAMPLE
                 // replace string value with type
                 $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType), 'class');
                 $node->args = [new Arg($classConstFetch)];
+
                 $this->hasChanged = true;
             }
 

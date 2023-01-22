@@ -28,6 +28,7 @@ final class DummySymfonyRoutesProvider implements SymfonyRoutesProviderInterface
         $routesFileContent = FileSystem::read(__DIR__ . '/../config/routes.json');
         $routesJson = Json::decode($routesFileContent, Json::FORCE_ARRAY);
 
+        /** @var SymfonyRouteMetadata[] $symfonyRoutesMetadatas */
         $symfonyRoutesMetadatas = array_map(
             static fn (array $route): SymfonyRouteMetadata => new SymfonyRouteMetadata(
                 name: $route['name'],
@@ -51,6 +52,7 @@ final class DummySymfonyRoutesProvider implements SymfonyRoutesProviderInterface
     public function getRouteByClassMethodReference(string $classMethodReference): ?SymfonyRouteMetadata
     {
         foreach ($this->provide() as $symfonyRouteMetadata) {
+            /** @var SymfonyRouteMetadata $symfonyRouteMetadata */
             if ($symfonyRouteMetadata->getDefault('_controller') === $classMethodReference) {
                 return $symfonyRouteMetadata;
             }
