@@ -178,8 +178,13 @@ CODE_SAMPLE
                 }
 
                 // replace string value with type
+<<<<<<< HEAD
                 $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType), 'class');
                 $node->args = [new Arg($classConstFetch)];
+=======
+                $classConstFetch = new Node\Expr\ClassConstFetch(new FullyQualified($serviceType), 'class');
+                $node->args = [new Node\Arg($classConstFetch)];
+>>>>>>> a921673 (Add function reference support to ServicesSetNameToSetTypeRector)
                 $this->hasChanged = true;
             }
 
