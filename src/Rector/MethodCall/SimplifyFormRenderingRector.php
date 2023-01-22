@@ -26,6 +26,8 @@ final class SimplifyFormRenderingRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 class ReplaceFormCreateViewFunctionCall extends AbstractController
 {
     public function form(): Response
@@ -38,6 +40,8 @@ class ReplaceFormCreateViewFunctionCall extends AbstractController
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 class ReplaceFormCreateViewFunctionCall extends AbstractController
 {
     public function form(): Response
