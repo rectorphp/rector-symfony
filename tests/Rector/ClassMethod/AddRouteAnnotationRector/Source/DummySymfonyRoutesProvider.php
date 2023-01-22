@@ -52,6 +52,7 @@ final class DummySymfonyRoutesProvider implements SymfonyRoutesProviderInterface
     public function getRouteByClassMethodReference(string $classMethodReference): ?SymfonyRouteMetadata
     {
         foreach ($this->provide() as $symfonyRouteMetadata) {
+            /** @var SymfonyRouteMetadata $symfonyRouteMetadata */
             if ($symfonyRouteMetadata->getDefault('_controller') === $classMethodReference) {
                 return $symfonyRouteMetadata;
             }

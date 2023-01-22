@@ -45,14 +45,6 @@ final class SymfonyRouteMetadata
     /**
      * @return array<string, mixed>
      */
-    public function getDefaults(): array
-    {
-        return $this->defaults;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
     public function getDefaultsWithoutController(): array
     {
         $defaults = $this->defaults;
@@ -61,6 +53,9 @@ final class SymfonyRouteMetadata
         return $defaults;
     }
 
+    /**
+     * @api used
+     */
     public function getDefault(string $name): mixed
     {
         return $this->defaults[$name] ?? null;
