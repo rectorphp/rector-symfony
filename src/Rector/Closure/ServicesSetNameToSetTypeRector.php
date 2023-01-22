@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\Closure;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -176,8 +178,8 @@ CODE_SAMPLE
                 }
 
                 // replace string value with type
-                $classConstFetch = new Node\Expr\ClassConstFetch(new FullyQualified($serviceType), 'class');
-                $node->args = [new Node\Arg($classConstFetch)];
+                $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType), 'class');
+                $node->args = [new Arg($classConstFetch)];
                 $this->hasChanged = true;
             }
 
