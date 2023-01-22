@@ -26,6 +26,9 @@ final class SymfonyPhpClosureDetector
             return false;
         }
 
-        return $this->nodeNameResolver->isName($firstParam->type, 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
+        return $this->nodeNameResolver->isName(
+            $firstParam->type,
+            'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'
+        );
     }
 }
