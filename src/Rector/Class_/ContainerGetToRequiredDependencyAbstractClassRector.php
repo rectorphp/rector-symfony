@@ -131,7 +131,10 @@ CODE_SAMPLE
 
         $newStmts = $this->createPropertyStmts($autowiredTypes);
 
-        $newStmts[] = $this->requiredClassMethodFactory->createRequiredAutowireClassMethod($this->autowiredTypes);
+        $newStmts[] = $this->requiredClassMethodFactory->createRequiredAutowireClassMethod(
+            $this->autowiredTypes,
+            $node
+        );
 
         $node->stmts = array_merge($newStmts, $node->stmts);
 

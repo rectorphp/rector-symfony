@@ -10,10 +10,13 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Webmozart\Assert\Assert;
 
 final class RequiredClassMethodFactory
@@ -21,11 +24,16 @@ final class RequiredClassMethodFactory
     /**
      * @param string[] $classNames
      */
-    public function createRequiredAutowireClassMethod(array $classNames): ClassMethod
+    public function createRequiredAutowireClassMethod(array $classNames, Class_ $class): ClassMethod
     {
         Assert::allString($classNames);
 
-        $method = new Method('autowire');
+        if (! $class->name instanceof Identifier) {
+            throw new ShouldNotHappenException();
+        }
+
+        // use unique name per class, to avoid inheritance override
+        $method = new Method('autowire' . ucfirst($class->name->toString()));
         $method->makePublic();
 
         foreach ($classNames as $className) {
