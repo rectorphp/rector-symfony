@@ -17,6 +17,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver;
 use Rector\Symfony\NodeFactory\RequiredClassMethodFactory;
+use Rector\Symfony\TypeAnalyzer\ContainerAwareAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,6 +34,7 @@ final class ContainerGetToRequiredDependencyAbstractClassRector extends Abstract
     public function __construct(
         private readonly ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
         private readonly RequiredClassMethodFactory $requiredClassMethodFactory,
+        private readonly ContainerAwareAnalyzer $containerAwareAnalyzer
     ) {
     }
 
@@ -94,10 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType(
-            $node,
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')
-        )) {
+        if (! $this->containerAwareAnalyzer->isGetMethodAwareType($node)) {
             return null;
         }
 
@@ -128,14 +127,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $newStmts = [];
-        foreach ($this->autowiredTypes as $autowiredType) {
-            $propertyName = $this->resolveVariableNameFromClassName($autowiredType);
-            $propertyBuilder = new Property($propertyName);
-            $propertyBuilder->makePrivate();
-            $propertyBuilder->setType(new FullyQualified($autowiredType));
-            $newStmts[] = $propertyBuilder->getNode();
-        }
+        $autowiredTypes = array_unique($this->autowiredTypes);
+
+        $newStmts = $this->createPropertyStmts($autowiredTypes);
 
         $newStmts[] = $this->requiredClassMethodFactory->createRequiredAutowireClassMethod($this->autowiredTypes);
 
@@ -169,5 +163,25 @@ CODE_SAMPLE
         }
 
         return lcfirst($shortClassName);
+    }
+
+    /**
+     * @param string[] $autowiredTypes
+     * @return Node\Stmt\Property[]
+     */
+    private function createPropertyStmts(array $autowiredTypes): array
+    {
+        $properties = [];
+
+        foreach ($autowiredTypes as $autowiredType) {
+            $propertyName = $this->resolveVariableNameFromClassName($autowiredType);
+            $propertyBuilder = new Property($propertyName);
+            $propertyBuilder->makePrivate();
+            $propertyBuilder->setType(new FullyQualified($autowiredType));
+
+            $properties[] = $propertyBuilder->getNode();
+        }
+
+        return $properties;
     }
 }

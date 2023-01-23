@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\TypeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -25,8 +24,8 @@ final class ContainerAwareAnalyzer
         ];
     }
 
-    public function isGetMethodAwareType(Expr $expr): bool
+    public function isGetMethodAwareType(\PhpParser\Node $node): bool
     {
-        return $this->nodeTypeResolver->isObjectTypes($expr, $this->getMethodAwareObjectTypes);
+        return $this->nodeTypeResolver->isObjectTypes($node, $this->getMethodAwareObjectTypes);
     }
 }
