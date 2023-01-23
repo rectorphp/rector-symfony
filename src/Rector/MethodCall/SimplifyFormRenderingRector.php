@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,6 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyFormRenderingRector extends AbstractRector
 {
+    public function __construct(
+        private readonly ControllerAnalyzer $controllerAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -70,10 +76,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType(
-            $node->var,
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController')
-        )) {
+        if (! $this->controllerAnalyzer->isController($node->var)) {
             return null;
         }
 
