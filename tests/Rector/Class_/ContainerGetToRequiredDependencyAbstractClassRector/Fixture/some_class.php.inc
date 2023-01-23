@@ -26,7 +26,7 @@ abstract class CustomAbstractController extends AbstractController
     /**
      * @required
      */
-    public function autowire(\App\\SomeType $someType)
+    public function autowireCustomAbstractController(\App\\SomeType $someType)
     {
         $this->someType = $someType;
     }
