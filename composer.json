@@ -12,7 +12,7 @@
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.9.2",
         "phpstan/phpstan-webmozart-assert": "^1.2",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^10.0",
         "rector/phpstan-rules": "^0.6",
         "rector/rector-debugging": "dev-main",
         "rector/rector-generator": "^0.6",
@@ -50,13 +50,7 @@
         "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor/bin/ecs check --ansi",
         "fix-cs": "vendor/bin/ecs check --fix --ansi",
-<<<<<<< HEAD
-        "docs": [
-            "vendor/bin/rule-doc-generator generate src --output-file docs/rector_rules_overview.md --ansi"
-        ]
-=======
         "docs": "vendor/bin/rule-doc-generator generate src --output-file docs/rector_rules_overview.md --ansi"
->>>>>>> 69e29b4 (remove markdown cleanup)
     },
     "extra": {
         "enable-patching": true,

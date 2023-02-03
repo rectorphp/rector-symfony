@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector;
 
 use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ContainerGetNameToTypeInTestsRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @dataProvider provideData()
-     */
+    #[DataProvider('provideData')]
     public function test(string $filePath): void
     {
         $this->doTestFile($filePath);
@@ -20,9 +19,9 @@ final class ContainerGetNameToTypeInTestsRectorTest extends AbstractRectorTestCa
     /**
      * @return Iterator<string>
      */
-    public function provideData(): Iterator
+    public static function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return self::yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string
