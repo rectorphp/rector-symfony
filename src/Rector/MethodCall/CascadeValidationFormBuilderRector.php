@@ -188,7 +188,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->valueResolver->isValue($arrayItem->key, 'cascade_validation')) {
+        if (! $arrayItem->key instanceof String_) {
+            return null;
+        }
+
+        if ($arrayItem->key->value !== 'cascade_validation') {
             return null;
         }
 
