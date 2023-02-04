@@ -34,11 +34,7 @@ return static function (RectorConfig $rectorConfig): void {
             'strlenWithoutDecoration',
             'removeDecoration',
         ),
-        new MethodCallRename(
-            'Symfony\Component\HttpKernel\Event\KernelEvent',
-            'isMasterRequest',
-            'isMainRequest',
-        ),
+        new MethodCallRename('Symfony\Component\HttpKernel\Event\KernelEvent', 'isMasterRequest', 'isMainRequest'),
         new MethodCallRename(
             'Symfony\Component\Security\Core\Authentication\Token\TokenInterface',
             'getUsername',
