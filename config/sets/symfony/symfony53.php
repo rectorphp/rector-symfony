@@ -35,7 +35,7 @@ return static function (RectorConfig $rectorConfig): void {
             'removeDecoration',
         ),
         new MethodCallRename(
-            '\Symfony\Component\HttpKernel\Event\KernelEvent',
+            'Symfony\Component\HttpKernel\Event\KernelEvent',
             'isMasterRequest',
             'isMainRequest',
         ),
