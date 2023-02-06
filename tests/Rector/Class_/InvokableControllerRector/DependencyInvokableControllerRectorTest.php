@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector;
 
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Nette\Utils\FileSystem;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class DependencyInvokableControllerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $someClassFile = __DIR__ . '/FixtureDependency/dependency_controller.php.inc';
-        $this->doTestFile($someClassFile);
+        $this->doTestFile(__DIR__ . '/FixtureDependency/dependency_controller.php.inc');
 
         // 1. here the file should be split into 2 new ones
 
-        $addedFileWithContents = [];
-        $addedFileWithContents[] = new AddedFileWithContent(
-            $this->getFixtureTempDirectory() . '/DependencyListController.php',
-            file_get_contents(__DIR__ . '/FixtureDependency/Expected/DependencyListController.php')
+        $this->assertFileWasAdded(
+            __DIR__ . '/FixtureDependency/DependencyListController.php',
+            FileSystem::read(__DIR__ . '/FixtureDependency/Expected/DependencyListController.php')
         );
 
-        $addedFileWithContents[] = new AddedFileWithContent(
-            $this->getFixtureTempDirectory() . '/DependencyDetailController.php',
-            file_get_contents(__DIR__ . '/FixtureDependency/Expected/DependencyDetailController.php')
+        $this->assertFileWasAdded(
+            __DIR__ . '/FixtureDependency/DependencyDetailController.php',
+            FileSystem::read(__DIR__ . '/FixtureDependency/Expected/DependencyDetailController.php')
         );
-
-        $this->assertFilesWereAdded($addedFileWithContents);
 
         // 2. old file should be removed
-        $removedFilesCount = $this->removedAndAddedFilesCollector->getRemovedFilesCount();
-        $this->assertSame(1, $removedFilesCount);
+        $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved(
+            __DIR__ . '/FixtureDependency/dependency_controller.php'
+        );
+        $this->assertTrue($isFileRemoved);
     }
 
     public function provideConfigFilePath(): string
