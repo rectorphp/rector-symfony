@@ -4,34 +4,30 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Class_\InvokableControllerRector;
 
-use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Nette\Utils\FileSystem;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SplitInvokableControllerRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $someClassFile = __DIR__ . '/FixtureSplit/some_class.php.inc';
-        $this->doTestFile($someClassFile);
+        $this->doTestFile(__DIR__ . '/FixtureSplit/some_class.php.inc');
 
-        // 1. here the file should be split into 2 new ones
-
-        $addedFileWithContents = [];
-        $addedFileWithContents[] = new AddedFileWithContent(
-            $this->getFixtureTempDirectory() . '/SomeListController.php',
-            file_get_contents(__DIR__ . '/FixtureSplit/Expected/SomeListController.php')
+        $this->assertFileWasAdded(
+            __DIR__ . '/FixtureSplit/SomeListController.php',
+            FileSystem::read(__DIR__ . '/FixtureSplit/Expected/SomeListController.php')
         );
 
-        $addedFileWithContents[] = new AddedFileWithContent(
-            $this->getFixtureTempDirectory() . '/SomeDetailController.php',
-            file_get_contents(__DIR__ . '/FixtureSplit/Expected/SomeDetailController.php')
+        $this->assertFileWasAdded(
+            __DIR__ . '/FixtureSplit/SomeDetailController.php',
+            FileSystem::read(__DIR__ . '/FixtureSplit/Expected/SomeDetailController.php')
         );
-
-        $this->assertFilesWereAdded($addedFileWithContents);
 
         // 2. old file should be removed
-        $removedFilesCount = $this->removedAndAddedFilesCollector->getRemovedFilesCount();
-        $this->assertSame(1, $removedFilesCount);
+        $isOriginalFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved(
+            __DIR__ . '/FixtureSplit/some_class.php'
+        );
+        $this->assertTrue($isOriginalFileRemoved);
     }
 
     public function provideConfigFilePath(): string
