@@ -12,10 +12,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,9 +35,10 @@ final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRe
 
     private const MAP_ENTITY_CLASS = 'Symfony\Bridge\Doctrine\Attribute\MapEntity';
 
+    private ?Use_ $useNode;
+
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 
@@ -93,7 +94,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (($node instanceof Use_) && $this->isName($node, self::PARAM_CONVERTER_CLASS)) {
-            $this->removeNode($node);
+            $this->useNode = $node;
         }
 
         if (
@@ -104,7 +105,12 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->refactorParamConverter($node);
+        $this->refactorParamConverter($node);
+
+        if ($this->useNode) {
+            $this->removeNode($this->useNode);
+        }
+        return $node;
     }
 
     private function refactorParamConverter(ClassMethod $classMethod): Node
@@ -117,26 +123,7 @@ CODE_SAMPLE
             }
         }
 
-        $this->renamedClassesDataCollector->addOldToNewClasses([
-            self::PARAM_CONVERTER_CLASS => self::MAP_ENTITY_CLASS,
-        ]);
-
         return $classMethod;
-    }
-
-    private function addMapEntityAttribute(
-        ClassMethod $classMethod,
-        string $variableName,
-        AttributeGroup $attributeGroup
-    ): void {
-        foreach ($classMethod->params as $param) {
-            if (! $param->var instanceof Variable) {
-                continue;
-            }
-            if ($variableName === $param->var->name) {
-                $param->attrGroups = [$attributeGroup];
-            }
-        }
     }
 
     private function refactorAttribute(ClassMethod $classMethod, Attribute $attribute): void
@@ -151,15 +138,14 @@ CODE_SAMPLE
         }
 
         $name = $attribute->args[0]->value->value;
-
         $mapping = $attribute->args[1]->value;
 
         if (! $mapping instanceof Array_) {
             return;
         }
-        $this->removeNode($attribute->args[0]);
 
         $newArguments = [];
+        $probablyEntity = false;
         foreach ($mapping->items as $item) {
             if (
                 ! $item instanceof ArrayItem ||
@@ -167,10 +153,21 @@ CODE_SAMPLE
             ) {
                 continue;
             }
+            if (in_array($item->key->value, ['mapping', 'entity_manager'], true)) {
+                $probablyEntity = true;
+            }
             $newArguments[] = new Arg($item->value, name: new Identifier($item->key->value));
         }
 
+        if (! $probablyEntity) {
+            $this->useNode = null;
+            return;
+        }
+
+        $this->removeNode($attribute->args[0]);
+
         $attribute->args = $newArguments;
+        $attribute->name = new FullyQualified(self::MAP_ENTITY_CLASS);
 
         $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
         if (! $node instanceof AttributeGroup) {
@@ -178,6 +175,23 @@ CODE_SAMPLE
         }
 
         $this->addMapEntityAttribute($classMethod, $name, $node);
-        $this->removeNode($node);
+    }
+
+    private function addMapEntityAttribute(
+        ClassMethod $classMethod,
+        string $variableName,
+        AttributeGroup $attributeGroup
+    ): void {
+        foreach ($classMethod->params as $param) {
+            if (
+                ! $param->var instanceof Variable
+            ) {
+                continue;
+            }
+            if ($variableName === $param->var->name) {
+                $param->attrGroups = [$attributeGroup];
+                $this->removeNode($attributeGroup);
+            }
+        }
     }
 }
