@@ -23,18 +23,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
         new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
-        # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L55
-        new MethodCallRename(
-            'Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent',
-            'getException',
-            'getThrowable'
-        ),
-        # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L67
-        new MethodCallRename(
-            'Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent',
-            'setException',
-            'setThrowable'
-        ),
     ]);
 
     $rectorConfig->rule(MakeDispatchFirstArgumentEventRector::class);
