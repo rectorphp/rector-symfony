@@ -2,7 +2,7 @@
 
 class SomeEventListener
 {
-    public function someMethod(\Symfony\Component\HttpKernel\Event\ExceptionEvent $exceptionEvent)
+    public function someMethod(\Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $exceptionEvent)
     {
         $exception = $exceptionEvent->getException();
         $exceptionEvent->setException($exception);
@@ -15,7 +15,7 @@ class SomeEventListener
 
 class SomeEventListener
 {
-    public function someMethod(\Symfony\Component\HttpKernel\Event\ExceptionEvent $exceptionEvent)
+    public function someMethod(\Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $exceptionEvent)
     {
         $exception = $exceptionEvent->getThrowable();
         $exceptionEvent->setThrowable($exception);
