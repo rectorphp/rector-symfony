@@ -35,7 +35,7 @@ final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRe
 
     private const MAP_ENTITY_CLASS = 'Symfony\Bridge\Doctrine\Attribute\MapEntity';
 
-    private ?Use_ $useNode;
+    private ?Use_ $use = null;
 
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
@@ -94,7 +94,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (($node instanceof Use_) && $this->isName($node, self::PARAM_CONVERTER_CLASS)) {
-            $this->useNode = $node;
+            $this->use = $node;
         }
 
         if (
@@ -107,8 +107,8 @@ CODE_SAMPLE
 
         $this->refactorParamConverter($node);
 
-        if ($this->useNode) {
-            $this->removeNode($this->useNode);
+        if ($this->use !== null) {
+            $this->removeNode($this->use);
         }
         return $node;
     }
@@ -160,7 +160,7 @@ CODE_SAMPLE
         }
 
         if (! $probablyEntity) {
-            $this->useNode = null;
+            $this->use = null;
             return;
         }
 
