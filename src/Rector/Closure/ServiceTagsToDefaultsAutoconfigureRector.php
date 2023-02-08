@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\Closure;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
@@ -141,20 +141,20 @@ CODE_SAMPLE
     private function addDefaultAutoconfigure(Closure $closure): void
     {
         foreach ($closure->stmts as $key => $nodeStmt) {
-            if (!$nodeStmt instanceof Expression) {
+            if (! $nodeStmt instanceof Expression) {
                 continue;
             }
 
-            if (!$nodeStmt->expr instanceof Assign) {
+            if (! $nodeStmt->expr instanceof Assign) {
                 continue;
             }
 
             $assign = $nodeStmt->expr;
-            if (!$assign->var instanceof Variable) {
+            if (! $assign->var instanceof Variable) {
                 continue;
             }
 
-            if (!$this->isName($assign->var, 'services')) {
+            if (! $this->isName($assign->var, 'services')) {
                 continue;
             }
 
