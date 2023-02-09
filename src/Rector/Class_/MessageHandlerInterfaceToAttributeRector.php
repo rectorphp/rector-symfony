@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Helper\MessengerHelper;
+use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -78,7 +79,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->hasImplements($node)) {
-            return null;
+            $handlers = $this->messengerHelper->getHandlersFromServices();
+            if ($handlers === []) {
+                return null;
+            }
+
+            return $this->checkForServices($node, $handlers);
         }
 
         $this->refactorImplements($node);
@@ -106,5 +112,20 @@ CODE_SAMPLE
 
             unset($class->implements[$key]);
         }
+    }
+
+    /**
+     * @param ServiceDefinition[] $handlers
+     */
+    private function checkForServices(Class_ $class, array $handlers): Class_
+    {
+        foreach ($handlers as $handler) {
+            if ($this->isName($class, $handler->getClass() ?? $handler->getId())) {
+                $options = $this->messengerHelper->extractOptionsFromServiceDefinition($handler);
+                $this->messengerHelper->addAttribute($class, $options);
+            }
+        }
+
+        return $class;
     }
 }
