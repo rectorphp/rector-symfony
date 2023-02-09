@@ -120,15 +120,18 @@ CODE_SAMPLE
     {
         if (
             $attribute->args === [] ||
-            ! $attribute->args[1]->name instanceof Identifier ||
-            $attribute->args[1]->name->name !== 'options' ||
             ! $attribute->args[0]->value instanceof String_
         ) {
             return;
         }
 
+        $optionsIndex = $this->getIndexForOptionsArg($attribute->args);
+        if (! $optionsIndex) {
+            return;
+        }
+
         $name = $attribute->args[0]->value->value;
-        $mapping = $attribute->args[1]->value;
+        $mapping = $attribute->args[$optionsIndex]->value;
 
         if (! $mapping instanceof Array_) {
             return;
@@ -154,8 +157,8 @@ CODE_SAMPLE
         }
 
         $this->removeNode($attribute->args[0]);
-
-        $attribute->args = $newArguments;
+        $this->removeNode($attribute->args[$optionsIndex]);
+        $attribute->args = array_merge($attribute->args, $newArguments);
         $attribute->name = new FullyQualified(self::MAP_ENTITY_CLASS);
 
         $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
@@ -182,5 +185,19 @@ CODE_SAMPLE
                 $this->removeNode($attributeGroup);
             }
         }
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function getIndexForOptionsArg(array $args): ?int
+    {
+        foreach ($args as $key => $arg) {
+            if ($arg->name instanceof Identifier && $arg->name->name === 'options') {
+                return $key;
+            }
+        }
+
+        return null;
     }
 }
