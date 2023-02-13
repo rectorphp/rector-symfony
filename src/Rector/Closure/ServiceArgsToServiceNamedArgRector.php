@@ -213,8 +213,10 @@ CODE_SAMPLE
                     continue;
                 }
 
+                $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
+
                 $argMethodCall = $this->createArgMethodCall(
-                    $constructorParameterNames[$key],
+                    $constructorParameterNames[$parameterPosition],
                     $arrayItemValue,
                     $argMethodCall,
                     $methodCall
@@ -223,5 +225,15 @@ CODE_SAMPLE
         }
 
         return $argMethodCall;
+    }
+
+    private function resolveParameterPosition(ArrayItem $arrayItem, int $key): int
+    {
+        if ($arrayItem->key instanceof Expr) {
+            return $this->valueResolver->getValue($arrayItem->key);
+        }
+
+        // fallbakc in case of empty array item
+        return $key;
     }
 }
