@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
 use Rector\Symfony\ValueObject\EventReferenceToMethodName;
@@ -27,7 +28,8 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
 
     public function __construct(
         private readonly OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
-        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
+        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
+        private readonly ClassAnalyzer $classAnalyzer,
     ) {
         $this->logoutHandlerObjectType = new ObjectType(
             'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
@@ -97,7 +99,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasImplements($node)) {
+        if (! $this->classAnalyzer->hasImplements(
+            $node,
+            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
+        )) {
             return null;
         }
 
@@ -137,15 +142,5 @@ CODE_SAMPLE
 
             unset($class->implements[$key]);
         }
-    }
-
-    private function hasImplements(Class_ $class): bool
-    {
-        foreach ($class->implements as $implement) {
-            if ($this->isName($implement, 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface')) {
-                return true;
-            }
-        }
-        return false;
     }
 }
