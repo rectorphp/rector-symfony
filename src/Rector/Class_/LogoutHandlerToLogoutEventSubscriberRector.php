@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
+use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\EventReferenceToMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,6 +31,7 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
         private readonly OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
+        private readonly ClassManipulator $classManipulator,
     ) {
         $this->logoutHandlerObjectType = new ObjectType(
             'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
@@ -106,7 +108,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->refactorImplements($node);
+        $this->classManipulator->removeImplements($node, [$this->logoutHandlerObjectType->getClassName()]);
+        $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         // 2. refactor logout() class method to onLogout()
         $logoutClassMethod = $node->getMethod('logout');
@@ -129,18 +132,5 @@ CODE_SAMPLE
         $node->stmts[] = $getSubscribedEventsClassMethod;
 
         return $node;
-    }
-
-    private function refactorImplements(Class_ $class): void
-    {
-        $class->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
-
-        foreach ($class->implements as $key => $implement) {
-            if (! $this->isName($implement, $this->logoutHandlerObjectType->getClassName())) {
-                continue;
-            }
-
-            unset($class->implements[$key]);
-        }
     }
 }
