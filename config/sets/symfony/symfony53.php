@@ -97,12 +97,14 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
+        // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
             'mapFormsToData',
             0,
             new ObjectType(Traversable::class)
         ),
+        // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
             'mapDataToForms',
