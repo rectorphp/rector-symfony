@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
+use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 use Rector\Symfony\ValueObject\ServiceDefinition;
@@ -50,7 +51,8 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
 
     public function __construct(
         private readonly ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
-        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory
+        private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
+        private readonly ClassAnalyzer $classAnalyzer,
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
@@ -136,7 +138,7 @@ CODE_SAMPLE
         }
 
         // is already a subscriber
-        if ($this->isAlreadyEventSubscriber($node)) {
+        if ($this->classAnalyzer->hasImplements($node, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
             return null;
         }
 
@@ -153,17 +155,6 @@ CODE_SAMPLE
 
         $this->changeListenerToSubscriberWithMethods($node, $listenerClassesToEventsToMethods[$className]);
         return $node;
-    }
-
-    private function isAlreadyEventSubscriber(Class_ $class): bool
-    {
-        foreach ($class->implements as $implement) {
-            if ($this->isName($implement, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
