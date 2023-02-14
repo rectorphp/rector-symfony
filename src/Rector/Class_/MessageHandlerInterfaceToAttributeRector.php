@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Symfony\Helper\MessengerHelper;
+use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
+use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,6 +23,8 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
 {
     public function __construct(
         private readonly MessengerHelper $messengerHelper,
+        private readonly ClassManipulator $classManipulator,
+        private readonly ClassAnalyzer $classAnalyzer,
     ) {
     }
 
@@ -78,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->hasImplements($node)) {
+        if (! $this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
             $handlers = $this->messengerHelper->getHandlersFromServices();
             if ($handlers === []) {
                 return null;
@@ -87,31 +91,9 @@ CODE_SAMPLE
             return $this->checkForServices($node, $handlers);
         }
 
-        $this->refactorImplements($node);
+        $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_HANDLER_INTERFACE]);
 
         return $this->messengerHelper->addAttribute($node);
-    }
-
-    private function hasImplements(Class_ $class): bool
-    {
-        foreach ($class->implements as $implement) {
-            if ($this->isName($implement, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function refactorImplements(Class_ $class): void
-    {
-        foreach ($class->implements as $key => $implement) {
-            if (! $this->isName($implement, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
-                continue;
-            }
-
-            unset($class->implements[$key]);
-        }
     }
 
     /**
