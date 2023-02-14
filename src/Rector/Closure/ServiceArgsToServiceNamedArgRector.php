@@ -131,12 +131,12 @@ CODE_SAMPLE
         }
 
         $servicesSetArgs = $methodCall->getArgs();
-        foreach ($servicesSetArgs as $servicesSetArg) {
-            if (! $servicesSetArg->value instanceof ClassConstFetch) {
+        foreach ($servicesSetArgs as $serviceSetArg) {
+            if (! $serviceSetArg->value instanceof ClassConstFetch) {
                 continue;
             }
 
-            return $this->valueResolver->getValue($servicesSetArg->value);
+            return $this->valueResolver->getValue($serviceSetArg->value);
         }
 
         return null;
