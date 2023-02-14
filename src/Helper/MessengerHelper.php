@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Helper;
 
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\PhpAttribute\AttributeArrayNameInliner;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
@@ -20,6 +24,7 @@ final class MessengerHelper
 
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private readonly AttributeArrayNameInliner $attributeArrayNameInliner,
         private readonly ServiceMapProvider $serviceMapProvider,
     ) {
     }
@@ -56,8 +61,10 @@ final class MessengerHelper
      */
     public function addAttribute(Class_|ClassMethod $node, array $options = []): Class_|ClassMethod
     {
+        $args = $this->phpAttributeGroupFactory->createArgsFromItems($options, self::AS_MESSAGE_HANDLER_ATTRIBUTE);
+        $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $node->attrGroups = [
-            $this->phpAttributeGroupFactory->createFromClassWithItems(self::AS_MESSAGE_HANDLER_ATTRIBUTE, $options),
+            new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)]),
         ];
 
         return $node;
