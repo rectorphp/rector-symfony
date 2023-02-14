@@ -2,6 +2,6 @@
 
 namespace Rector\Symfony\Tests\Rector\Closure\ServiceArgsToServiceNamedArgRector\Source;
 
-class SomeChildClassWithConstructor extends SomeClassWithConstructor
+final class GrandChildClassWithConstructor extends SomeChildClassWithConstructor
 {
 }
