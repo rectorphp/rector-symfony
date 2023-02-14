@@ -24,7 +24,7 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    $rectorConfig->import(__DIR__ . '/symfony53-types.php');
+    $rectorConfig->import(__DIR__ . '/symfony50-types.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40536
