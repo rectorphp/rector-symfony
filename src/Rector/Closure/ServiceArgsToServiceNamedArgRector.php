@@ -101,7 +101,6 @@ CODE_SAMPLE
                 return null;
             }
 
-
             $constructorParameterNames = $this->resolveConstructorParameterNames($serviceClass);
 
             $mainArgMethodCall = $this->createMainArgMethodCall($node, $constructorParameterNames);
