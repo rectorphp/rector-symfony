@@ -134,5 +134,35 @@
         "defaults": {
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\InvokeController"
         }
+    },
+    "double_route_1": {
+        "name": "double_route_1",
+        "path": "\/some-path",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        },
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
+        }
+    },
+    "double_route_2": {
+        "name": "double_route_2",
+        "path": "\/some-path",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        },
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
+        }
     }
 }
