@@ -119,5 +119,20 @@
         "defaults": {
             "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
         }
+    },
+    "invokable": {
+        "name": "invokable",
+        "path": "\/invoke",
+        "host": "",
+        "schemes": [],
+        "methods": [],
+        "requirements": [],
+        "condition": "",
+        "options": {
+            "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
+        },
+        "defaults": {
+            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\InvokeController"
+        }
     }
 }
