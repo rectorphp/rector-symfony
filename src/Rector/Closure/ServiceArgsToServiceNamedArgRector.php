@@ -97,6 +97,11 @@ CODE_SAMPLE
                 return null;
             }
 
+            if (! $this->reflectionProvider->hasClass($serviceClass)) {
+                return null;
+            }
+
+
             $constructorParameterNames = $this->resolveConstructorParameterNames($serviceClass);
 
             $mainArgMethodCall = $this->createMainArgMethodCall($node, $constructorParameterNames);
