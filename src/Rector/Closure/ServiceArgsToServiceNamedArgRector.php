@@ -10,7 +10,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -213,10 +212,6 @@ CODE_SAMPLE
                 }
 
                 $arrayItemValue = $arrayItem->value;
-                if ($arrayItemValue instanceof FuncCall) {
-                    continue;
-                }
-
                 $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
 
                 $argMethodCall = $this->createArgMethodCall(
