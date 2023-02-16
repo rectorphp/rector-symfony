@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Symfony\Helper\MessengerHelper;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeManipulator\ClassManipulator;
@@ -25,6 +26,7 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
         private readonly MessengerHelper $messengerHelper,
         private readonly ClassManipulator $classManipulator,
         private readonly ClassAnalyzer $classAnalyzer,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
     ) {
     }
 
@@ -82,6 +84,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
+            return null;
+        }
+
         if (! $this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
             $handlers = $this->messengerHelper->getHandlersFromServices();
             if ($handlers === []) {
