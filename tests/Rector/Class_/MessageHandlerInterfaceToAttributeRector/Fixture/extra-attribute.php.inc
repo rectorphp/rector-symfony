@@ -23,8 +23,8 @@ namespace Rector\Symfony\Tests\Rector\Class_\MessageHandlerInterfaceToAttributeR
 use App\Message\SmsNotification;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-#[\Symfony\Component\Messenger\Attribute\AsMessageHandler]
 #[\Acme\DemoAttribute]
+#[\Symfony\Component\Messenger\Attribute\AsMessageHandler]
 class DemoSmsNotificationHandler
 {
     public function __invoke(SmsNotification $message)
