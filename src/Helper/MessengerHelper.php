@@ -18,7 +18,7 @@ final class MessengerHelper
 {
     public const MESSAGE_HANDLER_INTERFACE = 'Symfony\Component\Messenger\Handler\MessageHandlerInterface';
 
-    private const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\Component\Messenger\Attribute\AsMessageHandler';
+    public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\Component\Messenger\Attribute\AsMessageHandler';
 
     private string $messengerTagName = 'messenger.message_handler';
 
@@ -63,9 +63,9 @@ final class MessengerHelper
     {
         $args = $this->phpAttributeGroupFactory->createArgsFromItems($options, self::AS_MESSAGE_HANDLER_ATTRIBUTE);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
-        $node->attrGroups = [
+        $node->attrGroups = array_merge($node->attrGroups, [
             new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)]),
-        ];
+        ]);
 
         return $node;
     }
