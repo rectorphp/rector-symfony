@@ -25,14 +25,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ClassWithNamedService3 extends Controller
 {
-    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\Foo\Bar $fooBar, private \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\Bar\Bar $barBar)
+    public function __construct(private \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\Foo\Bar $bar, private \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\Source\Bar\Bar $bar2)
     {
     }
     public function render()
     {
         $this->renderTwig([
-            'posts' => $this->fooBar->callMe(),
-            'comments' => $this->barBar->callMe(),
+            'posts' => $this->bar->callMe(),
+            'comments' => $this->bar2->callMe(),
         ]);
     }
 }

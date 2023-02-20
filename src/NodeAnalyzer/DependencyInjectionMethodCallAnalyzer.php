@@ -53,7 +53,7 @@ final class DependencyInjectionMethodCallAnalyzer
             $propertyName = $resolvedPropertyNameByType;
         } else {
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-            $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
+            $propertyName = $this->resolveNewPropertyNameWhenExists($class, $serviceType, $propertyName, $propertyName);
         }
 
         $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
@@ -64,6 +64,7 @@ final class DependencyInjectionMethodCallAnalyzer
 
     private function resolveNewPropertyNameWhenExists(
         Class_ $class,
+        ObjectType $serviceType,
         string $originalPropertyName,
         string $propertyName,
         int $count = 1
@@ -78,7 +79,15 @@ final class DependencyInjectionMethodCallAnalyzer
         foreach ($promotedPropertyParams as $promotedPropertyParam) {
             if ($this->nodeNameResolver->isName($promotedPropertyParam->var, $propertyName)) {
                 $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
-                return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
+                return $this->resolveNewPropertyNameWhenExists($class, $serviceType, $originalPropertyName, $propertyName, $count);
+            }
+        }
+
+        $newProperties = $this->propertyToAddCollector->getPropertiesByClass($class);
+        foreach ($newProperties as $newProperty) {
+            if ($this->nodeNameResolver->isStringName($newProperty->getName(), $propertyName) && !$newProperty->getType()->equals($serviceType)) {
+                $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
+                return $this->resolveNewPropertyNameWhenExists($class, $serviceType, $originalPropertyName, $propertyName, $count);
             }
         }
 
@@ -88,7 +97,7 @@ final class DependencyInjectionMethodCallAnalyzer
         }
 
         $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);
-        return $this->resolveNewPropertyNameWhenExists($class, $originalPropertyName, $propertyName, $count);
+        return $this->resolveNewPropertyNameWhenExists($class, $serviceType, $originalPropertyName, $propertyName, $count);
     }
 
     private function resolveIncrementPropertyName(string $originalPropertyName, int $count): string
