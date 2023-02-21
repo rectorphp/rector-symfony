@@ -1,10 +1,10 @@
 <?php
 
-use Symfony\Component\Config\Loader\LoaderInterface;
-
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\Fixture;
 
-class ApiRouteLoader implements LoaderInterface
+use Symfony\Component\Config\Loader\LoaderInterface;
+
+class ApiLoader implements LoaderInterface
 {
     public function load($resource, ?string $type = null): RouteCollection
     {
@@ -18,13 +18,13 @@ class ApiRouteLoader implements LoaderInterface
 }
 ?>
 -----
-    <?php
-
-use Symfony\Component\Config\Loader\LoaderInterface;
+<?php
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\Fixture;
 
-class ApiRouteLoader implements LoaderInterface
+use Symfony\Component\Config\Loader\LoaderInterface;
+
+class ApiLoader implements LoaderInterface
 {
     public function load(mixed $resource, ?string $type = null): RouteCollection
     {
