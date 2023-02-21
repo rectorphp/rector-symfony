@@ -23,8 +23,6 @@ return static function (RectorConfig $rectorConfig): void {
     $arrayType = new ArrayType(new MixedType(), new MixedType());
     $iterableType = new IterableType(new MixedType(), new MixedType());
 
-    $nullableStringType = new UnionType([new StringType(), new NullType()]);
-
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/issues/32179
         new AddParamTypeDeclaration(
@@ -266,7 +264,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Contracts\Translation\TranslatorInterface',
             'trans',
             0,
-            $nullableStringType
+            new StringType()
         ),
         new AddParamTypeDeclaration(
             'Symfony\Contracts\Translation\TranslatorInterface',
