@@ -110,7 +110,9 @@ CODE_SAMPLE
         foreach ($handlers as $handler) {
             if ($this->isName($class, $handler->getClass() ?? $handler->getId())) {
                 $options = $this->messengerHelper->extractOptionsFromServiceDefinition($handler);
-                $this->messengerHelper->addAttribute($class, $options);
+                if (!isset($options['method']) || '__invoke' === $options['method']) {
+                    $this->messengerHelper->addAttribute($class, $options);
+                }
             }
         }
 
