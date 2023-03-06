@@ -156,9 +156,11 @@ CODE_SAMPLE
 
         $extendedMethodReflection = $serviceClassReflection->getConstructor();
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle(
+            $extendedMethodReflection->getVariants()
+        );
 
-        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflection) {
             /** @var PhpParameterReflection $parameterReflection */
             $constructorParameterNames[] = '$' . $parameterReflection->getName();
         }
