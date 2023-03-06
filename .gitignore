@@ -4,7 +4,8 @@ composer.lock
 # PHPStorm meta files
 .idea/
 
-.phpunit.cache
+/.phpunit.cache
+/.phpunit.result.cache
 
 # often customized locally - example on Github is just fine
 rector-recipe.php
