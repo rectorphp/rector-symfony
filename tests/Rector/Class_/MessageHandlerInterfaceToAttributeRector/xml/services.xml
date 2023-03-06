@@ -4,5 +4,8 @@
         <service id="Rector\Symfony\Tests\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Fixture\ManualSmsNotificationHandler">
             <tag name="messenger.message_handler" priority="10" from_transport="async" />
         </service>
+        <service id="manual.message_handler" class="Rector\Symfony\Tests\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Fixture\SkipMethodSmsNotificationHandler" autowire="true" autoconfigure="true">
+            <tag name="messenger.message_handler" bus="" handles="" method="test" priority="0" from_transport=""/>
+        </service>
     </services>
 </container>
