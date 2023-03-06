@@ -160,9 +160,9 @@ CODE_SAMPLE
             $extendedMethodReflection->getVariants()
         );
 
-        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflection) {
-            /** @var PhpParameterReflection $parameterReflection */
-            $constructorParameterNames[] = '$' . $parameterReflection->getName();
+        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflectionWithPhpDoc) {
+            /** @var PhpParameterReflection $parameterReflectionWithPhpDoc */
+            $constructorParameterNames[] = '$' . $parameterReflectionWithPhpDoc->getName();
         }
 
         return $constructorParameterNames;
