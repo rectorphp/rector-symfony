@@ -68,11 +68,8 @@ final class MinimalSharedStringSolver
      *
      * @return string the extracted part of string or false on failure.
      */
-    private function result(
-        array $longestIndexes,
-        int $longestLength,
-        string $stringA,
-    ) {
+    private function result(array $longestIndexes, int $longestLength, string $stringA)
+    {
         return count($longestIndexes) === 0 ? '' : substr($stringA, $longestIndexes[0], $longestLength);
     }
 }
