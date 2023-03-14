@@ -10,7 +10,7 @@ namespace Rector\Symfony\Rector\Closure;
 final class MinimalSharedStringSolver
 {
     /**
-     * @return array|mixed
+     * @return string
      */
     public function solve(string $stringA, string $stringB)
     {

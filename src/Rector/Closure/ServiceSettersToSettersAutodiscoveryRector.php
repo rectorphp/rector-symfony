@@ -105,9 +105,6 @@ CODE_SAMPLE
         );
 
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
-        if (! is_string($sharedNamespace)) {
-            return null;
-        }
 
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();
