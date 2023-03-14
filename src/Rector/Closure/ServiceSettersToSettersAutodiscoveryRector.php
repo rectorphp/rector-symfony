@@ -31,14 +31,14 @@ use Triun\LongestCommonSubstring\Solver;
  */
 final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
-    private readonly Solver $minimalSharedStringSolver;
+    private readonly MinimalSharedStringSolver $minimalSharedStringSolver;
 
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
         private readonly ReflectionProvider $reflectionProvider,
         private readonly Filesystem $filesystem,
     ) {
-        $this->minimalSharedStringSolver = new Solver();
+        $this->minimalSharedStringSolver = new MinimalSharedStringSolver();
     }
 
     public function getRuleDefinition(): RuleDefinition
