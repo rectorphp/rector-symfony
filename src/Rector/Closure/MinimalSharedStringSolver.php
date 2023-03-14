@@ -9,10 +9,7 @@ namespace Rector\Symfony\Rector\Closure;
  */
 final class MinimalSharedStringSolver
 {
-    /**
-     * @return string
-     */
-    public function solve(string $stringA, string $stringB)
+    public function solve(string $stringA, string $stringB): string
     {
         if (func_num_args() > 2) {
             $arguments = func_get_args();
@@ -55,10 +52,8 @@ final class MinimalSharedStringSolver
 
     /**
      * @param array<int, array<int, int>> $matrix
-     *
-     * @return int
      */
-    private function newIndex(array $matrix, int $i, int $j)
+    private function newIndex(array $matrix, int $i, int $j): int
     {
         return $i - $matrix[$i][$j] + 1;
     }
@@ -68,7 +63,7 @@ final class MinimalSharedStringSolver
      *
      * @return string the extracted part of string or false on failure.
      */
-    private function result(array $longestIndexes, int $longestLength, string $stringA)
+    private function result(array $longestIndexes, int $longestLength, string $stringA): string
     {
         return count($longestIndexes) === 0 ? '' : substr($stringA, $longestIndexes[0], $longestLength);
     }
