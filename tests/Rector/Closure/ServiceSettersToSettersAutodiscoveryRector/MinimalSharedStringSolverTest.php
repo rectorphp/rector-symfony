@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Rector\Symfony\Rector\Closure\MinimalSharedStringSolver;
 
@@ -23,12 +24,12 @@ class MinimalSharedStringSolverTest extends TestCase
     }
 
     /**
-     * @dataProvider twoStringsSymmetricValuesProvider
      *
      * @param string $stringLeft
      * @param string $stringRight
      * @param string $expected
      */
+    #[DataProvider('twoStringsSymmetricValuesProvider')]
     public function testTwoStringsSymmetric($stringLeft, $stringRight, $expected)
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
@@ -36,25 +37,25 @@ class MinimalSharedStringSolverTest extends TestCase
     }
 
     /**
-     * @dataProvider twoStringsOrderedValuesProvider
      *
      * @param string $stringLeft
      * @param string $stringRight
      * @param string $expected
      */
+    #[DataProvider('twoStringsOrderedValuesProvider')]
     public function testTwoStringsOrdered($stringLeft, $stringRight, $expected)
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
     }
 
     /**
-     * @dataProvider threeStringsSymmetricValuesProvider
      *
      * @param string $stringA
      * @param string $stringB
      * @param string $stringC
      * @param string $expected
      */
+    #[DataProvider('threeStringsSymmetricValuesProvider')]
     public function testThreeStringsSymmetric($stringA, $stringB, $stringC, $expected)
     {
         $this->assertSame($expected, static::$solver->solve($stringA, $stringB, $stringC));
