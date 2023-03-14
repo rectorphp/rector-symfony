@@ -15,7 +15,7 @@ final class MinimalSharedStringSolver
             $arguments = func_get_args();
             array_splice($arguments, 0, 2, [$this->solve($stringA, $stringB)]);
 
-            return call_user_func_array([$this, 'solve'], $arguments);
+            return $this->solve(...$arguments);
         }
 
         $charsA = str_split($stringA);
@@ -28,11 +28,7 @@ final class MinimalSharedStringSolver
         foreach ($charsA as $i => $charA) {
             foreach ($charsB as $j => $charB) {
                 if ($charA === $charB) {
-                    if ($i === 0 || $j === 0) {
-                        $matrix[$i][$j] = 1;
-                    } else {
-                        $matrix[$i][$j] = $matrix[$i - 1][$j - 1] + 1;
-                    }
+                    $matrix[$i][$j] = $i === 0 || $j === 0 ? 1 : $matrix[$i - 1][$j - 1] + 1;
 
                     $newIndex = $this->newIndex($matrix, $i, $j);
                     if ($matrix[$i][$j] > $longestLength) {
@@ -65,6 +61,6 @@ final class MinimalSharedStringSolver
      */
     private function result(array $longestIndexes, int $longestLength, string $stringA): string
     {
-        return count($longestIndexes) === 0 ? '' : substr($stringA, $longestIndexes[0], $longestLength);
+        return $longestIndexes === [] ? '' : substr($stringA, $longestIndexes[0], $longestLength);
     }
 }
