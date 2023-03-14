@@ -24,7 +24,6 @@ use Rector\Symfony\ValueObject\ClassNameAndFilePath;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Triun\LongestCommonSubstring\Solver;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest

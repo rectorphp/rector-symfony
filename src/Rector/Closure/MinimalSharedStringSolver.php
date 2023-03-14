@@ -10,40 +10,6 @@ namespace Rector\Symfony\Rector\Closure;
 final class MinimalSharedStringSolver
 {
     /**
-     * @param array $matrix
-     * @param int   $i
-     * @param int   $j
-     *
-     * @return int
-     */
-    protected function newIndex(array $matrix, int $i, int $j)
-    {
-        return $i - $matrix[$i][$j] + 1;
-    }
-
-    /**
-     * @param array  $longestIndexes
-     * @param int    $longestLength
-     * @param string $stringA
-     * @param string $stringB
-     * @param array  $matrix
-     *
-     * @return bool|string the extracted part of string or false on failure.
-     */
-    protected function result(
-        array $longestIndexes,
-        int $longestLength,
-        string $stringA,
-        string $stringB,
-        array $matrix
-    ) {
-        return count($longestIndexes) === 0 ? '' : substr($stringA, $longestIndexes[0], $longestLength);
-    }
-
-    /**
-     * @param string $stringA
-     * @param string $stringB
-     *
      * @return array|mixed
      */
     public function solve(string $stringA, string $stringB)
@@ -65,7 +31,7 @@ final class MinimalSharedStringSolver
         foreach ($charsA as $i => $charA) {
             foreach ($charsB as $j => $charB) {
                 if ($charA === $charB) {
-                    if (0 === $i || 0 === $j) {
+                    if ($i === 0 || $j === 0) {
                         $matrix[$i][$j] = 1;
                     } else {
                         $matrix[$i][$j] = $matrix[$i - 1][$j - 1] + 1;
@@ -84,6 +50,29 @@ final class MinimalSharedStringSolver
             }
         }
 
-        return $this->result($longestIndexes, $longestLength, $stringA, $stringB, $matrix);
+        return $this->result($longestIndexes, $longestLength, $stringA);
+    }
+
+    /**
+     * @param array<int, array<int, int>> $matrix
+     *
+     * @return int
+     */
+    private function newIndex(array $matrix, int $i, int $j)
+    {
+        return $i - $matrix[$i][$j] + 1;
+    }
+
+    /**
+     * @param list<int> $longestIndexes
+     *
+     * @return string the extracted part of string or false on failure.
+     */
+    private function result(
+        array $longestIndexes,
+        int $longestLength,
+        string $stringA,
+    ) {
+        return count($longestIndexes) === 0 ? '' : substr($stringA, $longestIndexes[0], $longestLength);
     }
 }
