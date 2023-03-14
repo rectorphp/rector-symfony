@@ -24,21 +24,20 @@ use Rector\Symfony\ValueObject\ClassNameAndFilePath;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Triun\LongestCommonSubstring\Solver;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest
  */
 final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
-    private readonly Solver $minimalSharedStringSolver;
+    private readonly MinimalSharedStringSolver $minimalSharedStringSolver;
 
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
         private readonly ReflectionProvider $reflectionProvider,
         private readonly Filesystem $filesystem,
     ) {
-        $this->minimalSharedStringSolver = new Solver();
+        $this->minimalSharedStringSolver = new MinimalSharedStringSolver();
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -106,9 +105,6 @@ CODE_SAMPLE
         );
 
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
-        if (! is_string($sharedNamespace)) {
-            return null;
-        }
 
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();
