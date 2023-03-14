@@ -24,39 +24,36 @@ class MinimalSharedStringSolverTest extends TestCase
     }
 
     /**
-     *
      * @param string $stringLeft
      * @param string $stringRight
      * @param string $expected
      */
     #[DataProvider('twoStringsSymmetricValuesProvider')]
-    public function testTwoStringsSymmetric($stringLeft, $stringRight, $expected)
+    public function testTwoStringsSymmetric($stringLeft, $stringRight, $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
         $this->assertSame($expected, static::$solver->solve($stringRight, $stringLeft));
     }
 
     /**
-     *
      * @param string $stringLeft
      * @param string $stringRight
      * @param string $expected
      */
     #[DataProvider('twoStringsOrderedValuesProvider')]
-    public function testTwoStringsOrdered($stringLeft, $stringRight, $expected)
+    public function testTwoStringsOrdered($stringLeft, $stringRight, $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
     }
 
     /**
-     *
      * @param string $stringA
      * @param string $stringB
      * @param string $stringC
      * @param string $expected
      */
     #[DataProvider('threeStringsSymmetricValuesProvider')]
-    public function testThreeStringsSymmetric($stringA, $stringB, $stringC, $expected)
+    public function testThreeStringsSymmetric($stringA, $stringB, $stringC, $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringA, $stringB, $stringC));
         $this->assertSame($expected, static::$solver->solve($stringA, $stringC, $stringB));
@@ -66,7 +63,10 @@ class MinimalSharedStringSolverTest extends TestCase
         $this->assertSame($expected, static::$solver->solve($stringC, $stringB, $stringA));
     }
 
-    public static function twoStringsSymmetricValuesProvider()
+    /**
+     * @return array<string, list<string>>
+     */
+    public static function twoStringsSymmetricValuesProvider(): array
     {
         return [
             'Empty values' => ['', '', ''],
@@ -102,7 +102,10 @@ class MinimalSharedStringSolverTest extends TestCase
         ];
     }
 
-    public static function twoStringsOrderedValuesProvider()
+    /**
+     * @return array<string, list<string>>
+     */
+    public static function twoStringsOrderedValuesProvider(): array
     {
         return [
             'Reverse string ASC -> DESC' => ['ABCDE', 'EDCBA', 'A'],
@@ -122,7 +125,10 @@ class MinimalSharedStringSolverTest extends TestCase
         ];
     }
 
-    public static function threeStringsSymmetricValuesProvider()
+    /**
+     * @return array<string, list<string>>
+     */
+    public static function threeStringsSymmetricValuesProvider(): array
     {
         return [
             'No match' => ['ABDEGH', 'JKLMN', 'OPQRST', ''],
