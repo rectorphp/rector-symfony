@@ -13,47 +13,28 @@ use Rector\Symfony\Rector\Closure\MinimalSharedStringSolver;
  */
 class MinimalSharedStringSolverTest extends TestCase
 {
-    /**
-     * @var MinimalSharedStringSolver
-     */
-    protected static $solver;
+    protected static MinimalSharedStringSolver $solver;
 
     public static function setUpBeforeClass(): void
     {
         static::$solver = new MinimalSharedStringSolver();
     }
 
-    /**
-     * @param string $stringLeft
-     * @param string $stringRight
-     * @param string $expected
-     */
     #[DataProvider('twoStringsSymmetricValuesProvider')]
-    public function testTwoStringsSymmetric($stringLeft, $stringRight, $expected): void
+    public function testTwoStringsSymmetric(string $stringLeft, string $stringRight, string $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
         $this->assertSame($expected, static::$solver->solve($stringRight, $stringLeft));
     }
 
-    /**
-     * @param string $stringLeft
-     * @param string $stringRight
-     * @param string $expected
-     */
     #[DataProvider('twoStringsOrderedValuesProvider')]
-    public function testTwoStringsOrdered($stringLeft, $stringRight, $expected): void
+    public function testTwoStringsOrdered(string $stringLeft, string $stringRight, string $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
     }
 
-    /**
-     * @param string $stringA
-     * @param string $stringB
-     * @param string $stringC
-     * @param string $expected
-     */
     #[DataProvider('threeStringsSymmetricValuesProvider')]
-    public function testThreeStringsSymmetric($stringA, $stringB, $stringC, $expected): void
+    public function testThreeStringsSymmetric(string $stringA, string $stringB, string $stringC, string $expected): void
     {
         $this->assertSame($expected, static::$solver->solve($stringA, $stringB, $stringC));
         $this->assertSame($expected, static::$solver->solve($stringA, $stringC, $stringB));
