@@ -23,7 +23,7 @@ final class ServiceMapProvider
 
     public function provide(): ServiceMap
     {
-        if ($this->serviceMap !== null) {
+        if ($this->serviceMap instanceof ServiceMap) {
             return $this->serviceMap;
         }
 
