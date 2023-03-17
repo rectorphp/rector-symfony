@@ -16,20 +16,27 @@ final class ServiceMapProvider
 {
     public function __construct(
         private readonly ParameterProvider $parameterProvider,
-        private readonly ServiceMapFactory $serviceMapFactory
+        private readonly ServiceMapFactory $serviceMapFactory,
+        private ?ServiceMap $serviceMap = null
     ) {
     }
 
     public function provide(): ServiceMap
     {
+        if ($this->serviceMap !== null) {
+            return $this->serviceMap;
+        }
+
         $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(
             Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER
         );
 
         if ($symfonyContainerXmlPath === '') {
-            return $this->serviceMapFactory->createEmpty();
+            $this->serviceMap = $this->serviceMapFactory->createEmpty();
+        } else {
+            $this->serviceMap = $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);
         }
 
-        return $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);
+        return $this->serviceMap;
     }
 }
