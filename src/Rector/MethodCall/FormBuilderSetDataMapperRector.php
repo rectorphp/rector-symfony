@@ -91,11 +91,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormConfigBuilderInterface'))) {
+        if (! $this->isName($node->name, 'setDataMapper')) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'setDataMapper')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormConfigBuilderInterface'))) {
             return null;
         }
 

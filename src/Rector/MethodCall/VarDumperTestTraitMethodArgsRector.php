@@ -49,6 +49,10 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
+            return null;
+        }
+
         if (! $this->isObjectType(
             $node->var,
             new ObjectType('Symfony\Component\VarDumper\Test\VarDumperTestTrait')
@@ -56,9 +60,6 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
-            return null;
-        }
         if (count($node->args) <= 2) {
             return null;
         }

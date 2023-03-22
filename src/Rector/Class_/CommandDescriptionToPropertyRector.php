@@ -124,13 +124,14 @@ CODE_SAMPLE
                 return null;
             }
 
+            if (! $this->isName($node->name, 'setDescription')) {
+                return null;
+            }
+
             if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
                 return null;
             }
 
-            if (! $this->isName($node->name, 'setDescription')) {
-                return null;
-            }
             /** @var Arg $arg */
             $arg = $node->getArgs()[0];
             if (! $this->getType($arg->value) instanceof StringType) {

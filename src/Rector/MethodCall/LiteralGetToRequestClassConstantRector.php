@@ -84,11 +84,11 @@ CODE_SAMPLE
             return $this->refactorClientMethodCall($node);
         }
 
-        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormBuilderInterface'))) {
+        if (! $this->isName($node->name, 'setMethod')) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'setMethod')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Form\FormBuilderInterface'))) {
             return null;
         }
 
@@ -102,11 +102,11 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): StaticCall|null
     {
-        if (! $this->isObjectType($staticCall->class, new ObjectType('Symfony\Component\HttpFoundation\Request'))) {
+        if (! $this->isName($staticCall->name, 'create')) {
             return null;
         }
 
-        if (! $this->isName($staticCall->name, 'create')) {
+        if (! $this->isObjectType($staticCall->class, new ObjectType('Symfony\Component\HttpFoundation\Request'))) {
             return null;
         }
 

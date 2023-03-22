@@ -56,14 +56,14 @@ final class CommandHelper
                     return null;
                 }
 
+                if (! $this->nodeNameResolver->isName($node->name, 'setAliases')) {
+                    return null;
+                }
+
                 if (! $this->nodeTypeResolver->isObjectType(
                     $node->var,
                     new ObjectType('Symfony\Component\Console\Command\Command')
                 )) {
-                    return null;
-                }
-
-                if (! $this->nodeNameResolver->isName($node->name, 'setAliases')) {
                     return null;
                 }
 
@@ -107,14 +107,14 @@ final class CommandHelper
                     return null;
                 }
 
+                if (! $this->nodeNameResolver->isName($node->name, 'setHidden')) {
+                    return null;
+                }
+
                 if (! $this->nodeTypeResolver->isObjectType(
                     $node->var,
                     new ObjectType('Symfony\Component\Console\Command\Command')
                 )) {
-                    return null;
-                }
-
-                if (! $this->nodeNameResolver->isName($node->name, 'setHidden')) {
                     return null;
                 }
 
