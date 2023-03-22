@@ -127,15 +127,15 @@ CODE_SAMPLE
 
         $nestedMethodCall = $secondArg->value;
 
+        if (! $this->nodeNameResolver->isName($nestedMethodCall->name, 'getStatusCode')) {
+            return null;
+        }
+
         // caller must be a response object
         if (! $this->isObjectType(
             $nestedMethodCall->var,
             new ObjectType('Symfony\Component\HttpFoundation\Response')
         )) {
-            return null;
-        }
-
-        if (! $this->nodeNameResolver->isName($nestedMethodCall->name, 'getStatusCode')) {
             return null;
         }
 

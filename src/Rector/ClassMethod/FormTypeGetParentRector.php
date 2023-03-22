@@ -129,12 +129,12 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'))) {
-            return $this->isName($classMethod->name, 'getParent');
+        if ($this->isName($classMethod->name, 'getParent')) {
+            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'));
         }
 
-        if ($this->isObjectType($classMethod, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'))) {
-            return $this->isName($classMethod->name, 'getExtendedType');
+        if ($this->isName($classMethod->name, 'getExtendedType')) {
+            return $this->isObjectType($classMethod, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'));
         }
 
         return false;

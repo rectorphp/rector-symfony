@@ -111,14 +111,14 @@ CODE_SAMPLE
                 return false;
             }
 
+            if (! $this->isName($node->name, 'root')) {
+                return false;
+            }
+
             if (! $this->isObjectType(
                 $node->var,
                 new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
             )) {
-                return false;
-            }
-
-            if (! $this->isName($node->name, 'root')) {
                 return false;
             }
 

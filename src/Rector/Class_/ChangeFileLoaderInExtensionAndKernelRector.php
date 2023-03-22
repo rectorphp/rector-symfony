@@ -177,11 +177,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Config\Loader\LoaderInterface'))) {
+        if (! $this->isName($node->name, 'load')) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'load')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Config\Loader\LoaderInterface'))) {
             return null;
         }
 

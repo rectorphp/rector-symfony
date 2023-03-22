@@ -106,11 +106,11 @@ CODE_SAMPLE
             return $this->processRedirectMethodCall($methodCall);
         }
 
-        if (! $this->isObjectType($methodCall->var, $this->responseObjectType)) {
+        if (! $this->isName($methodCall->name, 'setStatusCode')) {
             return null;
         }
 
-        if (! $this->isName($methodCall->name, 'setStatusCode')) {
+        if (! $this->isObjectType($methodCall->var, $this->responseObjectType)) {
             return null;
         }
 
@@ -149,11 +149,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isObjectType($node->var, $this->responseObjectType)) {
+        if (! $this->isName($node->name, 'getStatusCode')) {
             return false;
         }
 
-        return $this->isName($node->name, 'getStatusCode');
+        return $this->isObjectType($node->var, $this->responseObjectType);
     }
 
     private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber

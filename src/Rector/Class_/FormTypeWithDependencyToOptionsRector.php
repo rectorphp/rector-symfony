@@ -94,13 +94,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $formObjectType = new ObjectType('Symfony\Component\Form\AbstractType');
-        if (! $this->isObjectType($node, $formObjectType)) {
+        // skip abstract
+        if ($node->isAbstract()) {
             return null;
         }
 
-        // skip abstract
-        if ($node->isAbstract()) {
+        $formObjectType = new ObjectType('Symfony\Component\Form\AbstractType');
+        if (! $this->isObjectType($node, $formObjectType)) {
             return null;
         }
 
