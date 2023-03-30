@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\Return_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
@@ -102,7 +103,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->expr === null) {
+        if (! $node->expr instanceof Expr) {
             return null;
         }
 

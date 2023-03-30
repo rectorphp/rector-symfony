@@ -133,7 +133,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // anonymous class
-        if ($node->name === null) {
+        if (! $node->name instanceof Identifier) {
             return null;
         }
 

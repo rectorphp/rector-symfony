@@ -61,7 +61,7 @@ final class ThisRenderFactory
         $arguments = [$templateNameString];
 
         $parametersExpr = $this->resolveParametersExpr($return, $templateDoctrineAnnotationTagValueNode);
-        if ($parametersExpr !== null) {
+        if ($parametersExpr instanceof Expr) {
             $arguments[] = new Arg($parametersExpr);
         }
 
@@ -95,7 +95,7 @@ final class ThisRenderFactory
             return $this->createArrayFromArrayItemNodes($vars);
         }
 
-        if ($return === null) {
+        if (! $return instanceof Return_) {
             return null;
         }
 
