@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -112,11 +114,11 @@ CODE_SAMPLE
         }
 
         foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem === null) {
+            if (! $arrayItem instanceof ArrayItem) {
                 continue;
             }
 
-            if ($arrayItem->key === null) {
+            if (! $arrayItem->key instanceof Expr) {
                 continue;
             }
 

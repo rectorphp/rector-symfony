@@ -133,7 +133,7 @@ CODE_SAMPLE
 
         if ($firstArgumentExpr instanceof FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
-            if ($arrayNode !== null) {
+            if ($arrayNode instanceof Array_) {
                 $args[$argumentPosition]->value = $arrayNode;
             }
         } elseif ($firstArgumentExpr instanceof String_) {
@@ -171,7 +171,7 @@ CODE_SAMPLE
         }
 
         $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
-        if ($arrayNode !== null && count($arrayNode->items) > 1) {
+        if ($arrayNode instanceof Array_ && count($arrayNode->items) > 1) {
             $assign->expr = $arrayNode;
         }
     }

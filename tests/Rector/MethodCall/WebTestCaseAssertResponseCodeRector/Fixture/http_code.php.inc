@@ -16,11 +16,15 @@ final class SomeClass extends WebTestCase
     public function testFound()
     {
         $response = self::getClient()->getResponse();
+        $customMessage = 'Custom message';
+        $customMessageInt = 1;
 
-        $this->assertSame(302, $response->getStatusCode(), 'Custom message');
-        $this->assertSame(HttpCode::FOUND, $response->getStatusCode(), 'Custom message');
+        $this->assertSame(302, $response->getStatusCode(), $customMessage);
+        $this->assertSame(302, $response->getStatusCode(), (string) $customMessageInt);
+        $this->assertSame(HttpCode::FOUND, $response->getStatusCode(), $customMessage);
         $this->assertSame('https://example.com', $response->headers->get('Location'));
-        $this->assertSame('https://example.com', $response->headers->get('Location'), 'Custom message');
+        $this->assertSame('https://example.com', $response->headers->get('Location'), $customMessage);
+        $this->assertSame('https://example.com', $response->headers->get('Location'), (string) $customMessageInt);
     }
 
     /**
@@ -64,11 +68,15 @@ final class SomeClass extends WebTestCase
     public function testFound()
     {
         $response = self::getClient()->getResponse();
+        $customMessage = 'Custom message';
+        $customMessageInt = 1;
 
-        $this->assertResponseStatusCodeSame(302, 'Custom message');
-        $this->assertResponseStatusCodeSame(HttpCode::FOUND, 'Custom message');
+        $this->assertResponseStatusCodeSame(302, $customMessage);
+        $this->assertResponseStatusCodeSame(302, (string) $customMessageInt);
+        $this->assertResponseStatusCodeSame(HttpCode::FOUND, $customMessage);
         $this->assertResponseRedirects('https://example.com');
-        $this->assertResponseRedirects('https://example.com', null, 'Custom message');
+        $this->assertResponseRedirects('https://example.com', null, $customMessage);
+        $this->assertResponseRedirects('https://example.com', null, (string) $customMessageInt);
     }
 
     /**
