@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
+use Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 
@@ -18,6 +19,6 @@ return static function (RectorConfig $rectorConfig): void {
         ResponseStatusCodeRector::class,
         LiteralGetToRequestClassConstantRector::class,
 
-        \Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector::class,
+        RemoveUnusedRequestParamRector::class,
     ]);
 };

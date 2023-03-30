@@ -156,7 +156,7 @@ CODE_SAMPLE
 
         $extendedMethodReflection = $serviceClassReflection->getConstructor();
 
-        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle(
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors(
             $extendedMethodReflection->getVariants()
         );
 

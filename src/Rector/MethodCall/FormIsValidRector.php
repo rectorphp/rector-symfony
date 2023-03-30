@@ -95,7 +95,7 @@ CODE_SAMPLE
 
         $previousNode = $methodCall->getAttribute(AttributeKey::PREVIOUS_NODE);
 
-        if ($previousNode !== null) {
+        if ($previousNode instanceof Node) {
             return true;
         }
 
