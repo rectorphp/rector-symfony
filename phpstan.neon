@@ -43,11 +43,6 @@ parameters:
         # closure/callable
         - '#Parameter \#2 \$filter of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstPrevious\(\) expects callable\(PhpParser\\Node\)\: bool, Closure\(PhpParser\\Node\)\: PhpParser\\Node\\Expr\\Assign\|null given#'
 
-        # in test, fixtures exists
-        -
-             message: '#Parameter \#2 \$fileContent of class Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent constructor expects string, string\|false given#'
-             path: tests
-
         -
             path: "src/ValueObjectFactory/ServiceMapFactory.php"
             message: '#@simplexml_load_string(.*?) is forbidden to use#'
@@ -65,3 +60,6 @@ parameters:
             path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
 
         - '#Calling PHPStan\\Reflection\\Php\\PhpParameterReflection\:\:getName\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
+
+        # false positive
+        - '#Access to an undefined property Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
