@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
@@ -16,6 +17,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
     $rectorConfig->rule(AuthorizationCheckerIsGrantedExtractorRector::class);
+
+    $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
+        'Symfony\Component\DependencyInjection\Loader\Configurator\tagged' => 'Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator',
+    ]);
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L55
