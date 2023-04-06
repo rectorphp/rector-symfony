@@ -34,6 +34,9 @@ return static function (RectorConfig $rectorConfig): void {
         // assets deprecation
         'Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper' => 'Symfony\Component\Asset\Packages',
 
+        // templating
+        'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface' => 'Symfony\Component\Templating\EngineInterface',
+
         # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
         # Browser Kit
         'Symfony\Component\BrowserKit\Client' => 'Symfony\Component\BrowserKit\AbstractBrowser',
