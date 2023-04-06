@@ -31,6 +31,9 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        // assets deprecation
+        'Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper' => 'Symfony\Component\Asset\Packages',
+
         # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
         # Browser Kit
         'Symfony\Component\BrowserKit\Client' => 'Symfony\Component\BrowserKit\AbstractBrowser',
