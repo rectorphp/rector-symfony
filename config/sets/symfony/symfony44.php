@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
@@ -17,6 +18,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
     $rectorConfig->rule(AuthorizationCheckerIsGrantedExtractorRector::class);
+
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Symfony\Component\Templating\EngineInterface' => 'Twig\Environment',
+    ]);
 
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configurator\tagged' => 'Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator',
