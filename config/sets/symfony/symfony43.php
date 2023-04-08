@@ -10,6 +10,7 @@ use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Symfony\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
@@ -23,6 +24,7 @@ return static function (RectorConfig $rectorConfig): void {
         WebTestCaseAssertResponseCodeRector::class,
         TwigBundleFilesystemLoaderToTwigRector::class,
         MakeDispatchFirstArgumentEventRector::class,
+        GetCurrencyBundleMethodCallsToIntlRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
