@@ -53,14 +53,10 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
             return null;
         }
 
-        // since this is just a test-trait, we can do runtime autoloading.
-        // in a regular rector that would not be allowed.
-        $traitClass = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait';
-        if (! trait_exists($traitClass)) {
-            return null;
-        }
-
-        if (! $this->isObjectType($node->var, new ObjectType($traitClass))) {
+        if (! $this->isObjectType(
+            $node->var,
+            new ObjectType('Symfony\Component\VarDumper\Test\VarDumperTestTrait')
+        )) {
             return null;
         }
 

@@ -76,7 +76,7 @@ final class FormTypeStringToTypeProvider
     {
         $customServiceFormTypeByAlias = $this->provideCustomServiceFormTypeByAliasFromContainerXml();
 
-        return [...self::SYMFONY_CORE_NAME_TO_TYPE_MAP, ...$customServiceFormTypeByAlias];
+        return array_merge(self::SYMFONY_CORE_NAME_TO_TYPE_MAP, $customServiceFormTypeByAlias);
     }
 
     /**
