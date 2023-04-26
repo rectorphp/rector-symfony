@@ -111,15 +111,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyPathAccessor = new New_(new FullyQualified(
+        $new = new New_(new FullyQualified(
             'Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor'
         ));
 
-        $newArgumentValue = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [
-            new Arg($propertyPathAccessor),
-        ]);
-
-        $firstArg->value = $newArgumentValue;
+        $firstArg->value = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [new Arg($new)]);
 
         return $node;
     }
