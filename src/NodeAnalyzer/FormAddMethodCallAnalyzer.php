@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeAnalyzer;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -43,6 +44,6 @@ final class FormAddMethodCallAnalyzer
         }
 
         $firstArg = $args[1];
-        return $firstArg->value !== null;
+        return $firstArg->value instanceof Expr;
     }
 }

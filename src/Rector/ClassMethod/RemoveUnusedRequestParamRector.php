@@ -7,8 +7,11 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,7 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedRequestParamRector extends AbstractRector
 {
     public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer
+        private readonly ControllerAnalyzer $controllerAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ClassChildAnalyzer $classChildAnalyzer,
     ) {
     }
 
@@ -74,6 +79,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isAbstract() || $this->hasAbstractParentClassMethod($node)) {
+            return null;
+        }
+
         if (! $this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
@@ -112,5 +121,15 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function hasAbstractParentClassMethod(ClassMethod $classMethod): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $this->getName($classMethod));
     }
 }
