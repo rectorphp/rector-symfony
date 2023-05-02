@@ -79,7 +79,9 @@ CODE_SAMPLE
         if (! $objectType instanceof ThisType) {
             return null;
         }
-
+        if ($node->isFirstClassCallable()) {
+               return null;
+        }
         $args = $node->getArgs();
 
         if (! isset($args[0])) {
