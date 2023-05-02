@@ -20,14 +20,14 @@ final class ContainerServiceProvider
 
     public function provideByName(string $serviceName): object
     {
-        /** @var Container $container */
-        $container = $this->getSymfonyContainer();
-        if (! $container->has($serviceName)) {
+        /** @var Container $symfonyContainer */
+        $symfonyContainer = $this->getSymfonyContainer();
+        if (! $symfonyContainer->has($serviceName)) {
             $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
             throw new ShouldNotHappenException($errorMessage);
         }
 
-        return $container->get($serviceName);
+        return $symfonyContainer->get($serviceName);
     }
 
     private function getSymfonyContainer(): object

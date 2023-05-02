@@ -23,7 +23,7 @@ class ContainerServiceProviderTest extends TestCase
         $containerServiceProvider = $this->createContainerServiceProvider();
 
         $service = $containerServiceProvider->provideByName('service1');
-        $this->assertEquals(Service1::class, get_class($service));
+        $this->assertEquals(Service1::class, $service::class);
     }
 
     public function testProvideByNameNotExistedService(): void
@@ -39,10 +39,10 @@ class ContainerServiceProviderTest extends TestCase
         $containerServiceProvider = $this->createContainerServiceProvider();
 
         $service1 = $containerServiceProvider->provideByName('service1');
-        $this->assertEquals(Service1::class, get_class($service1));
+        $this->assertEquals(Service1::class, $service1::class);
 
         $service2 = $containerServiceProvider->provideByName('service2');
-        $this->assertEquals(Service2::class, get_class($service2));
+        $this->assertEquals(Service2::class, $service2::class);
     }
 
     public function testProvideWithNotExistedContainerPhpFile(): void
@@ -66,8 +66,8 @@ class ContainerServiceProviderTest extends TestCase
         ], $parameters);
 
         $container = new Container(new ParameterBag($parameters));
-        $configProvider = new RectorConfigProvider(new ParameterProvider($container));
+        $rectorConfigProvider = new RectorConfigProvider(new ParameterProvider($container));
 
-        return new ContainerServiceProvider($configProvider);
+        return new ContainerServiceProvider($rectorConfigProvider);
     }
 }
