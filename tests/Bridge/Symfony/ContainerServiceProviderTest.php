@@ -18,21 +18,6 @@ use Webmozart\Assert\InvalidArgumentException;
 
 class ContainerServiceProviderTest extends TestCase
 {
-    /**
-     * @param array<mixed> $parameters
-     */
-    protected function createContainerServiceProvider(array $parameters = []): ContainerServiceProvider
-    {
-        $parameters = array_merge([
-            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => __DIR__ . '/Fixture/symfony-container.php'
-        ], $parameters);
-
-        $container = new Container(new ParameterBag($parameters));
-        $configProvider = new RectorConfigProvider(new ParameterProvider($container));
-
-        return new ContainerServiceProvider($configProvider);
-    }
-
     public function testProvideByName(): void
     {
         $containerServiceProvider = $this->createContainerServiceProvider();
@@ -63,11 +48,26 @@ class ContainerServiceProviderTest extends TestCase
     public function testProvideWithNotExistedContainerPhpFile(): void
     {
         $containerServiceProvider = $this->createContainerServiceProvider([
-            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => 'symfony-container-that-do-not-exists.php'
+            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => 'symfony-container-that-do-not-exists.php',
         ]);
 
         $this->expectException(InvalidArgumentException::class);
 
         $containerServiceProvider->provideByName('service1');
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     */
+    protected function createContainerServiceProvider(array $parameters = []): ContainerServiceProvider
+    {
+        $parameters = array_merge([
+            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => __DIR__ . '/Fixture/symfony-container.php',
+        ], $parameters);
+
+        $container = new Container(new ParameterBag($parameters));
+        $configProvider = new RectorConfigProvider(new ParameterProvider($container));
+
+        return new ContainerServiceProvider($configProvider);
     }
 }

@@ -18,6 +18,18 @@ final class ContainerServiceProvider
     ) {
     }
 
+    public function provideByName(string $serviceName): object
+    {
+        /** @var Container $container */
+        $container = $this->getSymfonyContainer();
+        if (! $container->has($serviceName)) {
+            $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
+            throw new ShouldNotHappenException($errorMessage);
+        }
+
+        return $container->get($serviceName);
+    }
+
     private function getSymfonyContainer(): object
     {
         if ($this->container === null) {
@@ -32,17 +44,5 @@ final class ContainerServiceProvider
         }
 
         return $this->container;
-    }
-
-    public function provideByName(string $serviceName): object
-    {
-        /** @var Container $container */
-        $container = $this->getSymfonyContainer();
-        if (!$container->has($serviceName)) {
-            $errorMessage = sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
-            throw new ShouldNotHappenException($errorMessage);
-        }
-
-        return $container->get($serviceName);
     }
 }
