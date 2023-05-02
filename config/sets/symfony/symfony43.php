@@ -26,7 +26,7 @@ return static function (RectorConfig $rectorConfig): void {
         TwigBundleFilesystemLoaderToTwigRector::class,
         MakeDispatchFirstArgumentEventRector::class,
         GetCurrencyBundleMethodCallsToIntlRector::class,
-        ConvertRenderTemplateShortNotationToBundleSyntaxRector::class
+        ConvertRenderTemplateShortNotationToBundleSyntaxRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [

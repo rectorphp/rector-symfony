@@ -94,8 +94,8 @@ CODE_SAMPLE
         }
 
         $newValue = '@' .
-            Strings::replace(substr($tplName, 0, $matches[0][1]), '/Bundle/', '') .
-            Strings::replace(substr($tplName, $matches[0][1]), '/:/', '/');
+            Strings::replace(substr((string) $tplName, 0, $matches[0][1]), '/Bundle/', '') .
+            Strings::replace(substr((string) $tplName, $matches[0][1]), '/:/', '/');
 
         $newValue = str_replace('\\', '/', $newValue);
 
