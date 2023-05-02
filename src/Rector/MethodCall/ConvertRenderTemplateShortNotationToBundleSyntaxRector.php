@@ -16,12 +16,12 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @see https://github.com/symfony/symfony/pull/21035
  * @see https://github.com/symfony/symfony/blob/4.4/src/Symfony/Bundle/FrameworkBundle/Templating/TemplateNameParser.php
  * @see https://symfony.com/doc/4.4/templates.html#bundle-templates
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
-
 final class ConvertRenderTemplateShortNotationToBundleSyntaxRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
@@ -71,12 +71,12 @@ CODE_SAMPLE
         }
 
         $objectType = $this->nodeTypeResolver->getType($node->var);
-        if (! $objectType instanceof ThisType) {
+        $controllerType = new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller');
+        if (! $controllerType->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
 
-        $controllerType = new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller');
-        if (! $controllerType->isSuperTypeOf($objectType)->yes()) {
+        if (! $objectType instanceof ThisType) {
             return null;
         }
 
