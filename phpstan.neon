@@ -12,17 +12,6 @@ parameters:
         class: 40
         function: 10
 
-    type_coverage:
-        return_type: 100
-        param_type: 100
-        property_type: 100
-        print_suggestions: true
-
-    unused_public:
-        methods: true
-        properties: true
-        constants: true
-
     scanDirectories:
         - stubs
 
