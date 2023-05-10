@@ -18,7 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/pull/27476
+ * @changelog https://github.com/symfony/symfony/pull/27476
+ *
  * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
@@ -26,7 +27,7 @@ final class RootNodeTreeBuilderRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes  Process string argument to an array',
+            'Changes TreeBuilder with root() call to constructor passed root and getRootNode() call',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

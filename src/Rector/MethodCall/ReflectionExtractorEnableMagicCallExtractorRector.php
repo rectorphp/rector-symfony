@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
+ * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\ReflectionExtractorEnableMagicCallExtractorRectorTest
  */
 final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector

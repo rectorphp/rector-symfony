@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
+ * @changelog https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\MakeDispatchFirstArgumentEventRectorTest
  */
