@@ -21,9 +21,6 @@ return static function (RectorConfig $rectorConfig): void {
         '*/tests/*/Fixture*/Expected/*',
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
 
-        // soon to be removed
-        \Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector::class,
-
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
