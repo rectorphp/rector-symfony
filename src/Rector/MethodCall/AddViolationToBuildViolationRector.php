@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://stackoverflow.com/questions/25264922/symfony-2-5-addviolationat-deprecated-use-buildviolation
+ * @changelog https://stackoverflow.com/questions/25264922/symfony-2-5-addviolationat-deprecated-use-buildviolation
  * @see \Rector\Symfony\Tests\Rector\MethodCall\AddViolationToBuildViolationRector\AddViolationToBuildViolationRectorTest
  */
 final class AddViolationToBuildViolationRector extends AbstractRector

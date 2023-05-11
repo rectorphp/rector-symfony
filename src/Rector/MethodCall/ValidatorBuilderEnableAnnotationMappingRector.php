@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
+ * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector\ValidatorBuilderEnableAnnotationMappingRectorTest
  */
 final class ValidatorBuilderEnableAnnotationMappingRector extends AbstractRector

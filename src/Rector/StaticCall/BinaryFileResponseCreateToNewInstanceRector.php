@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
+ * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
  * @see \Rector\Symfony\Tests\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\BinaryFileResponseCreateToNewInstanceRectorTest
  */
 final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector
