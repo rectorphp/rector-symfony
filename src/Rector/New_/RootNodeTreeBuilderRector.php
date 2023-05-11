@@ -106,8 +106,8 @@ CODE_SAMPLE
             if (! $firstArg->value instanceof String_) {
                 return null;
             }
-            $new->args = $rootMethodCallNode->getArgs();
-            $rootMethodCallNode->args = $new->getArgs();
+
+            [$new->args, $rootMethodCallNode->args] = [$rootMethodCallNode->getArgs(), $new->getArgs()];
 
             $rootMethodCallNode->name = new Identifier('getRootNode');
 
