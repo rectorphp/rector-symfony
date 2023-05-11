@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ($node->stmts as $stmt) {
             if (! $stmt instanceof Expression) {
                 continue;
             }
@@ -106,7 +106,8 @@ CODE_SAMPLE
             if (! $firstArg->value instanceof String_) {
                 return null;
             }
-            [$new->args, $rootMethodCallNode->args] = [$rootMethodCallNode->getArgs(), $new->getArgs()];
+            $new->args = $rootMethodCallNode->getArgs();
+            $rootMethodCallNode->args = $new->getArgs();
 
             $rootMethodCallNode->name = new Identifier('getRootNode');
 

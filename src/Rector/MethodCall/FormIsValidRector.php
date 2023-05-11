@@ -78,12 +78,10 @@ CODE_SAMPLE
         /** @var string $variableName */
         $variableName = $this->getName($methodCall->var);
 
-        $booleanAnd = new BooleanAnd(
+        $node->cond = new BooleanAnd(
             $this->nodeFactory->createMethodCall($variableName, 'isSubmitted'),
             $this->nodeFactory->createMethodCall($variableName, 'isValid')
         );
-
-        $node->cond = $booleanAnd;
 
         return $node;
     }
