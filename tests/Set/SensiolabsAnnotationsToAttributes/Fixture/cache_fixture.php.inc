@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 class BarController
 {
     /**
-     * @Cache(smaxage="20")
+     * @Cache(smaxage=20)
      */
     public function foo()
     {
