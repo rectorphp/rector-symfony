@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 
@@ -15,12 +16,12 @@ final class StringValueQuoteWrapper
     }
 
     /**
-     * @return mixed|CurlyListNode|string
+     * @return mixed|CurlyListNode|StringNode
      */
     public function wrap(mixed $value, ?string $key): mixed
     {
         if (is_string($value)) {
-            return '"' . $value . '"';
+            return new StringNode($value);
         }
 
         if (is_array($value)) {
@@ -42,7 +43,7 @@ final class StringValueQuoteWrapper
                     continue;
                 }
 
-                $value[$nestedKey] = '"' . $nestedValue . '"';
+                $value[$nestedKey] = new StringNode($nestedValue);
             }
         }
 

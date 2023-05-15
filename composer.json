@@ -8,6 +8,12 @@
         "ext-xml": "*",
         "symfony/string": "^6.1"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yguedidi/rector-src"
+        }
+    ],
     "require-dev": {
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.9.2",
@@ -15,7 +21,7 @@
         "phpunit/phpunit": "^10.0",
         "rector/phpstan-rules": "^0.6",
         "rector/rector-generator": "^0.6",
-        "rector/rector-src": "dev-main",
+        "rector/rector-src": "dev-improve-annotationtoattributerector",
         "symfony/routing": "^6.1",
         "symfony/security-core": "^6.2",
         "symfony/security-http": "^6.1",

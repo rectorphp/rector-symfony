@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
@@ -143,14 +143,12 @@ CODE_SAMPLE
         $arrayItemNodes = [];
 
         $arrayItemNodes[] = new ArrayItemNode(
-            $symfonyRouteMetadata->getPath(),
+            new StringNode($symfonyRouteMetadata->getPath()),
             'path',
-            String_::KIND_DOUBLE_QUOTED
         );
         $arrayItemNodes[] = new ArrayItemNode(
-            $symfonyRouteMetadata->getName(),
+            new StringNode($symfonyRouteMetadata->getName()),
             'name',
-            String_::KIND_DOUBLE_QUOTED
         );
 
         if ($symfonyRouteMetadata->getRequirements() !== []) {
@@ -172,9 +170,8 @@ CODE_SAMPLE
 
         if ($symfonyRouteMetadata->getHost() !== '') {
             $arrayItemNodes[] = new ArrayItemNode(
-                $symfonyRouteMetadata->getHost(),
+                new StringNode($symfonyRouteMetadata->getHost()),
                 'host',
-                String_::KIND_DOUBLE_QUOTED
             );
         }
 
@@ -190,9 +187,8 @@ CODE_SAMPLE
 
         if ($symfonyRouteMetadata->getCondition() !== '') {
             $arrayItemNodes[] = new ArrayItemNode(
-                $symfonyRouteMetadata->getCondition(),
+                new StringNode($symfonyRouteMetadata->getCondition()),
                 'condition',
-                String_::KIND_DOUBLE_QUOTED
             );
         }
 
@@ -226,11 +222,11 @@ CODE_SAMPLE
 
         foreach ($curlyListNode->values as $nestedMethodsArrayItem) {
             if (is_string($nestedMethodsArrayItem->value)) {
-                $nestedMethodsArrayItem->kindValueQuoted = String_::KIND_DOUBLE_QUOTED;
+                $nestedMethodsArrayItem->value = new StringNode($nestedMethodsArrayItem->value);
             }
 
             if (is_string($nestedMethodsArrayItem->key)) {
-                $nestedMethodsArrayItem->kindKeyQuoted = String_::KIND_DOUBLE_QUOTED;
+                $nestedMethodsArrayItem->key = new StringNode($nestedMethodsArrayItem->key);
             }
 
             if ($nestedMethodsArrayItem->value === null) {
