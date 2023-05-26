@@ -154,8 +154,8 @@ CODE_SAMPLE
         );
 
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $requriementsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
-            $arrayItemNodes[] = new ArrayItemNode($requriementsCurlyList, 'requirements');
+            $curlyListNode = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
+            $arrayItemNodes[] = new ArrayItemNode($curlyListNode, 'requirements');
         }
 
         $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
