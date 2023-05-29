@@ -6,14 +6,11 @@ namespace Rector\Symfony\Helper;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -22,64 +19,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\CommandPropertyToAttributeRectorTest
  */
 final class CommandHelper
 {
-    public const ATTRIBUTE = 'Symfony\Component\Console\Attribute\AsCommand';
-
     public function __construct(
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly NodeRemover $nodeRemover,
+        private readonly AttributeValueResolver $attributeValueResolver,
     ) {
-    }
-
-    public function resolveCommandAliasesFromAttributeOrSetter(Class_ $class): ?Array_
-    {
-        $classMethod = $class->getMethod('configure');
-        if (! $classMethod instanceof ClassMethod) {
-            return $this->resolveCommandAliasesFromAttribute($class);
-        }
-
-        if ($classMethod->stmts === null) {
-            return null;
-        }
-
-        $aliasesArray = $this->resolveFromStmtSetterMethodCall($classMethod);
-        if ($aliasesArray instanceof Array_) {
-            return $aliasesArray;
-        }
-
-        $aliasesArray = null;
-
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            &$aliasesArray
-        ) {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $this->isSetAliasesMethodCall($node)) {
-                return null;
-            }
-
-            $firstArgValue = $node->getArgs()[0]
-                ->value;
-            if (! $firstArgValue instanceof Array_) {
-                return null;
-            }
-
-            $aliasesArray = $firstArgValue;
-
-            return $node->var;
-        });
-
-        return $aliasesArray;
     }
 
     public function getCommandHiddenValueFromAttributeOrSetter(Class_ $class): ?ConstFetch
@@ -96,22 +51,12 @@ final class CommandHelper
                     return null;
                 }
 
-                if ($node->isFirstClassCallable()) {
-                    return null;
-                }
-
-                if (! $this->nodeNameResolver->isName($node->name, 'setHidden')) {
-                    return null;
-                }
-
-                if (! $this->nodeTypeResolver->isObjectType(
-                    $node->var,
-                    new ObjectType('Symfony\Component\Console\Command\Command')
-                )) {
+                if (! $this->isSetHiddenMethodCall($node)) {
                     return null;
                 }
 
                 $commandHidden = $this->getCommandHiddenValue($node);
+
                 $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
                 if ($parentNode instanceof MethodCall) {
                     $parentNode->var = $node->var;
@@ -141,98 +86,32 @@ final class CommandHelper
         return $arg->value;
     }
 
-    public function getArgumentValueFromAttribute(Class_ $class, int $argumentIndexKey): string|ConstFetch|Array_|null
+    public function isSetHiddenMethodCall(MethodCall $node): bool
     {
-        $argumentValue = null;
-        foreach ($class->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
-                if (! $this->nodeNameResolver->isName($attribute->name, self::ATTRIBUTE)) {
-                    continue;
-                }
-
-                if (! isset($attribute->args[$argumentIndexKey])) {
-                    continue;
-                }
-
-                $arg = $attribute->args[$argumentIndexKey];
-                if ($arg->value instanceof String_) {
-                    $argumentValue = $arg->value->value;
-                } elseif ($arg->value instanceof ConstFetch || $arg->value instanceof Array_) {
-                    $argumentValue = $arg->value;
-                }
-            }
-        }
-
-        return $argumentValue;
-    }
-
-    private function isSetAliasesMethodCall(MethodCall $methodCall): bool
-    {
-        if (! $this->nodeNameResolver->isName($methodCall->name, 'setAliases')) {
+        if (! $this->nodeNameResolver->isName($node->name, 'setHidden')) {
             return false;
         }
-        return $this->nodeTypeResolver->isObjectType(
-            $methodCall->var,
+
+        if (! $this->nodeTypeResolver->isObjectType(
+            $node->var,
             new ObjectType('Symfony\Component\Console\Command\Command')
-        );
+        )) {
+            return false;
+        }
+
+        return true;
     }
 
     private function resolveHiddenFromAttribute(Class_ $class): ?ConstFetch
     {
         $commandHidden = null;
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
-            $commandHiddenFromArgument = $this->getArgumentValueFromAttribute($class, 3);
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
+            $commandHiddenFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 3);
             if ($commandHiddenFromArgument instanceof ConstFetch) {
                 $commandHidden = $commandHiddenFromArgument;
             }
         }
 
         return $commandHidden;
-    }
-
-    private function resolveCommandAliasesFromAttribute(Class_ $class): ?Array_
-    {
-        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
-            return null;
-        }
-
-        $commandAliasesFromArgument = $this->getArgumentValueFromAttribute($class, 2);
-        if ($commandAliasesFromArgument instanceof Array_) {
-            return $commandAliasesFromArgument;
-        }
-
-        return null;
-    }
-
-    private function resolveFromStmtSetterMethodCall(ClassMethod $classMethod): Array_|null
-    {
-        if ($classMethod->stmts === null) {
-            return null;
-        }
-
-        foreach ($classMethod->stmts as $key => $stmt) {
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
-
-            if (! $stmt->expr instanceof MethodCall) {
-                continue;
-            }
-
-            $methodCall = $stmt->expr;
-            if (! $this->isSetAliasesMethodCall($methodCall)) {
-                continue;
-            }
-
-            $arg = $methodCall->getArgs()[0];
-            if (! $arg->value instanceof Array_) {
-                return null;
-            }
-
-            unset($classMethod->stmts[$key]);
-            return $arg->value;
-        }
-
-        return null;
     }
 }
