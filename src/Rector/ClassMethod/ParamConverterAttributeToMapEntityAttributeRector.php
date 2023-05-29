@@ -103,7 +103,7 @@ CODE_SAMPLE
                 }
 
                 $attribute = $this->refactorAttribute($node, $attr, $attrGroup);
-                if ($attribute) {
+                if ($attribute instanceof Attribute) {
                     unset($node->attrGroups[$attrGroupKey]);
 
                     $hasChanged = true;
