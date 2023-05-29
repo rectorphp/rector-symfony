@@ -20,7 +20,6 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -39,9 +38,11 @@ final class ConsoleExecuteReturnIntRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Returns int from Command::execute command', [
+        return new RuleDefinition('Returns int from Command::execute() command', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
+use Symfony\Component\Console\Command\Command;
+
 class SomeCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output)
@@ -52,6 +53,8 @@ class SomeCommand extends Command
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+use Symfony\Component\Console\Command\Command;
+
 class SomeCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -87,7 +90,7 @@ CODE_SAMPLE
         }
 
         $this->refactorReturnTypeDeclaration($executeClassMethod);
-        $this->addReturn0ToMethod($executeClassMethod);
+        $this->addReturn0ToExecuteClassMethod($executeClassMethod);
 
         if ($this->hasChanged) {
             return $node;
@@ -107,27 +110,16 @@ CODE_SAMPLE
         $this->hasChanged = true;
     }
 
-    private function addReturn0ToMethod(ClassMethod $classMethod): void
+    private function addReturn0ToExecuteClassMethod(ClassMethod $classMethod): void
     {
-        $hasReturn = false;
+        if ($classMethod->stmts === null) {
+            return;
+        }
 
-        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-            $classMethod,
-            &$hasReturn
-        ): ?int {
-            if ($node instanceof FunctionLike) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?int {
+            // skip anonymous class/function
+            if ($node instanceof FunctionLike || $node instanceof Class_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-
-            // skip anonymous class
-            if ($node instanceof Class_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Node && $this->isReturnWithExprIntEquals($parentNode, $node)) {
-                $hasReturn = true;
-                return null;
             }
 
             if (! $node instanceof Return_) {
@@ -139,22 +131,15 @@ CODE_SAMPLE
             }
 
             if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
-                $hasReturn = true;
                 return null;
             }
 
-            // is there return without nesting?
-            if ($parentNode === $classMethod) {
-                $hasReturn = true;
-            }
-
             $this->setReturnTo0InsteadOfNull($node);
-            $this->hasChanged = true;
 
             return null;
         });
 
-        $this->processReturn0ToMethod($hasReturn, $classMethod);
+        $this->processReturn0ToMethod($classMethod);
     }
 
     private function isReturnIntegerType(?Expr $expr): bool
@@ -184,12 +169,8 @@ CODE_SAMPLE
         return $ifType instanceof IntegerType && $elseType instanceof IntegerType;
     }
 
-    private function processReturn0ToMethod(bool $hasReturn, ClassMethod $classMethod): void
+    private function processReturn0ToMethod(ClassMethod $classMethod): void
     {
-        if ($hasReturn) {
-            return;
-        }
-
         $lastKey = array_key_last((array) $classMethod->stmts);
 
         $return = new Return_(new LNumber(0));
@@ -202,19 +183,6 @@ CODE_SAMPLE
         }
 
         $classMethod->stmts[] = $return;
-    }
-
-    private function isReturnWithExprIntEquals(Node $parentNode, Node $node): bool
-    {
-        if (! $parentNode instanceof Return_) {
-            return false;
-        }
-
-        if (! $this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
-            return false;
-        }
-
-        return $node instanceof Int_;
     }
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void

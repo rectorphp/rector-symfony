@@ -113,7 +113,7 @@ CODE_SAMPLE),
     private function createAttributeGroupAsCommand(
         string $defaultName,
         ?string $defaultDescription,
-        ?Array_ $array,
+        ?Array_ $aliasesArray,
         ?ConstFetch $constFetch
     ): AttributeGroup {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(CommandHelper::ATTRIBUTE);
@@ -122,12 +122,12 @@ CODE_SAMPLE),
 
         if ($defaultDescription !== null) {
             $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
-        } elseif ($array instanceof Array_ || $constFetch instanceof ConstFetch) {
+        } elseif ($aliasesArray instanceof Array_ || $constFetch instanceof ConstFetch) {
             $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
         }
 
-        if ($array instanceof Array_) {
-            $attributeGroup->attrs[0]->args[] = new Arg($array);
+        if ($aliasesArray instanceof Array_) {
+            $attributeGroup->attrs[0]->args[] = new Arg($aliasesArray);
         } elseif ($constFetch instanceof ConstFetch) {
             $attributeGroup->attrs[0]->args[] = new Arg(new Array_());
         }
