@@ -99,12 +99,14 @@ CODE_SAMPLE),
         }
 
         $defaultDescription = $this->resolveDefaultDescription($node);
-        $array = $this->commandHelper->getCommandAliasesValueFromAttributeOrSetter($node);
+
+        $alisesArray = $this->commandHelper->resolveCommandAliasesFromAttributeOrSetter($node);
+
         $constFetch = $this->commandHelper->getCommandHiddenValueFromAttributeOrSetter($node);
 
         return $this->replaceAsCommandAttribute(
             $node,
-            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $array, $constFetch)
+            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray, $constFetch)
         );
     }
 
@@ -208,6 +210,7 @@ CODE_SAMPLE),
     {
         $hasAsCommandAttribute = false;
         $replacedAsCommandAttribute = false;
+
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
                 if ($this->nodeNameResolver->isName($attribute->name, CommandHelper::ATTRIBUTE)) {
@@ -221,6 +224,7 @@ CODE_SAMPLE),
             $class->attrGroups[] = $createAttributeGroup;
             $replacedAsCommandAttribute = true;
         }
+
         if ($replacedAsCommandAttribute === false) {
             return null;
         }
@@ -235,6 +239,7 @@ CODE_SAMPLE),
             $attribute->args[0] = $createAttributeGroup->attrs[0]->args[0];
             $replacedAsCommandAttribute = true;
         }
+
         if ((! isset($attribute->args[1])) && isset($createAttributeGroup->attrs[0]->args[1])) {
             $attribute->args[1] = $createAttributeGroup->attrs[0]->args[1];
             $replacedAsCommandAttribute = true;
