@@ -97,7 +97,7 @@ CODE_SAMPLE
 
         foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if (! $this->isNames($attr, [SensioAttribute::PARAM_CONVERTER_CLASS, SensioAttribute::ENTITY_CLASS])) {
+                if (! $this->isNames($attr, [SensioAttribute::PARAM_CONVERTER, SensioAttribute::ENTITY])) {
                     continue;
                 }
 
@@ -161,7 +161,7 @@ CODE_SAMPLE
         }
 
         $attribute->args = array_merge($attribute->args, $newArguments);
-        $attribute->name = new FullyQualified(SymfonyAnnotation::MAP_ENTITY_CLASS);
+        $attribute->name = new FullyQualified(SymfonyAnnotation::MAP_ENTITY);
 
         $this->addMapEntityAttribute($classMethod, $name, $attributeGroup);
 

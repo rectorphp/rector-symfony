@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -19,7 +18,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
-use Rector\Symfony\Helper\CommandHelper;
+use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
+use Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,8 +35,9 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly AttributeValueResolver $attributeValueResolver,
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly CommandHelper $commandHelper,
+        private readonly SetAliasesMethodCallExtractor $setAliasesMethodCallExtractor,
     ) {
     }
 
@@ -89,7 +91,7 @@ CODE_SAMPLE),
             return null;
         }
 
-        if (! $this->reflectionProvider->hasClass(CommandHelper::ATTRIBUTE)) {
+        if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
             return null;
         }
 
@@ -100,40 +102,31 @@ CODE_SAMPLE),
 
         $defaultDescription = $this->resolveDefaultDescription($node);
 
-        $alisesArray = $this->commandHelper->resolveCommandAliasesFromAttributeOrSetter($node);
-
-        $constFetch = $this->commandHelper->getCommandHiddenValueFromAttributeOrSetter($node);
+        $alisesArray = $this->setAliasesMethodCallExtractor->resolveCommandAliasesFromAttributeOrSetter($node);
 
         return $this->replaceAsCommandAttribute(
             $node,
-            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray, $constFetch)
+            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray)
         );
     }
 
     private function createAttributeGroupAsCommand(
         string $defaultName,
         ?string $defaultDescription,
-        ?Array_ $aliasesArray,
-        ?ConstFetch $constFetch
+        ?Array_ $aliasesArray
     ): AttributeGroup {
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(CommandHelper::ATTRIBUTE);
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
 
         $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultName));
 
         if ($defaultDescription !== null) {
             $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
-        } elseif ($aliasesArray instanceof Array_ || $constFetch instanceof ConstFetch) {
+        } elseif ($aliasesArray instanceof Array_) {
             $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
         }
 
         if ($aliasesArray instanceof Array_) {
             $attributeGroup->attrs[0]->args[] = new Arg($aliasesArray);
-        } elseif ($constFetch instanceof ConstFetch) {
-            $attributeGroup->attrs[0]->args[] = new Arg(new Array_());
-        }
-
-        if ($constFetch instanceof ConstFetch) {
-            $attributeGroup->attrs[0]->args[] = new Arg($constFetch);
         }
 
         return $attributeGroup;
@@ -166,8 +159,11 @@ CODE_SAMPLE),
         }
 
         // Get DefaultName from attribute
-        if ($defaultName === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, CommandHelper::ATTRIBUTE)) {
-            $defaultNameFromArgument = $this->commandHelper->getArgumentValueFromAttribute($class, 0);
+        if ($defaultName === null && $this->phpAttributeAnalyzer->hasPhpAttribute(
+            $class,
+            SymfonyAnnotation::AS_COMMAND
+        )) {
+            $defaultNameFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 0);
             if (is_string($defaultNameFromArgument)) {
                 $defaultName = $defaultNameFromArgument;
             }
@@ -195,9 +191,9 @@ CODE_SAMPLE),
     {
         if ($defaultDescription === null && $this->phpAttributeAnalyzer->hasPhpAttribute(
             $class,
-            CommandHelper::ATTRIBUTE
+            SymfonyAnnotation::AS_COMMAND
         )) {
-            $defaultDescriptionFromArgument = $this->commandHelper->getArgumentValueFromAttribute($class, 1);
+            $defaultDescriptionFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 1);
             if (is_string($defaultDescriptionFromArgument)) {
                 $defaultDescription = $defaultDescriptionFromArgument;
             }
@@ -213,7 +209,7 @@ CODE_SAMPLE),
 
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isName($attribute->name, CommandHelper::ATTRIBUTE)) {
+                if ($this->nodeNameResolver->isName($attribute->name, SymfonyAnnotation::AS_COMMAND)) {
                     $hasAsCommandAttribute = true;
                     $replacedAsCommandAttribute = $this->replaceArguments($attribute, $createAttributeGroup);
                 }
