@@ -14,7 +14,6 @@ class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Componen
     {
         $this
             ->setAliases(['sun', 'shine'])
-            ->setHidden(false)
             ->setHelp('Let the sun shine! Its that simple')
         ;
     }
@@ -26,7 +25,7 @@ class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Componen
 
 namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
-#[\Symfony\Component\Console\Attribute\AsCommand('sunshine', 'Let the sun shine!', ['sun', 'shine'], false)]
+#[\Symfony\Component\Console\Attribute\AsCommand('sunshine', 'Let the sun shine!', ['sun', 'shine'])]
 class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Component\Console\Command\Command
 {
     public function configure(): void

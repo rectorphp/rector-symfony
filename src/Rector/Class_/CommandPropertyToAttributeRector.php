@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -20,7 +19,6 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Symfony\Enum\SymfonyAnnotation;
-use Rector\Symfony\Helper\CommandHelper;
 use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
 use Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -37,7 +35,6 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly CommandHelper $commandHelper,
         private readonly AttributeValueResolver $attributeValueResolver,
         private readonly ReflectionProvider $reflectionProvider,
         private readonly SetAliasesMethodCallExtractor $setAliasesMethodCallExtractor,
@@ -106,19 +103,17 @@ CODE_SAMPLE),
         $defaultDescription = $this->resolveDefaultDescription($node);
 
         $alisesArray = $this->setAliasesMethodCallExtractor->resolveCommandAliasesFromAttributeOrSetter($node);
-        $constFetch = $this->commandHelper->getCommandHiddenValueFromAttributeOrSetter($node);
 
         return $this->replaceAsCommandAttribute(
             $node,
-            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray, $constFetch)
+            $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray)
         );
     }
 
     private function createAttributeGroupAsCommand(
         string $defaultName,
         ?string $defaultDescription,
-        ?Array_ $aliasesArray,
-        ?ConstFetch $constFetch
+        ?Array_ $aliasesArray
     ): AttributeGroup {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
 
@@ -126,18 +121,12 @@ CODE_SAMPLE),
 
         if ($defaultDescription !== null) {
             $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
-        } elseif ($aliasesArray instanceof Array_ || $constFetch instanceof ConstFetch) {
+        } elseif ($aliasesArray instanceof Array_) {
             $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
         }
 
         if ($aliasesArray instanceof Array_) {
             $attributeGroup->attrs[0]->args[] = new Arg($aliasesArray);
-        } elseif ($constFetch instanceof ConstFetch) {
-            $attributeGroup->attrs[0]->args[] = new Arg(new Array_());
-        }
-
-        if ($constFetch instanceof ConstFetch) {
-            $attributeGroup->attrs[0]->args[] = new Arg($constFetch);
         }
 
         return $attributeGroup;
