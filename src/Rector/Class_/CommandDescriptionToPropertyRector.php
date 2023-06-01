@@ -132,12 +132,12 @@ CODE_SAMPLE
 
     private function createStaticProtectedPropertyWithDefault(String_ $string): Property
     {
-        $propertyBuilder = new \PhpParser\Builder\Property('defaultDescription');
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($string);
+        $property = new \PhpParser\Builder\Property('defaultDescription');
+        $property->makeProtected();
+        $property->makeStatic();
+        $property->setDefault($string);
 
-        return $propertyBuilder->getNode();
+        return $property->getNode();
     }
 
     private function addDefaultDescriptionProperty(Class_ $class, Property $defaultDescriptionProperty): Node
