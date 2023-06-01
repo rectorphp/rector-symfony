@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
-use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\EventReferenceToMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,7 +31,6 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
         private readonly OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
-        private readonly ClassManipulator $classManipulator,
     ) {
         $this->logoutHandlerObjectType = new ObjectType(
             'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
@@ -108,17 +107,25 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->classManipulator->removeImplements($node, [$this->logoutHandlerObjectType->getClassName()]);
+        foreach ($node->implements as $key => $implement) {
+            if ($this->isName($implement, $this->logoutHandlerObjectType->getClassName())) {
+                unset($node->implements[$key]);
+            }
+        }
+
         $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         // 2. refactor logout() class method to onLogout()
+
         $logoutClassMethod = $node->getMethod('logout');
         if (! $logoutClassMethod instanceof ClassMethod) {
             return null;
         }
 
         $node->stmts[] = $this->onLogoutClassMethodFactory->createFromLogoutClassMethod($logoutClassMethod);
-        $this->removeNode($logoutClassMethod);
+
+        $classMethodStmtKey = $logoutClassMethod->getAttribute(AttributeKey::STMT_KEY);
+        unset($node->stmts[$classMethodStmtKey]);
 
         // 3. add getSubscribedEvents() class method
         $classConstFetch = $this->nodeFactory->createClassConstReference(
