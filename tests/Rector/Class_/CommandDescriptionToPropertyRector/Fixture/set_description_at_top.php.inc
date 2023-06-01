@@ -11,7 +11,7 @@ class SetDescriptionAtTop extends \Symfony\Component\Console\Command\Command
     {
         $this
             ->setName('some:command')
-            ->setDescription('Description');
+            ->setDescription('Last description');
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -36,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SetDescriptionAtTop extends \Symfony\Component\Console\Command\Command
 {
-    protected static $defaultDescription = 'Description';
+    protected static $defaultDescription = 'Last description';
     public function configure()
     {
         $this

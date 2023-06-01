@@ -25,7 +25,8 @@ class SetDescriptionFluentChain extends \Symfony\Component\Console\Command\Comma
     protected static $defaultDescription = 'Description';
     public function configure()
     {
-        $this->setHelp('help me pls!!!');
+        $this
+            ->setHelp('help me pls!!!');
     }
 }
 
