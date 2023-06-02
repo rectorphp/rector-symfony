@@ -16,7 +16,7 @@ class BarController
 
     /**
      * @RequestParam(name="name", requirements="[a-z]+", description="Foo Name")
-     * @FileParam(name="avatar", requirements={"mimeTypes"="image/jpeg", "minWidth"="500"}, image=true)
+     * @FileParam(name="avatar", requirements={"mimeTypes"="image/jpeg", "minWidth"=500}, image=true)
      */
     public function create()
     {
