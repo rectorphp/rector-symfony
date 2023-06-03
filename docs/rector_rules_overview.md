@@ -1342,7 +1342,7 @@ Migrates from deprecated enable_magic_call_extraction context option in Reflecti
 
 ## RemoveDefaultGetBlockPrefixRector
 
-Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form
+Remove `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form
 
 - class: [`Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`](../src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php)
 
