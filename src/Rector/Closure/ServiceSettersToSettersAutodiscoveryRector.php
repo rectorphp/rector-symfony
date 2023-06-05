@@ -157,7 +157,7 @@ CODE_SAMPLE
     {
         $servicesSetMethodCalls = [];
 
-        foreach ($closure->stmts as $key => $stmt) {
+        foreach ($closure->stmts as $stmt) {
             if (! $stmt instanceof Expression) {
                 continue;
             }
@@ -185,9 +185,9 @@ CODE_SAMPLE
     {
         $classNamesAndFilesPaths = [];
 
-        foreach ($methodsCallExpressions as $methodsCallExpression) {
+        foreach ($methodsCallExpressions as $methodCallExpression) {
             /** @var MethodCall $methodCall */
-            $methodCall = $methodsCallExpression->expr;
+            $methodCall = $methodCallExpression->expr;
 
             $firstArg = $methodCall->getArgs()[0];
             $serviceClassReference = $this->valueResolver->getValue($firstArg->value);
