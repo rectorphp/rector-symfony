@@ -27,11 +27,11 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\CodeQuality\NodeTypeGroup;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\Annotation\AnnotationAnalyzer;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeFactory\ThisRenderFactory;
@@ -56,6 +56,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly ThisRenderFactory $thisRenderFactory,
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly EmptyReturnNodeFinder $emptyReturnNodeFinder,
+        private readonly AnnotationAnalyzer $annotationAnalyzer,
     ) {
     }
 
@@ -111,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->hasClassMethodWithTemplateAnnotation($class)) {
+        if (! $this->annotationAnalyzer->hasClassMethodWithTemplateAnnotation($class)) {
             return null;
         }
 
@@ -126,7 +127,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $doctrineAnnotationTagValueNode = $this->getDoctrineAnnotationTagValueNode(
+        $doctrineAnnotationTagValueNode = $this->annotationAnalyzer->getDoctrineAnnotationTagValueNode(
             $classMethod,
             SymfonyAnnotation::TEMPLATE
         );
@@ -138,21 +139,6 @@ CODE_SAMPLE
         $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode);
 
         return $classMethod;
-    }
-
-    private function hasClassMethodWithTemplateAnnotation(Class_ $class): bool
-    {
-        foreach ($class->getMethods() as $classMethod) {
-            $templateDoctrineAnnotationTagValueNode = $this->getDoctrineAnnotationTagValueNode(
-                $classMethod,
-                SymfonyAnnotation::TEMPLATE
-            );
-            if ($templateDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function refactorClassMethod(
@@ -188,9 +174,6 @@ CODE_SAMPLE
             );
 
             return null;
-            //            }
-
-            //            return null;
         });
 
         if (! $this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
@@ -249,18 +232,6 @@ CODE_SAMPLE
             $classMethod,
             $templateDoctrineAnnotationTagValueNode
         );
-    }
-
-    private function getDoctrineAnnotationTagValueNode(
-        ClassMethod $classMethod,
-        string $class
-    ): ?DoctrineAnnotationTagValueNode {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
-        if (! $phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-
-        return $phpDocInfo->getByAnnotationClass($class);
     }
 
     private function refactorNoReturn(
