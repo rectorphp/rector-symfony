@@ -19,6 +19,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
 use Symfony\Component\Filesystem\Filesystem;
@@ -92,7 +93,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $bareServicesSetMethodCalls = $this->collectServiceSetMethodCalls($node);
+        /** @var array<Expression<MethodCall>> $bareServicesSetMethodCalls */
+        $bareServicesSetMethodCalls = $this->collectServiceSetMethodCallExpressions($node);
         if ($bareServicesSetMethodCalls === []) {
             return null;
         }
@@ -111,13 +113,14 @@ CODE_SAMPLE
 
         $directoryConcat = $this->createAbsolutePathConcat($classFilePath);
 
-        $args = [new Arg(new String_($sharedNamespace)), new Arg($directoryConcat)];
-        $loadMethodCall = new MethodCall(new Variable('services'), 'load', $args);
+        $loadMethodCall = $this->createServicesLoadMethodCall($sharedNamespace, $directoryConcat);
         $node->stmts[] = new Expression($loadMethodCall);
 
         // remove all method calls
         foreach ($bareServicesSetMethodCalls as $bareServiceSetMethodCall) {
-            $this->removeNode($bareServiceSetMethodCall);
+            /** @var Expression $bareServiceSetMethodCall */
+            $stmtsKey = $bareServiceSetMethodCall->getAttribute(AttributeKey::STMT_KEY);
+            unset($node->stmts[$stmtsKey]);
         }
 
         return $node;
@@ -148,43 +151,44 @@ CODE_SAMPLE
     }
 
     /**
-     * @return MethodCall[]
+     * @return array<Expression<MethodCall>>
      */
-    private function collectServiceSetMethodCalls(Closure $closure): array
+    private function collectServiceSetMethodCallExpressions(Closure $closure): array
     {
         $servicesSetMethodCalls = [];
 
-        $this->traverseNodesWithCallable($closure, function (Node $node) use (&$servicesSetMethodCalls) {
-            if (! $node instanceof Expression) {
-                return null;
+        foreach ($closure->stmts as $key => $stmt) {
+            if (! $stmt instanceof Expression) {
+                continue;
             }
 
-            if (! $node->expr instanceof MethodCall) {
-                return null;
+            if (! $stmt->expr instanceof MethodCall) {
+                continue;
             }
 
-            $methodCall = $node->expr;
+            $methodCall = $stmt->expr;
             if (! $this->isBareServicesSetMethodCall($methodCall)) {
-                return null;
+                continue;
             }
 
-            $servicesSetMethodCalls[] = $methodCall;
-
-            return null;
-        });
+            $servicesSetMethodCalls[] = $stmt;
+        }
 
         return $servicesSetMethodCalls;
     }
 
     /**
-     * @param MethodCall[] $methodsCalls
+     * @param array<Expression<MethodCall>> $methodsCallExpressions
      * @return ClassNameAndFilePath[]
      */
-    private function createClassNamesAndFilePaths(array $methodsCalls): array
+    private function createClassNamesAndFilePaths(array $methodsCallExpressions): array
     {
         $classNamesAndFilesPaths = [];
 
-        foreach ($methodsCalls as $methodCall) {
+        foreach ($methodsCallExpressions as $methodsCallExpression) {
+            /** @var MethodCall $methodCall */
+            $methodCall = $methodsCallExpression->expr;
+
             $firstArg = $methodCall->getArgs()[0];
             $serviceClassReference = $this->valueResolver->getValue($firstArg->value);
 
@@ -220,5 +224,12 @@ CODE_SAMPLE
         $distConstFetch = new ConstFetch(new Name('__DIR__'));
 
         return new Concat($distConstFetch, new String_('/' . $relativeDirectoryPath));
+    }
+
+    private function createServicesLoadMethodCall(string $sharedNamespace, Concat $directoryConcat): MethodCall
+    {
+        $args = [new Arg(new String_($sharedNamespace)), new Arg($directoryConcat)];
+
+        return new MethodCall(new Variable('services'), 'load', $args);
     }
 }

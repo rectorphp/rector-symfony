@@ -52,3 +52,4 @@ parameters:
 
         # false positive
         - '#Access to an undefined property Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
+        - '#but class PhpParser\\Node\\Stmt\\Expression is not generic#'
