@@ -30,6 +30,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\CodeQuality\NodeTypeGroup;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
@@ -39,7 +40,6 @@ use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
@@ -50,7 +50,6 @@ use Webmozart\Assert\Assert;
  */
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
-
     public function __construct(
         private readonly ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
         private readonly ReturnTypeDeclarationUpdater $returnTypeDeclarationUpdater,
@@ -176,22 +175,22 @@ CODE_SAMPLE
                 return null;
             }
 
-            foreach (NodeTypeGroup::STMTS_AWARE as $stmtsAwareType) {
-                if (! $node instanceof $stmtsAwareType) {
-                    continue;
-                }
-
-                $this->refactorStmtsAwareNode(
-                    $node,
-                    $templateDoctrineAnnotationTagValueNode,
-                    $hasThisRenderOrReturnsResponse,
-                    $classMethod
-                );
-
+            //            foreach (NodeTypeGroup::STMTS_AWARE as $stmtsAwareType) {
+            if (! $node instanceof StmtsAwareInterface) {
                 return null;
             }
 
+            $this->refactorStmtsAwareNode(
+                $node,
+                $templateDoctrineAnnotationTagValueNode,
+                $hasThisRenderOrReturnsResponse,
+                $classMethod
+            );
+
             return null;
+            //            }
+
+            //            return null;
         });
 
         if (! $this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
@@ -348,12 +347,16 @@ CODE_SAMPLE
     }
 
     private function refactorStmtsAwareNode(
-        Stmt $stmtsAwareStmt,
+        StmtsAwareInterface $stmtsAware,
         DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): void {
-        foreach ((array) $stmtsAwareStmt->stmts as $stmt) {
+        if ($stmtsAware->stmts === null) {
+            return;
+        }
+
+        foreach ($stmtsAware->stmts as $stmt) {
             if (! $stmt instanceof Return_) {
                 continue;
             }
