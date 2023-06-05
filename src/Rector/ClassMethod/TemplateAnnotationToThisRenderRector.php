@@ -31,6 +31,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\CodeQuality\NodeTypeGroup;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeFactory\ThisRenderFactory;
 use Rector\Symfony\NodeFinder\EmptyReturnNodeFinder;
 use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
@@ -48,15 +50,6 @@ use Webmozart\Assert\Assert;
  */
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
-    /**
-     * @var class-string
-     */
-    private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
-
-    /**
-     * @var string
-     */
-    private const TEMPLATE_ANNOTATION_CLASS = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template';
 
     public function __construct(
         private readonly ArrayUnionResponseTypeAnalyzer $arrayUnionResponseTypeAnalyzer,
@@ -136,7 +129,7 @@ CODE_SAMPLE
 
         $doctrineAnnotationTagValueNode = $this->getDoctrineAnnotationTagValueNode(
             $classMethod,
-            self::TEMPLATE_ANNOTATION_CLASS
+            SymfonyAnnotation::TEMPLATE
         );
 
         if (! $doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
@@ -153,7 +146,7 @@ CODE_SAMPLE
         foreach ($class->getMethods() as $classMethod) {
             $templateDoctrineAnnotationTagValueNode = $this->getDoctrineAnnotationTagValueNode(
                 $classMethod,
-                self::TEMPLATE_ANNOTATION_CLASS
+                SymfonyAnnotation::TEMPLATE
             );
             if ($templateDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 return true;
@@ -225,7 +218,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
+        $responseObjectType = new ObjectType(SymfonyClass::RESPONSE);
 
         $returnType = $this->getType($node->expr);
         return $responseObjectType->isSuperTypeOf($returnType)
@@ -278,7 +271,7 @@ CODE_SAMPLE
     ): void {
         $classMethod->stmts[] = new Return_($thisRenderMethodCall);
 
-        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
 
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
     }
@@ -308,7 +301,7 @@ CODE_SAMPLE
 
         $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
             $returnStaticType,
-            self::RESPONSE_CLASS
+            SymfonyClass::RESPONSE
         );
 
         if ($isArrayOrResponseType) {
@@ -317,7 +310,7 @@ CODE_SAMPLE
 
         // already response
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
-        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, self::RESPONSE_CLASS);
+        $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
     }
 
     private function processIsArrayOrResponseType(
@@ -334,7 +327,7 @@ CODE_SAMPLE
         $assign = new Assign($responseVariable, $returnExpr);
         $assignExpression = new Expression($assign);
 
-        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(self::RESPONSE_CLASS)));
+        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(SymfonyClass::RESPONSE)));
         $if->stmts[] = new Return_($responseVariable);
 
         $thisRenderMethodCall->args[1] = new Arg($responseVariable);
@@ -360,8 +353,6 @@ CODE_SAMPLE
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): void {
-        Assert::propertyExists($stmtsAwareStmt, 'stmts');
-
         foreach ((array) $stmtsAwareStmt->stmts as $stmt) {
             if (! $stmt instanceof Return_) {
                 continue;
