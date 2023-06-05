@@ -31,6 +31,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\CodeQuality\NodeTypeGroup;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
@@ -67,18 +68,28 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-/**
- * @Template()
- */
-public function indexAction()
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+final class SomeController
 {
+    /**
+     * @Template()
+     */
+    public function indexAction()
+    {
+    }
 }
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-public function indexAction()
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+final class SomeController
 {
-    return $this->render('index.html.twig');
+    public function indexAction()
+    {
+        return $this->render('index.html.twig');
+    }
 }
 CODE_SAMPLE
                 ),
@@ -275,7 +286,10 @@ CODE_SAMPLE
         );
 
         if ($isArrayOrResponseType) {
-            $this->processIsArrayOrResponseType($classMethod, $return, $lastReturnExpr, $thisRenderMethodCall);
+            $returnStmtKey = $return->getAttribute(AttributeKey::STMT_KEY);
+            unset($classMethod->stmts[$returnStmtKey]);
+
+            $this->refactorIsArrayOrResponseType($classMethod, $lastReturnExpr, $thisRenderMethodCall);
         }
 
         // already response
@@ -283,14 +297,11 @@ CODE_SAMPLE
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
     }
 
-    private function processIsArrayOrResponseType(
+    private function refactorIsArrayOrResponseType(
         ClassMethod $classMethod,
-        Return_ $return,
         Expr $returnExpr,
         MethodCall $thisRenderMethodCall
     ): void {
-        $this->removeNode($return);
-
         // create instance of Response → return response, or return $this->render
         $responseVariable = new Variable('responseOrData');
 
