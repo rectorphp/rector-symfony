@@ -6,19 +6,13 @@ namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,11 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MakeCommandLazyRector extends AbstractRector
 {
-    public function __construct(
-        private readonly ParamAnalyzer $paramAnalyzer
-    ) {
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make Symfony commands lazy', [
@@ -87,55 +76,59 @@ CODE_SAMPLE
             return null;
         }
 
-        $commandName = $this->resolveCommandNameFromSetName($node);
-        if (! $commandName instanceof Node) {
+        $commandNameExpr = $this->resolveCommandNameFromSetName($node);
+        if (! $commandNameExpr instanceof Expr) {
             return null;
         }
 
-        if (! $commandName instanceof String_ && ! $commandName instanceof ClassConstFetch) {
+        $commandNameType = $this->getType($commandNameExpr);
+        if (! $commandNameType->isConstantScalarValue()->yes()) {
             return null;
         }
 
-        $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
-
+        $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandNameExpr);
         $node->stmts = array_merge([$defaultNameProperty], $node->stmts);
 
         return $node;
     }
 
-    private function resolveCommandNameFromSetName(Class_ $class): ?Node
+    private function resolveCommandNameFromSetName(Class_ $class): ?Expr
     {
-        $commandName = null;
+        $configureClassMethod = $class->getMethod('configure');
+        if (! $configureClassMethod instanceof ClassMethod) {
+            return null;
+        }
 
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
-            if (! $node instanceof MethodCall) {
-                return null;
+        if ($configureClassMethod->stmts === null) {
+            return null;
+        }
+
+        foreach ($configureClassMethod->stmts as $key => $stmt) {
+            if (! $stmt instanceof Expression) {
+                continue;
             }
 
-            if (! $this->isName($node->name, 'setName')) {
-                return null;
+            if (! $stmt->expr instanceof MethodCall) {
+                continue;
             }
 
-            if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
-                return null;
+            $methodCall = $stmt->expr;
+            if (! $this->isName($methodCall->name, 'setName')) {
+                continue;
             }
 
-            $commandName = $node->getArgs()[0]
-                ->value;
-            $commandNameStaticType = $this->getType($commandName);
-            if (! $commandNameStaticType instanceof StringType) {
-                return null;
+            if (! $this->isObjectType($methodCall->var, new ObjectType('Symfony\Component\Console\Command\Command'))) {
+                continue;
             }
 
-            // is chain call? → remove by variable nulling
-            if ($node->var instanceof MethodCall) {
-                return $node->var;
-            }
+            $commandNameEpxr = $methodCall->getArgs()[0]
+->value;
+            unset($configureClassMethod->stmts[$key]);
 
-            $this->removeNode($node);
-        });
+            return $commandNameEpxr;
+        }
 
-        return $commandName;
+        return null;
     }
 
     private function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
