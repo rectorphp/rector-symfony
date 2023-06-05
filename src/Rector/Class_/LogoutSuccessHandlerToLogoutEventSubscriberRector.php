@@ -129,12 +129,26 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->classManipulator->removeImplements($node, [$this->successHandlerObjectType->getClassName()]);
+        $this->refactorImplements($node);
 
         $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         // 2. refactor logout() class method to onLogout()
-        $onLogoutSuccessClassMethod = $node->getMethod('onLogoutSuccess');
+        $onLogoutSuccessClassMethod = null;
+
+        foreach ($node->stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
+
+            if (! $this->isName($stmt, 'onLogoutSuccess')) {
+                continue;
+            }
+
+            $onLogoutSuccessClassMethod = $stmt;
+            unset($node->stmts[$key]);
+        }
+
         if (! $onLogoutSuccessClassMethod instanceof ClassMethod) {
             return null;
         }
@@ -157,8 +171,17 @@ CODE_SAMPLE
         );
         $node->stmts[] = $getSubscribedEventsClassMethod;
 
-        $this->removeNode($onLogoutSuccessClassMethod);
-
         return $node;
+    }
+
+    private function refactorImplements(Class_ $class): void
+    {
+        foreach ($class->implements as $key => $implement) {
+            if (! $this->isName($implement, $this->successHandlerObjectType->getClassName())) {
+                continue;
+            }
+
+            unset($class->implements[$key]);
+        }
     }
 }
