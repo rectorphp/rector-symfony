@@ -34,10 +34,13 @@ final class InlinedShortClosure extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('resolve', function ($value) {
-                return $value + 100;
-            }),
+            new TwigFunction('resolve', $this->resolve(...)),
         ];
+    }
+
+    public function resolve($value)
+    {
+        return $value + 100;
     }
 }
 

@@ -35,9 +35,7 @@ final class TerminologyExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('resolve', function ($value) {
-                return $this->resolve($value);
-            }),
+            new TwigFunction('resolve', $this->resolve(...)),
         ];
     }
 
