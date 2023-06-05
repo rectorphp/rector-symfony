@@ -334,7 +334,6 @@ CODE_SAMPLE
         $returnThisRender = new Return_($thisRenderMethodCall);
 
         $classMethodStmts = (array) $classMethod->stmts;
-
         $classMethod->stmts = array_merge($classMethodStmts, [$assignExpression, $if, $returnThisRender]);
     }
 
