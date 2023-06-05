@@ -28,22 +28,11 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\Symfony\\Rector\\Closure\\MinimalSharedStringSolver\:\:solve\(\)" is (.*?), keep it under 10#'
 
-
-        # closure/callable
-        - '#Parameter \#2 \$filter of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findFirstPrevious\(\) expects callable\(PhpParser\\Node\)\: bool, Closure\(PhpParser\\Node\)\: PhpParser\\Node\\Expr\\Assign\|null given#'
-
         -
             path: "src/ValueObjectFactory/ServiceMapFactory.php"
             message: '#@simplexml_load_string(.*?) is forbidden to use#'
 
-        # known type
-        - '#Parameter \#1 \$className of method Rector\\Core\\Reflection\\ReflectionResolver\:\:resolveMethodReflection\(\) expects class\-string, string given#'
-
         # known array
-        -
-            message: '#Property PhpParser\\Node\\Expr\\Closure\:\:\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node\\Stmt>\|null#'
-            path: src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
-
         -
             message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
             path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
