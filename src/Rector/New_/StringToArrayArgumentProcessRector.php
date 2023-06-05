@@ -181,16 +181,12 @@ CODE_SAMPLE
         /** @var Assign|null $assign */
         $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use (
             $firstArgumentExpr
-        ): ?Assign {
+        ): bool {
             if (! $checkedNode instanceof Assign) {
-                return null;
+                return false;
             }
 
-            if (! $this->nodeComparator->areNodesEqual($checkedNode->var, $firstArgumentExpr)) {
-                return null;
-            }
-
-            return $checkedNode;
+            return $this->nodeComparator->areNodesEqual($checkedNode->var, $firstArgumentExpr);
         });
 
         return $assign;
