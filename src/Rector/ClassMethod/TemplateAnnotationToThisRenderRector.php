@@ -5,21 +5,14 @@ declare(strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ArrayType;
@@ -28,10 +21,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\CodeQuality\NodeTypeGroup;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
@@ -132,7 +123,7 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
+    private function replaceTemplateAnnotation(ClassMethod $classMethod): ?ClassMethod
     {
         if (! $classMethod->isPublic()) {
             return null;
@@ -147,15 +138,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode);
-
-        return $classMethod;
+        return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode);
     }
 
     private function refactorClassMethod(
         ClassMethod $classMethod,
         DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
-    ): void {
+    ): ?ClassMethod {
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
         $this->traverseNodesWithCallable($classMethod, function (Node $node) use (
@@ -168,11 +157,6 @@ CODE_SAMPLE
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
 
-            if (! $node instanceof Stmt) {
-                return null;
-            }
-
-            //            foreach (NodeTypeGroup::STMTS_AWARE as $stmtsAwareType) {
             if (! $node instanceof StmtsAwareInterface) {
                 return null;
             }
@@ -188,7 +172,7 @@ CODE_SAMPLE
         });
 
         if (! $this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
-            return;
+            return null;
         }
 
         $thisRenderMethodCall = $this->thisRenderFactory->create(
@@ -198,6 +182,8 @@ CODE_SAMPLE
         );
 
         $this->refactorNoReturn($classMethod, $thisRenderMethodCall, $templateDoctrineAnnotationTagValueNode);
+
+        return $classMethod;
     }
 
     private function hasLastReturnResponse(ClassMethod $classMethod): bool
@@ -285,38 +271,14 @@ CODE_SAMPLE
             SymfonyClass::RESPONSE
         );
 
+        // skip as the original class method has to change first
         if ($isArrayOrResponseType) {
-            $returnStmtKey = $return->getAttribute(AttributeKey::STMT_KEY);
-            unset($classMethod->stmts[$returnStmtKey]);
-
-            $this->refactorIsArrayOrResponseType($classMethod, $lastReturnExpr, $thisRenderMethodCall);
+            return;
         }
 
         // already response
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
-    }
-
-    private function refactorIsArrayOrResponseType(
-        ClassMethod $classMethod,
-        Expr $returnExpr,
-        MethodCall $thisRenderMethodCall
-    ): void {
-        // create instance of Response → return response, or return $this->render
-        $responseVariable = new Variable('responseOrData');
-
-        $assign = new Assign($responseVariable, $returnExpr);
-        $assignExpression = new Expression($assign);
-
-        $if = new If_(new Instanceof_($responseVariable, new FullyQualified(SymfonyClass::RESPONSE)));
-        $if->stmts[] = new Return_($responseVariable);
-
-        $thisRenderMethodCall->args[1] = new Arg($responseVariable);
-
-        $returnThisRender = new Return_($thisRenderMethodCall);
-
-        $classMethodStmts = (array) $classMethod->stmts;
-        $classMethod->stmts = array_merge($classMethodStmts, [$assignExpression, $if, $returnThisRender]);
     }
 
     private function removeDoctrineAnnotationTagValueNode(
