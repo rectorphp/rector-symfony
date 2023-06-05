@@ -118,6 +118,7 @@ CODE_SAMPLE
 
     private function resolveCommandNameFromConstructor(Class_ $class): ?Node
     {
+        return null;;
         $commandName = null;
 
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$commandName) {
