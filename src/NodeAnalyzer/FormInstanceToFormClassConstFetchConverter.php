@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeRemoval\NodeRemover;
 use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
 use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 
@@ -23,7 +22,6 @@ final class FormInstanceToFormClassConstFetchConverter
         private readonly NodeFactory $nodeFactory,
         private readonly FormTypeClassResolver $formTypeClassResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly NodeRemover $nodeRemover,
     ) {
     }
 
@@ -54,12 +52,6 @@ final class FormInstanceToFormClassConstFetchConverter
             if (! $methodCall instanceof MethodCall) {
                 throw new ShouldNotHappenException();
             }
-        }
-
-        // remove previous assign
-        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
-        if ($previousAssign instanceof Assign) {
-            $this->nodeRemover->removeNode($previousAssign);
         }
 
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
