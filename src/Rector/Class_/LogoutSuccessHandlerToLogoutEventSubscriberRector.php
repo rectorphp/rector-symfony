@@ -13,7 +13,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory;
-use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\EventReferenceToMethodNameWithPriority;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,7 +30,6 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
         private readonly OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory,
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
-        private readonly ClassManipulator $classManipulator,
     ) {
         $this->successHandlerObjectType = new ObjectType(
             'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface'
