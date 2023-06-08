@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,7 +42,7 @@ final class ParseFileRector extends AbstractRector
     private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
 
     public function __construct(
-        private readonly NodePrinterInterface $nodePrinter
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 
@@ -106,7 +106,7 @@ CODE_SAMPLE
 
         $possibleFileNode = $firstArg->value;
 
-        $possibleFileNodeAsString = $this->nodePrinter->print($possibleFileNode);
+        $possibleFileNodeAsString = $this->betterStandardPrinter->print($possibleFileNode);
 
         // is yml/yaml file
         if (StringUtils::isMatch($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
