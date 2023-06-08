@@ -17,7 +17,6 @@ use Rector\Symfony\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
-use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToNew;
@@ -60,12 +59,6 @@ return static function (RectorConfig $rectorConfig): void {
 
     // @see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
     $rectorConfig->rule(CommandConstantReturnCodeRector::class);
-
-    // @see https://github.com/symfony/symfony/pull/35308
-    $rectorConfig->ruleWithConfiguration(
-        NewArgToMethodCallRector::class,
-        [new NewArgToMethodCall('Symfony\Component\Dotenv\Dotenv', true, 'usePutenv')]
-    );
 
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
