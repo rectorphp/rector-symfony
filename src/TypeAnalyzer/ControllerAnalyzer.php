@@ -6,6 +6,7 @@ namespace Rector\Symfony\TypeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
@@ -17,20 +18,24 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerAnalyzer
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver,
     ) {
     }
 
-    public function isController(Expr $expr): bool
+    public function isController(Expr|Class_ $node): bool
     {
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if ($node instanceof Class_) {
+            return $this->isControllerClass($node);
+        }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         // might be missing in a trait
         if (! $scope instanceof Scope) {
             return false;
         }
 
-        $nodeType = $scope->getType($expr);
+        $nodeType = $scope->getType($node);
         if (! $nodeType instanceof TypeWithClassName) {
             return false;
         }
@@ -68,5 +73,15 @@ final class ControllerAnalyzer
         }
 
         return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
+    }
+
+    private function isControllerClass(Class_ $class): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $this->isControllerClassReflection($classReflection);
     }
 }
