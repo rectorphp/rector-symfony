@@ -46,8 +46,7 @@ final class DependencyInjectionMethodCallAnalyzer
             $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
         }
 
-        // @note this has troubles to propagate up
-        return new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
+        return new PropertyMetadata($propertyName, $serviceType);
     }
 
     private function resolveNewPropertyNameWhenExists(

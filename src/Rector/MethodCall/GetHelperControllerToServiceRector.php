@@ -103,14 +103,14 @@ CODE_SAMPLE
             }
 
             if ($this->isName($node->name, 'getDoctrine')) {
-                $entityManagerPropertyMetadata = $this->refactorGetDoctrine();
+                $entityManagerPropertyMetadata = $this->createManagerRegistryPropertyMetadata();
                 $propertyMetadatas[] = $entityManagerPropertyMetadata;
 
                 return $this->nodeFactory->createPropertyFetch('this', $entityManagerPropertyMetadata->getName());
             }
 
             if ($this->isName($node->name, 'dispatchMessage')) {
-                $eventDispatcherPropertyMetadata = $this->refactorDispatchMessage();
+                $eventDispatcherPropertyMetadata = $this->createMessageBusPropertyMetadata();
                 $propertyMetadatas[] = $eventDispatcherPropertyMetadata;
 
                 $thisVariable = new Variable('this');
@@ -136,21 +136,21 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function refactorDispatchMessage(): PropertyMetadata
+    private function createMessageBusPropertyMetadata(): PropertyMetadata
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Symfony\Component\Messenger\MessageBusInterface');
 
         // add dependency
         $propertyObjectType = new ObjectType('Symfony\Component\Messenger\MessageBusInterface');
-        return new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
+        return new PropertyMetadata($propertyName, $propertyObjectType);
     }
 
-    private function refactorGetDoctrine(): PropertyMetadata
+    private function createManagerRegistryPropertyMetadata(): PropertyMetadata
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Doctrine\Persistence\ManagerRegistry');
 
         // add dependency
         $propertyObjectType = new ObjectType('Doctrine\Persistence\ManagerRegistry');
-        return new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
+        return new PropertyMetadata($propertyName, $propertyObjectType);
     }
 }
