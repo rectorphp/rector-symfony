@@ -9,6 +9,8 @@ final class SomeController extends AbstractController
     public function run()
     {
         $productRepository = $this->getDoctrine()->getRepository(Product::class);
+
+        $anotherRepository = $this->getDoctrine()->getRepository(Another::class);
     }
 }
 
@@ -28,6 +30,8 @@ final class SomeController extends AbstractController
     public function run()
     {
         $productRepository = $this->managerRegistry->getRepository(Product::class);
+
+        $anotherRepository = $this->managerRegistry->getRepository(Another::class);
     }
 }
 
