@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -73,11 +74,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, MethodCall::class];
+        return [Class_::class];
     }
 
     /**
-     * @param ClassMethod|MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -85,12 +86,16 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof ClassMethod) {
-            return $this->refactorClassMethod($node);
+        $hasChanged = false;
+        foreach ($node->getMethods() as $classMethod) {
+            $changedClassMethod = $this->refactorClassMethod($classMethod);
+            if ($changedClassMethod instanceof ClassMethod) {
+                $hasChanged = true;
+            }
         }
 
-        if ($this->isGetRequestInAction($node)) {
-            return new Variable($this->getRequestVariableAndParamName());
+        if ($hasChanged) {
+            return $node;
         }
 
         return null;
@@ -145,7 +150,7 @@ CODE_SAMPLE
         return false;
     }
 
-    private function isGetRequestInAction(MethodCall $methodCall): bool
+    private function isGetRequestInAction(ClassMethod $classMethod, MethodCall $methodCall): bool
     {
         // must be $this->getRequest() in controller
         if (! $methodCall->var instanceof Variable) {
@@ -159,11 +164,6 @@ CODE_SAMPLE
         if (! $this->isName($methodCall->name, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters(
             $methodCall
         )) {
-            return false;
-        }
-
-        $classMethod = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
-        if (! $classMethod instanceof ClassMethod) {
             return false;
         }
 
@@ -231,6 +231,18 @@ CODE_SAMPLE
         $classMethod->params[] = new Param(new Variable(
             $this->getRequestVariableAndParamName()
         ), null, $fullyQualified);
+
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($classMethod) {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
+            if ($this->isGetRequestInAction($classMethod, $node)) {
+                return new Variable($this->getRequestVariableAndParamName());
+            }
+
+            return null;
+        });
 
         return $classMethod;
     }
