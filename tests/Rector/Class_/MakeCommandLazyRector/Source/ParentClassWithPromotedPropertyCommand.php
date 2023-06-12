@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\SourcePhp80;
+namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Source;
 
 use Symfony\Component\Console\Command\Command;
 

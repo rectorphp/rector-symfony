@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\FixturePhp80;
 
-use Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\SourcePhp80\ParentClassWithPromotedPropertyCommand;
+use Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Source\ParentClassWithPromotedPropertyCommand;
 
 final class SkipNonStringCommandName extends ParentClassWithPromotedPropertyCommand
 {

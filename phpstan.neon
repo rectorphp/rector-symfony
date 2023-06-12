@@ -17,8 +17,6 @@ parameters:
 
     excludePaths:
         - */Source/*
-        - */Source*/*
-        - *Source/*
         - */tests/*/Fixture*/Expected/*
 
     ignoreErrors:
