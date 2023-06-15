@@ -66,7 +66,7 @@ CODE_SAMPLE
                 }
 
                 // If there is no property with a SwiftMailer type we should skip this class
-                $swiftMailerProperty = $this->getSwiftMailerProperty($node, $subNode);
+                $swiftMailerProperty = $this->getSwiftMailerProperty($node);
                 if (! $swiftMailerProperty instanceof Property) {
                     return null;
                 }
@@ -83,8 +83,8 @@ CODE_SAMPLE
 
                 $hasChanged = true;
                 return new New_(new FullyQualified('Symfony\Component\Mime\Email'));
-            });
-
+            }
+        );
 
         if ($hasChanged) {
             return $node;
@@ -93,9 +93,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getSwiftMailerProperty($class, MethodCall $methodCall): ?Property
+    private function getSwiftMailerProperty($class): ?Property
     {
-         $properties = $class->getProperties();
+        $properties = $class->getProperties();
 
         foreach ($properties as $property) {
             $propertyType = $this->nodeTypeResolver->getType($property);
