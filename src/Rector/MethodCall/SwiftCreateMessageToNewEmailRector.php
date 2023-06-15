@@ -56,7 +56,7 @@ CODE_SAMPLE
 
         $this->traverseNodesWithCallable(
             $node->getMethods(),
-            function (Node $subNode) use (&$hasChanged) {
+            function (Node $subNode) use ($node, &$hasChanged) {
                 if (! $subNode instanceof MethodCall) {
                     return null;
                 }
@@ -66,7 +66,7 @@ CODE_SAMPLE
                 }
 
                 // If there is no property with a SwiftMailer type we should skip this class
-                $swiftMailerProperty = $this->getSwiftMailerProperty($subNode);
+                $swiftMailerProperty = $this->getSwiftMailerProperty($node, $subNode);
                 if (! $swiftMailerProperty instanceof Property) {
                     return null;
                 }
@@ -93,14 +93,9 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getSwiftMailerProperty(MethodCall $methodCall): ?Property
+    private function getSwiftMailerProperty($class, MethodCall $methodCall): ?Property
     {
-        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
-        if (! $class instanceof Class_) {
-            return null;
-        }
-
-        $properties = $class->getProperties();
+         $properties = $class->getProperties();
 
         foreach ($properties as $property) {
             $propertyType = $this->nodeTypeResolver->getType($property);
