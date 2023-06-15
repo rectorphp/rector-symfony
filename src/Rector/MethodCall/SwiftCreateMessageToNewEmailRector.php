@@ -93,7 +93,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getSwiftMailerProperty($class): ?Property
+    private function getSwiftMailerProperty(Class_ $class): ?Property
     {
         $properties = $class->getProperties();
 
