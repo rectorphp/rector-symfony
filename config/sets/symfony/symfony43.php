@@ -5,11 +5,10 @@ declare(strict_types=1);
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\MethodName;
-use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Symfony\Rector\ClassMethod\EventDispatcherParentConstructRector;
 use Rector\Symfony\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
 use Rector\Symfony\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
@@ -27,6 +26,7 @@ return static function (RectorConfig $rectorConfig): void {
         MakeDispatchFirstArgumentEventRector::class,
         GetCurrencyBundleMethodCallsToIntlRector::class,
         ConvertRenderTemplateShortNotationToBundleSyntaxRector::class,
+        EventDispatcherParentConstructRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
@@ -94,9 +94,5 @@ return static function (RectorConfig $rectorConfig): void {
             'context',
             []
         ),
-    ]);
-
-    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, [
-        'Symfony\Component\EventDispatcher\EventDispatcher' => MethodName::CONSTRUCT,
     ]);
 };
