@@ -7,3 +7,4 @@ phpstan.neon export-ignore
 phpunit.xml export-ignore
 stubs export-ignore
 tests export-ignore
+rules-tests export-ignore
