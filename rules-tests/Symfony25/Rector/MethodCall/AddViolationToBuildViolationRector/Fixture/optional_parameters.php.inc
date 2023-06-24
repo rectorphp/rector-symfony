@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
 
 class OptionalParameters extends \Symfony\Component\Validator\ConstraintValidator
 {
@@ -14,7 +14,7 @@ class OptionalParameters extends \Symfony\Component\Validator\ConstraintValidato
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
 
 class OptionalParameters extends \Symfony\Component\Validator\ConstraintValidator
 {

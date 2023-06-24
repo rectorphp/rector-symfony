@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector\Fixture;
 
 class SkipDifferentObject
 {
