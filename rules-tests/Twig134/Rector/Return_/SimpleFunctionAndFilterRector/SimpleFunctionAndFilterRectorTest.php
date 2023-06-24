@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Return_\SimpleFunctionAndFilterRector;
+namespace Rector\Symfony\Tests\Twig134\Rector\Return_\SimpleFunctionAndFilterRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
