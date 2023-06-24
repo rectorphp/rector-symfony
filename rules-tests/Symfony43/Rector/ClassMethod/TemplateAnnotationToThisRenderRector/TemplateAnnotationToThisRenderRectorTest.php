@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
+namespace Rector\Symfony\Tests\Symfony43\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
