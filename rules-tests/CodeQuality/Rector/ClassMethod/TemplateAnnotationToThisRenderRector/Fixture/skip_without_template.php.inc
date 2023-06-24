@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Routing\Annotation\Route;
 
 class WithoutBaseClassAndTemplate
 {

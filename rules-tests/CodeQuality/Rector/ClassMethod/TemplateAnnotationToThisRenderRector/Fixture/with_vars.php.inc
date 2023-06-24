@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -20,8 +21,9 @@ class WithVarsController extends AbstractController
 -----
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
