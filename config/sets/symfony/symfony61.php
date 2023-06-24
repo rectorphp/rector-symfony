@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Rector\Class_\CommandPropertyToAttributeRector;
-use Rector\Symfony\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
+use Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
+use Rector\Symfony\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
 
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.1.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(CommandPropertyToAttributeRector::class);
-    $rectorConfig->rule(ErrorNamesPropertyToConstantRector::class);
+    $rectorConfig->rules([CommandPropertyToAttributeRector::class, ErrorNamesPropertyToConstantRector::class]);
 
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
