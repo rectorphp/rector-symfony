@@ -12,17 +12,14 @@ use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rule(ConstraintUrlOptionRector::class);
-
-    $rectorConfig->rule(FormIsValidRector::class);
-
-    $rectorConfig->rule(VarDumperTestTraitMethodArgsRector::class);
-
-    $rectorConfig->rule(ContainerBuilderCompileEnvArgumentRector::class);
-
-    $rectorConfig->rule(ProcessBuilderInstanceRector::class);
-
-    $rectorConfig->rule(ProcessBuilderGetProcessRector::class);
+    $rectorConfig->rules([
+        ConstraintUrlOptionRector::class,
+        FormIsValidRector::class,
+        VarDumperTestTraitMethodArgsRector::class,
+        ContainerBuilderCompileEnvArgumentRector::class,
+        ProcessBuilderInstanceRector::class,
+        ProcessBuilderGetProcessRector::class,
+    ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
