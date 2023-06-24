@@ -6,7 +6,7 @@ namespace Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscove
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rector\Symfony\Rector\Closure\MinimalSharedStringSolver;
+use Rector\Symfony\MinimalSharedStringSolver;
 
 /**
  * Copied from https://github.com/Triun/PHP-Longest-Common-Substring/blob/master/test/suite/SolverTest.php

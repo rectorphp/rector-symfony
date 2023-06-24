@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
