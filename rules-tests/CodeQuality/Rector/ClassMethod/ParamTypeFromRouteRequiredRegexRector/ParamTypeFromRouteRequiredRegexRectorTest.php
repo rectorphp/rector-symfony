@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
