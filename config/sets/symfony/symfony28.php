@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
-
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Rector\StaticCall\ParseFileRector;
+use Rector\Symfony\Symfony28\Rector\StaticCall\ParseFileRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(ParseFileRector::class);
