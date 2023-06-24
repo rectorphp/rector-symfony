@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
