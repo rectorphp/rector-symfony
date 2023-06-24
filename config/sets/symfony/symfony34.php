@@ -7,6 +7,7 @@ use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Symfony\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
 use Rector\Symfony\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
+use Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(ArgumentRemoverRector::class, [
@@ -21,5 +22,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         MergeMethodAnnotationToRouteAnnotationRector::class,
         ReplaceSensioRouteAnnotationWithSymfonyRector::class,
+        ContainerGetNameToTypeInTestsRector::class,
     ]);
 };

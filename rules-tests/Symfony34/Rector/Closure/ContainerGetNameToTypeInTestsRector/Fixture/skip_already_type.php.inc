@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Symfony\Tests\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType;
+use Rector\Symfony\Tests\Symfony34\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class SkipAlreadyType extends TestCase

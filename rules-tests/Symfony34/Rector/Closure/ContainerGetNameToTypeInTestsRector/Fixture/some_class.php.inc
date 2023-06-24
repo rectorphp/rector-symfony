@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,7 +19,7 @@ final class SomeTest extends TestCase
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector\Fixture;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
