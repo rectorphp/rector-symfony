@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Array_\MaxLengthSymfonyFormOptionToAttrRector;
+namespace Rector\Symfony\Tests\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class MaxLengthSymfonyFormOptionToAttrRectorTest extends AbstractRectorTestCase
+final class AddViolationToBuildViolationRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
-    public function test(string $file): void
+    public function test(string $filePath): void
     {
-        $this->doTestFile($file);
+        $this->doTestFile($filePath);
     }
 
-    /**
-     * @return Iterator<string[]>
-     */
     public static function provideData(): Iterator
     {
         return self::yieldFilesFromDirectory(__DIR__ . '/Fixture');
