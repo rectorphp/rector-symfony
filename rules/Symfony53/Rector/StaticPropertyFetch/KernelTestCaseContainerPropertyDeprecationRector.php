@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\StaticPropertyFetch;
+namespace Rector\Symfony\Symfony53\Rector\StaticPropertyFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\KernelTestCaseContainerPropertyDeprecationRectorTest
+ * @see \Rector\Symfony\Tests\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\KernelTestCaseContainerPropertyDeprecationRectorTest
  */
 class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector
 {
