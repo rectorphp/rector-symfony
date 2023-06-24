@@ -35,7 +35,7 @@ parameters:
         # known array
         -
             message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
-            path: src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
+            path: rules/CodeQuality/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
 
         - '#Calling PHPStan\\Reflection\\Php\\PhpParameterReflection\:\:getName\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
 
