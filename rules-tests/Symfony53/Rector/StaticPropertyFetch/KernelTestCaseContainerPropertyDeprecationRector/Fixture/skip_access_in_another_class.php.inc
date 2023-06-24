@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -16,7 +16,7 @@ class SomeTest extends KernelTestCase
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

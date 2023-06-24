@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\Symfony53\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
  *
- * @see \Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\CommandDescriptionToPropertyRectorTest
+ * @see \Rector\Symfony\Tests\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector\CommandDescriptionToPropertyRectorTest
  */
 final class CommandDescriptionToPropertyRector extends AbstractRector
 {

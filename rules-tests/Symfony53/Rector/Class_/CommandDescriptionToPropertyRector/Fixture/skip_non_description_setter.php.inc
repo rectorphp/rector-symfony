@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\Class_\MakeCommandLazyRector\Fixture;
 
 final class SkipNonDescriptionSetter extends Symfony\Component\Console\Command\Command
 {
