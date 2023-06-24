@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -22,8 +23,9 @@ class InnerReturnWithOnlyVarsController extends AbstractController
 -----
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -34,7 +36,7 @@ class InnerReturnWithOnlyVarsController extends AbstractController
         function (Post $post) {
             return $post;
         };
-        return $this->render('Inner_Return_With_Only_Vars/index.html.twig', ['post' => $post]);
+        return $this->render('@App/Inner_Return_With_Only_Vars/index.html.twig', ['post' => $post]);
     }
 }
 

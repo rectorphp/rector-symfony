@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
 class WithRouteToo extends AbstractController
 {
@@ -22,11 +21,10 @@ class WithRouteToo extends AbstractController
 -----
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
 class WithRouteToo extends AbstractController
 {

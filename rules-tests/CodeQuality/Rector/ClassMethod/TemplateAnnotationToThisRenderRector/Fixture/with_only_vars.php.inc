@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -19,8 +20,9 @@ class WithOnlyVarsController extends AbstractController
 -----
 <?php
 
-namespace App\Controller;
+namespace AppBundle\Controller;
 
+use App\Controller\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -28,7 +30,7 @@ class WithOnlyVarsController extends AbstractController
 {
     public function index(Post $post): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('With_Only_Vars/index.html.twig', ['post' => $post]);
+        return $this->render('@App/With_Only_Vars/index.html.twig', ['post' => $post]);
     }
 }
 
