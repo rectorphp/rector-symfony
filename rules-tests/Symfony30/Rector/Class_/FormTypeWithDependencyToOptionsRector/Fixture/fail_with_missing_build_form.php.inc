@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\FormTypeWithDependencyToOptionsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony30\Rector\Class_\FormTypeWithDependencyToOptionsRector\Fixture;
 
 use Symfony\Component\Form\AbstractType;
 

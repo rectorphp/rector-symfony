@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\FormTypeWithDependencyToOptionsRector;
+namespace Rector\Symfony\Tests\Symfony30\Rector\Class_\FormTypeWithDependencyToOptionsRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
