@@ -1,4 +1,4 @@
-# 80 Rules Overview
+# 79 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -328,37 +328,6 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
 -        $this->container->get('some_service');
 +        $this->someService;
 +        $this->someService;
-     }
- }
-```
-
-<br>
-
-## ContainerGetToRequiredDependencyAbstractClassRector
-
-Change `$this->get("some_service");` to `@required` dependency in an abstract class
-
-- class: [`Rector\Symfony\Rector\Class_\ContainerGetToRequiredDependencyAbstractClassRector`](../src/Rector/Class_/ContainerGetToRequiredDependencyAbstractClassRector.php)
-
-```diff
- use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
- abstract class CustomAbstractController extends AbstractController
- {
-+    private SomeService $someService;
-+
-+    /**
-+     * @required
-+     */
-+    public function autowire(SomeService $someService)
-+    {
-+        $this->someService = $someService;
-+    }
-+
-     public function run()
-     {
--        $this->get('some_service')->apply();
-+        $this->someService->apply();
      }
  }
 ```
