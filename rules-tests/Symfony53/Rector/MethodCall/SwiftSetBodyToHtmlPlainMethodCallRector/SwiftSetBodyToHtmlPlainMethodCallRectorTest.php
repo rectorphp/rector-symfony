@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector;
+namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
