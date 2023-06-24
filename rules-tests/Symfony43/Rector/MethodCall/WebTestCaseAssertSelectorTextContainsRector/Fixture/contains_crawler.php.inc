@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -17,7 +17,7 @@ final class ContainsCrawler extends WebTestCase
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

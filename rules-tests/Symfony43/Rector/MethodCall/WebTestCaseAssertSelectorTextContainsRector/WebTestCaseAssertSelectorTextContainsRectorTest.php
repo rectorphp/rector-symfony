@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector;
+namespace Rector\Symfony\Tests\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;

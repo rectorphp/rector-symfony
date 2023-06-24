@@ -14,6 +14,7 @@ use Rector\Symfony\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToInt
 use Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector;
 use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
@@ -22,6 +23,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         WebTestCaseAssertIsSuccessfulRector::class,
         WebTestCaseAssertResponseCodeRector::class,
+        WebTestCaseAssertSelectorTextContainsRector::class,
         TwigBundleFilesystemLoaderToTwigRector::class,
         MakeDispatchFirstArgumentEventRector::class,
         GetCurrencyBundleMethodCallsToIntlRector::class,
