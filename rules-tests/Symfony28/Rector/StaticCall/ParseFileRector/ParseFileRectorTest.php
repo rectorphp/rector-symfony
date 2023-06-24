@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\StaticCall\ParseFileRector;
+namespace Rector\Symfony\Tests\Symfony28\Rector\StaticCall\ParseFileRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
