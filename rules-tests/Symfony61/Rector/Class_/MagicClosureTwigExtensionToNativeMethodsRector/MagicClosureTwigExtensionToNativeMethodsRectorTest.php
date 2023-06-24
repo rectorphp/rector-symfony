@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
