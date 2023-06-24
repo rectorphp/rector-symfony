@@ -11,6 +11,7 @@ return static function (EasyCIConfig $easyCIConfig): void {
     $easyCIConfig->paths([
          __DIR__ . '/config',
          __DIR__ . '/src',
+         __DIR__ . '/rules',
     ]);
 
     $easyCIConfig->typesToSkip([
