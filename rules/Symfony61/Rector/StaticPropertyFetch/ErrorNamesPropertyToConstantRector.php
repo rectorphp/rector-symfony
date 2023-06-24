@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\StaticPropertyFetch;
+namespace Rector\Symfony\Symfony61\Rector\StaticPropertyFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * Covers:
  * - https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.1.md#validator
  *
- * @see \Rector\Symfony\Tests\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\ErrorNamesPropertyToConstantRectorTest
+ * @see \Rector\Symfony\Tests\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\ErrorNamesPropertyToConstantRectorTest
  */
 final class ErrorNamesPropertyToConstantRector extends AbstractRector
 {

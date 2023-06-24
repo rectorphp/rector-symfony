@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 class SunshineCommand extends \Symfony\Component\Console\Command\Command
 {
@@ -12,7 +12,7 @@ class SunshineCommand extends \Symfony\Component\Console\Command\Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 #[\Symfony\Component\Console\Attribute\AsCommand('sunshine')]
 class SunshineCommand extends \Symfony\Component\Console\Command\Command

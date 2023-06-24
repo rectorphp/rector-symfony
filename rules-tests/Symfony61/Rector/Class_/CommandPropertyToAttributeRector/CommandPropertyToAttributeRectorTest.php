@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ErrorNamesPropertyToConstantRectorTest extends AbstractRectorTestCase
+final class CommandPropertyToAttributeRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $filePath): void

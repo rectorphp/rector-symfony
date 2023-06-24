@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 class CommandWithAliases extends \Symfony\Component\Console\Command\Command
 {
@@ -18,7 +18,7 @@ class CommandWithAliases extends \Symfony\Component\Console\Command\Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 #[\Symfony\Component\Console\Attribute\AsCommand('sunshine', null, ['sun', 'shine'])]
 class CommandWithAliases extends \Symfony\Component\Console\Command\Command

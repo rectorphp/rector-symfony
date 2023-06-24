@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\Fixture;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -18,7 +18,7 @@ final class Replace extends NotBlank
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector\Fixture;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
 

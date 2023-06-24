@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\Symfony61\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -28,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/doc/current/console.html#registering-the-command
  *
- * @see \Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\CommandPropertyToAttributeRectorTest
+ * @see \Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\CommandPropertyToAttributeRectorTest
  */
 final class CommandPropertyToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {

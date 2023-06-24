@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Component\Console\Command\Command
 {
@@ -23,7 +23,7 @@ class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Componen
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
 #[\Symfony\Component\Console\Attribute\AsCommand('sunshine', 'Let the sun shine!', ['sun', 'shine'])]
 class CommandWithDescriptionAndAliasesAndHiddenAndHelp extends \Symfony\Component\Console\Command\Command
