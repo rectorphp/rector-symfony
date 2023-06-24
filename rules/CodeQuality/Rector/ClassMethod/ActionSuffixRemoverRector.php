@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\ClassMethod;
+namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

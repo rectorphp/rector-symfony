@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\Fixture;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -25,7 +25,7 @@ final class TerminologyExtension extends AbstractExtension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\Fixture;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\RemoveServiceFromSensioRouteRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -18,7 +18,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\RemoveServiceFromSensioRouteRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
