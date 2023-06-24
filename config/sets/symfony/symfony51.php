@@ -13,25 +13,32 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
-use Rector\Symfony\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
-use Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
-use Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector;
-use Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
+use Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
+use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
+use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
+use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    // @see https://github.com/symfony/symfony/pull/36243
-    $rectorConfig->rule(LogoutHandlerToLogoutEventSubscriberRector::class);
-    $rectorConfig->rule(LogoutSuccessHandlerToLogoutEventSubscriberRector::class);
+    $rectorConfig->rules([
+        // @see https://github.com/symfony/symfony/pull/36243
+        LogoutHandlerToLogoutEventSubscriberRector::class,
+        LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
+        // @see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
+        CommandConstantReturnCodeRector::class,
+        RouteCollectionBuilderToRoutingConfiguratorRector::class,
+    ]);
+
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
         'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => 'Symfony\Component\Form\Util\ServerParams',
         // @see https://github.com/symfony/symfony/pull/35092
         'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
     ]);
+
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Config\Definition\BaseNode',
@@ -51,13 +58,11 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/symfony/symfony/pull/35828
         new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
     ]);
+
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configuraton\inline' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\inline_service',
         'Symfony\Component\DependencyInjection\Loader\Configuraton\ref' => 'Symfony\Component\DependencyInjection\Loader\Configuraton\service',
     ]);
-
-    // @see https://symfony.com/blog/new-in-symfony-5-1-misc-improvements-part-1#added-constants-for-command-exit-codes
-    $rectorConfig->rule(CommandConstantReturnCodeRector::class);
 
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
@@ -124,6 +129,4 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/symfony/symfony/pull/35858
         'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
     ]);
-
-    $rectorConfig->rule(RouteCollectionBuilderToRoutingConfiguratorRector::class);
 };
