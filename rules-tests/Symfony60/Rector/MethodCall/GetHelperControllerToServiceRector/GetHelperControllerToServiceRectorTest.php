@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\FuncCall\ReplaceServiceArgumentRector;
+namespace Rector\Symfony\Tests\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ReplaceServiceArgumentRectorTest extends AbstractRectorTestCase
+final class GetHelperControllerToServiceRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $filePath): void
