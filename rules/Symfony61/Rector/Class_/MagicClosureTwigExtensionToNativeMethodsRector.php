@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\Symfony61\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\MagicClosureTwigExtensionToNativeMethodsRectorTest
+ * @see \Rector\Symfony\Tests\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\MagicClosureTwigExtensionToNativeMethodsRectorTest
  *
  * @see PHP 8.1 way to handle functions/filters https://github.com/symfony/symfony/blob/e0ad2eead3513a558c09d8aa3ae9e867fb10b419/src/Symfony/Bridge/Twig/Extension/CodeExtension.php#L41-L52
  */
