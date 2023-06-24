@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector;
+namespace Rector\Symfony\Tests\Symfony26\Rector\MethodCall\RedirectToRouteRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
