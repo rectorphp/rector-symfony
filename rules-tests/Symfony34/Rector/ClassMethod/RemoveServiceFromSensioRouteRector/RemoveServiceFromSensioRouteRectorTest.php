@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
+namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
