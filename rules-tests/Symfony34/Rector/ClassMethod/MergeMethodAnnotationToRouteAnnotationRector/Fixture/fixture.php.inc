@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony40\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +20,7 @@ class DefaultController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony40\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;

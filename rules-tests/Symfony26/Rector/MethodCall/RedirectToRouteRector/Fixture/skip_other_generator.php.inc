@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Symfony26\Rector\MethodCall\RedirectToRouteRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\RedirectToRouteRector\Fixture\SomeGenerator;
+use Rector\Symfony\Tests\Symfony40\Rector\MethodCall\RedirectToRouteRector\Fixture\SomeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SkipController extends AbstractController
