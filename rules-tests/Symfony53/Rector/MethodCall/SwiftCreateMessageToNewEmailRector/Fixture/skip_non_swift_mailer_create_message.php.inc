@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
 
-class SkipNonSwiftMailerCreateMessage
+final class SkipNonSwiftMailerCreateMessage
 {
     private $swift;
 
@@ -16,5 +16,3 @@ class SkipNonSwiftMailerCreateMessage
         $email = $this->swift->createMessage('message');
     }
 }
-
-?>

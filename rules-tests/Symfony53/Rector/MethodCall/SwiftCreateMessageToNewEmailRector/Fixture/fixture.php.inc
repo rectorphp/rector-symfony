@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
 
 use Swift_Mailer;
 
-class Fixture
+final class Fixture
 {
     /**
      * @var Swift_Mailer
@@ -26,11 +26,11 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\Fixture;
 
 use Swift_Mailer;
 
-class Fixture
+final class Fixture
 {
     /**
      * @var Swift_Mailer

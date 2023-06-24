@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Symfony53\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\SwiftCreateMessageToNewEmailRectorTest
+ * @see \Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector\SwiftCreateMessageToNewEmailRectorTest
  */
 final class SwiftCreateMessageToNewEmailRector extends AbstractRector
 {
