@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector;
-use Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
-use Rector\Symfony\Rector\MethodCall\FormIsValidRector;
-use Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector;
-use Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
-use Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector;
+use Rector\Symfony\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
+use Rector\Symfony\Symfony40\Rector\StaticCall\ProcessBuilderInstanceRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
