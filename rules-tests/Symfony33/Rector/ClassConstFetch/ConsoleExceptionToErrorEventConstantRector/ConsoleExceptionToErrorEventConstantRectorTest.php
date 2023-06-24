@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector;
+namespace Rector\Symfony\Tests\Symfony33\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
