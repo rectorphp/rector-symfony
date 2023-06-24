@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Symfony60\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/symfony/symfony/pull/42422
  * @changelog https://github.com/symfony/symfony/pull/1195
  *
- * @see \Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\GetHelperControllerToServiceRectorTest
+ * @see \Rector\Symfony\Tests\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector\GetHelperControllerToServiceRectorTest
  */
 final class GetHelperControllerToServiceRector extends AbstractRector
 {

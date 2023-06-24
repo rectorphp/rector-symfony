@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -16,7 +16,7 @@ final class DispatchMessage extends AbstractController
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\FuncCall;
+namespace Rector\Symfony\Symfony60\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\FuncCall\ReplaceServiceArgumentRector\ReplaceServiceArgumentRectorTest
+ * @see \Rector\Symfony\Tests\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector\ReplaceServiceArgumentRectorTest
  */
 final class ReplaceServiceArgumentRector extends AbstractRector implements ConfigurableRectorInterface
 {
