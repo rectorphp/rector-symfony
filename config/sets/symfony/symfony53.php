@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -13,6 +12,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector;
+use Rector\Symfony\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -111,6 +111,21 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ]);
 
-    $rectorConfig->rule(KernelTestCaseContainerPropertyDeprecationRector::class);
-    $rectorConfig->rule(CommandDescriptionToPropertyRector::class);
+    $rectorConfig->rules([
+        KernelTestCaseContainerPropertyDeprecationRector::class,
+        CommandDescriptionToPropertyRector::class,
+        // @see https://symfony.com/blog/the-end-of-swiftmailer
+        SwiftCreateMessageToNewEmailRector::class,
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Swift_Mailer' => 'Symfony\Component\Mailer\MailerInterface',
+        'Swift_Message' => 'Symfony\Component\Mime\Email',
+        // message
+        'Swift_Mime_SimpleMessage' => 'Symfony\Component\Mime\RawMessage',
+        // transport
+        'Swift_SmtpTransport' => 'Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport',
+        'Swift_FailoverTransport' => 'Symfony\Component\Mailer\Transport\FailoverTransport',
+        'Swift_SendmailTransport' => 'Symfony\Component\Mailer\Transport\SendmailTransport',
+    ]);
 };

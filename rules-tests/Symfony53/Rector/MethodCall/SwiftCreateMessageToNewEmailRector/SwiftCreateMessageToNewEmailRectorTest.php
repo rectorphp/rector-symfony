@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
+namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
