@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use PHPStan\Type\ObjectType;
-
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -11,14 +10,14 @@ use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
-use Rector\Symfony\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
-use Rector\Symfony\Rector\MethodCall\FormBuilderSetDataMapperRector;
-use Rector\Symfony\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
-use Rector\Symfony\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
-use Rector\Symfony\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
-use Rector\Symfony\Rector\New_\PropertyPathMapperToDataMapperRector;
-use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
+use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
+use Rector\Symfony\Symfony52\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
+use Rector\Symfony\Symfony52\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
+use Rector\Symfony\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
+use Rector\Symfony\Symfony52\Rector\New_\PropertyPathMapperToDataMapperRector;
+use Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
@@ -27,17 +26,28 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
-    $rectorConfig->rule(PropertyPathMapperToDataMapperRector::class);
+    $rectorConfig->rules([
+        // https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
+        PropertyPathMapperToDataMapperRector::class,
 
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
-    $rectorConfig->rule(BinaryFileResponseCreateToNewInstanceRector::class);
+        // https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
+        BinaryFileResponseCreateToNewInstanceRector::class,
 
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
-    $rectorConfig->rule(PropertyAccessorCreationBooleanToFlagsRector::class);
+        // https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
+        PropertyAccessorCreationBooleanToFlagsRector::class,
 
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
-    $rectorConfig->rule(ReflectionExtractorEnableMagicCallExtractorRector::class);
+        // https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
+        ReflectionExtractorEnableMagicCallExtractorRector::class,
+
+        # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
+        DefinitionAliasSetPrivateToSetPublicRector::class,
+
+        # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
+        FormBuilderSetDataMapperRector::class,
+
+        # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
+        ValidatorBuilderEnableAnnotationMappingRector::class,
+    ]);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#security
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
@@ -104,15 +114,6 @@ return static function (RectorConfig $rectorConfig): void {
             'getFirewallName'
         ),
     ]);
-
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
-    $rectorConfig->rule(DefinitionAliasSetPrivateToSetPublicRector::class);
-
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
-    $rectorConfig->rule(FormBuilderSetDataMapperRector::class);
-
-    # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#validator
-    $rectorConfig->rule(ValidatorBuilderEnableAnnotationMappingRector::class);
 
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#notifier
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
