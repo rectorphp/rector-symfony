@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector;
+namespace Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;

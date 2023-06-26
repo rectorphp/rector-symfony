@@ -651,7 +651,7 @@ Turns fetching of Request via `$this->getRequest()` to action injection
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller
 
-- class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Rector/MethodCall/GetToConstructorInjectionRector.php)
+- class: [`Rector\Symfony\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Symfony28/Rector/MethodCall/GetToConstructorInjectionRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Symfony28\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Rector\MethodCall\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
+ * @see \Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
  */
 final class GetToConstructorInjectionRector extends AbstractRector
 {
