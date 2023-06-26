@@ -150,7 +150,7 @@ CODE_SAMPLE
                 $methodCallName = 'firewall';
                 $splitMany = true;
             } else {
-                $methodCallName = $key;
+                $methodCallName = $this->createCamelCaseFromUnderscored($key);
             }
 
             if ($splitMany) {
@@ -196,5 +196,13 @@ CODE_SAMPLE
         $fullyQualified = new FullyQualified($configClass);
 
         return new Param($configVariable, null, $fullyQualified);
+    }
+
+    private function createCamelCaseFromUnderscored(string $value): string
+    {
+        $uppercaseWords = \ucwords($value, '_');
+        $pascalCaseName = \str_replace('_', '', $uppercaseWords);
+
+        return \lcfirst($pascalCaseName);
     }
 }

@@ -41,8 +41,8 @@ return static function (\Symfony\Config\FrameworkConfig $frameworkConfig) : void
     $frameworkConfig->secret('onetwothree');
     $frameworkConfig->router(['resource' => '%kernel.project_dir%/config/routing.php', 'strict_requirements' => null]);
     $frameworkConfig->validation(['enable_annotations' => true]);
-    $frameworkConfig->default_locale('en');
-    $frameworkConfig->http_method_override(true);
+    $frameworkConfig->defaultLocale('en');
+    $frameworkConfig->httpMethodOverride(true);
     $frameworkConfig->session(['cookie_secure' => true, 'handler_id' => 'SomeSessionHandler']);
     $frameworkConfig->translator(['enabled' => false]);
 };
