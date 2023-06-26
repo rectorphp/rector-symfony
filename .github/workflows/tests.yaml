@@ -26,4 +26,4 @@ jobs:
 
             -   uses: "ramsey/composer-install@v1"
 
-            -   run: vendor/bin/phpunit tests
+            -   run: vendor/bin/phpunit
