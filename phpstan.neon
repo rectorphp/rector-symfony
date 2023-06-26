@@ -43,4 +43,4 @@ parameters:
         - '#Access to an undefined property Rector\\Core\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
         - '#but class PhpParser\\Node\\Stmt\\Expression is not generic#'
         - '#Class "Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ActionSuffixRemoverRector" is missing @see annotation with test case class reference#'
-        - '#Cognitive complexity for "Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector\:\:createFluentMethodCall\(\)" is 13, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector\:\:create(.*?)\(\)" is 13, keep it under 10#'
