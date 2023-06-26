@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Symfony\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector;
 
 // @see https://github.com/symfony/symfony/blob/6.3/UPGRADE-6.3.md
 // @see \Rector\Symfony\Tests\Set\Symfony63\Symfony63Test
@@ -22,4 +23,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Messenger\Transport\InMemoryTransportFactory' => 'Symfony\Component\Messenger\Transport\InMemory\InMemoryTransportFactory',
         ],
     );
+
+    // @see https://github.com/symfony/symfony/commit/1650e3861b5fcd931e5d3eb1dd84bad764020d8e
+    $rectorConfig->rule(SignalableCommandInterfaceReturnTypeRector::class);
 };
