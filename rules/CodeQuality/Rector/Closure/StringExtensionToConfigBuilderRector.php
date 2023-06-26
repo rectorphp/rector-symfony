@@ -13,7 +13,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
@@ -115,37 +114,30 @@ CODE_SAMPLE
             throw new NotImplementedYetException($extensionKeyAndConfiguration->getKey());
         }
 
-        return $this->createConfigClosure($configClass, $node, $extensionKeyAndConfiguration);
+        return $this->createConfigClosureStmts($configClass, $node, $extensionKeyAndConfiguration);
     }
 
-    private function createConfigClosure(
+    private function createConfigClosureStmts(
         string $configClass,
         Closure $closure,
         ExtensionKeyAndConfiguration $extensionKeyAndConfiguration
     ): Closure {
-        $fullyQualified = new FullyQualified($configClass);
-        $variableName = $this->propertyNaming->fqnToVariableName($configClass);
-        $configVariable = new Variable($variableName);
-
-        $closure->params[0] = new Param($configVariable, null, $fullyQualified);
+        $closure->params[0] = $this->createConfigParam($configClass);
 
         $configuration = $extensionKeyAndConfiguration->getArray();
+        $configVariable = $this->createConfigVariable($configClass);
 
-        $fluentMethodCall = $this->createFluentMethodCall($configuration, $configVariable);
-        if (! $fluentMethodCall instanceof MethodCall) {
-            $closure->stmts = [];
-        } else {
-            $closure->stmts = [
-                new Expression($fluentMethodCall),
-            ];
-        }
+        $closure->stmts = $this->createMethodCallStmts($configuration, $configVariable);
 
         return $closure;
     }
 
-    private function createFluentMethodCall(Array_ $configurationArray, Variable $configVariable): ?MethodCall
+    /**
+     * @return array<Expression<MethodCall>>
+     */
+    private function createMethodCallStmts(Array_ $configurationArray, Variable $configVariable): array
     {
-        $fluentMethodCall = null;
+        $methodCallStmts = [];
 
         $configurationValues = $this->valueResolver->getValue($configurationArray);
 
@@ -164,8 +156,10 @@ CODE_SAMPLE
             if ($splitMany) {
                 foreach ($value as $itemName => $itemConfiguration) {
                     $fluentMethodCall = $this->createNextMethodCall(
-                        [$itemName, $itemConfiguration], $fluentMethodCall, $configVariable, $methodCallName
+                        [$itemName, $itemConfiguration], $configVariable, $methodCallName
                     );
+
+                    $methodCallStmts[] = new Expression($fluentMethodCall);
                 }
             } else {
                 // skip empty values
@@ -173,25 +167,34 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $fluentMethodCall = $this->createNextMethodCall([$value], $fluentMethodCall, $configVariable, $methodCallName);
+                $fluentMethodCall = $this->createNextMethodCall([$value], $configVariable, $methodCallName);
+                $methodCallStmts[] = new Expression($fluentMethodCall);
             }
         }
 
-        return $fluentMethodCall;
+        return $methodCallStmts;
     }
 
     private function createNextMethodCall(
         mixed $value,
-        ?MethodCall $fluentMethodCall,
         Variable $configVariable,
         string $methodCallName
     ): MethodCall {
         $args = $this->nodeFactory->createArgs($value);
+        return new MethodCall($configVariable, $methodCallName, $args);
+    }
 
-        if (! $fluentMethodCall instanceof MethodCall) {
-            return new MethodCall($configVariable, $methodCallName, $args);
-        }
+    private function createConfigVariable(string $configClass): Variable
+    {
+        $variableName = $this->propertyNaming->fqnToVariableName($configClass);
+        return new Variable($variableName);
+    }
 
-        return new MethodCall($fluentMethodCall, $methodCallName, $args);
+    private function createConfigParam(string $configClass): Param
+    {
+        $configVariable = $this->createConfigVariable($configClass);
+        $fullyQualified = new FullyQualified($configClass);
+
+        return new Param($configVariable, null, $fullyQualified);
     }
 }
