@@ -13,8 +13,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\PropertyNaming;
+use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
+use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,8 +29,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StringExtensionToConfigBuilderRector extends AbstractRector
 {
+    /**
+     * @var array<string, string>
+     */
+    private const EXTENSION_KEY_TO_CLASS_MAP = [
+        'security' => 'Symfony\Config\SecurityConfig',
+        'framework' => 'Symfony\Config\FrameworkConfig',
+    ];
+
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
+        private readonly SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher,
+        private readonly PropertyNaming $propertyNaming,
     ) {
     }
 
@@ -91,76 +105,93 @@ CODE_SAMPLE
             return null;
         }
 
-        // must be exactly one
-        if (count($node->stmts) !== 1) {
+        $extensionKeyAndConfiguration = $this->symfonyClosureExtensionMatcher->match($node);
+        if (! $extensionKeyAndConfiguration instanceof ExtensionKeyAndConfiguration) {
             return null;
         }
 
-        $onlyStmt = $node->stmts[0];
-        if (! $onlyStmt instanceof Expression) {
-            return null;
+        $configClass = self::EXTENSION_KEY_TO_CLASS_MAP[$extensionKeyAndConfiguration->getKey()] ?? null;
+        if ($configClass === null) {
+            throw new NotImplementedYetException($extensionKeyAndConfiguration->getKey());
         }
 
-        if (! $onlyStmt->expr instanceof MethodCall) {
-            return null;
+        return $this->createConfigClosure($configClass, $node, $extensionKeyAndConfiguration);
+    }
+
+    private function createConfigClosure(
+        string $configClass,
+        Closure $closure,
+        ExtensionKeyAndConfiguration $extensionKeyAndConfiguration
+    ): Closure {
+        $fullyQualified = new FullyQualified($configClass);
+        $variableName = $this->propertyNaming->fqnToVariableName($configClass);
+        $configVariable = new Variable($variableName);
+
+        $closure->params[0] = new Param($configVariable, null, $fullyQualified);
+
+        $configuration = $extensionKeyAndConfiguration->getArray();
+
+        $fluentMethodCall = $this->createFluentMethodCall($configuration, $configVariable);
+        if (! $fluentMethodCall instanceof MethodCall) {
+            $closure->stmts = [];
+        } else {
+            $closure->stmts = [
+                new Expression($fluentMethodCall),
+            ];
         }
 
-        $methodCall = $onlyStmt->expr;
-        if (! $this->isName($methodCall->name, 'extension')) {
-            return null;
-        }
+        return $closure;
+    }
 
-        $args = $methodCall->getArgs();
-
-        $firstArg = $args[0];
-        $extensionKey = $this->valueResolver->getValue($firstArg->value);
-        if ($extensionKey !== 'security') {
-            return null;
-        }
-
-        $fullyQualified = new FullyQualified('Symfony\Config\SecurityConfig');
-        $node->params[0] = new Param(new Variable('securityConfig'), null, $fullyQualified);
-
-        // we have a match
-        $secondArg = $args[1];
-        $configuration = $secondArg->value;
-        if (! $configuration instanceof Array_) {
-            return null;
-        }
-
-        $securityConfigVariable = new Variable('securityConfig');
+    private function createFluentMethodCall(Array_ $configurationArray, Variable $configVariable): ?MethodCall
+    {
         $fluentMethodCall = null;
 
-        $configurationValues = $this->valueResolver->getValue($configuration);
+        $configurationValues = $this->valueResolver->getValue($configurationArray);
 
         foreach ($configurationValues as $key => $value) {
+            $splitMany = false;
             if ($key === 'providers') {
                 $methodCallName = 'provider';
+                $splitMany = true;
             } elseif ($key === 'firewalls') {
                 $methodCallName = 'firewall';
+                $splitMany = true;
             } else {
-                throw new NotImplementedYetException($key);
+                $methodCallName = $key;
             }
 
-            foreach ($value as $itemName => $itemConfiguration) {
-                $args = $this->nodeFactory->createArgs([$itemName, $itemConfiguration]);
-
-                if (! $fluentMethodCall instanceof MethodCall) {
-                    $fluentMethodCall = new MethodCall($securityConfigVariable, $methodCallName, $args);
-                } else {
-                    $fluentMethodCall = new MethodCall($fluentMethodCall, $methodCallName, $args);
+            if ($splitMany) {
+                foreach ($value as $itemName => $itemConfiguration) {
+                    $fluentMethodCall = $this->createNextMethodCall(
+                        [$itemName, $itemConfiguration], $fluentMethodCall, $configVariable, $methodCallName
+                    );
                 }
+            } else {
+                // skip empty values
+                if ($value === null) {
+                    continue;
+                }
+
+                $fluentMethodCall = $this->createNextMethodCall([$value], $fluentMethodCall, $configVariable, $methodCallName);
             }
         }
+
+        return $fluentMethodCall;
+    }
+
+    private function createNextMethodCall(
+        mixed $value,
+        ?MethodCall $fluentMethodCall,
+        Variable $configVariable,
+        string $methodCallName
+    ): MethodCall {
+        $args = $this->nodeFactory->createArgs($value);
 
         if (! $fluentMethodCall instanceof MethodCall) {
-            return null;
+            return new MethodCall($configVariable, $methodCallName, $args);
         }
 
-        $node->stmts = [
-            new Expression($fluentMethodCall),
-        ];
-
-        return $node;
+        return new MethodCall($fluentMethodCall, $methodCallName, $args);
     }
 }
