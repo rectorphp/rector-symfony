@@ -123,14 +123,11 @@ CODE_SAMPLE
         Closure $closure,
         ExtensionKeyAndConfiguration $extensionKeyAndConfiguration
     ): Closure {
-        $fullyQualified = new FullyQualified($configClass);
-        $variableName = $this->propertyNaming->fqnToVariableName($configClass);
-        $configVariable = new Variable($variableName);
-
-        $closure->params[0] = new Param($configVariable, null, $fullyQualified);
+        $closure->params[0] = $this->createConfigParam($configClass);
 
         $configuration = $extensionKeyAndConfiguration->getArray();
 
+        $configVariable = $this->createConfigVariable($configClass);
         $fluentMethodCall = $this->createFluentMethodCall($configuration, $configVariable);
         if (! $fluentMethodCall instanceof MethodCall) {
             $closure->stmts = [];
@@ -193,5 +190,19 @@ CODE_SAMPLE
         }
 
         return new MethodCall($fluentMethodCall, $methodCallName, $args);
+    }
+
+    private function createConfigVariable(string $configClass): Variable
+    {
+        $variableName = $this->propertyNaming->fqnToVariableName($configClass);
+        return new Variable($variableName);
+    }
+
+    private function createConfigParam(string $configClass): Param
+    {
+        $configVariable = $this->createConfigVariable($configClass);
+        $fullyQualified = new FullyQualified($configClass);
+
+        return new Param($configVariable, null, $fullyQualified);
     }
 }
