@@ -6,15 +6,12 @@ namespace Rector\Symfony\Tests\Bridge\Symfony;
 
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service1;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service2;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Webmozart\Assert\InvalidArgumentException;
 
 class ContainerServiceProviderTest extends TestCase
@@ -57,12 +54,7 @@ class ContainerServiceProviderTest extends TestCase
     protected function createContainerServiceProvider(
         ?string $symfonyContainerPhpFilePath = __DIR__ . '/Fixture/symfony-container.php'
     ): ContainerServiceProvider {
-        // BC parameters
-        $container = new Container(new ParameterBag([
-            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => $symfonyContainerPhpFilePath,
-        ]));
-
-        $rectorConfigProvider = new RectorConfigProvider(new ParameterProvider($container));
+        $rectorConfigProvider = new RectorConfigProvider();
 
         SimpleParameterProvider::setParameter(
             Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER,
