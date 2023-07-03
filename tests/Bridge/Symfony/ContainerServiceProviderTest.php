@@ -7,6 +7,7 @@ namespace Rector\Symfony\Tests\Bridge\Symfony;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
@@ -47,26 +48,26 @@ class ContainerServiceProviderTest extends TestCase
 
     public function testProvideWithNotExistedContainerPhpFile(): void
     {
-        $containerServiceProvider = $this->createContainerServiceProvider([
-            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => 'symfony-container-that-do-not-exists.php',
-        ]);
-
+        $containerServiceProvider = $this->createContainerServiceProvider('symfony-container-that-do-not-exists.php');
         $this->expectException(InvalidArgumentException::class);
 
         $containerServiceProvider->provideByName('service1');
     }
 
-    /**
-     * @param array<mixed> $parameters
-     */
-    protected function createContainerServiceProvider(array $parameters = []): ContainerServiceProvider
-    {
-        $parameters = array_merge([
-            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => __DIR__ . '/Fixture/symfony-container.php',
-        ], $parameters);
+    protected function createContainerServiceProvider(
+        ?string $symfonyContainerPhpFilePath = __DIR__ . '/Fixture/symfony-container.php'
+    ): ContainerServiceProvider {
+        // BC parameters
+        $container = new Container(new ParameterBag([
+            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER => $symfonyContainerPhpFilePath,
+        ]));
 
-        $container = new Container(new ParameterBag($parameters));
         $rectorConfigProvider = new RectorConfigProvider(new ParameterProvider($container));
+
+        SimpleParameterProvider::setParameter(
+            Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER,
+            $symfonyContainerPhpFilePath
+        );
 
         return new ContainerServiceProvider($rectorConfigProvider);
     }
