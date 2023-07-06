@@ -33,7 +33,7 @@ class ReplaceFormCreateViewFunctionCall extends AbstractController
         $form = $this->createFormBuilder()->getForm();
         return $this->render('form.html.twig', [
             'form' => $form,
-            'data' => $form,
+            'data' => $form->getData(),
         ]);
     }
 }
