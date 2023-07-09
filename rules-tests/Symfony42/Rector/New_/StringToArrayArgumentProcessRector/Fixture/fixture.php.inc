@@ -16,9 +16,6 @@ function stringToArgumentArray()
     $process = new Process($commitHash . 'git describe --contains' . $commitHash);
 
     $process = new Process(['ls', '-l']);
-
-    $value = 123;
-    $process = new Process($value);
 }
 
 ?>
@@ -41,9 +38,6 @@ function stringToArgumentArray()
     $process = new Process([$commitHash, 'git', 'describe', '--contains', $commitHash]);
 
     $process = new Process(['ls', '-l']);
-
-    $value = 123;
-    $process = new Process($value);
 }
 
 ?>
