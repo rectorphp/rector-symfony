@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
+namespace Rector\Symfony\Tests\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-class ConvertRenderTemplateShortNotationToBundleSyntaxRectorTest extends AbstractRectorTestCase
+final class ConvertRenderTemplateShortNotationToBundleSyntaxRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $filePath): void
