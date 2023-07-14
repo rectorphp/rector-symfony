@@ -25,9 +25,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set('rector\symfony\tests\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype', UniqueServiceType::class);
+    $services->set('rector\symfony\tests\configs\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype', UniqueServiceType::class);
 
-    $services->alias('first_one', 'rector\symfony\tests\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype');
+    $services->alias('first_one', 'rector\symfony\tests\configs\rector\closure\servicesetstringnametoclassnamerector\source\uniqueservicetype');
 };
 
 ?>

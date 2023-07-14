@@ -197,9 +197,9 @@ CODE_SAMPLE
     {
         $matches = [];
 
-        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadata) {
-            if ($symfonyRouteMetadata->getControllerReference() === $controllerReference) {
-                $matches[] = $symfonyRouteMetadata;
+        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadatum) {
+            if ($symfonyRouteMetadatum->getControllerReference() === $controllerReference) {
+                $matches[] = $symfonyRouteMetadatum;
             }
         }
 
