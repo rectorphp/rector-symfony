@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
+use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -124,13 +131,13 @@ CODE_SAMPLE
         }
 
         $stmts = (array)$getHandledMessagesClassMethod->stmts;
-        if (0 === count($stmts)) {
+        if ([] === $stmts) {
             return null;
         }
 
         if (
-            ($stmts[0] instanceof Node\Stmt\Expression) &&
-            $stmts[0]->expr instanceof Node\Expr\Yield_
+            ($stmts[0] instanceof Expression) &&
+            $stmts[0]->expr instanceof Yield_
         ) {
             $this->handleYields($stmts);
         }
@@ -148,7 +155,7 @@ CODE_SAMPLE
     {
         foreach ($expressions as $expression) {
             if ( ! $expression instanceof Expression ||
-                 ! $expression->expr instanceof Node\Expr\Yield_
+                 ! $expression->expr instanceof Yield_
             ) {
                 continue;
             }
@@ -156,9 +163,9 @@ CODE_SAMPLE
             $method    = MethodName::INVOKE;
             $arguments = [];
 
-            if ($expression->expr->key instanceof Node\Expr\ClassConstFetch) {
+            if ($expression->expr->key instanceof ClassConstFetch) {
                 $array = $expression->expr->value;
-                if ( ! $array instanceof Node\Expr\Array_) {
+                if ( ! $array instanceof Array_) {
                     continue;
                 }
 
@@ -169,8 +176,8 @@ CODE_SAMPLE
 
             $value = $expression->expr->value;
             if (
-                ( ! $value instanceof Node\Expr\ClassConstFetch) ||
-                ! $value->class instanceof Node\Name
+                ( ! $value instanceof ClassConstFetch) ||
+                ! $value->class instanceof Name
             ) {
                 continue;
             }
@@ -183,13 +190,13 @@ CODE_SAMPLE
     /**
      * @return array<string, mixed>
      */
-    private function parseArguments(Node\Expr\Array_ $array, string &$method): array
+    private function parseArguments(Array_ $array, string &$method): array
     {
         foreach ($array->items as $item) {
             if (
-                ! $item instanceof Node\Expr\ArrayItem ||
-                ! $item->key instanceof Node\Expr ||
-                ! $item->value instanceof Node\Expr
+                ! $item instanceof ArrayItem ||
+                ! $item->key instanceof Expr ||
+                ! $item->value instanceof Expr
             ) {
                 continue;
             }
@@ -211,7 +218,7 @@ CODE_SAMPLE
     private function addAttribute(string $classMethodName, array $arguments): void
     {
         $classMethod = $this->subscriberClass->getMethod($classMethodName);
-        if (null === $classMethod) {
+        if (!$classMethod instanceof ClassMethod) {
             return;
         }
 
@@ -224,6 +231,6 @@ CODE_SAMPLE
 
     private function renameInvoke(ClassMethod $classMethod): void
     {
-        $classMethod->name = new Node\Identifier($this->newInvokeMethodName);
+        $classMethod->name = new Identifier($this->newInvokeMethodName);
     }
 }

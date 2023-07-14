@@ -2,6 +2,12 @@
 
 namespace Rector\Symfony\Symfony63\Rector\Class_;
 
+use Rector\Core\Rector\AbstractRector;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -13,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector\SignalableCommandInterfaceReturnTypeRectorTest
  */
-final class SignalableCommandInterfaceReturnTypeRector extends \Rector\Core\Rector\AbstractRector
+final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector
 {
 
     public function __construct(
@@ -64,19 +70,19 @@ CODE_SAMPLE
             return null;
         }
 
-        $handleSignalMethod = $node->getMethod('handleSignal');
-        if (null === $handleSignalMethod) {
+        $classMethod = $node->getMethod('handleSignal');
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
 
-        $newType = new \PHPStan\Type\UnionType([new \PHPStan\Type\IntegerType(), new \PHPStan\Type\Constant\ConstantBooleanType(false)]);
-        if ($this->parentClassMethodTypeOverrideGuard->shouldSkipReturnTypeChange($handleSignalMethod, $newType)) {
+        $unionType = new UnionType([new IntegerType(), new ConstantBooleanType(false)]);
+        if ($this->parentClassMethodTypeOverrideGuard->shouldSkipReturnTypeChange($classMethod, $unionType)) {
             return null;
         }
 
-        $handleSignalMethod->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, TypeKind::RETURN);
+        $classMethod->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($unionType, TypeKind::RETURN);
 
-        $handleSignalMethod->stmts[] = new Node\Stmt\Return_($this->nodeFactory->createFalse());
+        $classMethod->stmts[] = new Return_($this->nodeFactory->createFalse());
 
         return $node;
     }

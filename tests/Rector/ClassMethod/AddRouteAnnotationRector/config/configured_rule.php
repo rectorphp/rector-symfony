@@ -3,12 +3,14 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Rector\ClassMethod\AddRouteAnnotationRector;
+use Rector\Symfony\Tests\ConfigList;
 use Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\Source\DummySymfonyRoutesProvider;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(__DIR__ . '/../../../../../config/config.php');
+    $rectorConfig->import(ConfigList::MAIN);
 
     $rectorConfig->rule(AddRouteAnnotationRector::class);
 

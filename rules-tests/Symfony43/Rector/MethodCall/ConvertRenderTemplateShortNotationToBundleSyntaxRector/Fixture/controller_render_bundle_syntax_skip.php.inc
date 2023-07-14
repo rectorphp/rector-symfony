@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

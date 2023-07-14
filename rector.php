@@ -12,7 +12,12 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
+    $rectorConfig->paths([
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+        __DIR__ . '/rules',
+        __DIR__ . '/rules-tests',
+    ]);
 
     $rectorConfig->skip([
         '*/Fixture/*',
