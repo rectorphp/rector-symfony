@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Bridge\Symfony;
 
-use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Container;
 use Webmozart\Assert\Assert;
@@ -12,11 +13,6 @@ use Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     private ?object $container = null;
-
-    public function __construct(
-        private readonly RectorConfigProvider $rectorConfigProvider
-    ) {
-    }
 
     public function provideByName(string $serviceName): object
     {
@@ -33,7 +29,9 @@ final class ContainerServiceProvider
     private function getSymfonyContainer(): object
     {
         if ($this->container === null) {
-            $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
+            $symfonyContainerPhp = SimpleParameterProvider::provideStringParameter(
+                Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER
+            );
             Assert::fileExists($symfonyContainerPhp);
 
             $container = require $symfonyContainerPhp;

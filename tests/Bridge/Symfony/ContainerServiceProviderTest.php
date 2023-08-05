@@ -7,7 +7,6 @@ namespace Rector\Symfony\Tests\Bridge\Symfony;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service1;
@@ -54,13 +53,11 @@ class ContainerServiceProviderTest extends TestCase
     protected function createContainerServiceProvider(
         ?string $symfonyContainerPhpFilePath = __DIR__ . '/Fixture/symfony-container.php'
     ): ContainerServiceProvider {
-        $rectorConfigProvider = new RectorConfigProvider();
-
         SimpleParameterProvider::setParameter(
             Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER,
             $symfonyContainerPhpFilePath
         );
 
-        return new ContainerServiceProvider($rectorConfigProvider);
+        return new ContainerServiceProvider();
     }
 }
