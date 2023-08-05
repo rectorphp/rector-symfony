@@ -10,6 +10,9 @@ use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symfony\Component\Routing\RouterInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @api part of AddRouteAnnotationRector
+ */
 final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**

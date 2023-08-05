@@ -4,39 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeManipulator;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
-use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 
 final class ArrayManipulator
 {
     public function __construct(
         private readonly RectorChangeCollector $rectorChangeCollector,
-        private readonly ExprAnalyzer $exprAnalyzer,
     ) {
-    }
-
-    public function isDynamicArray(Array_ $array): bool
-    {
-        foreach ($array->items as $item) {
-            if (! $item instanceof ArrayItem) {
-                continue;
-            }
-
-            if (! $this->isAllowedArrayKey($item->key)) {
-                return true;
-            }
-
-            if (! $this->isAllowedArrayValue($item->value)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key): void
@@ -93,23 +70,5 @@ final class ArrayManipulator
         }
 
         return $arrayItem->key->value === $name;
-    }
-
-    private function isAllowedArrayKey(?Expr $expr): bool
-    {
-        if (! $expr instanceof Expr) {
-            return true;
-        }
-
-        return in_array($expr::class, [String_::class, LNumber::class], true);
-    }
-
-    private function isAllowedArrayValue(Expr $expr): bool
-    {
-        if ($expr instanceof Array_) {
-            return ! $this->isDynamicArray($expr);
-        }
-
-        return ! $this->exprAnalyzer->isDynamicExpr($expr);
     }
 }
