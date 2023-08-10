@@ -3,12 +3,10 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 
 return static function (RectorConfig $rectorConfig): void {
-    $renamedClasses = [
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
         'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
         'Twig_Extension_Optimizer' => 'Twig\Extension\OptimizerExtension',
@@ -163,14 +161,5 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_Extensions_Node_Trans' => 'Twig\Extensions\Node\TransNode',
         'Twig_TemplateWrapper' => 'Twig\TemplateWrapper',
         'Twig_NodeInterface' => 'Twig\Node\Node',
-    ];
-
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, $renamedClasses);
-
-    $oldClasses = array_keys($renamedClasses);
-
-    $rectorConfig->ruleWithConfiguration(
-        PseudoNamespaceToNamespaceRector::class,
-        [new PseudoNamespaceToNamespace('Twig_', $oldClasses)]
-    );
+    ]);
 };
