@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 
 return static function (RectorConfig $rectorConfig): void {
-    $renamedClasses = [
+    // @see https://github.com/twigphp/Twig/pull/2862/files
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
         'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
         'Twig_Extension_Optimizer' => 'Twig\Extension\OptimizerExtension',
@@ -163,14 +162,35 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_Extensions_Node_Trans' => 'Twig\Extensions\Node\TransNode',
         'Twig_TemplateWrapper' => 'Twig\TemplateWrapper',
         'Twig_NodeInterface' => 'Twig\Node\Node',
-    ];
-
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, $renamedClasses);
-
-    $oldClasses = array_keys($renamedClasses);
-
-    $rectorConfig->ruleWithConfiguration(
-        PseudoNamespaceToNamespaceRector::class,
-        [new PseudoNamespaceToNamespace('Twig_', $oldClasses)]
-    );
+        'Twig_Compiler' => 'Twig\\Compiler',
+        'Twig_Environment' => 'Twig\\Environment',
+        'Twig_ExpressionParser' => 'Twig\\ExpressionParser',
+        'Twig_FileExtensionEscapingStrategy' => 'Twig\\FileExtensionEscapingStrategy',
+        'Twig_Lexer' => 'Twig\\Lexer',
+        'Twig_Markup' => 'Twig\\Markup',
+        'Twig_Parser' => 'Twig\\Parser',
+        'Twig_Source' => 'Twig\\Source',
+        'Twig_Template' => 'Twig\\Template',
+        'Twig_Token' => 'Twig\\Token',
+        'Twig_TokenStream' => 'Twig\\TokenStream',
+        'Twig_Extension_GlobalsInterface' => 'Twig\\Extension\\GlobalsInterface',
+        'Twig_Extension_InitRuntimeInterface' => 'Twig\\Extension\\InitRuntimeInterface',
+        'Twig_Node_Deprecated' => 'Twig\\Node\\DeprecatedNode',
+        'Twig_Node_SetTemp' => 'Twig\\Node\\SetTempNode',
+        'Twig_Profiler_Profile' => 'Twig\\Profiler\\Profile',
+        'Twig_Sandbox_SecurityError' => 'Twig\\Sandbox\\SecurityError',
+        'Twig_Sandbox_SecurityNotAllowedFilterError' => 'Twig\\Sandbox\\SecurityNotAllowedFilterError',
+        'Twig_Sandbox_SecurityNotAllowedFunctionError' => 'Twig\\Sandbox\\SecurityNotAllowedFunctionError',
+        'Twig_Sandbox_SecurityNotAllowedMethodError' => 'Twig\\Sandbox\\SecurityNotAllowedMethodError',
+        'Twig_Sandbox_SecurityNotAllowedPropertyError' => 'Twig\\Sandbox\\SecurityNotAllowedPropertyError',
+        'Twig_Sandbox_SecurityNotAllowedTagError' => 'Twig\\Sandbox\\SecurityNotAllowedTagError',
+        'Twig_Sandbox_SecurityPolicy' => 'Twig\\Sandbox\\SecurityPolicy',
+        'Twig_Sandbox_SecurityPolicyInterface' => 'Twig\\Sandbox\\SecurityPolicyInterface',
+        'Twig_Test_IntegrationTestCase' => 'Twig\\Test\\IntegrationTestCase',
+        'Twig_Test_NodeTestCase' => 'Twig\\Test\\NodeTestCase',
+        'Twig_TokenParser_Deprecated' => 'Twig\\TokenParser\\DeprecatedTokenParser',
+        'Twig_Util_DeprecationCollector' => 'Twig\\Util\\DeprecationCollector',
+        'Twig_Util_TemplateDirIterator' => 'Twig\\Util\\TemplateDirIterator',
+        'Twig_Tests_EnvironmentTest_Extension' => 'Twig\\Tests\\EnvironmentTest\\Extensio',
+    ]);
 };
