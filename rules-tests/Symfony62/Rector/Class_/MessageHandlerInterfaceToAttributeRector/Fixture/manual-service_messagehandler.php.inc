@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Fixture;
 
-use App\Message\SmsNotification;
+use Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Source\SmsNotification;
 
-class ManualSmsNotificationHandler
+final class ManualSmsNotificationHandler
 {
     public function __invoke(SmsNotification $message)
     {
@@ -18,10 +18,10 @@ class ManualSmsNotificationHandler
 
 namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Fixture;
 
-use App\Message\SmsNotification;
+use Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Source\SmsNotification;
 
 #[\Symfony\Component\Messenger\Attribute\AsMessageHandler(priority: 10, fromTransport: 'async')]
-class ManualSmsNotificationHandler
+final class ManualSmsNotificationHandler
 {
     public function __invoke(SmsNotification $message)
     {

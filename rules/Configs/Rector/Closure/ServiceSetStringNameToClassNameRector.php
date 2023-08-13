@@ -69,8 +69,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
-
         if (! $this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
