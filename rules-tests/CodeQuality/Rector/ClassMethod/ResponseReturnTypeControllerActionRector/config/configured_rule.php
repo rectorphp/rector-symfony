@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(__DIR__ . '/../../../../../../config/config.php');
     $rectorConfig->rule(ResponseReturnTypeControllerActionRector::class);
 };

@@ -6,6 +6,5 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(__DIR__ . '/../../../../../../config/config.php');
     $rectorConfig->rule(RemoveDefaultGetBlockPrefixRector::class);
 };

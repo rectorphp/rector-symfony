@@ -13,6 +13,7 @@ final class TwigBundleFilesystemLoaderToTwigRectorTest extends AbstractRectorTes
     #[DataProvider('provideData')]
     public function test(string $filePath): void
     {
+
         $this->doTestFile($filePath);
     }
 
