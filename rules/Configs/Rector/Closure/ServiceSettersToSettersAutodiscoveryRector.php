@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -94,13 +95,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var array<Expression<MethodCall>> $bareServicesSetMethodCalls */
-        $bareServicesSetMethodCalls = $this->collectServiceSetMethodCallExpressions($node);
-        if ($bareServicesSetMethodCalls === []) {
+        /** @var array<Expression<MethodCall>> $bareServicesSetMethodCallExpressions */
+        $bareServicesSetMethodCallExpressions = $this->collectServiceSetMethodCallExpressions($node);
+        if ($bareServicesSetMethodCallExpressions === []) {
             return null;
         }
 
-        $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCalls);
+        $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCallExpressions);
 
         $classNames = array_map(
             fn (ClassNameAndFilePath $classNameAndFilePath) => $classNameAndFilePath->getClassName(),
@@ -117,12 +118,7 @@ CODE_SAMPLE
         $loadMethodCall = $this->createServicesLoadMethodCall($sharedNamespace, $directoryConcat);
         $node->stmts[] = new Expression($loadMethodCall);
 
-        // remove all method calls
-        foreach ($bareServicesSetMethodCalls as $bareServiceSetMethodCall) {
-            /** @var Expression $bareServiceSetMethodCall */
-            $stmtsKey = $bareServiceSetMethodCall->getAttribute(AttributeKey::STMT_KEY);
-            unset($node->stmts[$stmtsKey]);
-        }
+        $this->removeServicesSetMethodCalls($node, $bareServicesSetMethodCallExpressions);
 
         return $node;
     }
@@ -232,5 +228,20 @@ CODE_SAMPLE
         $args = [new Arg(new String_($sharedNamespace)), new Arg($directoryConcat)];
 
         return new MethodCall(new Variable('services'), 'load', $args);
+    }
+
+    /**
+     * @param Stmt[] $stmtsToRemove
+     */
+    private function removeServicesSetMethodCalls(Closure $closure, array $stmtsToRemove): void
+    {
+        foreach ($closure->stmts as $key => $stmt) {
+            foreach ($stmtsToRemove as $bareServicesSetMethodCallExpression) {
+                if ($stmt === $bareServicesSetMethodCallExpression) {
+                    unset($closure->stmts[$key]);
+                    continue 2;
+                }
+            }
+        }
     }
 }

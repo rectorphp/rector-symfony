@@ -12,6 +12,8 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importNames();
+    $rectorConfig->removeUnusedImports();
+
     $rectorConfig->paths([
         __DIR__ . '/config',
         __DIR__ . '/src',
@@ -51,9 +53,6 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Routing\RouterInterface',
         'Symfony\Component\DependencyInjection\Container',
     ]);
-
-    // for testing
-    $rectorConfig->import(__DIR__ . '/config/config.php');
 
     $rectorConfig->sets([
         LevelSetList::UP_TO_PHP_81,

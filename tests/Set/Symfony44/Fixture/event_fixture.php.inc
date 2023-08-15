@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Symfony\Tests\Set\Symfony44\Fixture;
+
 class SomeEventListener
 {
     public function someMethod(\Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $exceptionEvent)
@@ -12,6 +14,8 @@ class SomeEventListener
 ?>
 -----
 <?php
+
+namespace Rector\Symfony\Tests\Set\Symfony44\Fixture;
 
 class SomeEventListener
 {
