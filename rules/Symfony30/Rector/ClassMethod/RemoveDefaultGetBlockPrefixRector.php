@@ -116,7 +116,7 @@ CODE_SAMPLE
 
     private function camelToSnake(string $content): string
     {
-        return strtolower(
+        return mb_strtolower(
             Strings::replace($content, '#([a-z])([A-Z])#', '$1_$2')
         );
     }
