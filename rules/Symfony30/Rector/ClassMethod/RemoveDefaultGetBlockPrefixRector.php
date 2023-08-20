@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -101,10 +100,7 @@ CODE_SAMPLE
                 $shortClassName = (string) Strings::before($shortClassName, 'Type');
             }
 
-            $shortClassNameUnicodeString = new UnicodeString($shortClassName);
-            $underscoredClassShortName = $shortClassNameUnicodeString->snake()
-                ->toString();
-
+            $underscoredClassShortName = $this->camelToSnake($shortClassName);
             if ($underscoredClassShortName !== $returnedValue) {
                 continue;
             }
@@ -117,6 +113,14 @@ CODE_SAMPLE
 
         return null;
     }
+
+    private function camelToSnake(string $content): string
+    {
+        return strtolower(
+            Strings::replace($content, '#([a-z])([A-Z])#', '$1_$2')
+        );
+    }
+
 
     /**
      * return <$thisValue>;
