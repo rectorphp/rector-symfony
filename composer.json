@@ -14,7 +14,7 @@
         "phpunit/phpunit": "^10.3",
         "rector/phpstan-rules": "^0.6",
         "rector/rector-generator": "^0.7",
-        "rector/rector-src": "dev-main",
+        "rector/rector-src": "dev-failing-fixture",
         "symfony/routing": "^6.2",
         "symfony/security-core": "^6.2",
         "symfony/security-http": "^6.1",
