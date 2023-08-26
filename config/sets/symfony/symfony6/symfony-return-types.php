@@ -52,7 +52,7 @@ return static function (RectorConfig $rectorConfig): void {
         new NullType(),
     ];
 
-    $scalarArrayObjectUnionedTypes = [...$scalarTypes, new ObjectType('ArrayObject')];
+    $scalarArrayObjectUnionedTypes = array_merge($scalarTypes, [new ObjectType('ArrayObject')]);
 
     // cannot be crated with \PHPStan\Type\UnionTypeHelper::sortTypes() as ObjectType requires a class reflection we do not have here
     $unionTypeReflectionClass = new ReflectionClass(UnionType::class);
