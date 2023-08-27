@@ -82,6 +82,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($classReflection->getParentClass() === null) {
+            return null;
+        }
+
         if ($this->hasParentCallOfMethod($node, MethodName::CONSTRUCT)) {
             return null;
         }
