@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Symfony43\Rector\ClassMethod\EventDispatcherParen
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class SkipImplementsInterface implements EventDispatcherInterface
+final class SkipNoParent implements EventDispatcherInterface
 {
     public function __construct()
     {
