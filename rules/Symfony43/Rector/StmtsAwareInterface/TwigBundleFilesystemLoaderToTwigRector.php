@@ -108,10 +108,6 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($assign->expr->class instanceof Expr) {
-                continue;
-            }
-
             $new = $assign->expr;
             if (! $this->isObjectType($new, new ObjectType('Symfony\Bundle\TwigBundle\Loader\FilesystemLoader'))) {
                 continue;
