@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony43\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -104,6 +105,10 @@ CODE_SAMPLE
 
             $assign = $stmt->expr;
             if (! $assign->expr instanceof New_) {
+                continue;
+            }
+
+            if ($assign->expr->class instanceof Expr) {
                 continue;
             }
 
