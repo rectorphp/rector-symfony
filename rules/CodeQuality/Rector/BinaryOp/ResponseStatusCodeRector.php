@@ -99,9 +99,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
-        if ($methodCall->name instanceof Identifier 
-            && $this->nodeNameResolver->matchesStringName($methodCall->name, 'assert*')
-        ) {
+        if ($this->nodeNameResolver->startsWith($methodCall->name, 'assert')) {
             return $this->processAssertMethodCall($methodCall);
         }
 
