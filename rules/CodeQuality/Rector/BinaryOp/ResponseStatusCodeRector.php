@@ -98,7 +98,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
-        if ($this->isName($methodCall->name, 'assert*')) {
+        if ($this->nodeNameResolver->matchesStringName($methodCall->name, 'assert*')) {
             return $this->processAssertMethodCall($methodCall);
         }
 
