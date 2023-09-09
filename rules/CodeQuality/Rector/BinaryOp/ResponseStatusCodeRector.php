@@ -99,15 +99,20 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
-        if ($this->nodeNameResolver->startsWith($methodCall->name, 'assert')) {
+        $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
+        if (! is_string($methodCallName)) {
+            return null;
+        }
+
+        if (str_starts_with($methodCallName, 'assert')) {
             return $this->processAssertMethodCall($methodCall);
         }
 
-        if ($this->isName($methodCall->name, 'redirect')) {
+        if ($methodCallName === 'redirect') {
             return $this->processRedirectMethodCall($methodCall);
         }
 
-        if (! $this->isName($methodCall->name, 'setStatusCode')) {
+        if ($methodCallName !== 'setStatusCode') {
             return null;
         }
 
