@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -98,7 +99,9 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
-        if ($this->nodeNameResolver->matchesStringName($methodCall->name, 'assert*')) {
+        if ($methodCall->name instanceof Identifier 
+            && $this->nodeNameResolver->matchesStringName($methodCall->name, 'assert*')
+        ) {
             return $this->processAssertMethodCall($methodCall);
         }
 
