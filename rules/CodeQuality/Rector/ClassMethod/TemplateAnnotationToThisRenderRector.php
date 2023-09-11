@@ -21,6 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -48,6 +49,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly EmptyReturnNodeFinder $emptyReturnNodeFinder,
         private readonly AnnotationAnalyzer $annotationAnalyzer,
+        private readonly DocBlockUpdater $docBlockUpdater,
     ) {
     }
 
@@ -287,7 +289,13 @@ CODE_SAMPLE
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        $hasChanged = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+
+        if ($hasChanged === false) {
+            return;
+        }
+
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
 
     private function refactorStmtsAwareNode(
