@@ -6,18 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ClassWithReturnTypes extends AbstractController
+final class ClassWithReturnTypes extends AbstractController
 {
-    /**
-     * @Template("AppBundle:Module:index.html.twig")
-     *
-     * @return array
-     */
-    public function indexAction(): array
-    {
-        return [];
-    }
-
     /**
      * @Template("AppBundle:Module:index2.html.twig")
      *
@@ -53,16 +43,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ClassWithReturnTypes extends AbstractController
+final class ClassWithReturnTypes extends AbstractController
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function indexAction(): \Symfony\Component\HttpFoundation\Response
-    {
-        return $this->render('AppBundle:Module:index.html.twig');
-    }
-
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */

@@ -172,6 +172,7 @@ CODE_SAMPLE
             return null;
         });
 
+
         if (! $this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
             return null;
         }
@@ -242,7 +243,6 @@ CODE_SAMPLE
         $classMethod->stmts[] = new Return_($thisRenderMethodCall);
 
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
-
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
     }
 
@@ -289,11 +289,7 @@ CODE_SAMPLE
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $hasChanged = $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
-
-        if ($hasChanged === false) {
-            return;
-        }
+        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }

@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -28,7 +29,7 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
 {
     public function __construct(
         private readonly PhpDocTagRemover $phpDocTagRemover,
-        private readonly PhpDocInfoPrinter $phpDocInfoPrinter,
+        private readonly DocBlockUpdater $docBlockUpdater,
     ) {
     }
 
@@ -123,7 +124,7 @@ CODE_SAMPLE
             $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
 
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
 
             $hasChanged = true;
         }
