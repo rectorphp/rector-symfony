@@ -82,8 +82,7 @@ return static function (SecurityConfig $securityConfig): void {
     ]);
 };
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -156,7 +155,9 @@ CODE_SAMPLE
             if ($splitMany) {
                 foreach ($value as $itemName => $itemConfiguration) {
                     $fluentMethodCall = $this->createNextMethodCall(
-                        [$itemName, $itemConfiguration], $configVariable, $methodCallName
+                        [$itemName, $itemConfiguration],
+                        $configVariable,
+                        $methodCallName
                     );
 
                     $methodCallStmts[] = new Expression($fluentMethodCall);

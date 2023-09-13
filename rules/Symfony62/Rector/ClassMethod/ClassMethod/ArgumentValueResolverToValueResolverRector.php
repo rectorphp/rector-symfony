@@ -37,13 +37,17 @@ final class ArgumentValueResolverToValueResolverRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->shouldRefactorClass($node)) {
+        if (! $this->shouldRefactorClass($node)) {
             return null;
         }
 
         foreach ($node->getMethods() as $key => $classMethod) {
             if ($classMethod->name->toString() === 'supports') {
-                [$isIdentical, $supportFirstArg, $supportSecondArg] = $this->extractSupportsArguments($node, $key, $classMethod);
+                [$isIdentical, $supportFirstArg, $supportSecondArg] = $this->extractSupportsArguments(
+                    $node,
+                    $key,
+                    $classMethod
+                );
             }
             if ($classMethod->name->toString() === 'resolve' && isset($isIdentical) && isset($supportFirstArg) && isset($supportSecondArg)) {
                 $this->processResolveMethod($classMethod, $isIdentical, $supportFirstArg, $supportSecondArg);
@@ -104,7 +108,6 @@ CODE_SAMPLE
     }
 
     /**
-     *
      * @return array{bool, Expr|null, Expr|null}
      */
     private function extractSupportsArguments(Class_ $class, int $key, ClassMethod $classMethod): array
@@ -112,15 +115,15 @@ CODE_SAMPLE
         $isIdentical = true;
         $supportFirstArg = $supportSecondArg = null;
 
-        if (null === $classMethod->getStmts()) {
+        if ($classMethod->getStmts() === null) {
             return [$isIdentical, $supportFirstArg, $supportSecondArg];
         }
         foreach ($classMethod->getStmts() as $stmt) {
-            if (!$stmt instanceof Return_) {
+            if (! $stmt instanceof Return_) {
                 continue;
             }
             $expression = $stmt->expr;
-            if (!$expression instanceof BinaryOp) {
+            if (! $expression instanceof BinaryOp) {
                 continue;
             }
             if ($expression instanceof NotIdentical) {
@@ -135,8 +138,12 @@ CODE_SAMPLE
         return [$isIdentical, $supportFirstArg, $supportSecondArg];
     }
 
-    private function processResolveMethod(mixed $classMethod, mixed $isIdentical, mixed $supportFirstArg, mixed $supportSecondArg): void
-    {
+    private function processResolveMethod(
+        mixed $classMethod,
+        mixed $isIdentical,
+        mixed $supportFirstArg,
+        mixed $supportSecondArg
+    ): void {
         $ifCondition = $isIdentical ? new NotIdentical($supportFirstArg, $supportSecondArg)
             : new Identical($supportFirstArg, $supportSecondArg);
 
