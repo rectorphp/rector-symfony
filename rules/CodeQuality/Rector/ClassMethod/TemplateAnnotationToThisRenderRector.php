@@ -172,7 +172,6 @@ CODE_SAMPLE
             return null;
         });
 
-
         if (! $this->emptyReturnNodeFinder->hasNoOrEmptyReturns($classMethod)) {
             return null;
         }

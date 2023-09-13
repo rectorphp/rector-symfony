@@ -8,8 +8,7 @@ use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class
-MaxLengthSymfonyFormOptionToAttrRectorTest extends AbstractRectorTestCase
+final class MaxLengthSymfonyFormOptionToAttrRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $file): void

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Name;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -32,6 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     private Class_ $subscriberClass;
+
     private string $newInvokeMethodName;
 
     public function __construct(
@@ -119,19 +120,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ( ! $this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE)) {
+        if (! $this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE)) {
             return null;
         }
 
         $this->subscriberClass = $node;
 
         $getHandledMessagesClassMethod = $node->getMethod('getHandledMessages');
-        if ( ! $getHandledMessagesClassMethod instanceof ClassMethod) {
+        if (! $getHandledMessagesClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        $stmts = (array)$getHandledMessagesClassMethod->stmts;
-        if ([] === $stmts) {
+        $stmts = (array) $getHandledMessagesClassMethod->stmts;
+        if ($stmts === []) {
             return null;
         }
 
@@ -154,18 +155,18 @@ CODE_SAMPLE
     private function handleYields(array $expressions): void
     {
         foreach ($expressions as $expression) {
-            if ( ! $expression instanceof Expression ||
+            if (! $expression instanceof Expression ||
                  ! $expression->expr instanceof Yield_
             ) {
                 continue;
             }
 
-            $method    = MethodName::INVOKE;
+            $method = MethodName::INVOKE;
             $arguments = [];
 
             if ($expression->expr->key instanceof ClassConstFetch) {
                 $array = $expression->expr->value;
-                if ( ! $array instanceof Array_) {
+                if (! $array instanceof Array_) {
                     continue;
                 }
 
@@ -176,12 +177,12 @@ CODE_SAMPLE
 
             $value = $expression->expr->value;
             if (
-                ( ! $value instanceof ClassConstFetch) ||
+                (! $value instanceof ClassConstFetch) ||
                 ! $value->class instanceof Name
             ) {
                 continue;
             }
-            $classParts                = $value->class->getParts();
+            $classParts = $value->class->getParts();
             $this->newInvokeMethodName = 'handle' . end($classParts);
             $this->addAttribute($method, $arguments);
         }
@@ -200,9 +201,9 @@ CODE_SAMPLE
             ) {
                 continue;
             }
-            $key   = (string)$this->valueResolver->getValue($item->key);
+            $key = (string) $this->valueResolver->getValue($item->key);
             $value = $this->valueResolver->getValue($item->value);
-            if ('method' === $key) {
+            if ($key === 'method') {
                 $method = $value;
                 continue;
             }
@@ -218,11 +219,11 @@ CODE_SAMPLE
     private function addAttribute(string $classMethodName, array $arguments): void
     {
         $classMethod = $this->subscriberClass->getMethod($classMethodName);
-        if (!$classMethod instanceof ClassMethod) {
+        if (! $classMethod instanceof ClassMethod) {
             return;
         }
 
-        if (MethodName::INVOKE === $classMethodName) {
+        if ($classMethodName === MethodName::INVOKE) {
             $this->renameInvoke($classMethod);
         }
 
