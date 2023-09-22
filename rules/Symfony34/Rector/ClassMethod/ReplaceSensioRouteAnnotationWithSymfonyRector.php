@@ -7,7 +7,10 @@ namespace Rector\Symfony\Symfony34\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -37,6 +40,7 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly PhpDocNodeByTypeFinder $findDoctrineAnnotationsByClass,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
 
@@ -91,9 +95,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        // early return in case of non public method
+        if ($node instanceof ClassMethod && ! $node->isPublic()) {
+            return null;
+        }
 
-        $sensioDoctrineAnnotationTagValueNodes  = $this->findDoctrineAnnotationsByClass->findDoctrineAnnotationsByClass(
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+
+        $sensioDoctrineAnnotationTagValueNodes = $this->findDoctrineAnnotationsByClass->findDoctrineAnnotationsByClass(
             $phpDocInfo->getPhpDocNode(),
             self::SENSIO_ROUTE_NAME
         );
@@ -107,8 +119,15 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
 
             // unset service, that is deprecated
+            $sensioDoctrineAnnotationTagValueNode->removeValue('service');
+
             $values = $sensioDoctrineAnnotationTagValueNode->getValues();
             $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($values);
+
+            // avoid adding this one
+            if ($node instanceof Class_ && $this->isSingleItemWithDefaultPath($values)) {
+                continue;
+            }
 
             $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
         }
@@ -120,5 +139,31 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
 
         return $node;
+    }
+
+    /**
+     * @param mixed[] $values
+     */
+    private function isSingleItemWithDefaultPath(array $values): bool
+    {
+        if (count($values) !== 1) {
+            return false;
+        }
+
+        $singleValue = $values[0];
+        if (! $singleValue instanceof ArrayItemNode) {
+            return false;
+        }
+
+        if ($singleValue->key !== null) {
+            return false;
+        }
+
+        $stringNode = $singleValue->value;
+        if (! $stringNode instanceof StringNode) {
+            return false;
+        }
+
+        return $singleValue->value->value === '/';
     }
 }

@@ -54,7 +54,6 @@ CODE_SAMPLE
         );
     }
 
-
     public function getNodeTypes(): array
     {
         return [Class_::class];
