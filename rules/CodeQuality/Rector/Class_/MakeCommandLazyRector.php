@@ -119,7 +119,8 @@ CODE_SAMPLE
 
             $this->traverseNodesWithCallable($stmt, function (Node $node) use (&$expr) {
                 if ($node instanceof MethodCall && $this->isName($node->name, 'setName')) {
-                    $expr = $node->getArgs()[0]->value;
+                    $expr = $node->getArgs()[0]
+->value;
 
                     // remove nested call
                     return $node->var;
