@@ -5,9 +5,9 @@ namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAn
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * @Route("/", service="some_service")
+ * @Route("/")
  */
-final class RemoveEmpty
+final class RemoveAnotherEmpty
 {
     public function run()
     {
@@ -22,7 +22,7 @@ namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAn
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-final class RemoveEmpty
+final class RemoveAnotherEmpty
 {
     public function run()
     {

@@ -57,8 +57,9 @@ final class SetAliasesMethodCallExtractor
                 return null;
             }
 
-            $firstArgValue = $node->getArgs()[0]
-                ->value;
+            $firstArg = $node->getArgs()[0];
+
+            $firstArgValue = $firstArg->value;
             if (! $firstArgValue instanceof Array_) {
                 return null;
             }
