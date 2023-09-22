@@ -19,7 +19,10 @@ parameters:
 
     excludePaths:
         - */Source/*
-        - */tests/*/Fixture*/Expected/*
+        - */Fixture/*
+        - */Fixture*/*
+
+    checkGenericClassInNonGenericObjectType: false
 
     ignoreErrors:
         -
@@ -27,6 +30,9 @@ parameters:
              path: src/ValueObjectFactory/ServiceMapFactory.php
 
         - '#Cognitive complexity for "Rector\\Symfony\\MinimalSharedStringSolver\:\:solve\(\)" is (.*?), keep it under 10#'
+
+        # pointless check
+        - '#expects class-string, string given#'
 
         -
             path: "src/ValueObjectFactory/ServiceMapFactory.php"
