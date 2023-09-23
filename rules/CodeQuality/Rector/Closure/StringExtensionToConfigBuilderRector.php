@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
@@ -40,6 +41,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
         private readonly SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher,
         private readonly PropertyNaming $propertyNaming,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 

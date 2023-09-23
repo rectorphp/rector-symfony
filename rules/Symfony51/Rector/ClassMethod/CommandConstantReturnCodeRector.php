@@ -10,6 +10,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyCommandConstantMap;
@@ -25,6 +26,7 @@ final class CommandConstantReturnCodeRector extends AbstractRector
 {
     public function __construct(
         private readonly ReflectionResolver $reflectionResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

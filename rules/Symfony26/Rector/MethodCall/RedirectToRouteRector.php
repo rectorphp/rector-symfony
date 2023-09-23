@@ -7,6 +7,7 @@ namespace Rector\Symfony\Symfony26\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -19,7 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RedirectToRouteRector extends AbstractRector
 {
     public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer
+        private readonly ControllerAnalyzer $controllerAnalyzer,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

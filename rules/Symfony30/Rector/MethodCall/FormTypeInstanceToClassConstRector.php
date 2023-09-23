@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
@@ -39,6 +40,7 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
         private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
         private readonly FormCollectionAnalyzer $formCollectionAnalyzer,
         private readonly ControllerAnalyzer $controllerAnalyzer,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 

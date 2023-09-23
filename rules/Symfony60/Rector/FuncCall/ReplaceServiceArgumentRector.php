@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -24,6 +25,11 @@ final class ReplaceServiceArgumentRector extends AbstractRector implements Confi
      * @var ReplaceServiceArgument[]
      */
     private array $replaceServiceArguments = [];
+
+    public function __construct(
+        private readonly ValueResolver $valueResolver
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

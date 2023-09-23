@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
@@ -28,6 +29,7 @@ final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
         private readonly SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
         private readonly TestsNodeAnalyzer $testsNodeAnalyzer,
         private readonly ExprAnalyzer $exprAnalyzer,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 

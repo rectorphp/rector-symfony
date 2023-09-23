@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,6 +37,11 @@ final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRe
      * @var string[]
      */
     private const METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
+
+    public function __construct(
+        private readonly ValueResolver $valueResolver
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -19,6 +19,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,7 +33,8 @@ final class ConsoleExecuteReturnIntRector extends AbstractRector
     private bool $hasChanged = false;
 
     public function __construct(
-        private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer
+        private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

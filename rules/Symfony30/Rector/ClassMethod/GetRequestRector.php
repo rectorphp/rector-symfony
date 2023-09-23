@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
@@ -34,6 +35,7 @@ final class GetRequestRector extends AbstractRector
     public function __construct(
         private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
         private readonly ControllerAnalyzer $controllerAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

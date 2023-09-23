@@ -20,9 +20,11 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -50,6 +52,8 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly EmptyReturnNodeFinder $emptyReturnNodeFinder,
         private readonly AnnotationAnalyzer $annotationAnalyzer,
         private readonly DocBlockUpdater $docBlockUpdater,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
 

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,6 +36,7 @@ final class ServiceTagsToDefaultsAutoconfigureRector extends AbstractRector
 
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 
