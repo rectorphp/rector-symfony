@@ -15,6 +15,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -39,6 +40,7 @@ final class MessageSubscriberInterfaceToAttributeRector extends AbstractRector i
         private readonly MessengerHelper $messengerHelper,
         private readonly ClassManipulator $classManipulator,
         private readonly ClassAnalyzer $classAnalyzer,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 

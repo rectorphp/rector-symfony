@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
@@ -28,7 +29,8 @@ final class AddRouteAnnotationRector extends AbstractRector
     public function __construct(
         private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
-        private readonly ArrayParser $arrayParser
+        private readonly ArrayParser $arrayParser,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

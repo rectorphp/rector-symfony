@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
@@ -25,6 +26,7 @@ final class RemoveUnusedRequestParamRector extends AbstractRector
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly ClassChildAnalyzer $classChildAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

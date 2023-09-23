@@ -17,6 +17,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpParameterReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,7 +30,8 @@ final class ServiceArgsToServiceNamedArgRector extends AbstractRector
 {
     public function __construct(
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
-        private readonly ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 
@@ -184,11 +186,11 @@ CODE_SAMPLE
         string $parameterName,
         Expr $expr,
         ?MethodCall $argMethodCall,
-        MethodCall $node
+        MethodCall $methodCall
     ): MethodCall {
         $argArgs = [new Arg(new String_($parameterName)), new Arg($expr)];
 
-        $callerExpr = $argMethodCall instanceof MethodCall ? $argMethodCall : $node->var;
+        $callerExpr = $argMethodCall instanceof MethodCall ? $argMethodCall : $methodCall->var;
 
         return new MethodCall($callerExpr, 'arg', $argArgs);
     }

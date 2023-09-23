@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
@@ -38,6 +39,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
         private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
         private readonly ReflectionProvider $reflectionProvider,
         private readonly Filesystem $filesystem,
+        private readonly ValueResolver $valueResolver,
     ) {
         $this->minimalSharedStringSolver = new MinimalSharedStringSolver();
     }

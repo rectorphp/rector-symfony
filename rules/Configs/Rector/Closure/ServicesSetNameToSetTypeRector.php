@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,7 +37,8 @@ final class ServicesSetNameToSetTypeRector extends AbstractRector
     private array $servicesNamesByType = [];
 
     public function __construct(
-        private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector
+        private readonly SymfonyPhpClosureDetector $symfonyPhpClosureDetector,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
@@ -35,7 +36,8 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
     public function __construct(
         private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
         private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher,
-        private readonly FormCollectionAnalyzer $formCollectionAnalyzer
+        private readonly FormCollectionAnalyzer $formCollectionAnalyzer,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 
