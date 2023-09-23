@@ -62,6 +62,4 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::NAMING,
         SymfonySetList::SYMFONY_60,
     ]);
-
-    $rectorConfig->rule(\Rector\Utils\Rector\MoveAbstractRectorToChildrenRector::class);
 };
