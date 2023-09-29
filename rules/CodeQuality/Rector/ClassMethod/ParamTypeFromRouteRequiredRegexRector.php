@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -21,7 +22,8 @@ final class ParamTypeFromRouteRequiredRegexRector extends AbstractRector
 {
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
-        private readonly RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver
+        private readonly RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver,
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 

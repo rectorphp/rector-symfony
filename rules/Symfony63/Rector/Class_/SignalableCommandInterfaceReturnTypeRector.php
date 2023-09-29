@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony63\Rector\Class_;
 
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -25,7 +26,8 @@ final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector
 {
     public function __construct(
         private readonly ClassAnalyzer $classAnalyzer,
-        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 
