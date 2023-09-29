@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony63\Rector\Class_;
 
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -14,6 +13,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

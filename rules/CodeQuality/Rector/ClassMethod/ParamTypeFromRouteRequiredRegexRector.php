@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
