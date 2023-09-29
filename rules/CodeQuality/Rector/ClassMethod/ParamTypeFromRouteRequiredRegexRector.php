@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +22,8 @@ final class ParamTypeFromRouteRequiredRegexRector extends AbstractRector
 {
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
-        private readonly RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver
+        private readonly RouteRequiredParamNameToTypesResolver $routeRequiredParamNameToTypesResolver,
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 
