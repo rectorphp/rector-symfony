@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony40\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
