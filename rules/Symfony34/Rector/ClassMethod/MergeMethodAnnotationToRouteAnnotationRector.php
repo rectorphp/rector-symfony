@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
@@ -31,6 +32,7 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder,
     ) {
     }
 
@@ -101,28 +103,23 @@ CODE_SAMPLE
                 continue;
             }
 
-            $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
-            if (! $symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            // get all routes
+            $symfonyDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass(
+                $phpDocInfo->getPhpDocNode(),
+                SymfonyAnnotation::ROUTE
+            );
+
+            // no symfony route? skip it
+            if ($symfonyDoctrineAnnotationTagValueNodes === []) {
                 continue;
             }
 
-            $sensioMethods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
-            if ($sensioMethods === null) {
+            $sensioMethodsCurlyListNode = $this->resolveMethodsCurlyListNode($sensioDoctrineAnnotationTagValueNode);
+            if (! $sensioMethodsCurlyListNode instanceof CurlyListNode) {
                 continue;
             }
 
-            if (is_string($sensioMethods) || $sensioMethods instanceof StringNode) {
-                $sensioMethods = new CurlyListNode([new ArrayItemNode($sensioMethods)]);
-            }
-
-            $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
-
-            // value is already filled, do not enter anything
-            if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
-                continue;
-            }
-
-            $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
+            $this->decorateRoutesWithMethods($symfonyDoctrineAnnotationTagValueNodes, $sensioMethodsCurlyListNode);
 
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
             $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
@@ -137,22 +134,49 @@ CODE_SAMPLE
         return null;
     }
 
-    /**
-     * @return string|string[]|null|CurlyListNode|StringNode
-     */
-    private function resolveMethods(
+    private function resolveMethodsCurlyListNode(
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
-    ): string|array|null|CurlyListNode|StringNode {
+    ): null|CurlyListNode {
         $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
         if ($methodsParameter instanceof ArrayItemNode && $methodsParameter->value instanceof CurlyListNode) {
             return $methodsParameter->value;
         }
 
         $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
-        if ($arrayItemNode instanceof ArrayItemNode) {
+        if (! $arrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+
+        if ($arrayItemNode->value instanceof CurlyListNode) {
             return $arrayItemNode->value;
         }
 
+        if ($arrayItemNode->value instanceof StringNode) {
+            return new CurlyListNode([new ArrayItemNode($arrayItemNode->value)]);
+        }
+
         return null;
+    }
+
+    /**
+     * @param DoctrineAnnotationTagValueNode[] $symfonyDoctrineAnnotationTagValueNodes
+     */
+    private function decorateRoutesWithMethods(
+        array $symfonyDoctrineAnnotationTagValueNodes,
+        CurlyListNode $sensioMethodsCurlyListNode
+    ): void {
+        foreach ($symfonyDoctrineAnnotationTagValueNodes as $symfonyDoctrineAnnotationTagValueNode) {
+            $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
+
+            // value is already filled, do not enter anything
+            if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
+                continue;
+            }
+
+            $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode(
+                $sensioMethodsCurlyListNode,
+                'methods'
+            );
+        }
     }
 }

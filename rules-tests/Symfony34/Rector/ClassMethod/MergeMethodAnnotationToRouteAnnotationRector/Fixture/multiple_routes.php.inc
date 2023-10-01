@@ -3,15 +3,14 @@
 namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithTemplateAnnotationController
+class MultipleRoutes
 {
     /**
-     * @Route("/show/{id}")
-     * @Method({"GET", "HEAD"})
-     * @Template("AdminBundle:Payment:create.html.twig")
+     * @Route("/first")
+     * @Route("/second")
+     * @Method({"POST"})
      */
     public function show($id)
     {
@@ -25,14 +24,13 @@ class ClassWithTemplateAnnotationController
 namespace Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector\Fixture;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithTemplateAnnotationController
+class MultipleRoutes
 {
     /**
-     * @Route("/show/{id}", methods={"GET", "HEAD"})
-     * @Template("AdminBundle:Payment:create.html.twig")
+     * @Route("/first", methods={"POST"})
+     * @Route("/second", methods={"POST"})
      */
     public function show($id)
     {
