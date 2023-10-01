@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Rector\AbstractRector;
@@ -32,7 +31,6 @@ final class MergeMethodAnnotationToRouteAnnotationRector extends AbstractRector
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder,
     ) {
     }
 
@@ -104,10 +102,7 @@ CODE_SAMPLE
             }
 
             // get all routes
-            $symfonyDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass(
-                $phpDocInfo->getPhpDocNode(),
-                SymfonyAnnotation::ROUTE
-            );
+            $symfonyDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(SymfonyAnnotation::ROUTE);
 
             // no symfony route? skip it
             if ($symfonyDoctrineAnnotationTagValueNodes === []) {

@@ -12,7 +12,6 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Rector\AbstractRector;
@@ -39,7 +38,6 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
         private readonly DocBlockUpdater $docBlockUpdater,
-        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
@@ -105,10 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $sensioDoctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass(
-            $phpDocInfo->getPhpDocNode(),
-            self::SENSIO_ROUTE_NAME
-        );
+        $sensioDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(self::SENSIO_ROUTE_NAME);
 
         // nothing to find
         if ($sensioDoctrineAnnotationTagValueNodes === []) {
