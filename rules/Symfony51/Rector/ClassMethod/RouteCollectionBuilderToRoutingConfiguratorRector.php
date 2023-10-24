@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony51\Rector\ClassMethod;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
