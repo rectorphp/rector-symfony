@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony51\Rector\ClassMethod;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -70,7 +71,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
