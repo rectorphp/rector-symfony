@@ -68,6 +68,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->name->toString() === 'getAction') {
+            return null;
+        }
+
         $this->removeSuffix($node, 'Action');
 
         return $node;
