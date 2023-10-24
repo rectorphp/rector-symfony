@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -69,19 +70,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Node\Stmt\Class_::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Node\Stmt\Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'configureRoutes')) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\Component\HttpKernel\Kernel'))) {
             return null;
         }
 
-        $firstParam = $node->params[0];
+        $configureRoutesClassMethod = $node->getMethod('configureRoutes');
+        if (! $configureRoutesClassMethod instanceof ClassMethod) {
+            return null;
+        }
+
+        $firstParam = $configureRoutesClassMethod->params[0];
         if ($firstParam->type === null) {
             return null;
         }
@@ -92,10 +98,12 @@ CODE_SAMPLE
 
         $firstParam->type = new FullyQualified('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator');
 
-        $node->name = new Identifier('configureRouting');
-        $node->returnType = new Identifier('void');
+        $configureRoutesClassMethod->name = new Identifier('configureRouting');
+        $configureRoutesClassMethod->returnType = new Identifier('void');
 
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node): ?MethodCall {
+        $this->traverseNodesWithCallable((array) $configureRoutesClassMethod->stmts, function (
+            Node $node
+        ): ?MethodCall {
             if (! $node instanceof MethodCall) {
                 return null;
             }
