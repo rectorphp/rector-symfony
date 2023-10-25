@@ -30,7 +30,7 @@ class SomeClass extends TestCase
         /** @var \Symfony\Component\HttpFoundation\Response $response */
         $response = $this->processResult();
 
-        $this->assertSame(200, $response->getStatusCode(), $response->getContents());
+        $this->assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 }
 
