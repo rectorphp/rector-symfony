@@ -199,7 +199,7 @@ CODE_SAMPLE
 
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
-            $new->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
+            $new->args = [new Arg(new String_($filterName)), ...$oldArguments];
             return;
         }
 
