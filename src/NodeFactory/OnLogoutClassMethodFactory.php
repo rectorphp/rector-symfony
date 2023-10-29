@@ -37,7 +37,7 @@ final class OnLogoutClassMethodFactory
         $classMethod = $this->bareLogoutClassMethodFactory->create();
 
         $assignStmts = $this->createAssignStmtFromOldClassMethod($logoutClassMethod);
-        $classMethod->stmts = array_merge($assignStmts, (array) $logoutClassMethod->stmts);
+        $classMethod->stmts = [...$assignStmts, ...(array) $logoutClassMethod->stmts];
 
         return $classMethod;
     }

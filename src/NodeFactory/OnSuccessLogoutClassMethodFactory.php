@@ -49,7 +49,7 @@ final class OnSuccessLogoutClassMethodFactory
         $this->replaceRequestWithGetRequest($onLogoutSuccessClassMethod);
 
         $oldClassStmts = (array) $onLogoutSuccessClassMethod->stmts;
-        $classMethod->stmts = array_merge([$if], $oldClassStmts);
+        $classMethod->stmts = [$if, ...$oldClassStmts];
 
         return $classMethod;
     }
