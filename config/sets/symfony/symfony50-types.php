@@ -289,17 +289,19 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new StringType()
         ),
+        // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
             'mapFormsToData',
             0,
-            $iterableType
+            new ObjectType(Traversable::class)
         ),
+        // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
             'mapDataToForms',
             1,
-            $iterableType
+            new ObjectType(Traversable::class)
         ),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'add', 1, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'remove', 0, new StringType()),
