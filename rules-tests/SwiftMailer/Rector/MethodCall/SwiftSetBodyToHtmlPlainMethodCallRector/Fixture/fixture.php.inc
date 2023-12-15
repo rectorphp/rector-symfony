@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\Fixture;
+namespace Rector\Symfony\Tests\SwiftMailer\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\Fixture;
 
 use Swift_Message;
 
@@ -12,7 +12,7 @@ $message->setBody('...');
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\Fixture;
+namespace Rector\Symfony\Tests\SwiftMailer\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\Fixture;
 
 use Swift_Message;
 

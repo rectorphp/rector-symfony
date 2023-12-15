@@ -9,7 +9,7 @@ use Rector\Set\Contract\SetListInterface;
 /**
  * @api
  */
-final class SwiftmailerSetList implements SetListInterface
+final class SwiftMailerSetList implements SetListInterface
 {
     /**
      * @var string
