@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -125,7 +126,7 @@ CODE_SAMPLE
         }
 
         $varType = $this->nodeTypeResolver->getType($expr->var);
-        if (! $varType instanceof \PHPStan\Type\ObjectType) {
+        if (! $varType instanceof ObjectType) {
             return null;
         }
 
