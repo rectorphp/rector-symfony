@@ -124,6 +124,15 @@ CODE_SAMPLE
             return null;
         }
 
+        $varType = $this->nodeTypeResolver->getType($expr->var);
+        if (! $varType instanceof \PHPStan\Type\ObjectType) {
+            return null;
+        }
+
+        if (! $varType->isInstanceof('Symfony\Component\HttpFoundation\Response')->yes()) {
+            return null;
+        }
+
         // must be status method call
         if (! $this->isName($expr->name, 'getStatusCode')) {
             return null;
