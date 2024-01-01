@@ -12,7 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerAnalyzer

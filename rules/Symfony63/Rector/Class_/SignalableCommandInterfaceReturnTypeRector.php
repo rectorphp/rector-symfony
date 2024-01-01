@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;

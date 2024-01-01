@@ -6,8 +6,8 @@ namespace Rector\Symfony\Symfony62\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Symfony\Helper\MessengerHelper;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;

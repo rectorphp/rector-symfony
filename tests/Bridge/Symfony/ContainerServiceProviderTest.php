@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Bridge\Symfony;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\Symfony\ContainerServiceProvider;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service1;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service2;

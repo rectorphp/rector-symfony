@@ -7,7 +7,7 @@ namespace Rector\Symfony\NodeFactory\Annotations;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 
 final class DoctrineAnnotationKeyToValuesResolver
 {
