@@ -15,7 +15,7 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Config\RectorConfig;
-use Rector\Core\Util\Reflection\PrivatesAccessor;
+use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;

@@ -7,7 +7,7 @@ namespace Rector\Symfony\NodeFinder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class EmptyReturnNodeFinder
 {

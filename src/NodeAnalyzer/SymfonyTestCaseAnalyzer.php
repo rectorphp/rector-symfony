@@ -6,7 +6,7 @@ namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Reflection\ReflectionResolver;
 
 final class SymfonyTestCaseAnalyzer
 {
