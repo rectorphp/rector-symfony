@@ -20,7 +20,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\NodeFactory;
-use Rector\ValueObject\PhpVersionFeature;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 use Rector\Symfony\Contract\Tag\TagInterface;
@@ -29,6 +28,7 @@ use Rector\Symfony\ValueObject\EventReferenceToMethodNameWithPriority;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class GetSubscribedEventsClassMethodFactory
 {

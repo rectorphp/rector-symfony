@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\RectorParser;
-use Rector\NodeNameResolver\NodeNameResolver;
 
 final class BundleClassResolver
 {

@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 
 final class SymfonyClosureExtensionMatcher
