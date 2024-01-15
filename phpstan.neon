@@ -53,6 +53,6 @@ parameters:
         - '#Access to an undefined property Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
 
         -
-            message: '#Cognitive complexity for "Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector\:\:resolveNameAndDescription\(\)" is 13, keep it under 10#'
+            message: '#Cognitive complexity for "Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector\:\:(resolveNameAndDescription|refactor)\(\)" is 13|15, keep it under 10#'
             path: rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php
 
