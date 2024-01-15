@@ -11,13 +11,17 @@ use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 
 /**
  * @see \Rector\Symfony\Tests\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRector\DowngradeSymfonyCommandAttributeRectorTest
  */
 final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
 {
-    public function __construct(private readonly ReflectionResolver $reflectionResolver)
+    public function __construct(
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
+    )
     {
     }
 
@@ -67,6 +71,10 @@ CODE_SAMPLE
         }
 
         if (! $classReflection->isSubClassOf('Symfony\Component\Console\Command\Command')) {
+            return null;
+        }
+
+        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($node, 'Symfony\Component\Console\Attribute\AsCommand')) {
             return null;
         }
 
