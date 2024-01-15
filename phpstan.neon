@@ -51,3 +51,8 @@ parameters:
         - '#Cognitive complexity for "Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector\:\:create(.*?)\(\)" is 13, keep it under 10#'
 
         - '#Access to an undefined property Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
+
+        -
+            message: '#Cognitive complexity for "Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector\:\:resolveNameAndDescription\(\)" is 13, keep it under 10#'
+            path: rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php
+

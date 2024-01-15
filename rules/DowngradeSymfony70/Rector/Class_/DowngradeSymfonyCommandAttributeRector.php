@@ -6,6 +6,7 @@ namespace Rector\Symfony\DowngradeSymfony70\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -79,26 +80,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $name = null;
-        $description = null;
-
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name->toString() !== 'Symfony\Component\Console\Attribute\AsCommand') {
-                    continue;
-                }
-
-                foreach ($attr->args as $arg) {
-                    if ($arg->name instanceof Identifier && $arg->name->toString() === 'name') {
-                        $name = $arg->value;
-                    }
-
-                    if ($arg->name instanceof Identifier && $arg->name->toString() === 'description') {
-                        $description = $arg->value;
-                    }
-                }
-            }
-        }
+        $resolveNameAndDescription = $this->resolveNameAndDescription($node);
+        $name = $resolveNameAndDescription['name'];
+        $description = $resolveNameAndDescription['description'];
 
         if ($name === null && $description === null) {
             return null;
@@ -125,5 +109,41 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    /**
+     * @return array{name: ?Expr, description: ?Expr}
+     */
+    private function resolveNameAndDescription(Class_ $node): array
+    {
+        $name = null;
+        $description = null;
+
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($attr->name->toString() !== 'Symfony\Component\Console\Attribute\AsCommand') {
+                    continue;
+                }
+
+                foreach ($attr->args as $arg) {
+                    if (! $arg->name instanceof Identifier) {
+                        continue;
+                    }
+
+                    if ($arg->name->toString() === 'name') {
+                        $name = $arg->value;
+                    }
+
+                    if ($arg->name->toString() === 'description') {
+                        $description = $arg->value;
+                    }
+                }
+            }
+        }
+
+        return [
+            'name' => $name,
+            'description' => $description,
+        ];
     }
 }
