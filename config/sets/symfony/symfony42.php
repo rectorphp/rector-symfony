@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use PHPStan\Type\IterableType;
-
 use PHPStan\Type\MixedType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
