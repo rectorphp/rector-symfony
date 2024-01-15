@@ -108,6 +108,18 @@ CODE_SAMPLE
             $node->stmts[] = $classMethod;
         }
 
+        foreach ($node->attrGroups as $keyAttribute => $attrGroup) {
+            foreach ($attrGroup->attrs as $key => $attr) {
+                if ($attr->name->toString() === 'Symfony\Component\Console\Attribute\AsCommand') {
+                    unset($attrGroup->attrs[$key]);
+                }
+            }
+
+            if ($attrGroup->attrs === []) {
+                unset($node->attrGroups[$keyAttribute]);
+            }
+        }
+
         return $node;
     }
 

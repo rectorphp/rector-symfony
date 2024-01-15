@@ -19,7 +19,6 @@ namespace Rector\Symfony\Tests\DowngradeSymfony70\Rector\Class_\DowngradeSymfony
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
-#[AsCommand(name: 'app:create-user')]
 class WithName extends Command
 {
     protected function configure()
