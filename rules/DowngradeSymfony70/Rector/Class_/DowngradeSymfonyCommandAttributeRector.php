@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace Rector\Symfony\DowngradeSymfony70\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\ValueObject\Visibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use PHPStan\Reflection\ClassReflection;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 
 /**
  * @see \Rector\Symfony\Tests\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRector\DowngradeSymfonyCommandAttributeRectorTest
@@ -19,10 +25,8 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver,
-        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
-    )
-    {
+        private readonly ReflectionResolver $reflectionResolver
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -38,6 +42,7 @@ class CreateUserCommand extends Command
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+#[AsCommand(name: 'app:create-user', description: 'some description')]
 class CreateUserCommand extends Command
 {
     protected function configure(): void
@@ -74,10 +79,51 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($node, 'Symfony\Component\Console\Attribute\AsCommand')) {
+        $name = null;
+        $description = null;
+
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($attr->name->toString() !== 'Symfony\Component\Console\Attribute\AsCommand') {
+                    continue;
+                }
+
+                foreach ($attr->args as $arg) {
+                    if ($arg->name instanceof Identifier && $arg->name->toString() === 'name') {
+                        $name = $arg->value;
+                    }
+
+                    if ($arg->name instanceof Identifier && $arg->name->toString() === 'description') {
+                        $description = $arg->value;
+                    }
+                }
+            }
+        }
+
+        if ($name === null && $description === null) {
             return null;
         }
 
-        return null;
+        $configureClassMethod = $node->getMethod('configure');
+        $stmts = [];
+        if ($name !== null) {
+            $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setName', [new Arg($name)]));
+        }
+
+        if ($description !== null) {
+            $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setDescription', [new Arg($description)]));
+        }
+
+        if ($configureClassMethod instanceof ClassMethod) {
+            $configureClassMethod->stmts = [...(array) $configureClassMethod->stmts, ...$stmts];
+        } else {
+            $classMethod = new ClassMethod('configure');
+            $classMethod->flags = Visibility::PROTECTED;
+            $classMethod->stmts = $stmts;
+
+            $node->stmts[] = $classMethod;
+        }
+
+        return $node;
     }
 }

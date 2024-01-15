@@ -29,7 +29,7 @@ final class ServicesSetNameToSetTypeRector extends AbstractRector
      */
     private array $alreadyChangedServiceNamesToTypes = [];
 
-    private bool  $hasChanged = false;
+    private bool $hasChanged = false;
 
     /**
      * @var array<string, string[]>
