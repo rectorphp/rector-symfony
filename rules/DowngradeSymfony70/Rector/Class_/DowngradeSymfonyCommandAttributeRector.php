@@ -7,14 +7,20 @@ namespace Rector\Symfony\DowngradeSymfony70\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PHPStan\Reflection\ClassReflection;
 
 /**
  * @see \Rector\Symfony\Tests\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRector\DowngradeSymfonyCommandAttributeRectorTest
  */
 final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
 {
+    public function __construct(private readonly ReflectionResolver $reflectionResolver)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -55,6 +61,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if (! $classReflection->isSubClassOf('Symfony\Component\Console\Command\Command')) {
+            return null;
+        }
+
         return null;
     }
 }
