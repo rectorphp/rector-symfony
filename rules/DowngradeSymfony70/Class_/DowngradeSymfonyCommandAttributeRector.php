@@ -15,7 +15,7 @@ final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes createMessage() into a new Symfony\Component\Mime\Email',
+            'Downgrade Symfony Command Attribute',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
