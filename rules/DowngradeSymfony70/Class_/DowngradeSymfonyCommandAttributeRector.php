@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\DowngradeSymfony70\Rector\MethodCall;
+namespace Rector\Symfony\DowngradeSymfony70\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
