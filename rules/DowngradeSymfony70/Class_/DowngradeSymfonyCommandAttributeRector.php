@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRector\DowngradeSymfonyCommandAttributeRectorTest
+ */
 final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
