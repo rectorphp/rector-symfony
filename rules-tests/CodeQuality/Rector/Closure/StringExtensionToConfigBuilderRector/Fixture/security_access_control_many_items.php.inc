@@ -29,7 +29,7 @@ namespace Rector\Symfony\Tests\Rector\Closure\StringExtensionToConfigBuilderRect
 use Rector\Symfony\Tests\CodeQuality\Rector\Closure\StringExtensionToConfigBuilderRector\Source\SomeUserProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (\Symfony\Config\SecurityConfig $securityConfig): void {
+return static function (\Symfony\Config\SecurityConfig $securityConfig) : void {
     $securityConfig->accessControl()->path('^/first')->roles(['PUBLIC_ACCESS']);
     $securityConfig->accessControl()->path('^/second')->roles(['PUBLIC_ACCESS']);
 };

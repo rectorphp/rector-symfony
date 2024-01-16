@@ -16,6 +16,8 @@ use Rector\Exception\NotImplementedYetException;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessControlConfigArrayHandler;
+use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
@@ -35,6 +37,9 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
     private const EXTENSION_KEY_TO_CLASS_MAP = [
         'security' => 'Symfony\Config\SecurityConfig',
         'framework' => 'Symfony\Config\FrameworkConfig',
+        'monolog' => 'Symfony\Config\MonologConfig',
+        'twig' => 'Symfony\Config\TwigConfig',
+        'doctrine' => 'Symfony\Config\DoctrineConfig',
     ];
 
     public function __construct(
@@ -42,6 +47,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         private readonly SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher,
         private readonly PropertyNaming $propertyNaming,
         private readonly ValueResolver $valueResolver,
+        private readonly SecurityAccessControlConfigArrayHandler $securityAccessControlConfigArrayHandler,
     ) {
     }
 
@@ -152,6 +158,19 @@ CODE_SAMPLE
                 $splitMany = true;
             } else {
                 $methodCallName = $this->createCamelCaseFromUnderscored($key);
+            }
+
+            if ($key === SecurityConfigKey::ACCESS_CONTROL) {
+                $accessControlMethodCalls = $this->securityAccessControlConfigArrayHandler->handle(
+                    $configurationArray,
+                    $configVariable
+                );
+                if ($accessControlMethodCalls !== []) {
+                    $methodCallStmts = array_merge($methodCallStmts, $accessControlMethodCalls);
+                    continue;
+                }
+
+                continue;
             }
 
             if ($splitMany) {
