@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (\Symfony\Config\DoctrineConfig $doctrineConfig) : void {
     $doctrineConfig->dbal()->defaultConnection('default');
-    $doctrineConfig->dbal()->connections()->default()->driver('pdo_pgsql')->host('%database_host%');
+    $doctrineConfig->dbal()->connection('default')->driver('pdo_pgsql')->host('%database_host%');
 };
 
 ?>
