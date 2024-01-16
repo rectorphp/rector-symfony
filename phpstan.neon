@@ -10,10 +10,6 @@ parameters:
         - rules
         - rules-tests
 
-    cognitive_complexity:
-        class: 40
-        function: 10
-
     scanDirectories:
         - stubs
 

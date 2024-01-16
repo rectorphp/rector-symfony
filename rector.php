@@ -35,9 +35,7 @@ return static function (RectorConfig $rectorConfig): void {
         ],
 
         // marked as skipped
-        ReturnNeverTypeRector::class => [
-            '*/tests/*'
-        ]
+        ReturnNeverTypeRector::class => ['*/tests/*'],
     ]);
 
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
