@@ -31,8 +31,8 @@ use Rector\Symfony\Tests\CodeQuality\Rector\Closure\StringExtensionToConfigBuild
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (\Symfony\Config\SecurityConfig $securityConfig) : void {
-    $securityConfig->provider('webservice', ['id' => 'Rector\Symfony\Tests\CodeQuality\Rector\Closure\StringExtensionToConfigBuilderRector\Source\SomeUserProvider']);
-    $securityConfig->firewall('dev', ['pattern' => '^/(_(profiler|wdt)|css|images|js)/', 'security' => false]);
+    $securityConfig->provider()->id('Rector\Symfony\Tests\CodeQuality\Rector\Closure\StringExtensionToConfigBuilderRector\Source\SomeUserProvider');
+    $securityConfig->firewall()->pattern('^/(_(profiler|wdt)|css|images|js)/')->security(false);
 };
 
 ?>
