@@ -18,6 +18,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'type' => 'pool',
                         'pool' => 'doctrine.result_cache_pool',
                     ],
+                ],
+                'extra' => [
+                    'query_cache_driver' => [
+                        'type' => 'bool',
+                        'pool' => 'enabled',
+                    ],
                 ]
             ]
         ]
@@ -33,8 +39,9 @@ declare(strict_types=1);
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (\Symfony\Config\DoctrineConfig $doctrineConfig) : void {
-    $doctrineConfig->dbal()->defaultConnection('default');
-    $doctrineConfig->dbal()->connection('default')->driver('pdo_pgsql')->host('%database_host%');
+    $doctrineConfig->orm()->defaultEntityManager('default');
+    $doctrineConfig->orm()->entityManager('default')->queryCacheDriver(['type' => 'pool', 'pool' => 'doctrine.system_cache_pool'])->resultCacheDriver(['type' => 'pool', 'pool' => 'doctrine.result_cache_pool']);
+    $doctrineConfig->orm()->entityManager('extra')->queryCacheDriver(['type' => 'bool', 'pool' => 'enabled']);
 };
 
 ?>

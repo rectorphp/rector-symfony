@@ -8,9 +8,18 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\NodeFactory;
+use Rector\Symfony\Utils\StringUtils;
 
 final class NestedConfigCallsFactory
 {
+    /**
+     * @var array<string, string>
+     */
+    private const GROUPING_METHOD_NAME_TO_SPLIT = [
+        'connections' => 'connection',
+        'entity_managers' => 'entityManager',
+    ];
+
     public function __construct(
         private readonly NodeFactory $nodeFactory
     ) {
@@ -29,20 +38,28 @@ final class NestedConfigCallsFactory
         foreach ($values as $value) {
             if (is_array($value)) {
                 // doctrine
-                if ($mainMethodName === 'connections') {
-                    foreach ($value as $connectionName => $connectionConfiguration) {
-                        $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
-                        $connectionMethodCall = new MethodCall($configCaller, 'connection', $connectionArgs);
+                foreach (self::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
+                    if ($mainMethodName === $groupingMethodName) {
+                        foreach ($value as $connectionName => $connectionConfiguration) {
+                            $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
+                            $connectionMethodCall = new MethodCall($configCaller, $splitMethodName, $connectionArgs);
 
-                        foreach ($connectionConfiguration as $configurationMethod => $configurationValue) {
-                            $args = $this->nodeFactory->createArgs([$configurationValue]);
-                            $connectionMethodCall = new MethodCall($connectionMethodCall, $configurationMethod, $args);
+                            foreach ($connectionConfiguration as $configurationMethod => $configurationValue) {
+                                $configurationMethod = StringUtils::underscoreToCamelCase($configurationMethod);
+
+                                $args = $this->nodeFactory->createArgs([$configurationValue]);
+                                $connectionMethodCall = new MethodCall(
+                                    $connectionMethodCall,
+                                    $configurationMethod,
+                                    $args
+                                );
+                            }
+
+                            $methodCallStmts[] = new Expression($connectionMethodCall);
                         }
 
-                        $methodCallStmts[] = new Expression($connectionMethodCall);
+                        continue 2;
                     }
-
-                    continue;
                 }
 
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
