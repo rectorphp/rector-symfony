@@ -9,14 +9,14 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\NotImplementedYetException;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessControlConfigArrayHandler;
+use Rector\Symfony\CodeQuality\NodeFactory\SymfonyClosureFactory;
+use Rector\Symfony\Configs\ConfigArrayHandler\NestedConfigCallsFactory;
 use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessDecisionManagerConfigArrayHandler;
 use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
@@ -49,8 +49,9 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         private readonly SymfonyClosureExtensionMatcher $symfonyClosureExtensionMatcher,
         private readonly PropertyNaming $propertyNaming,
         private readonly ValueResolver $valueResolver,
-        private readonly SecurityAccessControlConfigArrayHandler $securityAccessControlConfigArrayHandler,
-        private readonly SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler
+        private readonly NestedConfigCallsFactory $nestedConfigCallsFactory,
+        private readonly SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler,
+        private readonly SymfonyClosureFactory $symfonyClosureFactory
     ) {
     }
 
@@ -83,14 +84,12 @@ CODE_SAMPLE
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $securityConfig): void {
-    $securityConfig->provider('webservice', [
-        'id' => LoginServiceUserProvider::class,
-    ]);
+    $securityConfig->provider('webservice')
+        ->id(LoginServiceUserProvider::class);
 
-    $securityConfig->firewall('dev', [
-        'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
-        'security' => false,
-    ]);
+    $securityConfig->firewall('dev')
+        ->pattern('^/(_(profiler|wdt)|css|images|js)/')
+        ->security(false);
 };
 CODE_SAMPLE
             ),
@@ -124,22 +123,10 @@ CODE_SAMPLE
             throw new NotImplementedYetException($extensionKeyAndConfiguration->getKey());
         }
 
-        return $this->createConfigClosureStmts($configClass, $node, $extensionKeyAndConfiguration);
-    }
-
-    private function createConfigClosureStmts(
-        string $configClass,
-        Closure $closure,
-        ExtensionKeyAndConfiguration $extensionKeyAndConfiguration
-    ): Closure {
-        $closure->params[0] = $this->createConfigParam($configClass);
-
-        $configuration = $extensionKeyAndConfiguration->getArray();
         $configVariable = $this->createConfigVariable($configClass);
 
-        $closure->stmts = $this->createMethodCallStmts($configuration, $configVariable);
-
-        return $closure;
+        $stmts = $this->createMethodCallStmts($extensionKeyAndConfiguration->getArray(), $configVariable);
+        return $this->symfonyClosureFactory->create($configClass, $node, $stmts);
     }
 
     /**
@@ -159,11 +146,14 @@ CODE_SAMPLE
             } elseif ($key === 'firewalls') {
                 $methodCallName = 'firewall';
                 $splitMany = true;
+            } elseif ($key === SecurityConfigKey::ACCESS_CONTROL) {
+                $splitMany = true;
+                $methodCallName = 'accessControl';
             } else {
-                $methodCallName = $this->createCamelCaseFromUnderscored($key);
+                $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
 
-            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, 'entity'])) {
+            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY])) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
 
                 $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle(
@@ -178,28 +168,15 @@ CODE_SAMPLE
                 }
             }
 
-            if ($key === SecurityConfigKey::ACCESS_CONTROL) {
-                $accessControlMethodCalls = $this->securityAccessControlConfigArrayHandler->handle(
-                    $configurationArray,
-                    $configVariable
-                );
-                if ($accessControlMethodCalls !== []) {
-                    $methodCallStmts = array_merge($methodCallStmts, $accessControlMethodCalls);
-                    continue;
-                }
-
-                continue;
-            }
-
             if ($splitMany) {
                 foreach ($value as $itemName => $itemConfiguration) {
-                    $fluentMethodCall = $this->createNextMethodCall(
+                    $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
                         [$itemName, $itemConfiguration],
                         $configVariable,
                         $methodCallName
                     );
 
-                    $methodCallStmts[] = new Expression($fluentMethodCall);
+                    $methodCallStmts = array_merge($methodCallStmts, $nextMethodCallExpressions);
                 }
             } else {
                 // skip empty values
@@ -207,42 +184,20 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $fluentMethodCall = $this->createNextMethodCall([$value], $configVariable, $methodCallName);
-                $methodCallStmts[] = new Expression($fluentMethodCall);
+                $simpleMethodName = StringUtils::underscoreToCamelCase($key);
+
+                $args = $this->nodeFactory->createArgs([$value]);
+                $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
+                $methodCallStmts[] = new Expression($methodCall);
             }
         }
 
         return $methodCallStmts;
     }
 
-    private function createNextMethodCall(
-        mixed $value,
-        Variable $configVariable,
-        string $methodCallName
-    ): MethodCall {
-        $args = $this->nodeFactory->createArgs($value);
-        return new MethodCall($configVariable, $methodCallName, $args);
-    }
-
     private function createConfigVariable(string $configClass): Variable
     {
         $variableName = $this->propertyNaming->fqnToVariableName($configClass);
         return new Variable($variableName);
-    }
-
-    private function createConfigParam(string $configClass): Param
-    {
-        $configVariable = $this->createConfigVariable($configClass);
-        $fullyQualified = new FullyQualified($configClass);
-
-        return new Param($configVariable, null, $fullyQualified);
-    }
-
-    private function createCamelCaseFromUnderscored(string $value): string
-    {
-        $uppercaseWords = \ucwords($value, '_');
-        $pascalCaseName = \str_replace('_', '', $uppercaseWords);
-
-        return \lcfirst($pascalCaseName);
     }
 }
