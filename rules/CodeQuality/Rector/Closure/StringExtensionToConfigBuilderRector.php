@@ -21,6 +21,7 @@ use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessDecisionManagerConfi
 use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
+use Rector\Symfony\Utils\StringUtils;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -162,10 +163,13 @@ CODE_SAMPLE
                 $methodCallName = $this->createCamelCaseFromUnderscored($key);
             }
 
-            if ($key === SecurityConfigKey::ACCESS_DECISION_MANAGER) {
+            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, 'entity'])) {
+                $mainMethodName = StringUtils::underscoreToCamelCase($key);
+
                 $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle(
                     $configurationArray,
-                    $configVariable
+                    $configVariable,
+                    $mainMethodName
                 );
 
                 if ($accessDecisionManagerMethodCalls !== []) {
