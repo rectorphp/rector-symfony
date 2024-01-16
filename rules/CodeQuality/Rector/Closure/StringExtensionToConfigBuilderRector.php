@@ -191,7 +191,7 @@ CODE_SAMPLE
                     }
 
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
-                        [$itemName, $itemConfiguration],
+                        [$itemConfiguration],
                         $currentConfigCaller,
                         $methodCallName
                     );

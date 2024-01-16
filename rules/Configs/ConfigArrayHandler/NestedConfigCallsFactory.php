@@ -31,8 +31,6 @@ final class NestedConfigCallsFactory
      */
     public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
     {
-        unset($values[0]);
-
         $methodCallStmts = [];
 
         foreach ($values as $value) {
