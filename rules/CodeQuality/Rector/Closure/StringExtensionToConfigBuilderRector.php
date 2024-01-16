@@ -135,8 +135,8 @@ CODE_SAMPLE
             $nested = false;
 
             // doctrine
-            if ($key === 'dbal') {
-                $methodCallName = 'dbal';
+            if (in_array($key, ['dbal', 'orm'], true)) {
+                $methodCallName = $key;
                 $splitMany = true;
                 $nested = true;
             } elseif ($key === 'providers') {
