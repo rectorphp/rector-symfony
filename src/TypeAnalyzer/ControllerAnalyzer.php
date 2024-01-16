@@ -15,10 +15,10 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Reflection\ReflectionResolver;
 
-final class ControllerAnalyzer
+final readonly class ControllerAnalyzer
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver,
+        private ReflectionResolver $reflectionResolver,
     ) {
     }
 

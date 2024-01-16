@@ -12,11 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
 
-final class SymfonyClosureExtensionMatcher
+final readonly class SymfonyClosureExtensionMatcher
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly ValueResolver $valueResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private ValueResolver $valueResolver,
     ) {
     }
 

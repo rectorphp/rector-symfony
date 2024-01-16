@@ -11,12 +11,12 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
 use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndAnnotation;
 
-final class PropertyAnnotationAssertResolver
+final readonly class PropertyAnnotationAssertResolver
 {
     public function __construct(
-        private readonly ValueResolver $valueResolver,
-        private readonly DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory,
-        private readonly StmtMethodCallMatcher $stmtMethodCallMatcher,
+        private ValueResolver $valueResolver,
+        private DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory,
+        private StmtMethodCallMatcher $stmtMethodCallMatcher,
     ) {
     }
 

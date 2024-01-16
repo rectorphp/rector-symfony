@@ -80,7 +80,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $serviceNamesToType,
             &$hasChanged
-        ) {
+        ): ?String_ {
             if (! $node instanceof String_) {
                 return null;
             }

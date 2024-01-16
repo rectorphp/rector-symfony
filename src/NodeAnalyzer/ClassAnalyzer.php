@@ -7,10 +7,10 @@ namespace Rector\Symfony\NodeAnalyzer;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class ClassAnalyzer
+final readonly class ClassAnalyzer
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

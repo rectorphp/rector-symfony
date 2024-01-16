@@ -56,7 +56,7 @@ CODE_SAMPLE
 
         $this->traverseNodesWithCallable(
             $node->getMethods(),
-            function (Node $subNode) use ($node, &$hasChanged) {
+            function (Node $subNode) use ($node, &$hasChanged): ?New_ {
                 if (! $subNode instanceof MethodCall) {
                     return null;
                 }

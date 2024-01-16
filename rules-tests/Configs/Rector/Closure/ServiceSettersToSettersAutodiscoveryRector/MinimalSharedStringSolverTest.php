@@ -11,37 +11,37 @@ use Rector\Symfony\MinimalSharedStringSolver;
 /**
  * Copied from https://github.com/Triun/PHP-Longest-Common-Substring/blob/master/test/suite/SolverTest.php
  */
-class MinimalSharedStringSolverTest extends TestCase
+final class MinimalSharedStringSolverTest extends TestCase
 {
-    protected static MinimalSharedStringSolver $solver;
+    private static MinimalSharedStringSolver $minimalSharedStringSolver;
 
     public static function setUpBeforeClass(): void
     {
-        static::$solver = new MinimalSharedStringSolver();
+        static::$minimalSharedStringSolver = new MinimalSharedStringSolver();
     }
 
     #[DataProvider('twoStringsSymmetricValuesProvider')]
     public function testTwoStringsSymmetric(string $stringLeft, string $stringRight, string $expected): void
     {
-        $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
-        $this->assertSame($expected, static::$solver->solve($stringRight, $stringLeft));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringRight, $stringLeft));
     }
 
     #[DataProvider('twoStringsOrderedValuesProvider')]
     public function testTwoStringsOrdered(string $stringLeft, string $stringRight, string $expected): void
     {
-        $this->assertSame($expected, static::$solver->solve($stringLeft, $stringRight));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
     }
 
     #[DataProvider('threeStringsSymmetricValuesProvider')]
     public function testThreeStringsSymmetric(string $stringA, string $stringB, string $stringC, string $expected): void
     {
-        $this->assertSame($expected, static::$solver->solve($stringA, $stringB, $stringC));
-        $this->assertSame($expected, static::$solver->solve($stringA, $stringC, $stringB));
-        $this->assertSame($expected, static::$solver->solve($stringB, $stringA, $stringC));
-        $this->assertSame($expected, static::$solver->solve($stringB, $stringC, $stringA));
-        $this->assertSame($expected, static::$solver->solve($stringC, $stringA, $stringB));
-        $this->assertSame($expected, static::$solver->solve($stringC, $stringB, $stringA));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringA, $stringB, $stringC));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringA, $stringC, $stringB));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringB, $stringA, $stringC));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringB, $stringC, $stringA));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringC, $stringA, $stringB));
+        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringC, $stringB, $stringA));
     }
 
     /**

@@ -9,11 +9,11 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use Rector\PhpParser\Node\Value\ValueResolver;
 
-final class DoctrineAnnotationKeyToValuesResolver
+final readonly class DoctrineAnnotationKeyToValuesResolver
 {
     public function __construct(
-        private readonly ValueResolver $valueResolver,
-        private readonly StringValueQuoteWrapper $stringValueQuoteWrapper,
+        private ValueResolver $valueResolver,
+        private StringValueQuoteWrapper $stringValueQuoteWrapper,
     ) {
     }
 

@@ -16,7 +16,7 @@ use Rector\Symfony\BundleClassResolver;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
-final class TemplateGuesser
+final readonly class TemplateGuesser
 {
     /**
      * @var string
@@ -49,8 +49,8 @@ final class TemplateGuesser
     private const ACTION_MATCH_REGEX = '#Action$#';
 
     public function __construct(
-        private readonly BundleClassResolver $bundleClassResolver,
-        private readonly NodeNameResolver $nodeNameResolver
+        private BundleClassResolver $bundleClassResolver,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

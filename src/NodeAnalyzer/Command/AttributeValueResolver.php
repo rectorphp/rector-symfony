@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 
-final class AttributeValueResolver
+final readonly class AttributeValueResolver
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver,
+        private NodeNameResolver $nodeNameResolver,
     ) {
     }
 

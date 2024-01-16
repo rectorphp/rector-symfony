@@ -13,11 +13,11 @@ use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\ValueObject\PhpVersionFeature;
 
-final class BareLogoutClassMethodFactory
+final readonly class BareLogoutClassMethodFactory
 {
     public function __construct(
-        private readonly NodeFactory $nodeFactory,
-        private readonly PhpVersionProvider $phpVersionProvider
+        private NodeFactory $nodeFactory,
+        private PhpVersionProvider $phpVersionProvider
     ) {
     }
 

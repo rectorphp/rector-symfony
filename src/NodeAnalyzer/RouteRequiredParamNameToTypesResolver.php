@@ -20,11 +20,11 @@ use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 
-final class RouteRequiredParamNameToTypesResolver
+final readonly class RouteRequiredParamNameToTypesResolver
 {
     public function __construct(
-        private readonly AttrinationFinder $attrinationFinder,
-        private readonly NodeNameResolver $nodeNameResolver,
+        private AttrinationFinder $attrinationFinder,
+        private NodeNameResolver $nodeNameResolver,
     ) {
     }
 

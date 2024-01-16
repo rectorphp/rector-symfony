@@ -9,11 +9,11 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 
-final class FormCollectionAnalyzer
+final readonly class FormCollectionAnalyzer
 {
     public function __construct(
-        private readonly ValueResolver $valueResolver,
-        private readonly NodeNameResolver $nodeNameResolver
+        private ValueResolver $valueResolver,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

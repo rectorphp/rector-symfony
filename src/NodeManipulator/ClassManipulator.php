@@ -7,10 +7,10 @@ namespace Rector\Symfony\NodeManipulator;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class ClassManipulator
+final readonly class ClassManipulator
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

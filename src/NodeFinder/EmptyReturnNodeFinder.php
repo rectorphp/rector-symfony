@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
-final class EmptyReturnNodeFinder
+final readonly class EmptyReturnNodeFinder
 {
     public function __construct(
-        private readonly BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 

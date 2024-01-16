@@ -13,11 +13,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\PhpParser\Node\NodeFactory;
 use ReflectionMethod;
 
-final class CreateFormTypeOptionsArgMover
+final readonly class CreateFormTypeOptionsArgMover
 {
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-        private readonly NodeFactory $nodeFactory,
+        private ReflectionProvider $reflectionProvider,
+        private NodeFactory $nodeFactory,
     ) {
     }
 

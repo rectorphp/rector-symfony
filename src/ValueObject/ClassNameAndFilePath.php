@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObject;
 
-class ClassNameAndFilePath
+final readonly class ClassNameAndFilePath
 {
     public function __construct(
-        private readonly string $className,
-        private readonly string $filePath,
+        private string $className,
+        private string $filePath,
     ) {
     }
 

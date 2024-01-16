@@ -14,11 +14,11 @@ use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 
-final class ServiceTypeMethodCallResolver
+final readonly class ServiceTypeMethodCallResolver
 {
     public function __construct(
-        private readonly ServiceMapProvider $serviceMapProvider,
-        private readonly NodeNameResolver $nodeNameResolver
+        private ServiceMapProvider $serviceMapProvider,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

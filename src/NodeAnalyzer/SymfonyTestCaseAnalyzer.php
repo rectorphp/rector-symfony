@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Reflection\ReflectionResolver;
 
-final class SymfonyTestCaseAnalyzer
+final readonly class SymfonyTestCaseAnalyzer
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 

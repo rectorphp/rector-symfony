@@ -8,13 +8,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 
-final class ServiceMap
+final readonly class ServiceMap
 {
     /**
      * @param ServiceDefinition[] $services
      */
     public function __construct(
-        private readonly array $services
+        private array $services
     ) {
     }
 

@@ -12,10 +12,10 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\NodeFactory;
 
-final class LiteralCallLikeConstFetchReplacer
+final readonly class LiteralCallLikeConstFetchReplacer
 {
     public function __construct(
-        private readonly NodeFactory $nodeFactory
+        private NodeFactory $nodeFactory
     ) {
     }
 

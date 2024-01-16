@@ -6,18 +6,18 @@ namespace Rector\Symfony\ValueObject;
 
 use Rector\Symfony\Contract\Tag\TagInterface;
 
-final class ServiceDefinition
+final readonly class ServiceDefinition
 {
     /**
      * @param TagInterface[] $tags
      */
     public function __construct(
-        private readonly string $id,
-        private readonly ?string $class,
-        private readonly bool $isPublic,
-        private readonly bool $isSynthetic,
-        private readonly ?string $alias,
-        private readonly array $tags
+        private string $id,
+        private ?string $class,
+        private bool $isPublic,
+        private bool $isSynthetic,
+        private ?string $alias,
+        private array $tags
     ) {
     }
 

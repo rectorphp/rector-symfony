@@ -93,7 +93,9 @@ CODE_SAMPLE
 
         $propertyMetadatas = [];
 
-        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use (
+            &$propertyMetadatas
+        ): null|PropertyFetch|MethodCall {
             if (! $node instanceof MethodCall) {
                 return null;
             }

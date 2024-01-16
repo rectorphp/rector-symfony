@@ -11,10 +11,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeManipulator\FuncCallManipulator;
 
-final class ArrayFromCompactFactory
+final readonly class ArrayFromCompactFactory
 {
     public function __construct(
-        private readonly FuncCallManipulator $funcCallManipulator
+        private FuncCallManipulator $funcCallManipulator
     ) {
     }
 
