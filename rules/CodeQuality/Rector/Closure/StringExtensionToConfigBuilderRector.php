@@ -17,6 +17,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessControlConfigArrayHandler;
+use Rector\Symfony\Configs\ConfigArrayHandler\SecurityAccessDecisionManagerConfigArrayHandler;
 use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\NodeAnalyzer\SymfonyClosureExtensionMatcher;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
@@ -48,6 +49,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         private readonly PropertyNaming $propertyNaming,
         private readonly ValueResolver $valueResolver,
         private readonly SecurityAccessControlConfigArrayHandler $securityAccessControlConfigArrayHandler,
+        private readonly SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler
     ) {
     }
 
@@ -158,6 +160,18 @@ CODE_SAMPLE
                 $splitMany = true;
             } else {
                 $methodCallName = $this->createCamelCaseFromUnderscored($key);
+            }
+
+            if ($key === SecurityConfigKey::ACCESS_DECISION_MANAGER) {
+                $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle(
+                    $configurationArray,
+                    $configVariable
+                );
+
+                if ($accessDecisionManagerMethodCalls !== []) {
+                    $methodCallStmts = array_merge($methodCallStmts, $accessDecisionManagerMethodCalls);
+                    continue;
+                }
             }
 
             if ($key === SecurityConfigKey::ACCESS_CONTROL) {

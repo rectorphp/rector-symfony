@@ -10,4 +10,9 @@ final class SecurityConfigKey
      * @var string
      */
     public const ACCESS_CONTROL = 'access_control';
+
+    /**
+     * @var string
+     */
+    public const ACCESS_DECISION_MANAGER = 'access_decision_manager';
 }
