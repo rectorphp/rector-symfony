@@ -159,6 +159,9 @@ CODE_SAMPLE
             } elseif ($key === 'firewalls') {
                 $methodCallName = 'firewall';
                 $splitMany = true;
+            } elseif ($key === SecurityConfigKey::ACCESS_CONTROL) {
+                $splitMany = true;
+                $methodCallName = 'accessControl';
             } else {
                 $methodCallName = $this->createCamelCaseFromUnderscored($key);
             }
@@ -178,18 +181,18 @@ CODE_SAMPLE
                 }
             }
 
-            if ($key === SecurityConfigKey::ACCESS_CONTROL) {
-                $accessControlMethodCalls = $this->securityAccessControlConfigArrayHandler->handle(
-                    $configurationArray,
-                    $configVariable
-                );
-                if ($accessControlMethodCalls !== []) {
-                    $methodCallStmts = array_merge($methodCallStmts, $accessControlMethodCalls);
-                    continue;
-                }
-
-                continue;
-            }
+            //            if ($key === SecurityConfigKey::ACCESS_CONTROL) {
+            //                $accessControlMethodCalls = $this->securityAccessControlConfigArrayHandler->handle(
+            //                    $configurationArray,
+            //                    $configVariable
+            //                );
+            //                if ($accessControlMethodCalls !== []) {
+            //                    $methodCallStmts = array_merge($methodCallStmts, $accessControlMethodCalls);
+            //                    continue;
+            //                }
+            //
+            //                continue;
+            //            }
 
             if ($splitMany) {
                 foreach ($value as $itemName => $itemConfiguration) {
