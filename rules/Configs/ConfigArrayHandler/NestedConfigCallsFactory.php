@@ -20,7 +20,7 @@ final class NestedConfigCallsFactory
      * @param mixed[] $values
      * @return array<Expression<MethodCall>>
      */
-    public function create(array $values, Variable $configVariable, string $mainMethodName): array
+    public function create(array $values, Variable|MethodCall $configVariable, string $mainMethodName): array
     {
         unset($values[0]);
 
@@ -30,16 +30,18 @@ final class NestedConfigCallsFactory
             // build accessControl() method call here
             $accessControlMethodCall = new MethodCall($configVariable, $mainMethodName);
 
-            foreach ($value as $methodName => $parameters) {
-                // method correction
-                if ($methodName === 'role') {
-                    $methodName = 'roles';
-                    $parameters = [$parameters];
+            if (is_array($value)) {
+                foreach ($value as $methodName => $parameters) {
+                    // method correction
+                    if ($methodName === 'role') {
+                        $methodName = 'roles';
+                        $parameters = [$parameters];
+                    }
+
+                    $args = $this->nodeFactory->createArgs([$parameters]);
+
+                    $accessControlMethodCall = new MethodCall($accessControlMethodCall, $methodName, $args);
                 }
-
-                $args = $this->nodeFactory->createArgs([$parameters]);
-
-                $accessControlMethodCall = new MethodCall($accessControlMethodCall, $methodName, $args);
             }
 
             $methodCallStmts[] = new Expression($accessControlMethodCall);
