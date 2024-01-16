@@ -20,7 +20,7 @@ final class NestedConfigCallsFactory
      * @param mixed[] $values
      * @return array<Expression<MethodCall>>
      */
-    public function create(array $values, Variable|MethodCall $configVariable, string $mainMethodName): array
+    public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
     {
         unset($values[0]);
 
@@ -32,7 +32,7 @@ final class NestedConfigCallsFactory
                 if ($mainMethodName === 'connections') {
                     foreach ($value as $connectionName => $connectionConfiguration) {
                         $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
-                        $connectionMethodCall = new MethodCall($configVariable, 'connection', $connectionArgs);
+                        $connectionMethodCall = new MethodCall($configCaller, 'connection', $connectionArgs);
 
                         foreach ($connectionConfiguration as $configurationMethod => $configurationValue) {
                             $args = $this->nodeFactory->createArgs([$configurationValue]);
@@ -45,7 +45,7 @@ final class NestedConfigCallsFactory
                     continue;
                 }
 
-                $mainMethodCall = new MethodCall($configVariable, $mainMethodName);
+                $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
 
                 foreach ($value as $methodName => $parameters) {
                     // security
@@ -58,9 +58,9 @@ final class NestedConfigCallsFactory
 
                     $mainMethodCall = new MethodCall($mainMethodCall, $methodName, $args);
                 }
-            }
 
-            $methodCallStmts[] = new Expression($mainMethodCall);
+                $methodCallStmts[] = new Expression($mainMethodCall);
+            }
         }
 
         return $methodCallStmts;
