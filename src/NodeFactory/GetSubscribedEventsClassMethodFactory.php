@@ -30,7 +30,7 @@ use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\ValueObject\PhpVersionFeature;
 
-final class GetSubscribedEventsClassMethodFactory
+final readonly class GetSubscribedEventsClassMethodFactory
 {
     /**
      * @var string
@@ -38,12 +38,12 @@ final class GetSubscribedEventsClassMethodFactory
     private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
 
     public function __construct(
-        private readonly NodeFactory $nodeFactory,
-        private readonly VisibilityManipulator $visibilityManipulator,
-        private readonly PhpVersionProvider $phpVersionProvider,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly EventReferenceFactory $eventReferenceFactory
+        private NodeFactory $nodeFactory,
+        private VisibilityManipulator $visibilityManipulator,
+        private PhpVersionProvider $phpVersionProvider,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private EventReferenceFactory $eventReferenceFactory
     ) {
     }
 

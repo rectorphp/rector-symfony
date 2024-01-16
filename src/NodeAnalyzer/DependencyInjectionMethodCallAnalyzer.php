@@ -14,14 +14,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
-final class DependencyInjectionMethodCallAnalyzer
+final readonly class DependencyInjectionMethodCallAnalyzer
 {
     public function __construct(
-        private readonly PropertyNaming $propertyNaming,
-        private readonly ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
-        private readonly PromotedPropertyResolver $promotedPropertyResolver,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly PropertyManipulator $propertyManipulator
+        private PropertyNaming $propertyNaming,
+        private ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
+        private PromotedPropertyResolver $promotedPropertyResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private PropertyManipulator $propertyManipulator
     ) {
     }
 

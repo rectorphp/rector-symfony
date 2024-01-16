@@ -17,14 +17,14 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 
-final class SetAliasesMethodCallExtractor
+final readonly class SetAliasesMethodCallExtractor
 {
     public function __construct(
-        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly AttributeValueResolver $attributeValueResolver,
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private AttributeValueResolver $attributeValueResolver,
     ) {
     }
 

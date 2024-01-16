@@ -16,13 +16,13 @@ use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
 use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 use ReflectionMethod;
 
-final class FormInstanceToFormClassConstFetchConverter
+final readonly class FormInstanceToFormClassConstFetchConverter
 {
     public function __construct(
-        private readonly CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover,
-        private readonly NodeFactory $nodeFactory,
-        private readonly FormTypeClassResolver $formTypeClassResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver,
+        private CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover,
+        private NodeFactory $nodeFactory,
+        private FormTypeClassResolver $formTypeClassResolver,
+        private NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

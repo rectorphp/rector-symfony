@@ -17,13 +17,13 @@ use Rector\Php\PhpVersionProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\ValueObject\PhpVersionFeature;
 
-final class ReturnTypeDeclarationUpdater
+final readonly class ReturnTypeDeclarationUpdater
 {
     public function __construct(
-        private readonly PhpVersionProvider $phpVersionProvider,
-        private readonly StaticTypeMapper $staticTypeMapper,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly DocBlockUpdater $docBlockUpdater,
+        private PhpVersionProvider $phpVersionProvider,
+        private StaticTypeMapper $staticTypeMapper,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private DocBlockUpdater $docBlockUpdater,
     ) {
     }
 

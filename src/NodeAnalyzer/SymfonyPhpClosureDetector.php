@@ -13,12 +13,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
-final class SymfonyPhpClosureDetector
+final readonly class SymfonyPhpClosureDetector
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
     ) {
     }
 
@@ -46,7 +46,7 @@ final class SymfonyPhpClosureDetector
         // has defaults autoconfigure?
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure, function (Node $node) use (
             &$hasDefaultsAutoconfigure
-        ) {
+        ): ?int {
             if (! $node instanceof MethodCall) {
                 return null;
             }

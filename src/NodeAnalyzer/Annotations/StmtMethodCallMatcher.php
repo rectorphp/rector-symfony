@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class StmtMethodCallMatcher
+final readonly class StmtMethodCallMatcher
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 

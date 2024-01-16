@@ -7,7 +7,6 @@ use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallRet
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -53,11 +52,12 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
+        LevelSetList::UP_TO_PHP_82,
         \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
+        SetList::TYPE_DECLARATION,
+        SetList::PRIVATIZATION,
         SetList::NAMING,
-        SymfonySetList::SYMFONY_60,
     ]);
 };

@@ -6,12 +6,12 @@ namespace Rector\Symfony\ValueObject\Tag;
 
 use Rector\Symfony\Contract\Tag\TagInterface;
 
-final class EventListenerTag implements TagInterface
+final readonly class EventListenerTag implements TagInterface
 {
     public function __construct(
-        private readonly string $event,
-        private readonly string $method,
-        private readonly int $priority
+        private string $event,
+        private string $method,
+        private int $priority
     ) {
     }
 

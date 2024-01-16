@@ -11,10 +11,10 @@ use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class DoctrineAnnotationFromNewFactory
+final readonly class DoctrineAnnotationFromNewFactory
 {
     public function __construct(
-        private readonly DoctrineAnnotationKeyToValuesResolver $doctrineAnnotationKeyToValuesResolver
+        private DoctrineAnnotationKeyToValuesResolver $doctrineAnnotationKeyToValuesResolver
     ) {
     }
 

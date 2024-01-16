@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 
-final class ControllerMethodAnalyzer
+final readonly class ControllerMethodAnalyzer
 {
     public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer
+        private ControllerAnalyzer $controllerAnalyzer
     ) {
     }
 

@@ -11,11 +11,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 
-final class EventReferenceFactory
+final readonly class EventReferenceFactory
 {
     public function __construct(
-        private readonly NodeFactory $nodeFactory,
-        private readonly ReflectionProvider $reflectionProvider
+        private NodeFactory $nodeFactory,
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 

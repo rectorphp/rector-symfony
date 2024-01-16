@@ -11,11 +11,11 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Exception\NotImplementedYetException;
 use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
 
-final class ClassAnnotationAssertResolver
+final readonly class ClassAnnotationAssertResolver
 {
     public function __construct(
-        private readonly StmtMethodCallMatcher $stmtMethodCallMatcher,
-        private readonly DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory,
+        private StmtMethodCallMatcher $stmtMethodCallMatcher,
+        private DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory,
     ) {
     }
 

@@ -10,11 +10,11 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class FormTypeClassResolver
+final readonly class FormTypeClassResolver
 {
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

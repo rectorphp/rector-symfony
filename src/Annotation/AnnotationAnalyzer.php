@@ -11,10 +11,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 
-final class AnnotationAnalyzer
+final readonly class AnnotationAnalyzer
 {
     public function __construct(
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
 

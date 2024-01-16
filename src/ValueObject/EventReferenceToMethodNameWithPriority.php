@@ -7,12 +7,12 @@ namespace Rector\Symfony\ValueObject;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 
-final class EventReferenceToMethodNameWithPriority implements EventReferenceToMethodNameInterface
+final readonly class EventReferenceToMethodNameWithPriority implements EventReferenceToMethodNameInterface
 {
     public function __construct(
-        private readonly ClassConstFetch $classConstFetch,
-        private readonly string $methodName,
-        private readonly int $priority
+        private ClassConstFetch $classConstFetch,
+        private string $methodName,
+        private int $priority
     ) {
     }
 

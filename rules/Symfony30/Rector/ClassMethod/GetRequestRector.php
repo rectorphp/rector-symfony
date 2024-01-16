@@ -234,7 +234,9 @@ CODE_SAMPLE
             $this->getRequestVariableAndParamName()
         ), null, $fullyQualified);
 
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($classMethod) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $classMethod
+        ): ?Variable {
             if (! $node instanceof MethodCall) {
                 return null;
             }

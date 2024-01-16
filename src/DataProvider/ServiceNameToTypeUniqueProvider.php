@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\DataProvider;
 
-final class ServiceNameToTypeUniqueProvider
+final readonly class ServiceNameToTypeUniqueProvider
 {
     public function __construct(
-        private readonly ServiceMapProvider $serviceMapProvider
+        private ServiceMapProvider $serviceMapProvider
     ) {
     }
 

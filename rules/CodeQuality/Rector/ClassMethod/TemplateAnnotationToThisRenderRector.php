@@ -156,7 +156,7 @@ CODE_SAMPLE
             $templateDoctrineAnnotationTagValueNode,
             $hasThisRenderOrReturnsResponse,
             $classMethod
-        ) {
+        ): ?int {
             // keep as similar type
             if ($node instanceof Closure || $node instanceof Function_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

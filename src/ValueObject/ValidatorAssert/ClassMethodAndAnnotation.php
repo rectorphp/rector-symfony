@@ -6,14 +6,14 @@ namespace Rector\Symfony\ValueObject\ValidatorAssert;
 
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 
-final class ClassMethodAndAnnotation
+final readonly class ClassMethodAndAnnotation
 {
     /**
      * @param string[] $possibleMethodNames
      */
     public function __construct(
-        private readonly array $possibleMethodNames,
-        private readonly DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+        private array $possibleMethodNames,
+        private DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ) {
     }
 

@@ -13,13 +13,13 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\RectorParser;
 
-final class BundleClassResolver
+final readonly class BundleClassResolver
 {
     public function __construct(
-        private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly RectorParser $rectorParser,
-        private readonly ReflectionProvider $reflectionProvider
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver,
+        private RectorParser $rectorParser,
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 

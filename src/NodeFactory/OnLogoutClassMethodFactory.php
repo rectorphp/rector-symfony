@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
-final class OnLogoutClassMethodFactory
+final readonly class OnLogoutClassMethodFactory
 {
     /**
      * @var array<string, string>
@@ -26,9 +26,9 @@ final class OnLogoutClassMethodFactory
     ];
 
     public function __construct(
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
-        private readonly ParamAnalyzer $paramAnalyzer
+        private NodeNameResolver $nodeNameResolver,
+        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 

@@ -8,10 +8,10 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 
-final class StringValueQuoteWrapper
+final readonly class StringValueQuoteWrapper
 {
     public function __construct(
-        private readonly ArrayParser $arrayParser
+        private ArrayParser $arrayParser
     ) {
     }
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObject;
 
-final class SymfonyRouteMetadata
+final readonly class SymfonyRouteMetadata
 {
     /**
      * Format <class>::<method>
      */
-    private readonly ?string $controllerReference;
+    private ?string $controllerReference;
 
     /**
      * @param array<string, mixed> $defaults
@@ -19,15 +19,15 @@ final class SymfonyRouteMetadata
      * @param array<string, mixed> $options
      */
     public function __construct(
-        private readonly string $name,
-        private readonly string $path,
-        private readonly array $defaults,
-        private readonly array $requirements,
-        private readonly string $host,
-        private readonly array $schemes,
-        private readonly array $methods,
-        private readonly string $condition,
-        private readonly array $options,
+        private string $name,
+        private string $path,
+        private array $defaults,
+        private array $requirements,
+        private string $host,
+        private array $schemes,
+        private array $methods,
+        private string $condition,
+        private array $options,
     ) {
         $this->controllerReference = $defaults['_controller'] ?? null;
     }

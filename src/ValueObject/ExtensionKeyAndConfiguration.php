@@ -6,11 +6,11 @@ namespace Rector\Symfony\ValueObject;
 
 use PhpParser\Node\Expr\Array_;
 
-final class ExtensionKeyAndConfiguration
+final readonly class ExtensionKeyAndConfiguration
 {
     public function __construct(
-        private readonly string $key,
-        private readonly Array_ $array,
+        private string $key,
+        private Array_ $array,
     ) {
     }
 

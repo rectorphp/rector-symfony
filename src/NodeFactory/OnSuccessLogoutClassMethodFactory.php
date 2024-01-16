@@ -19,7 +19,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\NodeFactory;
 
-final class OnSuccessLogoutClassMethodFactory
+final readonly class OnSuccessLogoutClassMethodFactory
 {
     /**
      * @var string
@@ -27,10 +27,10 @@ final class OnSuccessLogoutClassMethodFactory
     private const LOGOUT_EVENT = 'logoutEvent';
 
     public function __construct(
-        private readonly NodeFactory $nodeFactory,
-        private readonly NodeNameResolver $nodeNameResolver,
-        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
+        private NodeFactory $nodeFactory,
+        private NodeNameResolver $nodeNameResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private BareLogoutClassMethodFactory $bareLogoutClassMethodFactory
     ) {
     }
 
@@ -74,20 +74,23 @@ final class OnSuccessLogoutClassMethodFactory
 
     private function replaceRequestWithGetRequest(ClassMethod $classMethod): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) {
-            if ($node instanceof Param) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            $classMethod,
+            function (Node $node): int|null|MethodCall {
+                if ($node instanceof Param) {
+                    return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
 
-            if (! $node instanceof Variable) {
-                return null;
-            }
+                if (! $node instanceof Variable) {
+                    return null;
+                }
 
-            if (! $this->nodeNameResolver->isName($node, 'request')) {
-                return null;
-            }
+                if (! $this->nodeNameResolver->isName($node, 'request')) {
+                    return null;
+                }
 
-            return new MethodCall(new Variable(self::LOGOUT_EVENT), 'getRequest');
-        });
+                return new MethodCall(new Variable(self::LOGOUT_EVENT), 'getRequest');
+            }
+        );
     }
 }

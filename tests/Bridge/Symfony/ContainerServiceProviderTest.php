@@ -13,7 +13,7 @@ use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service1;
 use Rector\Symfony\Tests\Bridge\Symfony\Fixture\Service2;
 use Webmozart\Assert\InvalidArgumentException;
 
-class ContainerServiceProviderTest extends TestCase
+final class ContainerServiceProviderTest extends TestCase
 {
     public function testProvideByName(): void
     {
@@ -50,7 +50,7 @@ class ContainerServiceProviderTest extends TestCase
         $containerServiceProvider->provideByName('service1');
     }
 
-    protected function createContainerServiceProvider(
+    private function createContainerServiceProvider(
         ?string $symfonyContainerPhpFilePath = __DIR__ . '/Fixture/symfony-container.php'
     ): ContainerServiceProvider {
         SimpleParameterProvider::setParameter(

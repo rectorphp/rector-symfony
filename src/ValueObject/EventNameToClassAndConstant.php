@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObject;
 
-final class EventNameToClassAndConstant
+final readonly class EventNameToClassAndConstant
 {
     public function __construct(
-        private readonly string $eventName,
-        private readonly string $eventClass,
-        private readonly string $eventConstant
+        private string $eventName,
+        private string $eventClass,
+        private string $eventConstant
     ) {
     }
 
