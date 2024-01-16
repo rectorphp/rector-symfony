@@ -169,7 +169,9 @@ CODE_SAMPLE
 
             if ($splitMany) {
                 if ($nested) {
-                    $configVariable = new MethodCall($configVariable, $methodCallName);
+                    $currentConfigCaller = new MethodCall($configVariable, $methodCallName);
+                } else {
+                    $currentConfigCaller = $configVariable;
                 }
 
                 foreach ($value as $itemName => $itemConfiguration) {
@@ -183,14 +185,14 @@ CODE_SAMPLE
 
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
 
-                        $methodCall = new MethodCall($configVariable, $itemName, $args);
+                        $methodCall = new MethodCall($currentConfigCaller, $itemName, $args);
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
                     }
 
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
                         [$itemName, $itemConfiguration],
-                        $configVariable,
+                        $currentConfigCaller,
                         $methodCallName
                     );
 
