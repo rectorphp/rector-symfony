@@ -20,19 +20,35 @@ final class NestedConfigCallsFactory
      * @param mixed[] $values
      * @return array<Expression<MethodCall>>
      */
-    public function create(array $values, Variable|MethodCall $configVariable, string $mainMethodName): array
+    public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
     {
         unset($values[0]);
 
         $methodCallStmts = [];
 
         foreach ($values as $value) {
-            // build accessControl() method call here
-            $accessControlMethodCall = new MethodCall($configVariable, $mainMethodName);
-
             if (is_array($value)) {
+                // doctrine
+                if ($mainMethodName === 'connections') {
+                    foreach ($value as $connectionName => $connectionConfiguration) {
+                        $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
+                        $connectionMethodCall = new MethodCall($configCaller, 'connection', $connectionArgs);
+
+                        foreach ($connectionConfiguration as $configurationMethod => $configurationValue) {
+                            $args = $this->nodeFactory->createArgs([$configurationValue]);
+                            $connectionMethodCall = new MethodCall($connectionMethodCall, $configurationMethod, $args);
+                        }
+
+                        $methodCallStmts[] = new Expression($connectionMethodCall);
+                    }
+
+                    continue;
+                }
+
+                $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
+
                 foreach ($value as $methodName => $parameters) {
-                    // method correction
+                    // security
                     if ($methodName === 'role') {
                         $methodName = 'roles';
                         $parameters = [$parameters];
@@ -40,11 +56,11 @@ final class NestedConfigCallsFactory
 
                     $args = $this->nodeFactory->createArgs([$parameters]);
 
-                    $accessControlMethodCall = new MethodCall($accessControlMethodCall, $methodName, $args);
+                    $mainMethodCall = new MethodCall($mainMethodCall, $methodName, $args);
                 }
-            }
 
-            $methodCallStmts[] = new Expression($accessControlMethodCall);
+                $methodCallStmts[] = new Expression($mainMethodCall);
+            }
         }
 
         return $methodCallStmts;
