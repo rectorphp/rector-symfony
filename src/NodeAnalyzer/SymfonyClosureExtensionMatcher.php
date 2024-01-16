@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\ValueObject\ExtensionKeyAndConfiguration;
@@ -22,6 +23,21 @@ final readonly class SymfonyClosureExtensionMatcher
 
     public function match(Closure $closure): ?ExtensionKeyAndConfiguration
     {
+        if (count($closure->stmts) > 1) {
+            $extensionNames = $this->resolveExtensionNames($closure);
+            if (count($extensionNames) > 2) {
+                return null;
+            }
+
+            // warn use early about it, to avoid silent skip
+            $errorMessage = sprintf(
+                'Split extensions "%s" to multiple separated files first',
+                implode('", "', $extensionNames)
+            );
+
+            throw new ShouldNotHappenException($errorMessage);
+        }
+
         // must be exactly single line
         if (count($closure->stmts) !== 1) {
             return null;
@@ -37,14 +53,13 @@ final readonly class SymfonyClosureExtensionMatcher
         }
 
         $methodCall = $onlyStmt->expr;
-        if (! $this->nodeNameResolver->isName($methodCall->name, 'extension')) {
-            return null;
-        }
 
         $args = $methodCall->getArgs();
+        $extensionKey = $this->matchExtensionName($methodCall);
 
-        $firstArg = $args[0];
-        $extensionKey = $this->valueResolver->getValue($firstArg->value);
+        if (! is_string($extensionKey)) {
+            return null;
+        }
 
         $secondArg = $args[1];
         if (! $secondArg->value instanceof Array_) {
@@ -52,5 +67,45 @@ final readonly class SymfonyClosureExtensionMatcher
         }
 
         return new ExtensionKeyAndConfiguration($extensionKey, $secondArg->value);
+    }
+
+    private function matchExtensionName(MethodCall $methodCall): ?string
+    {
+        if (! $this->nodeNameResolver->isName($methodCall->name, 'extension')) {
+            return null;
+        }
+
+        $args = $methodCall->getArgs();
+
+        $firstArg = $args[0];
+        return $this->valueResolver->getValue($firstArg->value);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveExtensionNames(Closure $closure): array
+    {
+        $extensionNames = [];
+
+        foreach ($closure->stmts as $stmt) {
+            if (! $stmt instanceof Expression) {
+                continue;
+            }
+
+            $expr = $stmt->expr;
+            if (! $expr instanceof MethodCall) {
+                continue;
+            }
+
+            $extensionName = $this->matchExtensionName($expr);
+            if (! is_string($extensionName)) {
+                continue;
+            }
+
+            $extensionNames[] = $extensionName;
+        }
+
+        return $extensionNames;
     }
 }
