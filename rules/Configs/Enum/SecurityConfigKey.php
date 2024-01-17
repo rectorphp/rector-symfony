@@ -20,4 +20,34 @@ final class SecurityConfigKey
      * @var string
      */
     public const ENTITY = 'entity';
+
+    /**
+     * @var string
+     */
+    public const ROLE = 'role';
+
+    /**
+     * @var string
+     */
+    public const ROLES = 'roles';
+
+    /**
+     * @var string
+     */
+    public const FIREWALLS = 'firewalls';
+
+    /**
+     * @var string
+     */
+    public const FIREWALL = 'firewall';
+
+    /**
+     * @var string
+     */
+    public const PROVIDERS = 'providers';
+
+    /**
+     * @var string
+     */
+    public const PROVIDER = 'provider';
 }

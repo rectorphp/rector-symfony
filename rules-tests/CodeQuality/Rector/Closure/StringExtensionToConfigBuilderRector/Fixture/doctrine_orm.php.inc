@@ -15,8 +15,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'pool' => 'doctrine.system_cache_pool',
                     ],
                     'result_cache_driver' => [
-                        'type' => 'pool',
-                        'pool' => 'doctrine.result_cache_pool',
+                        'type' => 'pool2',
+                        'pool' => 'doctrine.result_cache_pool2',
                     ],
                 ],
                 'extra' => [
@@ -40,8 +40,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (\Symfony\Config\DoctrineConfig $doctrineConfig) : void {
     $doctrineConfig->orm()->defaultEntityManager('default');
-    $doctrineConfig->orm()->entityManager('default')->queryCacheDriver(['type' => 'pool', 'pool' => 'doctrine.system_cache_pool'])->resultCacheDriver(['type' => 'pool', 'pool' => 'doctrine.result_cache_pool']);
-    $doctrineConfig->orm()->entityManager('extra')->queryCacheDriver(['type' => 'bool', 'pool' => 'enabled']);
+    $doctrineConfig->orm()->entityManager('default')->queryCacheDriver()->type('pool')->pool('doctrine.system_cache_pool')->resultCacheDriver()->type('pool2')->pool('doctrine.result_cache_pool2');
+    $doctrineConfig->orm()->entityManager('extra')->queryCacheDriver()->type('bool')->pool('enabled');
 };
 
 ?>

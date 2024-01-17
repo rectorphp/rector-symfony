@@ -8,18 +8,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\NodeFactory;
+use Rector\Symfony\Configs\Enum\GroupingMethods;
+use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\Utils\StringUtils;
+use Webmozart\Assert\Assert;
 
 final class NestedConfigCallsFactory
 {
-    /**
-     * @var array<string, string>
-     */
-    private const GROUPING_METHOD_NAME_TO_SPLIT = [
-        'connections' => 'connection',
-        'entity_managers' => 'entityManager',
-    ];
-
     public function __construct(
         private readonly NodeFactory $nodeFactory
     ) {
@@ -31,29 +26,23 @@ final class NestedConfigCallsFactory
      */
     public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
     {
-        unset($values[0]);
-
         $methodCallStmts = [];
 
         foreach ($values as $value) {
             if (is_array($value)) {
                 // doctrine
-                foreach (self::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
+                foreach (GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
                     if ($mainMethodName === $groupingMethodName) {
+                        // @possibly here
                         foreach ($value as $connectionName => $connectionConfiguration) {
                             $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
+
                             $connectionMethodCall = new MethodCall($configCaller, $splitMethodName, $connectionArgs);
 
-                            foreach ($connectionConfiguration as $configurationMethod => $configurationValue) {
-                                $configurationMethod = StringUtils::underscoreToCamelCase($configurationMethod);
-
-                                $args = $this->nodeFactory->createArgs([$configurationValue]);
-                                $connectionMethodCall = new MethodCall(
-                                    $connectionMethodCall,
-                                    $configurationMethod,
-                                    $args
-                                );
-                            }
+                            $connectionMethodCall = $this->createMainMethodCall(
+                                $connectionConfiguration,
+                                $connectionMethodCall
+                            );
 
                             $methodCallStmts[] = new Expression($connectionMethodCall);
                         }
@@ -63,23 +52,53 @@ final class NestedConfigCallsFactory
                 }
 
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
-
-                foreach ($value as $methodName => $parameters) {
-                    // security
-                    if ($methodName === 'role') {
-                        $methodName = 'roles';
-                        $parameters = [$parameters];
-                    }
-
-                    $args = $this->nodeFactory->createArgs([$parameters]);
-
-                    $mainMethodCall = new MethodCall($mainMethodCall, $methodName, $args);
-                }
+                $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
 
                 $methodCallStmts[] = new Expression($mainMethodCall);
             }
         }
 
         return $methodCallStmts;
+    }
+
+    /**
+     * @param array<mixed, mixed> $value
+     */
+    private function createMainMethodCall(array $value, MethodCall $mainMethodCall): MethodCall
+    {
+        foreach ($value as $methodName => $parameters) {
+            // security
+            if ($methodName === SecurityConfigKey::ROLE) {
+                $methodName = SecurityConfigKey::ROLES;
+                $parameters = [$parameters];
+            } else {
+                Assert::string($methodName);
+                $methodName = StringUtils::underscoreToCamelCase($methodName);
+            }
+
+            if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
+                $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
+
+                $itemName = array_key_first($parameters);
+                $args = $this->nodeFactory->createArgs([$itemName]);
+                $parameters = $parameters[$itemName];
+
+                $mainMethodCall = new MethodCall($mainMethodCall, $splitMethodName, $args);
+                return $this->createMainMethodCall($parameters, $mainMethodCall);
+            }
+
+            // traverse nested arrays with recursion call
+            if (is_array($parameters) && ! array_is_list($parameters)) {
+                $mainMethodCall = new MethodCall($mainMethodCall, $methodName);
+                $mainMethodCall = $this->createMainMethodCall($parameters, $mainMethodCall);
+
+                continue;
+            }
+
+            $args = $this->nodeFactory->createArgs([$parameters]);
+            $mainMethodCall = new MethodCall($mainMethodCall, $methodName, $args);
+        }
+
+        return $mainMethodCall;
     }
 }
