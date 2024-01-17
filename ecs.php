@@ -9,5 +9,5 @@ return ECSConfig::configure()
         [__DIR__ . '/src', __DIR__ . '/rules', __DIR__ . '/rules-tests', __DIR__ . '/tests', __DIR__ . '/config']
     )
     ->withRootFiles()
-    ->withPreparedSets(psr12: true, symplify: true, common: true)
+    ->withPreparedSets(psr12: true, symplify: true, common: true, strict: true)
     ->withSkip(['*/Source/*', '*/Fixture/*', '*/Expected/*']);

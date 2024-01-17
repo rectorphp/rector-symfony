@@ -153,7 +153,7 @@ CODE_SAMPLE
                 $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
 
-            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY])) {
+            if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], true)) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
 
                 $accessDecisionManagerMethodCalls = $this->securityAccessDecisionManagerConfigArrayHandler->handle(
