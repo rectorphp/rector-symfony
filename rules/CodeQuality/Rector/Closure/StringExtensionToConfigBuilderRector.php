@@ -115,7 +115,10 @@ CODE_SAMPLE
 
         $configClass = self::EXTENSION_KEY_TO_CLASS_MAP[$extensionKeyAndConfiguration->getKey()] ?? null;
         if ($configClass === null) {
-            throw new NotImplementedYetException($extensionKeyAndConfiguration->getKey());
+            throw new NotImplementedYetException(sprintf(
+                'The extensions "%s" is not supported yet. Check the rule and add keyword.',
+                $extensionKeyAndConfiguration->getKey()
+            ));
         }
 
         $configVariable = $this->createConfigVariable($configClass);
