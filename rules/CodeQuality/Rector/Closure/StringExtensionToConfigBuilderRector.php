@@ -217,9 +217,19 @@ CODE_SAMPLE
 
                 $simpleMethodName = StringUtils::underscoreToCamelCase($key);
 
-                $args = $this->nodeFactory->createArgs([$value]);
-                $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
-                $methodCallStmts[] = new Expression($methodCall);
+                if (is_array($value)) {
+                    $simpleMethodCallStmts = $this->nestedConfigCallsFactory->create(
+                        [$value],
+                        $configVariable,
+                        $simpleMethodName
+                    );
+
+                    $methodCallStmts = array_merge($methodCallStmts, $simpleMethodCallStmts);
+                } else {
+                    $args = $this->nodeFactory->createArgs([$value]);
+                    $methodCall = new MethodCall($configVariable, $simpleMethodName, $args);
+                    $methodCallStmts[] = new Expression($methodCall);
+                }
             }
         }
 

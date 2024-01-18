@@ -39,12 +39,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (\Symfony\Config\FrameworkConfig $frameworkConfig) : void {
     $frameworkConfig->secret('onetwothree');
-    $frameworkConfig->router(['resource' => '%kernel.project_dir%/config/routing.php', 'strict_requirements' => null]);
-    $frameworkConfig->validation(['enable_annotations' => true]);
+    $frameworkConfig->router()->resource('%kernel.project_dir%/config/routing.php')->strictRequirements(null);
+    $frameworkConfig->validation()->enableAnnotations(true);
     $frameworkConfig->defaultLocale('en');
     $frameworkConfig->httpMethodOverride(true);
-    $frameworkConfig->session(['cookie_secure' => true, 'handler_id' => 'SomeSessionHandler']);
-    $frameworkConfig->translator(['enabled' => false]);
+    $frameworkConfig->session()->cookieSecure(true)->handlerId('SomeSessionHandler');
+    $frameworkConfig->translator()->enabled(false);
 };
 
 ?>
