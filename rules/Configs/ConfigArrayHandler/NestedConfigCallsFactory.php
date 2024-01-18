@@ -79,12 +79,14 @@ final class NestedConfigCallsFactory
             if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
                 $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
 
-                $itemName = array_key_first($parameters);
-                $args = $this->nodeFactory->createArgs([$itemName]);
-                $parameters = $parameters[$itemName];
+                foreach ($parameters as $splitName => $splitParameters) {
+                    $args = $this->nodeFactory->createArgs([$splitName]);
+                    $mainMethodCall = new MethodCall($mainMethodCall, $splitMethodName, $args);
 
-                $mainMethodCall = new MethodCall($mainMethodCall, $splitMethodName, $args);
-                return $this->createMainMethodCall($parameters, $mainMethodCall);
+                    $mainMethodCall = $this->createMainMethodCall($splitParameters, $mainMethodCall);
+                }
+
+                continue;
             }
 
             // traverse nested arrays with recursion call

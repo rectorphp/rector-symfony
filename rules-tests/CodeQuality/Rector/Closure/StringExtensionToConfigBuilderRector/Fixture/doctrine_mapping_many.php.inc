@@ -17,6 +17,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                             'dir' => '/some-path',
                             'prefix' => 'App\FirstNamespace',
                         ],
+                        'shared_hearts' => [
+                            'is_bundle' => false,
+                            'type' => 'annotation',
+                            'dir' => '/another-path',
+                            'prefix' => 'App\SecondNamespace',
+                        ],
                     ],
                 ],
             ],
@@ -33,7 +39,7 @@ declare(strict_types=1);
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (\Symfony\Config\DoctrineConfig $doctrineConfig): void {
-    $doctrineConfig->orm()->entityManager('default')->namingStrategy('doctrine.orm.naming_strategy.underscore')->mapping('unique_items')->isBundle(false)->type('annotation')->dir('/some-path')->prefix('App\FirstNamespace');
+    $doctrineConfig->orm()->entityManager('default')->namingStrategy('doctrine.orm.naming_strategy.underscore')->mapping('unique_items')->isBundle(false)->type('annotation')->dir('/some-path')->prefix('App\FirstNamespace')->mapping('shared_hearts')->isBundle(false)->type('annotation')->dir('/another-path')->prefix('App\SecondNamespace');
 };
 
 ?>
