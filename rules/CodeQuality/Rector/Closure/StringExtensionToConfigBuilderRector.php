@@ -43,6 +43,8 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         'monolog' => 'Symfony\Config\MonologConfig',
         'twig' => 'Symfony\Config\TwigConfig',
         'doctrine' => 'Symfony\Config\DoctrineConfig',
+        'doctrine_migrations' => 'Symfony\Config\DoctrineMigrationsConfig',
+        'sentry' => 'Symfony\Config\DoctrineMigrationsConfig',
     ];
 
     public function __construct(
