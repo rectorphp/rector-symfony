@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -30,7 +31,8 @@ final class AddRouteAnnotationRector extends AbstractRector
         private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
         private readonly ArrayParser $arrayParser,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly DocBlockUpdater $docBlockUpdater
     ) {
     }
 
@@ -84,6 +86,7 @@ final class AddRouteAnnotationRector extends AbstractRector
             }
 
             $hasChanged = true;
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
         }
 
         if ($hasChanged) {
