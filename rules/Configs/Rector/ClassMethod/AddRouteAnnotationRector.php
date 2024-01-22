@@ -73,7 +73,12 @@ final class AddRouteAnnotationRector extends AbstractRector
             }
 
             // skip if already has an annotation
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            try {
+                $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            } catch (\TypeError) {
+                continue;
+            }
+
             $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
             if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;

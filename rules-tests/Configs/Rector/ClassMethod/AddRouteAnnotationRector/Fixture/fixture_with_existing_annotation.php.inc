@@ -51,6 +51,9 @@ class AppController extends Controller
     {
     }
 
+    /**
+     * @\Symfony\Component\Routing\Annotation\Route(path="/", name="minimal")
+     */
     public function minimalAction()
     {
     }
