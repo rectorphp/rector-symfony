@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector;
 
 // @see https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.4.md
 return static function (RectorConfig $rectorConfig): void {
@@ -14,4 +15,5 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\HttpKernel\Debug\FileLinkFormatter' => 'Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter',
         ],
     );
+    $rectorConfig->rule(ChangeRouteAttributeFromAnnotationSubnamespaceRector::class);
 };
