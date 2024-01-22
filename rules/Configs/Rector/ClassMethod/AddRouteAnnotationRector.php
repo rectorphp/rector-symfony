@@ -198,7 +198,6 @@ CODE_SAMPLE
     private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference): array
     {
         $matches = [];
-
         foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadatum) {
             if ($symfonyRouteMetadatum->getControllerReference() === $controllerReference) {
                 $matches[] = $symfonyRouteMetadatum;
