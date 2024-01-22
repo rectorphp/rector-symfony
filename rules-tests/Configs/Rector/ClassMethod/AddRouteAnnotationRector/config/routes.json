@@ -12,7 +12,7 @@
             "POST"
         ],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::allAction",
             "foo": "foo123",
             "page": 1,
             "nullableDefault": null,
@@ -37,7 +37,7 @@
         "schemes": [],
         "methods": [],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::minimalAction"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::minimalAction"
         },
         "requirements": [],
         "condition": "",
@@ -52,7 +52,7 @@
         "schemes": [],
         "methods": [],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::shortAction"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::shortAction"
         },
         "requirements": [],
         "condition": "",
@@ -80,7 +80,7 @@
         "schemes": [],
         "methods": [],
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::nullAction",
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::nullAction",
             "nullableDefault": null
         },
         "requirements": [],
@@ -102,7 +102,7 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
         },
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
         }
     },
     "duplicate_all_short": {
@@ -117,7 +117,7 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
         },
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\AppController::duplicateAction"
         }
     },
     "invokable": {
@@ -132,7 +132,7 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
         },
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\InvokeController"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\InvokeController"
         }
     },
     "double_route_1": {
@@ -147,7 +147,7 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
         },
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
         }
     },
     "double_route_2": {
@@ -162,7 +162,7 @@
             "compiler_class": "Symfony\\Component\\Routing\\RouteCompiler"
         },
         "defaults": {
-            "_controller": "Rector\\Symfony\\Tests\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
+            "_controller": "Rector\\Symfony\\Tests\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector\\Fixture\\DoubleRouteController::show"
         }
     }
 }
