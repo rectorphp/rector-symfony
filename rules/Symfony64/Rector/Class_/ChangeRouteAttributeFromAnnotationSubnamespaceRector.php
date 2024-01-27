@@ -18,8 +18,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeRouteAttributeFromAnnotationSubnamespaceRector extends AbstractRector
 {
     private const ANNOTATION_ROUTE = 'Symfony\Component\Routing\Annotation\Route';
-    private const ATTRIBUTE_ROUTE = 'Symfony\Component\Routing\Attribute\Route';
 
+    private const ATTRIBUTE_ROUTE = 'Symfony\Component\Routing\Attribute\Route';
 
     public function getRuleDefinition(): RuleDefinition
     {

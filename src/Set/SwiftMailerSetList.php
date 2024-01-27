@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Set;
 
-use Rector\Set\Contract\SetListInterface;
-
 /**
  * @api
  */
-final class SwiftMailerSetList implements SetListInterface
+final class SwiftMailerSetList
 {
     /**
      * @var string
      */
-    final public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php';
+    final public const SWIFT_TO_SYMONY = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php';
 }
