@@ -94,6 +94,10 @@ CODE_SAMPLE
 
         $tplName = $this->valueResolver->getValue($args[0]->value);
 
+        if ($tplName === null) {
+            return null;
+        }
+
         $matches = Strings::match($tplName, '/:/', PREG_OFFSET_CAPTURE);
         if ($matches === null) {
             return null;
