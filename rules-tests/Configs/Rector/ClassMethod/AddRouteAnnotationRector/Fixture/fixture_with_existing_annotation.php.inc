@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AppController extends Controller
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
+     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"})
      */
     public function allAction()
     {
@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AppController extends Controller
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"}, condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'")
+     * @\Symfony\Component\Routing\Annotation\Route(path="/all/{foo}/{page}", name="all", host="m.example.com", schemes={"http", "https"}, methods={"GET", "POST"})
      */
     public function allAction()
     {

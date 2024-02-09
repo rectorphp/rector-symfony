@@ -8,15 +8,10 @@ use Rector\Symfony\Configs\Rector\ClassMethod\AddRouteAnnotationRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\Source\DummySymfonyRoutesProvider;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->singleton(SymfonyRoutesProvider::class);
-    $rectorConfig->alias(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
-
-    $rectorConfig->rule(AddRouteAnnotationRector::class);
-
+return RectorConfig::configure()
+    ->withRules([AddRouteAnnotationRector::class])
+    // testing alias override, we need to use the 2nd service instead
+    ->registerService(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class)
     // only for tests
-    $rectorConfig->singleton(DummySymfonyRoutesProvider::class);
-
     // give this service autowiring preferences
-    $rectorConfig->alias(DummySymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
-};
+    ->registerService(DummySymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
