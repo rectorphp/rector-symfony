@@ -11,7 +11,7 @@ use Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\Sou
 return RectorConfig::configure()
     ->withRules([AddRouteAnnotationRector::class])
     // testing alias override, we need to use the 2nd service instead
-    ->registerService(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class)
+    ->registerService(SymfonyRoutesProvider::class, alias: SymfonyRoutesProviderInterface::class)
     // only for tests
     // give this service autowiring preferences
-    ->registerService(DummySymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
+    ->registerService(DummySymfonyRoutesProvider::class, alias: SymfonyRoutesProviderInterface::class);
