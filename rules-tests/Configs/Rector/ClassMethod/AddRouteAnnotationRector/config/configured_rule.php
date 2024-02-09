@@ -9,10 +9,10 @@ use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterfac
 use Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\Source\DummySymfonyRoutesProvider;
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->rule(AddRouteAnnotationRector::class);
+
     $rectorConfig->singleton(SymfonyRoutesProvider::class);
     $rectorConfig->alias(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
-
-    $rectorConfig->rule(AddRouteAnnotationRector::class);
 
     // only for tests
     $rectorConfig->singleton(DummySymfonyRoutesProvider::class);
