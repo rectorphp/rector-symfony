@@ -8,3 +8,4 @@ phpunit.xml export-ignore
 stubs export-ignore
 tests export-ignore
 rules-tests export-ignore
+rector.php export-ignore
