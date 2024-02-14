@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,14 +25,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
 {
     public function __construct(
-        private readonly ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer,
+        private readonly ControllerAnalyzer $controllerAnalyzer,
     ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`',
+            'Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`, also updates AbstractController usages',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -61,6 +63,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): MethodCall|BooleanOr|null
     {
+        if ($this->controllerAnalyzer->isInsideController($node)) {
+            return $this->processControllerMethods($node);
+        }
+
         $objectType = $this->nodeTypeResolver->getType($node->var);
         if (! $objectType instanceof ObjectType) {
             return null;
@@ -77,21 +83,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $args = $node->getArgs();
-        if ($this->argsAnalyzer->hasNamedArg($args)) {
-            return null;
-        }
-
-        if (! isset($args[0])) {
-            return null;
-        }
-
-        $value = $args[0]->value;
-        if (! $value instanceof Array_) {
-            return null;
-        }
-
-        return $this->processExtractIsGranted($node, $value, $args);
+        return $this->handleIsGranted($node);
     }
 
     /**
@@ -150,5 +142,37 @@ CODE_SAMPLE
         }
 
         return $booleanOr;
+    }
+
+    private function processControllerMethods(MethodCall $node): MethodCall|BooleanOr|null
+    {
+        if ($this->nodeNameResolver->isName($node->name, 'isGranted')) {
+            return $this->handleIsGranted($node);
+        }
+
+        return null;
+    }
+
+    private function handleIsGranted(MethodCall $node): BooleanOr|null|MethodCall
+    {
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+
+        $args = $node->getArgs();
+        if ($this->argsAnalyzer->hasNamedArg($args)) {
+            return null;
+        }
+
+        if (! isset($args[0])) {
+            return null;
+        }
+
+        $value = $args[0]->value;
+        if (! $value instanceof Array_) {
+            return null;
+        }
+
+        return $this->processExtractIsGranted($node, $value, $args);
     }
 }

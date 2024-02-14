@@ -70,4 +70,8 @@ abstract class AbstractController implements \Symfony\Component\DependencyInject
     public function stream(string $view, array $parameters = [], StreamedResponse $response = null): StreamedResponse
     {
     }
+
+    protected function isGranted($attributes, $subject = null): bool
+    {
+    }
 }
