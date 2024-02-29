@@ -105,17 +105,18 @@ CODE_SAMPLE
     /**
      * @param ServiceDefinition[] $handlers
      */
-    private function checkForServices(Class_ $class, array $handlers): Class_
+    private function checkForServices(Class_ $class, array $handlers): ?Class_
     {
         foreach ($handlers as $handler) {
             if ($this->isName($class, $handler->getClass() ?? $handler->getId())) {
                 $options = $this->messengerHelper->extractOptionsFromServiceDefinition($handler);
                 if (! isset($options['method']) || $options['method'] === '__invoke') {
                     $this->messengerHelper->addAttribute($class, $options);
+                    return $class;
                 }
             }
         }
 
-        return $class;
+        return null;
     }
 }
