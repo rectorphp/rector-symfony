@@ -176,5 +176,18 @@ CODE_SAMPLE
             $this->eventNamesToClassConstants
         );
         $class->stmts[] = $classMethod;
+
+        $this->removeAttribute($class);
+    }
+
+    private function removeAttribute(Class_ $class){
+        foreach ($class->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if (!$this->nodeNameResolver->isName($attribute->name, 'Symfony\Component\EventDispatcher\Attribute\AsEventListener')) {
+                    continue;
+                }
+                unset($class->attrGroups[$attrGroupKey]);
+            }
+        }
     }
 }
