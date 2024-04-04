@@ -70,6 +70,7 @@ return static function (RectorConfig $rectorConfig): void {
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Url'),
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Uuid'),
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Valid'),
+        new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Context'),
         new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\DiscriminatorMap'),
         new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Groups'),
         new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Ignore'),
