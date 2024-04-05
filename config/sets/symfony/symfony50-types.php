@@ -267,13 +267,13 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Contracts\Translation\TranslatorInterface',
             'trans',
             2,
-            new StringType()
+            \PHPStan\Type\TypeCombinator::addNull(new StringType())
         ),
         new AddParamTypeDeclaration(
             'Symfony\Contracts\Translation\TranslatorInterface',
             'trans',
             3,
-            new StringType()
+            \PHPStan\Type\TypeCombinator::addNull(new StringType())
         ),
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'getType', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'hasType', 0, new StringType()),
