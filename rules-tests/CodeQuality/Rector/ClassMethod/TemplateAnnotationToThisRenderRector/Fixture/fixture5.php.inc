@@ -14,6 +14,14 @@ class ClassWithNamedService55Controller extends AbstractController
     {
         return [];
     }
+
+    /**
+     * @Template()
+     */
+    public function camelCase()
+    {
+        return [];
+    }
 }
 
 ?>
@@ -29,7 +37,12 @@ class ClassWithNamedService55Controller extends AbstractController
 {
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('Class_With_Named_Service55/index.html.twig');
+        return $this->render('class_with_named_service55/index.html.twig');
+    }
+
+    public function camelCase(): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('class_with_named_service55/camel_case.html.twig');
     }
 }
 
