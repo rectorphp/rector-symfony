@@ -92,7 +92,7 @@ final readonly class TemplateGuesser
         $action = Strings::replace(
             $action,
             self::SMALL_LETTER_BIG_LETTER_REGEX,
-            '\\1_\\2'
+            '$1_$2'
         );
 
         $fullPath = '';
@@ -129,7 +129,7 @@ final readonly class TemplateGuesser
         $controller = Strings::replace(
             $match['class_name_without_suffix'],
             self::SMALL_LETTER_BIG_LETTER_REGEX,
-            '\\1_\\2'
+            '$1_$2'
         );
         return str_replace('\\', '/', $controller);
     }
