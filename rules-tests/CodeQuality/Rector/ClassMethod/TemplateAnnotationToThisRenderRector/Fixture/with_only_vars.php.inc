@@ -30,7 +30,7 @@ class WithOnlyVarsController extends AbstractController
 {
     public function index(Post $post): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('@App/With_Only_Vars/index.html.twig', ['post' => $post]);
+        return $this->render('@App/with_only_vars/index.html.twig', ['post' => $post]);
     }
 }
 

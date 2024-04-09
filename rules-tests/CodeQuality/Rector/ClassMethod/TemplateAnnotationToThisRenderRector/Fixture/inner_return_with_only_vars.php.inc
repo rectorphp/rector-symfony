@@ -36,7 +36,7 @@ class InnerReturnWithOnlyVarsController extends AbstractController
         function (Post $post) {
             return $post;
         };
-        return $this->render('@App/Inner_Return_With_Only_Vars/index.html.twig', ['post' => $post]);
+        return $this->render('@App/inner_return_with_only_vars/index.html.twig', ['post' => $post]);
     }
 }
 
