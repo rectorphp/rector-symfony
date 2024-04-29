@@ -18,7 +18,7 @@ jobs:
                 actions:
                     -
                         name: 'Active Classes'
-                        run: vendor/bin/class-leak check config src rules --ansi --skip-suffix "Rectors"
+                        run: vendor/bin/class-leak check config src rules --ansi --skip-suffix "Rector"
 
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
