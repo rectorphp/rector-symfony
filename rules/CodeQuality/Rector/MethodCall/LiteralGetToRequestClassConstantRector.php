@@ -79,7 +79,11 @@ CODE_SAMPLE
         // in most cases that should be skipped, @changelog https://github.com/rectorphp/rector/issues/7135
         if (
             $this->reflectionProvider->hasClass('Symfony\Component\BrowserKit\AbstractBrowser') &&
-            $this->isObjectType($node->var, new ObjectType('Symfony\Component\HttpKernel\Client'))
+            (
+                $this->isObjectType($node->var, new ObjectType('Symfony\Component\HttpKernel\Client'))
+                ||
+                $this->isObjectType($node->var, new ObjectType('Symfony\Bundle\FrameworkBundle\KernelBrowser'))
+            )
         ) {
             return $this->refactorClientMethodCall($node);
         }
