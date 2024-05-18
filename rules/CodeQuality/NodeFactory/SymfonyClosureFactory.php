@@ -11,7 +11,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use Rector\Naming\Naming\PropertyNaming;
 
-final class SymfonyClosureFactory
+final readonly class SymfonyClosureFactory
 {
     public function __construct(
         private PropertyNaming $propertyNaming,

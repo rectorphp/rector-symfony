@@ -21,6 +21,7 @@ use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use TypeError;
 
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
@@ -75,7 +76,7 @@ final class AddRouteAnnotationRector extends AbstractRector
             // skip if already has an annotation
             try {
                 $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            } catch (\TypeError) {
+            } catch (TypeError) {
                 continue;
             }
 

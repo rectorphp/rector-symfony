@@ -13,10 +13,10 @@ use Rector\Symfony\Configs\Enum\SecurityConfigKey;
 use Rector\Symfony\Utils\StringUtils;
 use Webmozart\Assert\Assert;
 
-final class NestedConfigCallsFactory
+final readonly class NestedConfigCallsFactory
 {
     public function __construct(
-        private readonly NodeFactory $nodeFactory
+        private NodeFactory $nodeFactory
     ) {
     }
 

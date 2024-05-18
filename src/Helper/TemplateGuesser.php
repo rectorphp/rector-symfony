@@ -89,11 +89,7 @@ final readonly class TemplateGuesser
 
         $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
 
-        $action = Strings::replace(
-            $action,
-            self::SMALL_LETTER_BIG_LETTER_REGEX,
-            '$1_$2'
-        );
+        $action = Strings::replace($action, self::SMALL_LETTER_BIG_LETTER_REGEX, '$1_$2');
 
         $fullPath = '';
         if ($bundle !== '') {
