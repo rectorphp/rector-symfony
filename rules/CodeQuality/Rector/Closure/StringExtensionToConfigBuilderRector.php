@@ -183,16 +183,10 @@ CODE_SAMPLE
             }
 
             if ($splitMany) {
-                if ($nested) {
-                    $currentConfigCaller = new MethodCall($configVariable, $methodCallName);
-                } else {
-                    $currentConfigCaller = $configVariable;
-                }
-
+                $currentConfigCaller = $nested ? new MethodCall($configVariable, $methodCallName) : $configVariable;
                 if (! is_array($value)) {
                     return null;
                 }
-
                 foreach ($value as $itemName => $itemConfiguration) {
                     if ($nested && is_array($itemConfiguration)) {
                         $methodCallName = $itemName;

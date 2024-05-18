@@ -8,8 +8,10 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -267,13 +269,13 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Contracts\Translation\TranslatorInterface',
             'trans',
             2,
-            new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), new StringType()])
+            new UnionType([new NullType(), new StringType()])
         ),
         new AddParamTypeDeclaration(
             'Symfony\Contracts\Translation\TranslatorInterface',
             'trans',
             3,
-            new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), new StringType()])
+            new UnionType([new NullType(), new StringType()])
         ),
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'getType', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'hasType', 0, new StringType()),
