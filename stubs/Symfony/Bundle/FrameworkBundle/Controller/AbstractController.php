@@ -35,6 +35,10 @@ abstract class AbstractController implements \Symfony\Component\DependencyInject
     {
     }
 
+    protected function renderView(string $view, array $parameters = []): string
+    {
+    }
+
     public function forward(string $controller, array $path = [], array $query = []): Response
     {
     }
