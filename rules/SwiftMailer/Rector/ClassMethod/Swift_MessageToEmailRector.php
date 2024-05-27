@@ -203,6 +203,11 @@ CODE_SAMPLE
 
     private function handleAttach(MethodCall $methodCall): void
     {
+        $objectType = $this->nodeTypeResolver->getType($methodCall->var);
+        if (! $objectType->isInstanceOf('Swift_Message')->yes()) {
+            return;
+        }
+
         $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use ($methodCall) {
             if ($node instanceof StaticCall && $this->isName($node->name, 'fromPath')) {
                 $methodCall->args[0] = $node->args[0];
