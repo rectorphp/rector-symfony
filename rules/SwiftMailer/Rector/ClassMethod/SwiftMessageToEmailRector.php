@@ -16,6 +16,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -206,7 +207,7 @@ CODE_SAMPLE
     private function handleAttach(MethodCall $methodCall): void
     {
         $objectType = $this->nodeTypeResolver->getType($methodCall->var);
-        if (! $objectType->isInstanceOf('Swift_Message')->yes()) {
+        if (! $objectType instanceof ObjectType || ! $objectType->isInstanceOf('Swift_Message')->yes()) {
             return;
         }
 
