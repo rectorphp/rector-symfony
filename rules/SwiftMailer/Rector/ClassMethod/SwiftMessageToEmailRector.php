@@ -6,6 +6,8 @@ namespace Rector\Symfony\SwiftMailer\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -14,11 +16,12 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-class Swift_MessageToEmailRector extends AbstractRector
+class SwiftMessageToEmailRector extends AbstractRector
 {
     public const EMAIL_FQN = 'Symfony\Component\Mime\Email';
 
@@ -93,7 +96,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->traverseNodesWithCallable($node, function (Node $node) {
+        $this->traverseNodesWithCallable($node, function (Node $node): ?Node {
             if (
                 $node instanceof ClassMethod &&
                 $node->returnType instanceof FullyQualified &&
@@ -114,7 +117,7 @@ CODE_SAMPLE
                     return null;
                 }
                 $args = $node->getArgs();
-                if (count($args) > 0) {
+                if ($args !== []) {
                     $node = new MethodCall(new New_(new FullyQualified(self::EMAIL_FQN)), 'subject', [$args[0]]);
                 } else {
                     $node->class = new FullyQualified(self::EMAIL_FQN);
@@ -125,6 +128,15 @@ CODE_SAMPLE
                 $name = $this->getName($node->name);
 
                 if ($name) {
+                    $objectType = $this->nodeTypeResolver->getType($node->var);
+                    if (! $objectType instanceof ObjectType) {
+                        return null;
+                    }
+
+                    if (! $objectType->isInstanceOf('Swift_Message')->yes() && ! $objectType->isInstanceOf('Symfony\Component\Mime\Email')->yes()) {
+                        return null;
+                    }
+
                     $this->handleBasicMapping($node, $name);
                     $this->handleAddressMapping($node, $name);
                     $this->handleBody($node, $name);
@@ -153,18 +165,18 @@ CODE_SAMPLE
             if ($this->addressesMapping[$name] !== null) {
                 $methodCall->name = new Identifier($this->addressesMapping[$name]);
             }
-            if (count($methodCall->getArgs()) === 0) {
+            if ($methodCall->getArgs() === []) {
                 return;
             }
             if (! ($firstArg = $methodCall->args[0]) instanceof Arg) {
                 return;
             }
             if (
-                $firstArg->value instanceof \PhpParser\Node\Expr\Array_ &&
+                $firstArg->value instanceof Array_ &&
                 $firstArg->value->items !== []
             ) {
                 foreach ($firstArg->value->items as $item) {
-                    if ($item instanceof Node\Expr\ArrayItem) {
+                    if ($item instanceof ArrayItem) {
                         if ($item->key === null) {
                             $item->value = $this->createAddress([new Arg($item->value)]);
                         } else {
@@ -203,7 +215,7 @@ CODE_SAMPLE
 
     private function handleAttach(MethodCall $methodCall): void
     {
-        $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use ($methodCall) {
+        $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use ($methodCall): Node {
             if ($node instanceof StaticCall && $this->isName($node->name, 'fromPath')) {
                 $methodCall->args[0] = $node->args[0];
             }
