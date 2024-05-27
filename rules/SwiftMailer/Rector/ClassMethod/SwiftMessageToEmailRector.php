@@ -128,6 +128,15 @@ CODE_SAMPLE
                 $name = $this->getName($node->name);
 
                 if ($name) {
+                    $objectType = $this->nodeTypeResolver->getType($node->var);
+                    if (! $objectType instanceof ObjectType) {
+                        return null;
+                    }
+
+                    if (! $objectType->isInstanceOf('Swift_Message')->yes() && ! $objectType->isInstanceOf('Symfony\Component\Mime\Email')->yes()) {
+                        return null;
+                    }
+
                     $this->handleBasicMapping($node, $name);
                     $this->handleAddressMapping($node, $name);
                     $this->handleBody($node, $name);
@@ -206,11 +215,6 @@ CODE_SAMPLE
 
     private function handleAttach(MethodCall $methodCall): void
     {
-        $objectType = $this->nodeTypeResolver->getType($methodCall->var);
-        if (! $objectType instanceof ObjectType || ! $objectType->isInstanceOf('Swift_Message')->yes()) {
-            return;
-        }
-
         $this->traverseNodesWithCallable($methodCall->args[0], function (Node $node) use ($methodCall): Node {
             if ($node instanceof StaticCall && $this->isName($node->name, 'fromPath')) {
                 $methodCall->args[0] = $node->args[0];
