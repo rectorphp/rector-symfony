@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\Swift_MessageToEmailRector\Fixture;
+namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector\Fixture;
 
 class SimpleMessage {
     public function createMessage(): \Swift_Message
@@ -17,7 +17,7 @@ class SimpleMessage {
 -----
 <?php
 
-namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\Swift_MessageToEmailRector\Fixture;
+namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector\Fixture;
 
 class SimpleMessage {
     public function createMessage(): \Symfony\Component\Mime\Email

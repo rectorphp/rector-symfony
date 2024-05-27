@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\Swift_MessageToEmailRector\Fixture;
+namespace Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector\Fixture;
 
 final class SkipAttachmentHandler
 {

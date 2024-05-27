@@ -6,7 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
-use Rector\Symfony\SwiftMailer\Rector\ClassMethod\Swift_MessageToEmailRector;
+use Rector\Symfony\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector;
 use Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftCreateMessageToNewEmailRector;
 use Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector;
 
@@ -15,7 +15,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         SwiftCreateMessageToNewEmailRector::class,
         SwiftSetBodyToHtmlPlainMethodCallRector::class,
-        Swift_MessageToEmailRector::class,
+        SwiftMessageToEmailRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
