@@ -21,6 +21,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector\SwiftMessageToEmailRectorTest
+ */
 class SwiftMessageToEmailRector extends AbstractRector
 {
     public const EMAIL_FQN = 'Symfony\Component\Mime\Email';

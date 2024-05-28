@@ -18,9 +18,10 @@ parameters:
         - */Fixture/*
         - */Fixture*/*
 
-    checkGenericClassInNonGenericObjectType: false
-
     ignoreErrors:
+        -
+            identifier: missingType.generics
+
         # pointless check
         - '#expects class-string, string given#'
 
