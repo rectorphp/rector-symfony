@@ -57,7 +57,7 @@ class SwiftMessageToEmailRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Convert \Swift_Message into an Symfony\Component\Mime\Email',
+            'Convert \Swift_Message into an \Symfony\Component\Mime\Email',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -136,7 +136,9 @@ CODE_SAMPLE
                         return null;
                     }
 
-                    if (! $objectType->isInstanceOf('Swift_Message')->yes() && ! $objectType->isInstanceOf('Symfony\Component\Mime\Email')->yes()) {
+                    if (! $objectType->isInstanceOf(self::SWIFT_MESSAGE_FQN)->yes() &&
+                        ! $objectType->isInstanceOf(self::EMAIL_FQN)->yes()
+                    ) {
                         return null;
                     }
 
@@ -145,6 +147,9 @@ CODE_SAMPLE
                     $this->handleBody($node, $name);
                     if ($name === 'attach') {
                         $this->handleAttach($node);
+                    }
+                    if ($name === 'getId') {
+                        $node = $this->handleId($node);
                     }
                 }
             }
@@ -235,6 +240,16 @@ CODE_SAMPLE
         });
 
         $methodCall->name = new Identifier('attachFromPath');
+    }
+
+    private function handleId(MethodCall $methodCall): MethodCall
+    {
+        $methodCall->name = new Identifier('getHeaders');
+        return $this->nodeFactory->createMethodCall(
+            $methodCall,
+            'get',
+            [$this->nodeFactory->createArg(new String_('Content-ID'))]
+        );
     }
 
     /**
