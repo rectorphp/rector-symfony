@@ -26,7 +26,7 @@ final class MessageIdController extends AbstractController
 
     public function someAction()
     {
-        return (new \Symfony\Component\Mime\Email())->getHeaders()->get('Content-ID');
+        return (new \Symfony\Component\Mime\Email())->getHeaders()->get('Content-ID')->toString();
     }
 }
 

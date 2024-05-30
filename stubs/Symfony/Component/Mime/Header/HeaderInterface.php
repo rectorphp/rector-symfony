@@ -10,4 +10,5 @@ if (class_exists('Symfony\Component\Mime\Header\HeaderInterface')) {
 
 interface HeaderInterface
 {
+    public function toString(): string;
 }

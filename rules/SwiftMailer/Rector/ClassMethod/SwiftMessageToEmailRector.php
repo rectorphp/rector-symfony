@@ -245,11 +245,11 @@ CODE_SAMPLE
     private function handleId(MethodCall $methodCall): MethodCall
     {
         $methodCall->name = new Identifier('getHeaders');
-        return $this->nodeFactory->createMethodCall(
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createMethodCall(
             $methodCall,
             'get',
             [$this->nodeFactory->createArg(new String_('Content-ID'))]
-        );
+        ), 'toString');
     }
 
     /**
