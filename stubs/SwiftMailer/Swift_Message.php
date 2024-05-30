@@ -102,4 +102,11 @@ class Swift_Message
     {
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+    }
 }

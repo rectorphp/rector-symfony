@@ -8,7 +8,7 @@ if (class_exists('Symfony\Component\Mime\Email')) {
     return;
 }
 
-class Email
+class Email extends Message
 {
 
 }
