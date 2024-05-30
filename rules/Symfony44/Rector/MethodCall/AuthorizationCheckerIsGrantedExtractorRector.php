@@ -144,22 +144,22 @@ CODE_SAMPLE
         return $booleanOr;
     }
 
-    private function processControllerMethods(MethodCall $node): MethodCall|BooleanOr|null
+    private function processControllerMethods(MethodCall $methodCall): MethodCall|BooleanOr|null
     {
-        if ($this->nodeNameResolver->isName($node->name, 'isGranted')) {
-            return $this->handleIsGranted($node);
+        if ($this->nodeNameResolver->isName($methodCall->name, 'isGranted')) {
+            return $this->handleIsGranted($methodCall);
         }
 
         return null;
     }
 
-    private function handleIsGranted(MethodCall $node): BooleanOr|null|MethodCall
+    private function handleIsGranted(MethodCall $methodCall): BooleanOr|null|MethodCall
     {
-        if ($node->isFirstClassCallable()) {
+        if ($methodCall->isFirstClassCallable()) {
             return null;
         }
 
-        $args = $node->getArgs();
+        $args = $methodCall->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
@@ -173,6 +173,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processExtractIsGranted($node, $value, $args);
+        return $this->processExtractIsGranted($methodCall, $value, $args);
     }
 }
