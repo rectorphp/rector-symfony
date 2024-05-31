@@ -183,16 +183,15 @@ CODE_SAMPLE
                 $firstArg->value instanceof Array_ &&
                 $firstArg->value->items !== []
             ) {
+                $newArgs = [];
                 foreach ($firstArg->value->items as $item) {
                     if ($item instanceof ArrayItem) {
-                        if ($item->key === null) {
-                            $item->value = $this->createAddress([new Arg($item->value)]);
-                        } else {
-                            $item->value = $this->createAddress([new Arg($item->key), new Arg($item->value)]);
-                            $item->key = null;
-                        }
+                        $newArgs[] = $this->nodeFactory->createArg(
+                            $this->createAddress($item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg($item->value)])
+                        );
                     }
                 }
+                $methodCall->args = $newArgs;
             } else {
                 $addressArguments = [new Arg($firstArg->value)];
                 if (isset($methodCall->args[1]) && ($secondArg = $methodCall->args[1]) instanceof Arg) {
