@@ -14,6 +14,7 @@ final class MailController extends AbstractController
             ->setPriority(2)
             ->setTo(['recipient@example.com' => 'Recipient', 'recipient2@example.com'])
             ->setCc(['cc@example.com' => 'CC'])
+            ->addCc('cc2@example.com')
             ->setBody($this->renderView('emails/registration.html.twig', ['name' => $name]), 'text/html');
     }
 }
@@ -32,9 +33,9 @@ final class MailController extends AbstractController
     public function createMessage(string $name): \Symfony\Component\Mime\Email
     {
         return (new \Symfony\Component\Mime\Email())->subject('Hello Email')->from(new \Symfony\Component\Mime\Address('send@example.com', 'Sender'))
-            ->priority(2)
-            ->to([new \Symfony\Component\Mime\Address('recipient@example.com', 'Recipient'), new \Symfony\Component\Mime\Address('recipient2@example.com')])
-            ->cc([new \Symfony\Component\Mime\Address('cc@example.com', 'CC')])
+            ->priority(2)->to(new \Symfony\Component\Mime\Address('recipient@example.com', 'Recipient'), new \Symfony\Component\Mime\Address('recipient2@example.com'))
+            ->cc(new \Symfony\Component\Mime\Address('cc@example.com', 'CC'))
+            ->addCc(new \Symfony\Component\Mime\Address('cc2@example.com'))
             ->html($this->renderView('emails/registration.html.twig', ['name' => $name]));
     }
 }

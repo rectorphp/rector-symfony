@@ -8,7 +8,30 @@ if (class_exists('Symfony\Component\Mime\Email')) {
     return;
 }
 
-class Email
+class Email extends Message
 {
+    /**
+     * @return $this
+     */
+    public function to(...$addresses)
+    {
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function cc(...$addresses)
+    {
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function addCC(...$addresses)
+    {
+        return $this;
+    }
 
 }

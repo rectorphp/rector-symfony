@@ -61,13 +61,12 @@ final class SymfonyExample extends AbstractController
             )
 
             // you can remove the following code if you don't define a text version for your emails
-            ->addPart(
+            ->text(
                 $this->renderView(
                 // templates/emails/registration.txt.twig
                     'emails/registration.txt.twig',
                     ['name' => $name]
-                ),
-                'text/plain'
+                )
             )
         ;
 
