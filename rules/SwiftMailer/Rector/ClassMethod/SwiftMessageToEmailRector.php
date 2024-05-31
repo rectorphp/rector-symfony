@@ -205,7 +205,7 @@ CODE_SAMPLE
 
     private function handleBody(MethodCall $methodCall, string $name): void
     {
-        if ($name !== 'setBody') {
+        if (! in_array($name, ['setBody', 'addPart'], true)) {
             return;
         }
 

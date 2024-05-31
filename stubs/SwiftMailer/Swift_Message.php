@@ -109,4 +109,12 @@ class Swift_Message
     public function getId()
     {
     }
+
+    /**
+     * @return $this
+     */
+    public function setBody($body, $contentType = null, $charset = null)
+    {
+        return $this;
+    }
 }
