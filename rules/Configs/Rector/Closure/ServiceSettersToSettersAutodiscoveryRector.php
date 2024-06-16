@@ -105,7 +105,7 @@ CODE_SAMPLE
         $classNamesAndFilesPaths = $this->createClassNamesAndFilePaths($bareServicesSetMethodCallExpressions);
 
         $classNames = array_map(
-            static fn(ClassNameAndFilePath $classNameAndFilePath): string => $classNameAndFilePath->getClassName(),
+            static fn (ClassNameAndFilePath $classNameAndFilePath): string => $classNameAndFilePath->getClassName(),
             $classNamesAndFilesPaths
         );
 
