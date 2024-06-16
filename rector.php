@@ -46,5 +46,12 @@ return RectorConfig::configure()
         'Symfony\Component\DependencyInjection\Container',
     ])
     ->withPhpSets()
-    ->withPreparedSets(codeQuality: true, typeDeclarations: true, deadCode: true, privatization: true, naming: true, rectorPreset: true)
+    ->withPreparedSets(
+        codeQuality: true,
+        typeDeclarations: true,
+        deadCode: true,
+        privatization: true,
+        naming: true,
+        rectorPreset: true
+    )
     ->withImportNames();

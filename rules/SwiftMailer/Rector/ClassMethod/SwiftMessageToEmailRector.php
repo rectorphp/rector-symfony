@@ -187,7 +187,11 @@ CODE_SAMPLE
                 foreach ($firstArg->value->items as $item) {
                     if ($item instanceof ArrayItem) {
                         $newArgs[] = $this->nodeFactory->createArg(
-                            $this->createAddress($item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg($item->value)])
+                            $this->createAddress(
+                                $item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg(
+                                    $item->value
+                                )]
+                            )
                         );
                     }
                 }
