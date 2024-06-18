@@ -110,8 +110,12 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+
             $args = $node->getArgs();
-            if (is_array($args) && count($args) === 1 && $args[0]->value->getType() === 'Expr_ClassConstFetch') {
+            if (count($args) === 1 && $args[0]->value->getType() === 'Expr_ClassConstFetch') {
                 return null;
             }
 
