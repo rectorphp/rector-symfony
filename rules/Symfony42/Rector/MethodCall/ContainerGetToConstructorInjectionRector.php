@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony42\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -115,7 +116,7 @@ CODE_SAMPLE
             }
 
             $args = $node->getArgs();
-            if (count($args) === 1 && $args[0]->value->getType() === 'Expr_ClassConstFetch') {
+            if (count($args) === 1 && $args[0]->value instanceof ClassConstFetch) {
                 return null;
             }
 
