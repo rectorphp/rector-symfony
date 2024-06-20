@@ -10,6 +10,13 @@ parameters:
         - rules
         - rules-tests
 
+    # https://github.com/rectorphp/type-perfect/
+    type_perfect:
+        no_mixed: true
+        null_over_false: true
+        narrow_param: true
+        narrow_return: true
+
     scanDirectories:
         - stubs
 
@@ -19,16 +26,8 @@ parameters:
         - */Fixture*/*
 
     ignoreErrors:
-        -
-            identifier: missingType.generics
-
         # pointless check
         - '#expects class-string, string given#'
-
-        # known array
-        -
-            message: '#Parameter \#2 \$name of method Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder\:\:hasByOne\(\) expects class\-string, string given#'
-            path: rules/CodeQuality/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
 
         - '#Calling PHPStan\\Reflection\\Php\\PhpParameterReflection\:\:getName\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
 

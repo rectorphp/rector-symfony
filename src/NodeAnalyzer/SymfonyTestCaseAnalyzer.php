@@ -25,6 +25,9 @@ final readonly class SymfonyTestCaseAnalyzer
         return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
+    /**
+     * @api used elsewhere
+     */
     public function isInKernelTestCase(Node $node): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
