@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
 return RectorConfig::configure()->withConfiguredRule(RenameClassRector::class, [
+    // @see https://github.com/twigphp/Twig/pull/2862/files
     'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
     'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
     'Twig_Extension_Optimizer' => 'Twig\Extension\OptimizerExtension',
