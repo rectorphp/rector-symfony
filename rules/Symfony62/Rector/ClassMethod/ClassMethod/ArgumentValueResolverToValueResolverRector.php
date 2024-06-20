@@ -42,14 +42,17 @@ final class ArgumentValueResolverToValueResolverRector extends AbstractRector
         }
 
         foreach ($node->getMethods() as $key => $classMethod) {
-            if ($classMethod->name->toString() === 'supports') {
+            if ($this->isName($classMethod->name, 'supports')) {
                 [$isIdentical, $supportFirstArg, $supportSecondArg] = $this->extractSupportsArguments(
                     $node,
                     $key,
                     $classMethod
                 );
             }
-            if ($classMethod->name->toString() === 'resolve' && isset($isIdentical) && isset($supportFirstArg) && isset($supportSecondArg)) {
+            if ($this->isName(
+                $classMethod->name,
+                'resolve'
+            ) && isset($isIdentical) && isset($supportFirstArg) && isset($supportSecondArg)) {
                 $this->processResolveMethod($classMethod, $isIdentical, $supportFirstArg, $supportSecondArg);
             }
         }
@@ -139,10 +142,10 @@ CODE_SAMPLE
     }
 
     private function processResolveMethod(
-        mixed $classMethod,
-        mixed $isIdentical,
-        mixed $supportFirstArg,
-        mixed $supportSecondArg
+        ClassMethod $classMethod,
+        bool $isIdentical,
+        Expr $supportFirstArg,
+        Expr $supportSecondArg
     ): void {
         $ifCondition = $isIdentical ? new NotIdentical($supportFirstArg, $supportSecondArg)
             : new Identical($supportFirstArg, $supportSecondArg);
@@ -151,7 +154,7 @@ CODE_SAMPLE
             [new If_($ifCondition, [
                 'stmts' => [new Return_(new ConstFetch(new Name('[]')))],
             ])],
-            $classMethod->getStmts()
+            (array) $classMethod->stmts
         );
     }
 }

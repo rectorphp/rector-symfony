@@ -26,7 +26,7 @@ final readonly class SymfonyTestCaseAnalyzer
     }
 
     /**
-     * @api used elsewhere
+     * @api
      */
     public function isInKernelTestCase(Node $node): bool
     {

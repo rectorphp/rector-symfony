@@ -163,6 +163,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $singleValue->value->value === '/';
+        return $stringNode->value === '/';
     }
 }

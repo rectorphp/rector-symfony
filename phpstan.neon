@@ -36,3 +36,7 @@ parameters:
         - '#but class PhpParser\\Node\\Stmt\\Expression is not generic#'
 
         - '#Access to an undefined property Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
+
+        # false positive
+        - '#Parameters should have "PhpParser\\Node\\Expr\\Closure" types as the only types passed to this method#'
+        - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
