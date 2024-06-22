@@ -56,7 +56,7 @@ class SomeClass extends TestCase
 {
     public function test()
     {
-         $this->assertResponseIsSuccessful();
+        $this->assertResponseIsSuccessful();
     }
 }
 CODE_SAMPLE
