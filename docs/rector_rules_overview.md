@@ -1,4 +1,4 @@
-# 87 Rules Overview
+# 85 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -257,28 +257,6 @@ Changes int return from execute to use Symfony Command constants.
 +        return \Symfony\Component\Console\Command\Command::SUCCESS;
      }
 
- }
-```
-
-<br>
-
-## CommandDescriptionToPropertyRector
-
-Symfony Command description setters are moved to properties
-
-- class: [`Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector`](../rules/Symfony53/Rector/Class_/CommandDescriptionToPropertyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultDescription = 'sunshine description';
-+
-     public function configure()
-     {
--        $this->setDescription('sunshine description');
-     }
  }
 ```
 
@@ -938,27 +916,6 @@ Change TwigExtension function/filter magic closures to inlined and clear callabl
      private function resolve($value)
      {
          return $value + 100;
-     }
- }
-```
-
-<br>
-
-## MakeCommandLazyRector
-
-Make Symfony commands lazy
-
-- class: [`Rector\Symfony\CodeQuality\Rector\Class_\MakeCommandLazyRector`](../rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultName = 'sunshine';
-     public function configure()
-     {
--        $this->setName('sunshine');
      }
  }
 ```
