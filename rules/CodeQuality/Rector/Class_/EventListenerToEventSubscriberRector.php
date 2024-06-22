@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
@@ -27,6 +28,11 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      * @var string
      */
     private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\Component\EventDispatcher\EventSubscriberInterface';
+
+    /**
+     * @var string
+     */
+    private const EVENT_LISTENER_ATTRIBUTE = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
 
     /**
      * @var string
@@ -53,6 +59,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
         private readonly ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
@@ -142,6 +149,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasAsListenerAttribute($node)) {
+            return null;
+        }
+
         // there must be event dispatcher in the application
         $listenerClassesToEventsToMethods = $this->listenerServiceDefinitionProvider->extract();
         if ($listenerClassesToEventsToMethods === []) {
@@ -176,5 +187,27 @@ CODE_SAMPLE
             $this->eventNamesToClassConstants
         );
         $class->stmts[] = $classMethod;
+    }
+
+    /**
+     * @see https://symfony.com/doc/current/event_dispatcher.html#event-dispatcher_event-listener-attributes
+     */
+    private function hasAsListenerAttribute(Class_ $class): bool
+    {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::EVENT_LISTENER_ATTRIBUTE)) {
+            return true;
+        }
+
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $classMethod->isPublic()) {
+                continue;
+            }
+
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::EVENT_LISTENER_ATTRIBUTE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
