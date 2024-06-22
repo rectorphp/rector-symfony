@@ -17,6 +17,6 @@ return static function (RectorConfig $rectorConfig): void {
         new RenameAttribute(
             'Symfony\Component\DependencyInjection\Attribute\TaggedLocator',
             'Symfony\Component\DependencyInjection\Attribute\AutowireLocator'
-        )
+        ),
     ]);
 };
