@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony64\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -14,13 +12,11 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector
+ * @deprecated This rule is deprecated since Rector 1.1.2. Use @see RenameAttributeRector rule instead.
  */
 final class ChangeRouteAttributeFromAnnotationSubnamespaceRector extends AbstractRector
 {
-    private const ANNOTATION_ROUTE = 'Symfony\Component\Routing\Annotation\Route';
-
-    private const ATTRIBUTE_ROUTE = 'Symfony\Component\Routing\Attribute\Route';
+    private bool $hasWarned = false;
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -59,30 +55,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
-
-        foreach ($node->attrGroups as $attributeGroup) {
-            foreach ($attributeGroup->attrs as $attribute) {
-                if ($this->isSymfonyRouteAttribute($attribute)) {
-                    $attribute->name = new FullyQualified(self::ATTRIBUTE_ROUTE);
-                    $hasChanged = true;
-                }
-            }
+        if ($this->hasWarned) {
+            return null;
         }
 
-        if ($hasChanged) {
-            return $node;
-        }
+        trigger_error(
+            sprintf('The "%s" rule was deprecated. Use RenameAttributeRector rule instead', self::class)
+        );
+
+        sleep(3);
+
+        $this->hasWarned = true;
 
         return null;
-    }
-
-    private function isSymfonyRouteAttribute(Attribute $attribute): bool
-    {
-        if ($attribute->name === null) {
-            return false;
-        }
-
-        return (string) $attribute->name === self::ANNOTATION_ROUTE;
     }
 }
