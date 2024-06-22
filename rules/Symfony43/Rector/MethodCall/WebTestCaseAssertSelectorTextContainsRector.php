@@ -70,9 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        trigger_error(
-            sprintf('The "%s" rule was deprecated, as it does not upgrade to valid code.', self::class)
-        );
+        trigger_error(sprintf('The "%s" rule was deprecated, as it does not upgrade to valid code.', self::class));
 
         sleep(3);
 
