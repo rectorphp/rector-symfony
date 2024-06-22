@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony40\Rector\StaticCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Symfony40\Rector\StaticCall\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
+ * @deprecated This rule is deprecated since Rector 1.1.2, as it can create invalid code.
+ * This needs a manual change
+ *
+ * @see https://github.com/pact-foundation/pact-php/pull/61/files.
  */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {
+    private bool $hasWarned = false;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -43,18 +46,21 @@ final class ProcessBuilderInstanceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->class instanceof Name) {
+        if ($this->hasWarned) {
             return null;
         }
 
-        if (! $this->isName($node->class, 'Symfony\Component\Process\ProcessBuilder')) {
-            return null;
-        }
+        trigger_error(
+            sprintf(
+                'The "%s" rule was deprecated, as it cannot change fluent code builder in a reliable way.',
+                self::class,
+            )
+        );
 
-        if (! $this->isName($node->name, 'create')) {
-            return null;
-        }
+        sleep(3);
 
-        return new New_($node->class, $node->args);
+        $this->hasWarned = true;
+
+        return null;
     }
 }
