@@ -1,4 +1,4 @@
-# 86 Rules Overview
+# 87 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -220,6 +220,28 @@ Change type in CollectionType from alias string to class reference
 
 <br>
 
+## CommandConfigureToAttributeRector
+
+Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands from `configure()`
+
+- class: [`Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector`](../rules/Symfony61/Rector/Class_/CommandConfigureToAttributeRector.php)
+
+```diff
++use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+
++#[AsCommand('sunshine')]
+ final class SunshineCommand extends Command
+ {
+-    public function configure()
+-    {
+-        $this->setName('sunshine');
+-    }
+ }
+```
+
+<br>
+
 ## CommandConstantReturnCodeRector
 
 Changes int return from execute to use Symfony Command constants.
@@ -272,11 +294,15 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand('sunshine')]
++#[AsCommand(
++    name: 'sunshine',
++    description: 'some description'
++)]
  final class SunshineCommand extends Command
  {
--    /** @var string|null */
 -    public static $defaultName = 'sunshine';
+-
+-    public static $defaultDescription = 'Ssome description';
  }
 ```
 
