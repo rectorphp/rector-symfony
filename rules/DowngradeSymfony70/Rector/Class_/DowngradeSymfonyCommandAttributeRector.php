@@ -39,7 +39,8 @@ final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
                     <<<'CODE_SAMPLE'
 #[AsCommand(name: 'app:create-user', description: 'some description')]
 class CreateUserCommand extends Command
-{}
+{
+}
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'

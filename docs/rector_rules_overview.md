@@ -178,14 +178,12 @@ Replace `Symfony\Component\Routing\Annotation\Route` by `Symfony\Component\Routi
 - class: [`Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector`](../rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php)
 
 ```diff
--/**
--     * #[\Symfony\Component\Routing\Annotation\Route("/foo")]
--    */
+-#[\Symfony\Component\Routing\Annotation\Route("/foo")]
 +#[\Symfony\Component\Routing\Attribute\Route('/foo')]
-     public function create(Request $request): Response
-     {
-         return new Response();
-     }
+ public function create(Request $request): Response
+ {
+     return new Response();
+ }
 ```
 
 <br>
@@ -274,10 +272,7 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand(
-+    name: 'sunshine',
-+    description: 'some description'
-+)]
++#[AsCommand(name: 'sunshine', description: 'some description')]
  final class SunshineCommand extends Command
  {
 -    public static $defaultName = 'sunshine';
@@ -462,14 +457,13 @@ Downgrade Symfony Command Attribute
 ```diff
  #[AsCommand(name: 'app:create-user', description: 'some description')]
  class CreateUserCommand extends Command
--{}
-+{
+ {
 +    protected function configure(): void
 +    {
 +        $this->setName('app:create-user');
 +        $this->setDescription('some description');
 +    }
-+}
+ }
 ```
 
 <br>
