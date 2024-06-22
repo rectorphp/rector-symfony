@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -93,15 +97,12 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $attribute->name = new Node\Name\FullyQualified(self::IS_GRANTED_ATTRIBUTE);
+                $attribute->name = new FullyQualified(self::IS_GRANTED_ATTRIBUTE);
 
                 $firstArg = $attribute->args[0];
+                $attribute->args[0]->value = $this->wrapToNewExpression($firstArg->value);
 
-                $attribute->args[0] = new Node\Expr\New_(new Node\Name\FullyQualified(
-                    'Symfony\Component\ExpressionLanguage\Expression'
-                ), [$firstArg]);
-
-                // @todo change args
+                $hasChanged = true;
             }
 
         }
@@ -111,5 +112,12 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function wrapToNewExpression(Expr $expr): New_
+    {
+        $args = [new Arg($expr)];
+
+        return new New_(new FullyQualified('Symfony\Component\ExpressionLanguage\Expression'), $args);
     }
 }
