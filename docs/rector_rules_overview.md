@@ -1,4 +1,4 @@
-# 85 Rules Overview
+# 84 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1124,22 +1124,6 @@ Replaces deprecated `Yaml::parse()` of file argument with file contents
 
 -$parsedFile = Yaml::parse('someFile.yml');
 +$parsedFile = Yaml::parse(file_get_contents('someFile.yml'));
-```
-
-<br>
-
-## ProcessBuilderGetProcessRector
-
-Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
-
-- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector`](../rules/Symfony40/Rector/MethodCall/ProcessBuilderGetProcessRector.php)
-
-```diff
- $processBuilder = new Symfony\Component\Process\ProcessBuilder;
--$process = $processBuilder->getProcess();
--$commamdLine = $processBuilder->getProcess()->getCommandLine();
-+$process = $processBuilder;
-+$commamdLine = $processBuilder->getCommandLine();
 ```
 
 <br>

@@ -7,7 +7,6 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector;
-use Rector\Symfony\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Symfony40\Rector\StaticCall\ProcessBuilderInstanceRector;
 
@@ -18,7 +17,6 @@ return static function (RectorConfig $rectorConfig): void {
         VarDumperTestTraitMethodArgsRector::class,
         ContainerBuilderCompileEnvArgumentRector::class,
         ProcessBuilderInstanceRector::class,
-        ProcessBuilderGetProcessRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
