@@ -17,7 +17,7 @@ class SunshineCommand extends \Symfony\Component\Console\Command\Command
 
 namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttributeRector\Fixture;
 
-#[\Symfony\Component\Console\Attribute\AsCommand('sunshine', 'Let the sun shine!')]
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine', description: 'Let the sun shine!')]
 class SunshineCommand extends \Symfony\Component\Console\Command\Command
 {
 }

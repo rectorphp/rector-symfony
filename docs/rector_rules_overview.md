@@ -1,4 +1,4 @@
-# 86 Rules Overview
+# 85 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -220,6 +220,28 @@ Change type in CollectionType from alias string to class reference
 
 <br>
 
+## CommandConfigureToAttributeRector
+
+Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands from `configure()`
+
+- class: [`Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector`](../rules/Symfony61/Rector/Class_/CommandConfigureToAttributeRector.php)
+
+```diff
++use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+
++#[AsCommand('sunshine')]
+ final class SunshineCommand extends Command
+ {
+-    public function configure()
+-    {
+-        $this->setName('sunshine');
+-    }
+ }
+```
+
+<br>
+
 ## CommandConstantReturnCodeRector
 
 Changes int return from execute to use Symfony Command constants.
@@ -240,28 +262,6 @@ Changes int return from execute to use Symfony Command constants.
 
 <br>
 
-## CommandDescriptionToPropertyRector
-
-Symfony Command description setters are moved to properties
-
-- class: [`Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector`](../rules/Symfony53/Rector/Class_/CommandDescriptionToPropertyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultDescription = 'sunshine description';
-+
-     public function configure()
-     {
--        $this->setDescription('sunshine description');
-     }
- }
-```
-
-<br>
-
 ## CommandPropertyToAttributeRector
 
 Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remove the deprecated properties
@@ -272,11 +272,15 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand('sunshine')]
++#[AsCommand(
++    name: 'sunshine',
++    description: 'some description'
++)]
  final class SunshineCommand extends Command
  {
--    /** @var string|null */
 -    public static $defaultName = 'sunshine';
+-
+-    public static $defaultDescription = 'Ssome description';
  }
 ```
 
@@ -912,27 +916,6 @@ Change TwigExtension function/filter magic closures to inlined and clear callabl
      private function resolve($value)
      {
          return $value + 100;
-     }
- }
-```
-
-<br>
-
-## MakeCommandLazyRector
-
-Make Symfony commands lazy
-
-- class: [`Rector\Symfony\CodeQuality\Rector\Class_\MakeCommandLazyRector`](../rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php)
-
-```diff
- use Symfony\Component\Console\Command\Command
-
- final class SunshineCommand extends Command
- {
-+    protected static $defaultName = 'sunshine';
-     public function configure()
-     {
--        $this->setName('sunshine');
      }
  }
 ```
