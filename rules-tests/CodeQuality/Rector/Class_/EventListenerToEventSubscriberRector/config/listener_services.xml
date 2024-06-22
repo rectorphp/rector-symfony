@@ -25,6 +25,14 @@
             <tag name="kernel.event_listener" event="single_event" method="singles"/>
         </service>
 
+        <service id="attribute_1" class="Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\SingleMethodListener">
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+        </service>
+
+        <service id="attribute_2" class="Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\MultiMethodListener">
+            <tag name="kernel.event_listener" event="single_event" method="singles"/>
+        </service>
+
         <service id="event_dispatcher" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     </services>
 </container>
