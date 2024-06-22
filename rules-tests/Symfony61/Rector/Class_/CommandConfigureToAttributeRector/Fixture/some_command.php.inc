@@ -16,9 +16,12 @@ final class SomeCommand extends \Symfony\Component\Console\Command\Command
 
 namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttributeRector\Fixture;
 
-#[\Symfony\Component\Console\Attribute\AsCommand('sunshine')]
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine')]
 final class SomeCommand extends \Symfony\Component\Console\Command\Command
 {
+    public function configure()
+    {
+    }
 }
 
 ?>

@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony61\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
-use Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver;
-use Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,9 +35,7 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly AttributeValueResolver $attributeValueResolver,
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly SetAliasesMethodCallExtractor $setAliasesMethodCallExtractor,
     ) {
     }
 
@@ -102,15 +105,74 @@ CODE_SAMPLE),
             return null;
         }
 
+        $commandNameExpr = $this->findAndRemoveMethodExpr($configureClassMethod, 'setName');
+        $commandDescriptionExpr = $this->findAndRemoveMethodExpr($configureClassMethod, 'setDescription');
+
+        // remove left overs
+        foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
+            if ($this->isExpressionVariableThis($stmt)) {
+                unset($configureClassMethod->stmts[$key]);
+            }
+        }
+
         // @todo resolve name, description, aliases, etc.
 
-        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClassWithItems(
-            SymfonyAnnotation::AS_COMMAND,
-            []
-        );
+        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        $attributeArgs = [];
+
+        if ($commandNameExpr instanceof Expr) {
+            $attributeArgs[] = $this->createNamedArg('name', $commandNameExpr);
+        }
+
+        if ($commandDescriptionExpr instanceof Expr) {
+            $attributeArgs[] = $this->createNamedArg('description', $commandDescriptionExpr);
+        }
+
+        $asCommandAttribute->attrs[0]->args = $attributeArgs;
 
         $node->attrGroups[] = $asCommandAttribute;
 
         return $node;
+    }
+
+    private function createNamedArg(string $name, Expr $expr): Arg
+    {
+        return new Arg($expr, false, false, [], new Identifier($name));
+    }
+
+    private function findAndRemoveMethodExpr(ClassMethod $classMethod, string $methodName): ?Expr
+    {
+        $expr = null;
+
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$expr, $methodName) {
+            // find setName() method call
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
+            if (! $this->isName($node->name, $methodName)) {
+                return null;
+            }
+
+            $expr = $node->getArgs()[0]
+                ->value;
+            return $node->var;
+        });
+
+        return $expr;
+    }
+
+    private function isExpressionVariableThis(Stmt $stmt): bool
+    {
+        if (! $stmt instanceof Expression) {
+            return false;
+        }
+
+        if (! $stmt->expr instanceof Variable) {
+            return false;
+        }
+
+        $variable = $stmt->expr;
+        return $this->isName($variable, 'this');
     }
 }
