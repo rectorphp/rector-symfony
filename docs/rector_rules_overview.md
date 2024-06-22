@@ -230,12 +230,14 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands from `co
 +use Symfony\Component\Console\Attribute\AsCommand;
  use Symfony\Component\Console\Command\Command;
 
-+#[AsCommand('sunshine')]
++#[AsCommand(name: 'sunshine', description: 'Some description')]
  final class SunshineCommand extends Command
  {
 -    public function configure()
 -    {
 -        $this->setName('sunshine');
+-        $this->setDescription('Some description');
+-
 -    }
  }
 ```
