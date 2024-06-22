@@ -1,4 +1,4 @@
-# 85 Rules Overview
+# 86 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -167,6 +167,25 @@ Rename `type` option to `entry_type` in CollectionType
          ]);
      }
  }
+```
+
+<br>
+
+## ChangeRouteAttributeFromAnnotationSubnamespaceRector
+
+Replace `Symfony\Component\Routing\Annotation\Route` by `Symfony\Component\Routing\Attribute\Route` when the class use #Route[] attribute
+
+- class: [`Rector\Symfony\Symfony64\Rector\Class_\ChangeRouteAttributeFromAnnotationSubnamespaceRector`](../rules/Symfony64/Rector/Class_/ChangeRouteAttributeFromAnnotationSubnamespaceRector.php)
+
+```diff
+-/**
+-     * #[\Symfony\Component\Routing\Annotation\Route("/foo")]
+-    */
++#[\Symfony\Component\Routing\Attribute\Route('/foo')]
+     public function create(Request $request): Response
+     {
+         return new Response();
+     }
 ```
 
 <br>
@@ -1688,7 +1707,7 @@ Changes Process string argument to an array
 
 ## SwiftCreateMessageToNewEmailRector
 
-Changes `createMessage()` into a new Symfony\Component\Mime\Email
+Changes `createMessage()` into a new `Symfony\Component\Mime\Email`
 
 - class: [`Rector\Symfony\SwiftMailer\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../rules/SwiftMailer/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
 
@@ -1701,7 +1720,7 @@ Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
 ## SwiftMessageToEmailRector
 
-Convert `\Swift_Message` into an \Symfony\Component\Mime\Email
+Convert `\Swift_Message` into an `\Symfony\Component\Mime\Email`
 
 - class: [`Rector\Symfony\SwiftMailer\Rector\ClassMethod\SwiftMessageToEmailRector`](../rules/SwiftMailer/Rector/ClassMethod/SwiftMessageToEmailRector.php)
 
