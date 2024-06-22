@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Class_\RenameAttributeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\RenameAttribute;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 
 // @see https://github.com/symfony/symfony/blob/6.4/UPGRADE-6.4.md
 return static function (RectorConfig $rectorConfig): void {
@@ -21,6 +26,19 @@ return static function (RectorConfig $rectorConfig): void {
         new RenameAttribute(
             'Symfony\Component\Routing\Annotation\Route',
             'Symfony\Component\Routing\Attribute\Route'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
+        new AddReturnTypeDeclaration(
+            'Symfony\Component\Form\DataTransformerInterface',
+            'transform',
+            new UnionType([new StringType(), new \PHPStan\Type\NullType()]),
+        ),
+        new AddReturnTypeDeclaration(
+            'Symfony\Component\Form\DataTransformerInterface',
+            'reverseTransform',
+            new UnionType([new StringType(), new ObjectWithoutClassType()]),
         ),
     ]);
 };
