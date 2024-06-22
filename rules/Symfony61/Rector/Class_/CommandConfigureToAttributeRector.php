@@ -32,6 +32,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommandConfigureToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @var array<string, string>
+     */
+    private const METHODS_TO_ATTRIBUTE_NAMES = [
+        'setName' => 'name',
+        'setDescription' => 'description',
+        'setAliases' => 'aliases',
+    ];
+
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
@@ -105,8 +114,17 @@ CODE_SAMPLE),
             return null;
         }
 
-        $commandNameExpr = $this->findAndRemoveMethodExpr($configureClassMethod, 'setName');
-        $commandDescriptionExpr = $this->findAndRemoveMethodExpr($configureClassMethod, 'setDescription');
+        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        $attributeArgs = [];
+
+        foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
+            $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
+            if ($resolvedExpr instanceof Expr) {
+                $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
+            }
+        }
+
+        $asCommandAttribute->attrs[0]->args = $attributeArgs;
 
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
@@ -114,21 +132,6 @@ CODE_SAMPLE),
                 unset($configureClassMethod->stmts[$key]);
             }
         }
-
-        // @todo resolve name, description, aliases, etc.
-
-        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
-        $attributeArgs = [];
-
-        if ($commandNameExpr instanceof Expr) {
-            $attributeArgs[] = $this->createNamedArg('name', $commandNameExpr);
-        }
-
-        if ($commandDescriptionExpr instanceof Expr) {
-            $attributeArgs[] = $this->createNamedArg('description', $commandDescriptionExpr);
-        }
-
-        $asCommandAttribute->attrs[0]->args = $attributeArgs;
 
         $node->attrGroups[] = $asCommandAttribute;
 
