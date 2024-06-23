@@ -33,7 +33,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // @see https://github.com/symfony/symfony/pull/50826
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\Component\HttpFoundation\Request', 'getContentType', 'getContentTypeFormat')
+        new MethodCallRename('Symfony\Component\HttpFoundation\Request', 'getContentType', 'getContentTypeFormat'),
     ]);
 
     // the "@required" was dropped, use attribute instead
