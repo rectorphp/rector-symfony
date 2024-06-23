@@ -15,4 +15,10 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\DependencyInjection\Attribute\AutowireDecorated',
         ),
     ]);
+
+    // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#frameworkbundle
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
+        'Symfony\Component\Serializer\Normalizer\ObjectNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+        'Symfony\Component\Serializer\Normalizer\PropertyNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+    ]);
 };
