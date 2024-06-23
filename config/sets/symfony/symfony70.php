@@ -16,9 +16,13 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ]);
 
-    // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#frameworkbundle
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
+        // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#frameworkbundle
         'Symfony\Component\Serializer\Normalizer\ObjectNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
         'Symfony\Component\Serializer\Normalizer\PropertyNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+
+        // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#httpfoundation
+        'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\ChainRequestMatcher',
+        'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
     ]);
 };
