@@ -18,7 +18,17 @@ use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEnti
 use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([SimplifyFormRenderingRector::class, SecurityAttributeToIsGrantedAttributeRector::class]);
+    $rectorConfig->rules([
+        SimplifyFormRenderingRector::class,
+        SecurityAttributeToIsGrantedAttributeRector::class,
+        ParamConverterAttributeToMapEntityAttributeRector::class,
+
+        // @see https://github.com/symfony/symfony/pull/47068, #[AsMessageHandler] attribute
+        MessageHandlerInterfaceToAttributeRector::class,
+        MessageSubscriberInterfaceToAttributeRector::class,
+        // @see https://github.com/symfony/symfony/pull/47363
+        ArgumentValueResolverToValueResolverRector::class,
+    ]);
 
     // change to attribute before rename
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
@@ -106,13 +116,4 @@ return static function (RectorConfig $rectorConfig): void {
             'MAX_USERNAME_LENGTH'
         ),
     ]);
-
-    $rectorConfig->rule(ParamConverterAttributeToMapEntityAttributeRector::class);
-    // @see https://github.com/symfony/symfony/pull/47068
-    $rectorConfig->rule(MessageHandlerInterfaceToAttributeRector::class);
-
-    $rectorConfig->rule(MessageSubscriberInterfaceToAttributeRector::class);
-
-    // @see https://github.com/symfony/symfony/pull/47363
-    $rectorConfig->rule(ArgumentValueResolverToValueResolverRector::class);
 };
