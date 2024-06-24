@@ -39,6 +39,7 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
         'setName' => 'name',
         'setDescription' => 'description',
         'setAliases' => 'aliases',
+        'setHidden' => 'hidden',
     ];
 
     public function __construct(
