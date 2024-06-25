@@ -169,12 +169,16 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony71.php'
             ),
 
-            new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/configs.php'),
-            new Set(SetGroup::SYMFONY, 'Code Quality', __DIR__ . '/../../../config/sets/symfony-code-quality.php'),
+            new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/symfony/configs.php'),
+            new Set(
+                SetGroup::SYMFONY,
+                'Code Quality',
+                __DIR__ . '/../../../config/sets/symfony/symfony-code-quality.php'
+            ),
             new Set(
                 SetGroup::SYMFONY,
                 'Constructor Injection',
-                __DIR__ . '/../../../config/sets/symfony-constructor-injection.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony-constructor-injection.php'
             ),
             new Set(
                 SetGroup::SYMFONY,
