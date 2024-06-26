@@ -7,6 +7,7 @@ namespace Rector\Symfony\Symfony64\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated since Rector 1.1.2. Use @see RenameAttributeRector rule instead.
  */
-final class ChangeRouteAttributeFromAnnotationSubnamespaceRector extends AbstractRector
+final class ChangeRouteAttributeFromAnnotationSubnamespaceRector extends AbstractRector implements DeprecatedInterface
 {
     private bool $hasWarned = false;
 
