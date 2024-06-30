@@ -46,6 +46,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         'doctrine' => 'Symfony\Config\DoctrineConfig',
         'doctrine_migrations' => 'Symfony\Config\DoctrineMigrationsConfig',
         'sentry' => 'Symfony\Config\SentryConfig',
+        'web_profiler' => 'Symfony\Config\WebProfilerConfig',
     ];
 
     public function __construct(
