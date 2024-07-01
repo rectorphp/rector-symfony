@@ -44,7 +44,6 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
 
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
@@ -107,27 +106,50 @@ CODE_SAMPLE),
             return null;
         }
 
-        // already converted
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, SymfonyAnnotation::AS_COMMAND)) {
-            return null;
-        }
-
         $configureClassMethod = $node->getMethod('configure');
         if (! $configureClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        $asCommandAttribute = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        // handle existing attribute
+        $asCommandAttribute = null;
         $attributeArgs = [];
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if (! $this->nodeNameResolver->isName($attribute->name, SymfonyAnnotation::AS_COMMAND)) {
+                    continue;
+                }
+
+                $asCommandAttribute = $attribute;
+                foreach ($asCommandAttribute->args as $arg) {
+                    if ($arg->name === null) {
+                        // when the existing attribute does not use named arguments, we cannot upgrade
+                        return null;
+                    }
+
+                    $attributeArgs[$arg->name->toString()] = $arg;
+                }
+
+                break 2;
+            }
+        }
+
+        if ($asCommandAttribute === null) {
+            $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+
+            $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
+
+            $node->attrGroups[] = $asCommandAttributeGroup;
+        }
 
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
             if ($resolvedExpr instanceof Expr) {
-                $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
+                $attributeArgs[$attributeName] = $this->createNamedArg($attributeName, $resolvedExpr);
             }
         }
 
-        $asCommandAttribute->attrs[0]->args = $attributeArgs;
+        $asCommandAttribute->args = $attributeArgs;
 
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
@@ -135,8 +157,6 @@ CODE_SAMPLE),
                 unset($configureClassMethod->stmts[$key]);
             }
         }
-
-        $node->attrGroups[] = $asCommandAttribute;
 
         return $node;
     }
