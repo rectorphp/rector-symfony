@@ -50,6 +50,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         'debug' => 'Symfony\Config\DebugConfig',
         'maker' => 'Symfony\Config\MakerConfig',
         'nelmio_cors' => 'Symfony\Config\NelmioCorsConfig',
+        'api_platform' => 'Symfony\Config\ApiPlatformConfig',
     ];
 
     public function __construct(
