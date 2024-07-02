@@ -1,0 +1,231 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Symfony\Configs\Rector\Class_;
+
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Parser\SimplePhpParser;
+use Rector\Rector\AbstractRector;
+use Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor;
+use Rector\Symfony\Configs\ValueObject\ServiceArguments;
+use Rector\ValueObject\MethodName;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
+
+/**
+ * @see https://symfony.com/blog/new-in-symfony-6-1-service-autowiring-attributes
+ */
+final class AutowireAttributeRector extends AbstractRector implements ConfigurableRectorInterface
+{
+    /**
+     * @var string
+     */
+    public const CONFIGS_DIRECTORY = 'configs_directory';
+
+    /**
+     * @var string
+     */
+    private const AUTOWIRE_CLASS = 'Symfony\Component\DependencyInjection\Attribute\Autowire';
+
+    private ?string $configsDirectory = null;
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Change explicit configuration parameter pass into #[Autowire] attributes', [
+            new CodeSample(
+                <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    public function __construct(
+        private int $timeout,
+        private string $secret,
+    )  {
+    }
+}
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+final class SomeClass
+{
+    public function __construct(
+        #[Autowire(param: 'timeout')]
+        private int $timeout,
+        #[Autowire(env: 'APP_SECRET')]
+        private string $secret
+    )  {
+    }
+}
+CODE_SAMPLE
+            )]);
+    }
+
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Class_
+    {
+        if ($node->isAnonymous()) {
+            return null;
+        }
+
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (! $constructClassMethod instanceof ClassMethod) {
+            return null;
+        }
+
+        if ($this->configsDirectory === null) {
+            throw new ShouldNotHappenException('Configure paths first');
+        }
+
+        $phpConfigFileInfos = $this->findPhpConfigs($this->configsDirectory);
+
+        $servicesArguments = $this->resolveServiceArguments($phpConfigFileInfos);
+        if ($servicesArguments === []) {
+            // nothing to resolve, maybe false positive!
+            return null;
+        }
+
+        $className = $this->getName($node);
+        if (! is_string($className)) {
+            return null;
+        }
+
+        $hasChanged = false;
+
+        foreach ($servicesArguments as $serviceArgument) {
+            if ($className !== $serviceArgument->getClassName()) {
+                continue;
+            }
+
+            foreach ($constructClassMethod->params as $constructorParam) {
+                if (! $constructorParam->var instanceof Variable) {
+                    continue;
+                }
+
+                $constructorParameterName = $constructorParam->var->name;
+                if (! is_string($constructorParameterName)) {
+                    continue;
+                }
+
+                $currentEnv = $serviceArgument->getEnvs()[$constructorParameterName] ?? null;
+                if ($currentEnv) {
+                    $constructorParam->attrGroups[] = new AttributeGroup([
+                        $this->createAutowireAttribute($currentEnv, 'env'),
+                    ]);
+
+                    $hasChanged = true;
+
+                }
+
+                $currentParameter = $serviceArgument->getParams()[$constructorParameterName] ?? null;
+                if ($currentParameter) {
+                    $constructorParam->attrGroups[] = new AttributeGroup([
+                        $this->createAutowireAttribute($currentParameter, 'param'),
+                    ]);
+
+                    $hasChanged = true;
+                }
+            }
+        }
+
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        if (! $configuration[self::CONFIGS_DIRECTORY]) {
+            return;
+        }
+
+        $configsDirectory = $configuration[self::CONFIGS_DIRECTORY];
+        Assert::string($configsDirectory);
+        Assert::directory($configsDirectory);
+
+        $this->configsDirectory = $configsDirectory;
+    }
+
+    /**
+     * @return SplFileInfo[]
+     */
+    private function findPhpConfigs(string $configsDirectory): array
+    {
+        $phpConfigsFinder = Finder::create()->files()
+            ->in($configsDirectory)
+            ->name('*.php')
+            ->sortByName();
+
+        if ($phpConfigsFinder->count() === 0) {
+            throw new ShouldNotHappenException(sprintf(
+                'Could not find any PHP configs in "%s"',
+                $this->configsDirectory
+            ));
+        }
+
+        return iterator_to_array($phpConfigsFinder->getIterator());
+    }
+
+    /**
+     * @param SplFileInfo[] $phpConfigFileInfos
+     * @return ServiceArguments[]
+     */
+    private function resolveServiceArguments(array $phpConfigFileInfos): array
+    {
+        $simplePhpParser = new SimplePhpParser();
+        $nodeTraverser = new NodeTraverser();
+
+        $collectServiceArgumentsNodeVisitor = new CollectServiceArgumentsNodeVisitor();
+        $nodeTraverser->addVisitor($collectServiceArgumentsNodeVisitor);
+
+        $servicesArguments = [];
+
+        foreach ($phpConfigFileInfos as $phpConfigFileInfo) {
+            // traverse and collect data
+            $configStmts = $simplePhpParser->parseString($phpConfigFileInfo->getContents());
+            $nodeTraverser->traverse($configStmts);
+
+            $servicesArguments = array_merge(
+                $servicesArguments,
+                $collectServiceArgumentsNodeVisitor->getServicesArguments()
+            );
+        }
+
+        return $servicesArguments;
+    }
+
+    private function createAutowireAttribute(string $value, string $argName): Attribute
+    {
+        $args = [new Arg(new String_($value), name: new Identifier($argName))];
+
+        return new Attribute(new FullyQualified(self::AUTOWIRE_CLASS), $args);
+    }
+}
