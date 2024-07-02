@@ -49,6 +49,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         'web_profiler' => 'Symfony\Config\WebProfilerConfig',
         'debug' => 'Symfony\Config\DebugConfig',
         'maker' => 'Symfony\Config\MakerConfig',
+        'nelmio_cors' => 'Symfony\Config\NelmioCorsConfig',
     ];
 
     public function __construct(
