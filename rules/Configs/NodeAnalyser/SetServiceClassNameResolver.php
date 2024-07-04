@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Configs\NodeAnalyser;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -37,16 +38,7 @@ final class SetServiceClassNameResolver
             }
 
             // we look for services variable
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
-
-            if (! is_string($node->var->name)) {
-                return null;
-            }
-
-            $servicesName = $node->var->name;
-            if ($servicesName !== 'services') {
+            if (! $this->isServicesVariable($node->var)) {
                 return null;
             }
 
@@ -57,20 +49,12 @@ final class SetServiceClassNameResolver
                     continue;
                 }
 
-                $classConstFetch = $arg->value;
-                if (! $classConstFetch->name instanceof Identifier) {
+                $resolvedClassConstantName = $this->matchClassConstantName($arg->value);
+                if (! is_string($resolvedClassConstantName)) {
                     continue;
                 }
 
-                if ($classConstFetch->name->toString() !== 'class') {
-                    continue;
-                }
-
-                if (! $classConstFetch->class instanceof FullyQualified) {
-                    continue;
-                }
-
-                $serviceClassName = $classConstFetch->class->toString();
+                $serviceClassName = $resolvedClassConstantName;
                 return true;
             }
 
@@ -78,5 +62,39 @@ final class SetServiceClassNameResolver
         });
 
         return $serviceClassName;
+    }
+
+    public function matchClassConstantName(ClassConstFetch $classConstFetch): ?string
+    {
+        if (! $classConstFetch->name instanceof Identifier) {
+            return null;
+        }
+
+        if ($classConstFetch->name->toString() !== 'class') {
+            return null;
+        }
+
+        if (! $classConstFetch->class instanceof FullyQualified) {
+            return null;
+        }
+
+        return $classConstFetch->class->toString();
+    }
+
+    /**
+     * Dummy name check, as we don't have types here, only variable names.
+     */
+    private function isServicesVariable(Expr $expr): bool
+    {
+        if (! $expr instanceof Variable) {
+            return false;
+        }
+
+        if (! is_string($expr->name)) {
+            return false;
+        }
+
+        $servicesName = $expr->name;
+        return $servicesName === 'services';
     }
 }
