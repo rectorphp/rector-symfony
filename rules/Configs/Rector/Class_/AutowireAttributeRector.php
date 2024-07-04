@@ -21,7 +21,7 @@ use Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver;
 use Rector\ValueObject\MethodName;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
@@ -50,7 +50,7 @@ final class AutowireAttributeRector extends AbstractRector implements Configurab
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change explicit configuration parameter pass into #[Autowire] attributes', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -71,11 +71,15 @@ final class SomeClass
         #[Autowire(param: 'timeout')]
         private int $timeout,
         #[Autowire(env: 'APP_SECRET')]
-        private string $secret
+        private string $secret,
     )  {
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    self::CONFIGS_DIRECTORY => __DIR__ . '/config',
+                ]
             )]);
     }
 
