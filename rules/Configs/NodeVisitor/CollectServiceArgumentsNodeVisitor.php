@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
-//use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Exception\NotImplementedYetException;
 use Rector\Symfony\Configs\NodeAnalyser\SetServiceClassNameResolver;
@@ -59,14 +58,15 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
 
         // 1. detect arg name + value
         $firstArg = $argMethodCall->getArgs()[0];
-        if (! $firstArg->value instanceof String_) {
+
+        if ($firstArg->value instanceof String_ || $firstArg->value instanceof Node\Scalar\LNumber) {
+            $argumentLocator = $firstArg->value->value;
+        } else {
             throw new NotImplementedYetException(sprintf(
                 'Add support for non-string arg names like "%s"',
                 $firstArg->value::class
             ));
         }
-
-        $argumentName = $firstArg->value->value;
 
         $secondArg = $argMethodCall->getArgs()[1];
         if (! $secondArg->value instanceof String_) {
@@ -85,13 +85,13 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
 
         $match = Strings::match($argumentValue, '#%env\((?<env>[A-Z_]+)\)#');
         if (isset($match['env'])) {
-            $this->servicesArgumentsByClass[$serviceClassName][self::ENVS][$argumentName] = (string) $match['env'];
+            $this->servicesArgumentsByClass[$serviceClassName][self::ENVS][$argumentLocator] = (string) $match['env'];
             return null;
         }
 
         $match = Strings::match($argumentValue, '#%(?<parameter>[\w]+)%#');
         if (isset($match['parameter'])) {
-            $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentName] = (string) $match['parameter'];
+            $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentLocator] = (string) $match['parameter'];
             return null;
         }
 

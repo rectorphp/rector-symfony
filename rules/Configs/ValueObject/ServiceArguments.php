@@ -7,8 +7,8 @@ namespace Rector\Symfony\Configs\ValueObject;
 final readonly class ServiceArguments
 {
     /**
-     * @param array<string, string> $params
-     * @param array<string, string> $envs
+     * @param array<string|int, string> $params
+     * @param array<string|int, string> $envs
      */
     public function __construct(
         private string $className,
@@ -23,7 +23,7 @@ final readonly class ServiceArguments
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string|int, string>
      */
     public function getParams(): array
     {
@@ -31,7 +31,7 @@ final readonly class ServiceArguments
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string|int, string>
      */
     public function getEnvs(): array
     {

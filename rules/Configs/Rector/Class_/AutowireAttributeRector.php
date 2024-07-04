@@ -122,7 +122,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach ($constructClassMethod->params as $constructorParam) {
+            foreach ($constructClassMethod->params as $position => $constructorParam) {
                 if (! $constructorParam->var instanceof Variable) {
                     continue;
                 }
@@ -132,7 +132,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $currentEnv = $serviceArgument->getEnvs()[$constructorParameterName] ?? null;
+                $currentEnv = $serviceArgument->getEnvs()[$constructorParameterName] ?? $serviceArgument->getEnvs()[$position] ?? null;
                 if ($currentEnv) {
                     $constructorParam->attrGroups[] = new AttributeGroup([
                         $this->createAutowireAttribute($currentEnv, 'env'),
@@ -142,7 +142,7 @@ CODE_SAMPLE
 
                 }
 
-                $currentParameter = $serviceArgument->getParams()[$constructorParameterName] ?? null;
+                $currentParameter = $serviceArgument->getParams()[$constructorParameterName] ?? $serviceArgument->getParams()[$position] ?? null;
                 if ($currentParameter) {
                     $constructorParam->attrGroups[] = new AttributeGroup([
                         $this->createAutowireAttribute($currentParameter, 'param'),
