@@ -14,13 +14,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Parser\SimplePhpParser;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor;
-use Rector\Symfony\Configs\ValueObject\ServiceArguments;
+use Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver;
 use Rector\ValueObject\MethodName;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -44,6 +41,11 @@ final class AutowireAttributeRector extends AbstractRector implements Configurab
     private const AUTOWIRE_CLASS = 'Symfony\Component\DependencyInjection\Attribute\Autowire';
 
     private ?string $configsDirectory = null;
+
+    public function __construct(
+        private readonly ConfigServiceArgumentsResolver $configServiceArgumentsResolver
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -102,7 +104,7 @@ CODE_SAMPLE
 
         $phpConfigFileInfos = $this->findPhpConfigs($this->configsDirectory);
 
-        $servicesArguments = $this->resolveServiceArguments($phpConfigFileInfos);
+        $servicesArguments = $this->configServiceArgumentsResolver->resolve($phpConfigFileInfos);
         if ($servicesArguments === []) {
             // nothing to resolve, maybe false positive!
             return null;
@@ -192,34 +194,6 @@ CODE_SAMPLE
         }
 
         return iterator_to_array($phpConfigsFinder->getIterator());
-    }
-
-    /**
-     * @param SplFileInfo[] $phpConfigFileInfos
-     * @return ServiceArguments[]
-     */
-    private function resolveServiceArguments(array $phpConfigFileInfos): array
-    {
-        $simplePhpParser = new SimplePhpParser();
-        $nodeTraverser = new NodeTraverser();
-
-        $collectServiceArgumentsNodeVisitor = new CollectServiceArgumentsNodeVisitor();
-        $nodeTraverser->addVisitor($collectServiceArgumentsNodeVisitor);
-
-        $servicesArguments = [];
-
-        foreach ($phpConfigFileInfos as $phpConfigFileInfo) {
-            // traverse and collect data
-            $configStmts = $simplePhpParser->parseString($phpConfigFileInfo->getContents());
-            $nodeTraverser->traverse($configStmts);
-
-            $servicesArguments = array_merge(
-                $servicesArguments,
-                $collectServiceArgumentsNodeVisitor->getServicesArguments()
-            );
-        }
-
-        return $servicesArguments;
     }
 
     private function createAutowireAttribute(string $value, string $argName): Attribute
