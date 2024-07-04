@@ -6,6 +6,7 @@ namespace Rector\Symfony\Configs\NodeVisitor;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
@@ -28,7 +29,7 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
     private const PARAMETERS = 'parameters';
 
     /**
-     * @var array<string, array<self::ENVS|self::PARAMETERS, string[]>>
+     * @var array<string, array<self::ENVS|self::PARAMETERS, array<string|Node\Expr>>>
      */
     private array $servicesArgumentsByClass = [];
 
@@ -72,20 +73,36 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
             ));
         }
 
-        $secondArg = $argMethodCall->getArgs()[1];
-        if (! $secondArg->value instanceof String_) {
-            throw new NotImplementedYetException(sprintf(
-                'Add support for non-string arg values like "%s"',
-                $firstArg->value::class
-            ));
-        }
-
         $serviceClassName = $this->setServiceClassNameResolver->resolve($argMethodCall);
         if (! is_string($serviceClassName)) {
             return null;
         }
 
-        $argumentValue = $secondArg->value->value;
+        $secondArg = $argMethodCall->getArgs()[1];
+
+        if ($secondArg->value instanceof Concat) {
+            // special case for concat parameter enum const
+            $concat = $secondArg->value;
+            if ($concat->right instanceof String_ && $concat->right->value === '%') {
+                $nestedConcat = $concat->left;
+                if ($nestedConcat instanceof Concat) {
+                    if ($nestedConcat->left instanceof String_ && $nestedConcat->left->value === '%') {
+                        $argumentValue = $nestedConcat->right;
+                        $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentLocator] = $argumentValue;
+                        return null;
+                    }
+                }
+            }
+        }
+
+        if ($secondArg->value instanceof String_) {
+            $argumentValue = $secondArg->value->value;
+        } else {
+            throw new NotImplementedYetException(sprintf(
+                'Add support for non-string arg values like "%s"',
+                $firstArg->value::class
+            ));
+        }
 
         $match = Strings::match($argumentValue, '#%env\((?<env>[A-Z_]+)\)#');
         if (isset($match['env'])) {

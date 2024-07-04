@@ -200,9 +200,13 @@ CODE_SAMPLE
         return iterator_to_array($phpConfigsFinder->getIterator());
     }
 
-    private function createAutowireAttribute(string $value, string $argName): Attribute
+    private function createAutowireAttribute(string|Node\Expr $value, string $argName): Attribute
     {
-        $args = [new Arg(new String_($value), name: new Identifier($argName))];
+        if (is_string($value)) {
+            $value = new String_($value);
+        }
+
+        $args = [new Arg($value, name: new Identifier($argName))];
 
         return new Attribute(new FullyQualified(self::AUTOWIRE_CLASS), $args);
     }

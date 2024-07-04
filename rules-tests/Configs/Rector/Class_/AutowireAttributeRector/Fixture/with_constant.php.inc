@@ -23,7 +23,7 @@ namespace Rector\Symfony\Tests\Configs\Rector\Class_\AutowireAttributeRector\Fix
 final class WithConstant
 {
     public function __construct(
-        #[\Symfony\Component\DependencyInjection\Attribute\Autowire(param: 'SOME_PARAM')]
+        #[\Symfony\Component\DependencyInjection\Attribute\Autowire(param: \Rector\Symfony\Tests\Configs\Rector\Class_\AutowireAttributeRector\Source\ParameterName::GOOGLE_KEY)]
         private $googleKey
     ) {
     }
