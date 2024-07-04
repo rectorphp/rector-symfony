@@ -8,7 +8,7 @@ if (class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\Serv
 
 class ServicesConfigurator
 {
-    public function set(): ServiceConfigurator
+    public function set(string $className): ServiceConfigurator
     {
     }
 }
