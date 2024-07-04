@@ -22,7 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 final class SingleIsGranted
 {
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_ADMIN')]
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(attribute: 'ROLE_ADMIN')]
     public function index()
     {
     }

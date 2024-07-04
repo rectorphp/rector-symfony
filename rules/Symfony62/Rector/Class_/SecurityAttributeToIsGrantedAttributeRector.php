@@ -117,6 +117,7 @@ CODE_SAMPLE
                 $attribute->name = new FullyQualified(self::IS_GRANTED_ATTRIBUTE);
 
                 $firstArg = $attribute->args[0];
+                $firstArg->name = new Node\Identifier('attribute');
                 $attribute->args[0]->value = $this->wrapToNewExpression($firstArg->value);
 
                 $hasChanged = true;
