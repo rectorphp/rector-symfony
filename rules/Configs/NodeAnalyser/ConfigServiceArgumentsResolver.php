@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Symfony\Configs\NodeAnalyser;
 
 use PhpParser\NodeTraverser;
-use Rector\PhpParser\Parser\SimplePhpParser;
 use Rector\Symfony\Configs\NodeVisitor\CollectServiceArgumentsNodeVisitor;
 use Rector\Symfony\Configs\ValueObject\ServiceArguments;
+use Rector\Symfony\PhpParser\NamedSimplePhpParser;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class ConfigServiceArgumentsResolver
@@ -17,7 +17,7 @@ final class ConfigServiceArgumentsResolver
     private CollectServiceArgumentsNodeVisitor $collectServiceArgumentsNodeVisitor;
 
     public function __construct(
-        private readonly SimplePhpParser $simplePhpParser
+        private readonly NamedSimplePhpParser $namedSimplePhpParser
     ) {
         $this->nodeTraverser = new NodeTraverser();
         $this->collectServiceArgumentsNodeVisitor = new CollectServiceArgumentsNodeVisitor();
@@ -34,7 +34,7 @@ final class ConfigServiceArgumentsResolver
 
         foreach ($phpConfigFileInfos as $phpConfigFileInfo) {
             // traverse and collect data
-            $configStmts = $this->simplePhpParser->parseString($phpConfigFileInfo->getContents());
+            $configStmts = $this->namedSimplePhpParser->parseString($phpConfigFileInfo->getContents());
             $this->nodeTraverser->traverse($configStmts);
 
             $servicesArguments = array_merge(

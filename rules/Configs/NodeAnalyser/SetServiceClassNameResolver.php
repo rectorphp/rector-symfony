@@ -76,6 +76,7 @@ final class SetServiceClassNameResolver
 
             return false;
         });
+
         return $serviceClassName;
     }
 }
