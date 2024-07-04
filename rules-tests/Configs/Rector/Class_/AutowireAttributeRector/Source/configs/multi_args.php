@@ -8,16 +8,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(SomeConfiguredService::class)
-        ->arg('$timeout', '%timeout%')
-        ->arg('$key', '%env(APP_KEY)%');
-
-    $services->set(AnotherConfiguredService::class)
-        ->arg('$missing', '%MISSING_PARAM%')
-        ->arg('$someParameter', '%SOME_PARAM%');
-
-    // should be skipped
-    $services->set(SkipServiceWithoutConstructor::class)
-        ->arg('$timeout', '%timeout%')
-        ->arg('$key', '%env(APP_KEY)%');
+    $services->set(\Rector\Symfony\Tests\Configs\Rector\Class_\AutowireAttributeRector\Fixture\MultiArgs::class)
+        ->args([
+            \Symfony\Component\DependencyInjection\Loader\Configurator\service('some_service'),
+            '%timeout%'
+        ]);
 };

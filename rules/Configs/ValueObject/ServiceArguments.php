@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\ValueObject;
 
+use PhpParser\Node\Expr;
+
 final readonly class ServiceArguments
 {
     /**
-     * @param array<string|int, string> $params
-     * @param array<string|int, string> $envs
+     * @param array<string|int, string|Expr> $params
+     * @param array<string|int, string|Expr> $envs
      */
     public function __construct(
         private string $className,
@@ -23,7 +25,7 @@ final readonly class ServiceArguments
     }
 
     /**
-     * @return array<string|int, string>
+     * @return array<string|int, string|Expr>
      */
     public function getParams(): array
     {
@@ -31,7 +33,7 @@ final readonly class ServiceArguments
     }
 
     /**
-     * @return array<string|int, string>
+     * @return array<string|int, string|Expr>
      */
     public function getEnvs(): array
     {

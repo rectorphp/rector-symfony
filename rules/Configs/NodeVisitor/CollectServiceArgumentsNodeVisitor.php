@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\NodeVisitor;
 
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Expr\Array_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
@@ -28,7 +34,7 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
     private const PARAMETERS = 'parameters';
 
     /**
-     * @var array<string, array<self::ENVS|self::PARAMETERS, string[]>>
+     * @var array<string, array<self::ENVS|self::PARAMETERS, array<string|Expr>>>
      */
     private array $servicesArgumentsByClass = [];
 
@@ -51,7 +57,13 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        $argMethodCall = $this->matchArgMethodCall($node);
+        $argsMethodCall = $this->matchNamedMethodCall($node, 'args');
+        if ($argsMethodCall instanceof MethodCall) {
+            $this->processArgsMethodCall($argsMethodCall);
+            return null;
+        }
+
+        $argMethodCall = $this->matchNamedMethodCall($node, 'arg');
         if (! $argMethodCall instanceof MethodCall) {
             return null;
         }
@@ -59,19 +71,15 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
         // 1. detect arg name + value
         $firstArg = $argMethodCall->getArgs()[0];
 
-        if ($firstArg->value instanceof String_ || $firstArg->value instanceof Node\Scalar\LNumber) {
-            $argumentLocator = $firstArg->value->value;
+        if ($firstArg->value instanceof String_ || $firstArg->value instanceof LNumber) {
+            $argumentLocation = $firstArg->value->value;
+            if (is_string($argumentLocation)) {
+                // remove $ prefix
+                $argumentLocation = ltrim($argumentLocation, '$');
+            }
         } else {
             throw new NotImplementedYetException(sprintf(
                 'Add support for non-string arg names like "%s"',
-                $firstArg->value::class
-            ));
-        }
-
-        $secondArg = $argMethodCall->getArgs()[1];
-        if (! $secondArg->value instanceof String_) {
-            throw new NotImplementedYetException(sprintf(
-                'Add support for non-string arg values like "%s"',
                 $firstArg->value::class
             ));
         }
@@ -81,21 +89,30 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-        $argumentValue = $secondArg->value->value;
+        $secondArg = $argMethodCall->getArgs()[1];
 
-        $match = Strings::match($argumentValue, '#%env\((?<env>[A-Z_]+)\)#');
-        if (isset($match['env'])) {
-            $this->servicesArgumentsByClass[$serviceClassName][self::ENVS][$argumentLocator] = (string) $match['env'];
+        if ($secondArg->value instanceof Concat) {
+            $unwrappedExpr = $this->matchConcatWrappedParameter($secondArg->value);
+            if (! $unwrappedExpr instanceof Expr) {
+                return null;
+            }
+
+            $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentLocation] = $unwrappedExpr;
             return null;
         }
 
-        $match = Strings::match($argumentValue, '#%(?<parameter>[\w]+)%#');
-        if (isset($match['parameter'])) {
-            $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentLocator] = (string) $match['parameter'];
-            return null;
+        if ($secondArg->value instanceof String_) {
+            $argumentValue = $secondArg->value->value;
+        } else {
+            throw new NotImplementedYetException(sprintf(
+                'Add support for non-string arg values like "%s"',
+                $firstArg->value::class
+            ));
         }
 
-        return null;
+        $this->matchStringEnvOrParameter($argumentValue, $serviceClassName, $argumentLocation);
+
+        return $node;
     }
 
     /**
@@ -118,7 +135,7 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
     /**
      * We look for: ->arg(..., ...)
      */
-    private function matchArgMethodCall(Node $node): ?MethodCall
+    private function matchNamedMethodCall(Node $node, string $methodName): ?MethodCall
     {
         if (! $node instanceof MethodCall) {
             return null;
@@ -128,10 +145,88 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
             return null;
         }
 
-        if ($node->name->toString() !== 'arg') {
+        if ($node->name->toString() !== $methodName) {
             return null;
         }
 
         return $node;
+    }
+
+    /**
+     * We look for:
+     * "%" . ParameterName::NAME . "%"
+     */
+    private function matchConcatWrappedParameter(Concat $concat): ?Expr
+    {
+        // special case for concat parameter enum const
+        if (! $concat->right instanceof String_) {
+            return null;
+        }
+
+        if ($concat->right->value !== '%') {
+            return null;
+        }
+
+        $nestedConcat = $concat->left;
+        if (! $nestedConcat instanceof Concat) {
+            return null;
+        }
+
+        if (! $nestedConcat->left instanceof String_) {
+            return null;
+        }
+
+        if ($nestedConcat->left->value !== '%') {
+            return null;
+        }
+
+        return $nestedConcat->right;
+    }
+
+    private function matchStringEnvOrParameter(
+        string $argumentValue,
+        string $serviceClassName,
+        int|string $argumentLocation
+    ): void {
+        $match = Strings::match($argumentValue, '#%env\((?<env>[A-Z_]+)\)#');
+        if (isset($match['env'])) {
+            $this->servicesArgumentsByClass[$serviceClassName][self::ENVS][$argumentLocation] = (string) $match['env'];
+        }
+
+        $match = Strings::match($argumentValue, '#%(?<parameter>[\w]+)%#');
+        if (isset($match['parameter'])) {
+            $this->servicesArgumentsByClass[$serviceClassName][self::PARAMETERS][$argumentLocation] = (string) $match['parameter'];
+        }
+    }
+
+    private function processArgsMethodCall(MethodCall $argsMethodCall): void
+    {
+        $serviceClassName = $this->setServiceClassNameResolver->resolve($argsMethodCall);
+
+        // unable to resolve service
+        if (! is_string($serviceClassName)) {
+            return;
+        }
+
+        // collect all
+        $firstArg = $argsMethodCall->getArgs()[0];
+
+        // must be an array
+        if (! $firstArg->value instanceof Array_) {
+            return;
+        }
+
+        foreach ($firstArg->value->items as $position => $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
+            // not a string? most likely services reference or something else
+            if (! $arrayItem->value instanceof String_) {
+                continue;
+            }
+
+            $this->matchStringEnvOrParameter($arrayItem->value->value, $serviceClassName, $position);
+        }
     }
 }

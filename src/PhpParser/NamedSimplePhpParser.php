@@ -10,7 +10,7 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
-final class NamedSimplePhpParser
+final readonly class NamedSimplePhpParser
 {
     private Parser $phpParser;
 
