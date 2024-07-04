@@ -61,6 +61,10 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
 
         if ($firstArg->value instanceof String_ || $firstArg->value instanceof Node\Scalar\LNumber) {
             $argumentLocator = $firstArg->value->value;
+            if (is_string($argumentLocator)) {
+                // remove $ prefix
+                $argumentLocator = ltrim($argumentLocator, '$');
+            }
         } else {
             throw new NotImplementedYetException(sprintf(
                 'Add support for non-string arg names like "%s"',
