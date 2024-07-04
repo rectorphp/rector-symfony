@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\Rector\Class_;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;

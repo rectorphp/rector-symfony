@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -35,6 +37,12 @@ final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector i
      */
     private const IS_GRANTED_ATTRIBUTE = 'Symfony\Component\Security\Http\Attribute\IsGranted';
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/Si1sDz/1
+     */
+    private const SOLE_IS_GRANTED_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\')\)$#';
+
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
@@ -51,8 +59,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class PostController extends Controller
 {
-    #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function index()
+    {
+    }
+
+    #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
+    public function list()
     {
     }
 }
@@ -64,14 +77,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PostController extends Controller
 {
-    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')"))]
+    #[IsGranted('ROLE_ADMIN')]
     public function index()
+    {
+    }
+
+    #[IsGranted(new Expression("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')"))]
+    public function list()
     {
     }
 }
 CODE_SAMPLE
                 ),
-
             ]
         );
     }
@@ -114,8 +131,16 @@ CODE_SAMPLE
         return null;
     }
 
-    private function wrapToNewExpression(Expr $expr): New_
+    private function wrapToNewExpression(Expr $expr): New_|String_
     {
+        if ($expr instanceof String_) {
+            $match = Strings::match($expr->value, self::SOLE_IS_GRANTED_REGEX);
+            // for single role, return it directly
+            if (isset($match['role'])) {
+                return new String_($match['role']);
+            }
+        }
+
         $args = [new Arg($expr)];
 
         return new New_(new FullyQualified('Symfony\Component\ExpressionLanguage\Expression'), $args);
