@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
@@ -33,7 +34,7 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
             'transform',
-            new UnionType([new StringType(), new \PHPStan\Type\NullType()]),
+            new UnionType([new StringType(), new NullType()]),
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
