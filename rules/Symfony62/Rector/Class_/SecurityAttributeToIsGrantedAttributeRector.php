@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -42,6 +43,12 @@ final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector i
      * @see https://regex101.com/r/Si1sDz/1
      */
     private const SOLE_IS_GRANTED_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\')\)$#';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/NYRPrx/1
+     */
+    private const IS_GRANTED_AND_SUBJECT_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\'),\s+(?<subject>\w+)\)$#';
 
     public function provideMinPhpVersion(): int
     {
@@ -117,7 +124,33 @@ CODE_SAMPLE
                 $attribute->name = new FullyQualified(self::IS_GRANTED_ATTRIBUTE);
 
                 $firstArg = $attribute->args[0];
-                $firstArg->name = new Node\Identifier('attribute');
+                $firstArg->name = new Identifier('attribute');
+
+                $firstValue = $firstArg->value;
+
+                if ($firstValue instanceof String_) {
+                    $match = Strings::match($firstValue->value, self::IS_GRANTED_AND_SUBJECT_REGEX);
+                    if ($match !== null) {
+                        $firstArg->name = new Identifier('attribute');
+                        $firstArg->value = new String_($match['role']);
+
+                        $secondArg = new Arg(new String_($match['subject']));
+                        $secondArg->name = new Identifier('subject');
+                        $attribute->args[] = $secondArg;
+
+                        $hasChanged = true;
+                        continue;
+                    }
+
+                    $match = Strings::match($firstValue->value, self::SOLE_IS_GRANTED_REGEX);
+                    // for single role, return it directly
+                    if (isset($match['role'])) {
+                        $firstArg->value = new String_($match['role']);
+                        $hasChanged = true;
+                        continue;
+                    }
+                }
+
                 $attribute->args[0]->value = $this->wrapToNewExpression($firstArg->value);
 
                 $hasChanged = true;
