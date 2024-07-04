@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\Rector\Class_;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -200,7 +201,7 @@ CODE_SAMPLE
         return iterator_to_array($phpConfigsFinder->getIterator());
     }
 
-    private function createAutowireAttribute(string|Node\Expr $value, string $argName): Attribute
+    private function createAutowireAttribute(string|Expr $value, string $argName): Attribute
     {
         if (is_string($value)) {
             $value = new String_($value);

@@ -10,14 +10,14 @@ use Rector\Symfony\Configs\ValueObject\ServiceArguments;
 use Rector\Symfony\PhpParser\NamedSimplePhpParser;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class ConfigServiceArgumentsResolver
+final readonly class ConfigServiceArgumentsResolver
 {
     private NodeTraverser $nodeTraverser;
 
     private CollectServiceArgumentsNodeVisitor $collectServiceArgumentsNodeVisitor;
 
     public function __construct(
-        private readonly NamedSimplePhpParser $namedSimplePhpParser
+        private NamedSimplePhpParser $namedSimplePhpParser
     ) {
         $this->nodeTraverser = new NodeTraverser();
         $this->collectServiceArgumentsNodeVisitor = new CollectServiceArgumentsNodeVisitor();
