@@ -4,9 +4,9 @@ namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\SecurityAttributeToIsGran
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-final class SimpleSecurity
+final class SingleIsGranted
 {
-    #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
+    #[Security("is_granted('ROLE_ADMIN')")]
     public function index()
     {
     }
@@ -20,9 +20,9 @@ namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\SecurityAttributeToIsGran
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-final class SimpleSecurity
+final class SingleIsGranted
 {
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(attribute: new \Symfony\Component\ExpressionLanguage\Expression("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')"))]
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(attribute: 'ROLE_ADMIN')]
     public function index()
     {
     }
