@@ -6,5 +6,3 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandPropertyToAttribut
 class SkipCommandWithAttributeNameSet extends \Symfony\Component\Console\Command\Command
 {
 }
-
-?>
