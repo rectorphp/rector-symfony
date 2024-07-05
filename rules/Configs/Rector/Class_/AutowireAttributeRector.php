@@ -28,7 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
 
 /**
- * @see https://symfony.com/blog/new-in-symfony-6-1-service-autowiring-attributes
+ * The param/env is only available since Symfony 6.3
+ * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
  */
 final class AutowireAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {
