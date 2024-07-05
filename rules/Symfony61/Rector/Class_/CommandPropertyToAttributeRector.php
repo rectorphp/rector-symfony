@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -35,7 +34,6 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly ReflectionProvider $reflectionProvider,
-        private readonly AttributeFinder $attributeFinder,
     ) {
     }
 
@@ -54,7 +52,7 @@ use Symfony\Component\Console\Command\Command;
 
 final class SunshineCommand extends Command
 {
-    public static $defaultNameExpr = 'sunshine';
+    public static $defaultName = 'sunshine';
 
     public static $defaultDescription = 'Ssome description';
 }
@@ -109,7 +107,7 @@ CODE_SAMPLE),
     }
 
     private function createAttributeGroupAsCommand(
-        ?Expr $defaultNameExpr,
+        Expr $defaultNameExpr,
         ?Expr $defaultDescription
     ): AttributeGroup {
         // name is always required to add
@@ -145,44 +143,7 @@ CODE_SAMPLE),
         }
 
         return null;
-        //        // fallback to existing one
-        //        return $this->resolveNameFromAttribute($class);
     }
-    //
-    //    private function resolveDefaultDescription(Class_ $class): ?string
-    //    {
-    //        foreach ($class->stmts as $key => $stmt) {
-    //            if (! $stmt instanceof Property) {
-    //                continue;
-    //            }
-    //
-    //            if (! $this->isName($stmt, 'defaultDescription')) {
-    //                continue;
-    //            }
-    //
-    //            $defaultDescription = $this->getValueFromProperty($stmt);
-    //            if ($defaultDescription !== null) {
-    //                unset($class->stmts[$key]);
-    //                return $defaultDescription;
-    //            }
-    //        }
-    //
-    //        return $this->resolveDefaultDescriptionFromAttribute($class);
-    //    }
-    //
-    //    private function resolveDefaultDescriptionFromAttribute(Class_ $class): ?string
-    //    {
-    ////        if (! $this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
-    ////            return null;
-    ////        }
-    //
-    ////        $defaultDescriptionFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 1);
-    ////        if (is_string($defaultDescriptionFromArgument)) {
-    ////            return $defaultDescriptionFromArgument;
-    ////        }
-    //
-    //        return null;
-    //    }
 
     private function replaceAsCommandAttribute(Class_ $class, AttributeGroup $createAttributeGroup): ?Class_
     {
@@ -237,27 +198,5 @@ CODE_SAMPLE),
     private function createNamedArg(string $name, Expr $expr): Arg
     {
         return new Arg($expr, false, false, [], new Identifier($name));
-    }
-
-    private function findArgByNameOrPosition(Attribute $attribute, string $argName, int $desiredPosition): ?Expr
-    {
-        foreach ($attribute->args as $attributeArg) {
-            if (! $attributeArg->name instanceof Identifier) {
-                continue;
-            }
-
-            if ($attributeArg->name->toString() === $argName) {
-                return $attributeArg->value;
-            }
-        }
-
-        // if nothing found, fallback to position
-        foreach ($attribute->args as $position => $attributeArg) {
-            if ($position === $desiredPosition) {
-                return $attributeArg->value;
-            }
-        }
-
-        return null;
     }
 }
