@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\Rector\Class_;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
@@ -19,6 +19,7 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\ValueObject\MethodName;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -35,11 +36,6 @@ final class AutowireAttributeRector extends AbstractRector implements Configurab
      * @var string
      */
     public const CONFIGS_DIRECTORY = 'configs_directory';
-
-    /**
-     * @var string
-     */
-    private const AUTOWIRE_CLASS = 'Symfony\Component\DependencyInjection\Attribute\Autowire';
 
     private ?string $configsDirectory = null;
 
@@ -209,6 +205,6 @@ CODE_SAMPLE
 
         $args = [new Arg($value, name: new Identifier($argName))];
 
-        return new Attribute(new FullyQualified(self::AUTOWIRE_CLASS), $args);
+        return new Attribute(new FullyQualified(SymfonyAttribute::AUTOWIRE), $args);
     }
 }
