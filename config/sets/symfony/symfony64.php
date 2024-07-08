@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\UnionType;
+use PHPStan\Type\MixedType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Class_\RenameAttributeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -34,12 +31,12 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
             'transform',
-            new UnionType([new StringType(), new NullType()]),
+            new MixedType(),
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
             'reverseTransform',
-            new UnionType([new StringType(), new ObjectWithoutClassType()]),
+            new MixedType(),
         ),
     ]);
 };
