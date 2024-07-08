@@ -174,6 +174,9 @@ CODE_SAMPLE),
     private function replaceArguments(Attribute $attribute, AttributeGroup $createAttributeGroup): bool
     {
         $replacedAsCommandAttribute = false;
+
+        // dump_node($attribute->args);
+
         if (! $attribute->args[0]->value instanceof String_) {
             $attribute->args[0] = $createAttributeGroup->attrs[0]->args[0];
             $replacedAsCommandAttribute = true;
