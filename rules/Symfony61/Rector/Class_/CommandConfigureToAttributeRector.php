@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony61\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -97,11 +98,11 @@ CODE_SAMPLE),
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
             return null;
         }
 
-        if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
+        if (! $this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
 
@@ -126,14 +127,14 @@ CODE_SAMPLE),
                         return null;
                     }
 
-                    $attributeArgs[$arg->name->toString()] = $arg;
+                    $attributeArgs[] = $arg;
                 }
 
                 break 2;
             }
         }
 
-        if ($asCommandAttribute === null) {
+        if (! $asCommandAttribute instanceof Attribute) {
             $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
 
             $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
@@ -144,7 +145,7 @@ CODE_SAMPLE),
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
             if ($resolvedExpr instanceof Expr) {
-                $attributeArgs[$attributeName] = $this->createNamedArg($attributeName, $resolvedExpr);
+                $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
             }
         }
 
