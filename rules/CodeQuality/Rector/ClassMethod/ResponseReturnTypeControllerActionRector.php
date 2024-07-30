@@ -205,11 +205,6 @@ CODE_SAMPLE
             return null;
         }
 
-        // no return, no type
-        if ($returns === []) {
-            return null;
-        }
-
         $responseReturnType = $this->resolveResponseOnlyReturnType($returns);
         if (! $responseReturnType instanceof \PHPStan\Type\Type) {
             return null;
