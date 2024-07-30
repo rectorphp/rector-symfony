@@ -49,8 +49,9 @@ final class CertificateFactory
 {
     private ?string $certName;
 
-    public function __construct(ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        ParameterBagInterface $parameterBag
+    ) {
         $this->certName = $parameterBag->get('certificate_name');
     }
 }

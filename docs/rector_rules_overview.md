@@ -1181,13 +1181,12 @@ Change explicit configuration parameter pass into #[Autowire] attributes
  {
      private ?string $certName;
 
--    public function __construct(ParameterBagInterface $parameterBag)
--    {
--        $this->certName = $parameterBag->get('certificate_name');
-+    public function __construct(
+     public function __construct(
+-        ParameterBagInterface $parameterBag
 +        #[Autowire('%env(CERT_NAME)%')]
 +        $certName,
-+    ) {
+     ) {
+-        $this->certName = $parameterBag->get('certificate_name');
 +        $this->certName = $certName;
      }
  }
