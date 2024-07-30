@@ -27,6 +27,7 @@
         "symplify/rule-doc-generator": "^12.2.2",
         "symplify/vendor-patches": "^11.3",
         "tomasvotruba/class-leak": "^0.2",
+        "tomasvotruba/unused-public": "^0.3.10",
         "tracy/tracy": "^2.10"
     },
     "autoload": {

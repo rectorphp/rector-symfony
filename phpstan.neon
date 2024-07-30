@@ -17,6 +17,11 @@ parameters:
         narrow_param: true
         narrow_return: true
 
+    unused_public:
+        constants: true
+        methods: true
+        properties: true
+
     scanDirectories:
         - stubs
 

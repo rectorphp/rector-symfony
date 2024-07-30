@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -206,13 +207,13 @@ CODE_SAMPLE
         }
 
         // no return, no type
-        if (count($returns) === 0) {
+        if ($returns === []) {
             return null;
         }
 
         $returnedTypes = [];
         foreach ($returns as $return) {
-            if (! $return->expr instanceof Node\Expr) {
+            if (! $return->expr instanceof Expr) {
                 // already validated above
                 throw new ShouldNotHappenException();
             }
@@ -220,11 +221,7 @@ CODE_SAMPLE
             $returnedTypes[] = $this->getType($return->expr);
         }
 
-        if (count($returnedTypes) > 1) {
-            $returnedType = new UnionType($returnedTypes);
-        } else {
-            $returnedType = $returnedTypes[0];
-        }
+        $returnedType = count($returnedTypes) > 1 ? new UnionType($returnedTypes) : $returnedTypes[0];
 
         $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedType, TypeKind::RETURN);
         if (! $returnType instanceof FullyQualified) {
