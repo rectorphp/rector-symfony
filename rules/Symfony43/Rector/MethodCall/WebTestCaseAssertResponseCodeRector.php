@@ -13,6 +13,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -135,10 +136,7 @@ CODE_SAMPLE
         }
 
         // caller must be a response object
-        if (! $this->isObjectType(
-            $nestedMethodCall->var,
-            new ObjectType('Symfony\Component\HttpFoundation\Response')
-        )) {
+        if (! $this->isObjectType($nestedMethodCall->var, new ObjectType(ResponseClass::BASIC))) {
             return null;
         }
 
