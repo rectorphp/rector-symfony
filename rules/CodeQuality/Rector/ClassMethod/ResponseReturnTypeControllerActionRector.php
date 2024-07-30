@@ -144,7 +144,7 @@ CODE_SAMPLE
         return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
     }
 
-    private function refactorResponse(ClassMethod $classMethod): Node
+    private function refactorResponse(ClassMethod $classMethod): ?ClassMethod
     {
         if ($this->isResponseReturnMethod($classMethod, ['redirectToRoute', 'redirect'])) {
             $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
@@ -172,6 +172,7 @@ CODE_SAMPLE
             return $classMethod;
         }
 
-        return $classMethod;
+        return null;
+        // return $classMethod;
     }
 }
