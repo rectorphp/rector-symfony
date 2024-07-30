@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -14,6 +14,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Exception\ShouldNotHappenException;
@@ -26,7 +27,6 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
-use Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictReturnNewAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,7 +43,6 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly ReturnAnalyzer $returnAnalyzer,
         private readonly StaticTypeMapper $staticTypeMapper,
-        //        private readonly StrictReturnNewAnalyzer $strictReturnNewAnalyzer,
     ) {
     }
 
@@ -211,6 +210,25 @@ CODE_SAMPLE
             return null;
         }
 
+        $responseReturnType = $this->resolveResponseOnlyReturnType($returns);
+        if (! $responseReturnType instanceof \PHPStan\Type\Type) {
+            return null;
+        }
+
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($responseReturnType, TypeKind::RETURN);
+        if (! $returnType instanceof FullyQualified) {
+            return null;
+        }
+
+        $classMethod->returnType = $returnType;
+        return $classMethod;
+    }
+
+    /**
+     * @param Return_[] $returns
+     */
+    private function resolveResponseOnlyReturnType(array $returns): ?\PHPStan\Type\Type
+    {
         $returnedTypes = [];
         foreach ($returns as $return) {
             if (! $return->expr instanceof Expr) {
@@ -218,17 +236,16 @@ CODE_SAMPLE
                 throw new ShouldNotHappenException();
             }
 
-            $returnedTypes[] = $this->getType($return->expr);
+            $returnedType = $this->getType($return->expr);
+
+            // we only accept response
+            if (! $returnedType instanceof ObjectType || ! $returnedType->isInstanceOf(ResponseClass::BASIC)->yes()) {
+                return null;
+            }
+
+            $returnedTypes[] = $returnedType;
         }
 
-        $returnedType = count($returnedTypes) > 1 ? new UnionType($returnedTypes) : $returnedTypes[0];
-
-        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedType, TypeKind::RETURN);
-        if (! $returnType instanceof FullyQualified) {
-            return null;
-        }
-
-        $classMethod->returnType = $returnType;
-        return $classMethod;
+        return count($returnedTypes) > 1 ? new UnionType($returnedTypes) : $returnedTypes[0];
     }
 }
