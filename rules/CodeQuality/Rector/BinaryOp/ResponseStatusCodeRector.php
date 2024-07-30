@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyResponseConstantMap;
@@ -30,7 +31,7 @@ final class ResponseStatusCodeRector extends AbstractRector
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer
     ) {
-        $this->responseObjectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
+        $this->responseObjectType = new ObjectType(ResponseClass::BASIC);
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -122,7 +123,7 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $methodCall,
             0,
-            'Symfony\Component\HttpFoundation\Response',
+            ResponseClass::BASIC,
             SymfonyResponseConstantMap::CODE_TO_CONST
         );
     }
@@ -189,7 +190,7 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $methodCall,
             0,
-            'Symfony\Component\HttpFoundation\Response',
+            ResponseClass::BASIC,
             SymfonyResponseConstantMap::CODE_TO_CONST
         );
     }
@@ -203,7 +204,7 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $methodCall,
             1,
-            'Symfony\Component\HttpFoundation\Response',
+            ResponseClass::BASIC,
             SymfonyResponseConstantMap::CODE_TO_CONST
         );
     }
@@ -217,7 +218,7 @@ CODE_SAMPLE
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition(
             $new,
             1,
-            'Symfony\Component\HttpFoundation\Response',
+            ResponseClass::BASIC,
             SymfonyResponseConstantMap::CODE_TO_CONST
         );
     }

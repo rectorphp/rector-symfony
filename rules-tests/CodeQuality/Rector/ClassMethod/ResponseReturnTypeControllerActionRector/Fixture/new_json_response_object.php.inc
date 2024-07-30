@@ -5,12 +5,16 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnType
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class JsonResponse extends AbstractController
+final class NewJsonResponseObject extends AbstractController
 {
-    #[Route]
+    /**
+     * @Route()
+     */
     public function jsonAction()
     {
-        return $this->json('');
+        $jsonResponse = new \Symfony\Component\HttpFoundation\JsonResponse('');
+
+        return $jsonResponse;
     }
 }
 
@@ -23,12 +27,16 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnType
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class JsonResponse extends AbstractController
+final class NewJsonResponseObject extends AbstractController
 {
-    #[Route]
+    /**
+     * @Route()
+     */
     public function jsonAction(): \Symfony\Component\HttpFoundation\JsonResponse
     {
-        return $this->json('');
+        $jsonResponse = new \Symfony\Component\HttpFoundation\JsonResponse('');
+
+        return $jsonResponse;
     }
 }
 
