@@ -6,30 +6,43 @@ namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\UnionType;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
+use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictReturnNewAnalyzer;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\ResponseReturnTypeControllerActionRectorTest
  */
-final class ResponseReturnTypeControllerActionRector extends AbstractRector
+final class ResponseReturnTypeControllerActionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly AttrinationFinder $attrinationFinder,
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ReturnAnalyzer $returnAnalyzer,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        //        private readonly StrictReturnNewAnalyzer $strictReturnNewAnalyzer,
     ) {
     }
 
@@ -114,6 +127,11 @@ CODE_SAMPLE
         return $this->refactorResponse($node);
     }
 
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SCALAR_TYPES;
+    }
+
     /**
      * @param array<string> $methods
      */
@@ -147,32 +165,73 @@ CODE_SAMPLE
     private function refactorResponse(ClassMethod $classMethod): ?ClassMethod
     {
         if ($this->isResponseReturnMethod($classMethod, ['redirectToRoute', 'redirect'])) {
-            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\RedirectResponse');
+            $classMethod->returnType = new FullyQualified(ResponseClass::REDIRECT);
 
             return $classMethod;
         }
         if ($this->isResponseReturnMethod($classMethod, ['file'])) {
-            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\BinaryFileResponse');
+            $classMethod->returnType = new FullyQualified(ResponseClass::BINARY_FILE);
 
             return $classMethod;
         }
         if ($this->isResponseReturnMethod($classMethod, ['json'])) {
-            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\JsonResponse');
+            $classMethod->returnType = new FullyQualified(ResponseClass::JSON);
 
             return $classMethod;
         }
         if ($this->isResponseReturnMethod($classMethod, ['stream'])) {
-            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\StreamedResponse');
+            $classMethod->returnType = new FullyQualified(name: ResponseClass::STREAMED);
 
             return $classMethod;
         }
         if ($this->isResponseReturnMethod($classMethod, ['render', 'forward', 'renderForm'])) {
-            $classMethod->returnType = new FullyQualified('Symfony\Component\HttpFoundation\Response');
+            $classMethod->returnType = new FullyQualified(ResponseClass::BASIC);
 
             return $classMethod;
         }
 
-        return null;
-        // return $classMethod;
+        return $this->refatorWithNew($classMethod);
+    }
+
+    private function refatorWithNew(ClassMethod $classMethod): ?ClassMethod
+    {
+        // early check
+        if (! $this->betterNodeFinder->hasInstancesOf($classMethod, [New_::class])) {
+            return null;
+        }
+
+        $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
+        if (! $this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
+            return null;
+        }
+
+        // no return, no type
+        if (count($returns) === 0) {
+            return null;
+        }
+
+        $returnedTypes = [];
+        foreach ($returns as $return) {
+            if (! $return->expr instanceof Node\Expr) {
+                // already validated above
+                throw new ShouldNotHappenException();
+            }
+
+            $returnedTypes[] = $this->getType($return->expr);
+        }
+
+        if (count($returnedTypes) > 1) {
+            $returnedType = new UnionType($returnedTypes);
+        } else {
+            $returnedType = $returnedTypes[0];
+        }
+
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnedType, TypeKind::RETURN);
+        if (! $returnType instanceof FullyQualified) {
+            return null;
+        }
+
+        $classMethod->returnType = $returnType;
+        return $classMethod;
     }
 }
