@@ -28,6 +28,7 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -44,6 +45,7 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly ReturnAnalyzer $returnAnalyzer,
         private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly ReturnTypeInferer $returnTypeInferer
     ) {
     }
 
@@ -121,6 +123,17 @@ CODE_SAMPLE
         if (
             $this->attrinationFinder->hasByOne($node, SensioAttribute::TEMPLATE) ||
             $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
+
+            $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+            $types = $returnType instanceof UnionType ? $returnType->getTypes() : [$returnType];
+            $objectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
+
+            foreach ($types as $type) {
+                if ($type instanceof ObjectType && $objectType->isSuperTypeOf($type)->yes()) {
+                    return null;
+                }
+            }
+
             $node->returnType = new NullableType(new Identifier('array'));
             return $node;
         }
