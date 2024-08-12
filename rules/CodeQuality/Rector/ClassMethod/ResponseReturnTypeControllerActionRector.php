@@ -134,8 +134,12 @@ CODE_SAMPLE
                 }
             }
 
-            $node->returnType = new NullableType(new Identifier('array'));
-            return $node;
+            if ($returnType->isArray()->yes()) {
+                $node->returnType = new Identifier('array');
+                return $node;
+            }
+
+            return null;
         }
 
         return $this->refactorResponse($node);
