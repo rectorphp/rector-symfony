@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SkipPossibleReturnArray extends AbstractController
+final class SkipPossibleReturnArrayOrResponse extends AbstractController
 {
     /**
      * @Route("/new", name="some_new")
