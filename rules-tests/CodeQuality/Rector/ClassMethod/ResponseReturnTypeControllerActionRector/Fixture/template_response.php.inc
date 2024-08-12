@@ -29,7 +29,7 @@ final class TemplateController extends AbstractController
 {
     #[Route]
     #[Template]
-    public function testDetail(): ?array
+    public function testDetail(): array
     {
         return [];
     }
