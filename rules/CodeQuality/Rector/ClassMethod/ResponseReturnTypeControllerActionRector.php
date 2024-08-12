@@ -125,7 +125,7 @@ CODE_SAMPLE
             $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
 
             $returnType = $this->returnTypeInferer->inferFunctionLike($node);
-            $types = $returnType instanceof UnionType ? $returnType->getTypes() : $returnType;
+            $types = $returnType instanceof UnionType ? $returnType->getTypes() : [$returnType];
             $objectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
 
             foreach ($types as $type) {
