@@ -10,6 +10,7 @@ function doNotConvertToArrayCallSetWorkingDirectory()
     $process->setWorkingDirectory('/some/other/path');
     $process->addOutput('Test output');
     $process->addErrorOutput('Test output');
+    $process->setInput('Test input');
 }
 
 ?>
@@ -26,6 +27,7 @@ function doNotConvertToArrayCallSetWorkingDirectory()
     $process->setWorkingDirectory('/some/other/path');
     $process->addOutput('Test output');
     $process->addErrorOutput('Test output');
+    $process->setInput('Test input');
 }
 
 ?>
