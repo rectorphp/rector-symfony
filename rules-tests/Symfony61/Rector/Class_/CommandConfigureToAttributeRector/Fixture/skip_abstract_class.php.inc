@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttribu
 
 use Symfony\Component\Console\Command\Command;
 
-abstract class CommandWithLock extends Command
+abstract class SkipAbstractClass extends Command
 {
     public function configure()
     {
