@@ -98,6 +98,10 @@ CODE_SAMPLE),
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->isAbstract()) {
+            return null;
+        }
+
         if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
             return null;
         }
