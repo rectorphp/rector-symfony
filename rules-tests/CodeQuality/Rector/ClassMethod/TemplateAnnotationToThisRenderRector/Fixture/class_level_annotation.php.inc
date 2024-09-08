@@ -27,9 +27,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ClassLevelAnnotation extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('items_template', []);
+        return $this->render('items_template');
     }
 }
 
