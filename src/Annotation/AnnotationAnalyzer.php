@@ -20,13 +20,18 @@ final readonly class AnnotationAnalyzer
 
     public function hasClassMethodWithTemplateAnnotation(Class_ $class): bool
     {
+        $classTemplateAnnotation = $this->getDoctrineAnnotationTagValueNode($class, SymfonyAnnotation::TEMPLATE);
+        if ($classTemplateAnnotation instanceof DoctrineAnnotationTagValueNode) {
+            return true;
+        }
+
         foreach ($class->getMethods() as $classMethod) {
-            $templateDoctrineAnnotationTagValueNode = $this->getDoctrineAnnotationTagValueNode(
+            $classMethodTemplateAnnotation = $this->getDoctrineAnnotationTagValueNode(
                 $classMethod,
                 SymfonyAnnotation::TEMPLATE
             );
 
-            if ($templateDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            if ($classMethodTemplateAnnotation instanceof DoctrineAnnotationTagValueNode) {
                 return true;
             }
         }
@@ -35,10 +40,10 @@ final readonly class AnnotationAnalyzer
     }
 
     public function getDoctrineAnnotationTagValueNode(
-        ClassMethod $classMethod,
+        Class_|ClassMethod $node,
         string $annotationClass
     ): ?DoctrineAnnotationTagValueNode {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
         }

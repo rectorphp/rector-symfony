@@ -34,7 +34,7 @@ final class ParameterBagToAutowireAttributeRector extends AbstractRector impleme
     private const PARAMETER_BAG_CLASS = 'Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface';
 
     public function __construct(
-        private AutowiredParamFactory $autowiredParamFactory
+        private readonly AutowiredParamFactory $autowiredParamFactory
     ) {
     }
 
