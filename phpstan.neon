@@ -44,3 +44,6 @@ parameters:
         # false positive
         - '#Parameters should have "PhpParser\\Node\\Expr\\Closure" types as the only types passed to this method#'
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
+        - '#Parameter \#1 \$stmtsAware of method Rector\\NodeAnalyzer\\TerminatedNodeAnalyzer\:\:isAlwaysTerminated\(\) expects Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface, PhpParser\\Node\\Stmt\\ClassMethod given#'
+
+
