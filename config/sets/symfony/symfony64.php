@@ -27,6 +27,48 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ]);
 
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\Context',
+            'Symfony\Component\Serializer\Attribute\Context'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\DiscriminatorMap',
+            'Symfony\Component\Serializer\Attribute\DiscriminatorMap'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\Groups',
+            'Symfony\Component\Serializer\Attribute\Groups'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\Ignore',
+            'Symfony\Component\Serializer\Attribute\Ignore'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\MaxDepth',
+            'Symfony\Component\Serializer\Attribute\MaxDepth'
+        ),
+    ]);
+
+    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
+        new RenameAttribute(
+            'Symfony\Component\Serializer\Annotation\SerializedName',
+            'Symfony\Component\Serializer\Attribute\SerializedName'
+        ),
+    ]);
+
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
