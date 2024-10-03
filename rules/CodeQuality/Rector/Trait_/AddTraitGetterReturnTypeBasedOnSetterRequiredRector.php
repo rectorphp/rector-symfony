@@ -174,13 +174,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function shouldProcess(ClassMethod $classMethod ): bool
+    private function shouldProcess(ClassMethod $classMethod): bool
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod );
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByName('required')) {
             return true;
         }
 
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod , self::REQUIRED_ATTRIBUTE);
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::REQUIRED_ATTRIBUTE);
     }
 }
