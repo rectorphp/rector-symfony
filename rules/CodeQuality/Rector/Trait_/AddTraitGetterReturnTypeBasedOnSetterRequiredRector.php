@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,8 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddTraitGetterReturnTypeBasedOnSetterRequiredRector extends AbstractRector
 {
-    public function __construct(private readonly PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    public function __construct(
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -125,12 +127,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (count($method->getStmts()) !== 1) {
+            if (count((array) $method->getStmts()) !== 1) {
                 return null;
             }
 
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($method);
-            if (! $phpDocInfo->hasByName('required')) {
+            if (! $phpDocInfo instanceof PhpDocInfo || ! $phpDocInfo->hasByName('required')) {
                 return null;
             }
 
@@ -142,12 +144,15 @@ CODE_SAMPLE
                 return null;
             }
 
-            $stmts = $method->getStmts();
-            if (! $stmts[0] instanceof Expression || ! $stmts[0]->expr instanceof Assign || ! $stmts[0]->expr->var instanceof PropertyFetch || ! $this->nodeComparator->areNodesEqual($stmts[0]->expr->expr, $method->params[0]->var)) {
+            $stmts = (array) $method->getStmts();
+            if (! $stmts[0] instanceof Expression || ! $stmts[0]->expr instanceof Assign || ! $stmts[0]->expr->var instanceof PropertyFetch || ! $this->nodeComparator->areNodesEqual(
+                $stmts[0]->expr->expr,
+                $method->params[0]->var
+            )) {
                 return null;
             }
 
-            $getterStmts = $getMethod->getStmts();
+            $getterStmts = (array) $getMethod->getStmts();
             if (count($getterStmts) !== 1) {
                 return null;
             }
