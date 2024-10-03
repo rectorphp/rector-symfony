@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,15 +23,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddTraitGetterReturnTypeBasedOnSetterRequiredRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const REQUIRED_ATTRIBUTE = 'Symfony\Contracts\Service\Attribute\Required';
+
     public function __construct(
-        private readonly PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Add trait getter return type based on setter with @required annotation',
+            'Add trait getter return type based on setter with @required annotation or #[\Symfony\Contracts\Service\Attribute\Required] attribute',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -131,8 +138,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($method);
-            if (! $phpDocInfo instanceof PhpDocInfo || ! $phpDocInfo->hasByName('required')) {
+            if (! $this->shouldProcess($method)) {
                 return null;
             }
 
@@ -166,5 +172,15 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldProcess(ClassMethod $classMethod ): bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod );
+        if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByName('required')) {
+            return true;
+        }
+
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod , self::REQUIRED_ATTRIBUTE);
     }
 }
