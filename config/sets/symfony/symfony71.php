@@ -25,7 +25,7 @@ return RectorConfig::configure()
     ->withConfiguredRule(RenameMethodRector::class, [
         // typo fix
         new MethodCallRename(
-            '̈́Symfony\Component\Serializer\Context\Normalizer\AbstractNormalizerContextBuilder',
+            'Symfony\Component\Serializer\Context\Normalizer\AbstractNormalizerContextBuilder',
             'withDefaultContructorArguments',
             'withDefaultConstructorArguments',
         ),
