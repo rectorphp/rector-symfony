@@ -50,8 +50,8 @@ final class TwigSetProvider implements SetProviderInterface
             new ComposerTriggeredSet(
                 SetGroup::TWIG,
                 'twig/twig',
-                '2.40',
-                __DIR__ . '/../../../config/sets/twig/twig240.php'
+                '2.4',
+                __DIR__ . '/../../../config/sets/twig/twig24.php'
             ),
         ];
     }
