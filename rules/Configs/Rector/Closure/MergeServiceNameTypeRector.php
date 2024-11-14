@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
-use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
@@ -18,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\Closure\MergeServiceNameTypeRector\MergeServiceNameTypeRectorTest
  */
-final class MergeServiceNameTypeRector extends AbstractRector implements DeprecatedInterface
+final class MergeServiceNameTypeRector extends AbstractRector
 {
     private bool $hasChanged = false;
 
