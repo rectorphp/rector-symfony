@@ -17,7 +17,7 @@ final readonly class NamedSimplePhpParser
     public function __construct()
     {
         $parserFactory = new ParserFactory();
-        $this->phpParser = $parserFactory->create(ParserFactory::ONLY_PHP7);
+        $this->phpParser = $parserFactory->createForNewestSupportedVersion();
     }
 
     /**
