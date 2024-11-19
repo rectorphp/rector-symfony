@@ -174,7 +174,10 @@ CODE_SAMPLE),
     {
         $expr = null;
 
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$expr, $methodName) {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            &$expr,
+            $methodName
+        ): ?Expr {
             // find setName() method call
             if (! $node instanceof MethodCall) {
                 return null;

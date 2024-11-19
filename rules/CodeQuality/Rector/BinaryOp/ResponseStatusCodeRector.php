@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\CodeQuality\Enum\ResponseClass;
@@ -134,13 +134,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($binaryOp->right instanceof LNumber && $this->isGetStatusMethod($binaryOp->left)) {
+        if ($binaryOp->right instanceof Int_ && $this->isGetStatusMethod($binaryOp->left)) {
             $binaryOp->right = $this->convertNumberToConstant($binaryOp->right);
 
             return $binaryOp;
         }
 
-        if ($binaryOp->left instanceof LNumber && $this->isGetStatusMethod($binaryOp->right)) {
+        if ($binaryOp->left instanceof Int_ && $this->isGetStatusMethod($binaryOp->right)) {
             $binaryOp->left = $this->convertNumberToConstant($binaryOp->left);
 
             return $binaryOp;
@@ -162,15 +162,15 @@ CODE_SAMPLE
         return $this->isObjectType($node->var, $this->responseObjectType);
     }
 
-    private function convertNumberToConstant(LNumber $lNumber): ClassConstFetch|LNumber
+    private function convertNumberToConstant(Int_ $int): ClassConstFetch|Int_
     {
-        if (! isset(SymfonyResponseConstantMap::CODE_TO_CONST[$lNumber->value])) {
-            return $lNumber;
+        if (! isset(SymfonyResponseConstantMap::CODE_TO_CONST[$int->value])) {
+            return $int;
         }
 
         return $this->nodeFactory->createClassConstFetch(
             $this->responseObjectType->getClassName(),
-            SymfonyResponseConstantMap::CODE_TO_CONST[$lNumber->value]
+            SymfonyResponseConstantMap::CODE_TO_CONST[$int->value]
         );
     }
 

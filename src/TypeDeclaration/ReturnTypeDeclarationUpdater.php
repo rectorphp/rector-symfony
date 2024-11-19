@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\TypeDeclaration;
 
+use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -72,7 +73,7 @@ final readonly class ReturnTypeDeclarationUpdater
         $objectType = new ObjectType($className);
 
         // change return type
-        if ($classMethod->returnType !== null) {
+        if ($classMethod->returnType instanceof Node) {
             $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
             if ($objectType->isSuperTypeOf($returnType)->yes()) {
                 return;

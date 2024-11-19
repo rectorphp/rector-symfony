@@ -6,8 +6,9 @@ namespace Rector\Symfony\SwiftMailer\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -194,9 +195,9 @@ CODE_SAMPLE
                     if ($item instanceof ArrayItem) {
                         $newArgs[] = $this->nodeFactory->createArg(
                             $this->createAddress(
-                                $item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg(
+                                $item->key instanceof Expr ? [new Arg($item->key), new Arg(
                                     $item->value
-                                )]
+                                )] : [new Arg($item->value)]
                             )
                         );
                     }

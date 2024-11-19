@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\NodeFactory;
 
@@ -38,7 +38,7 @@ final readonly class LiteralCallLikeConstFetchReplacer
         }
 
         $arg = $args[$argPosition];
-        if (! $arg->value instanceof String_ && ! $arg->value instanceof LNumber) {
+        if (! $arg->value instanceof String_ && ! $arg->value instanceof Int_) {
             return null;
         }
 

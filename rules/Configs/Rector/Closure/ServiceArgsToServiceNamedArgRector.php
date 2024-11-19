@@ -6,9 +6,9 @@ namespace Rector\Symfony\Configs\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
@@ -158,11 +158,11 @@ CODE_SAMPLE
 
         $extendedMethodReflection = $serviceClassReflection->getConstructor();
 
-        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::combineAcceptors(
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors(
             $extendedMethodReflection->getVariants()
         );
 
-        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflectionWithPhpDoc) {
+        foreach ($extendedParametersAcceptor->getParameters() as $parameterReflectionWithPhpDoc) {
             /** @var PhpParameterReflection $parameterReflectionWithPhpDoc */
             $constructorParameterNames[] = '$' . $parameterReflectionWithPhpDoc->getName();
         }
