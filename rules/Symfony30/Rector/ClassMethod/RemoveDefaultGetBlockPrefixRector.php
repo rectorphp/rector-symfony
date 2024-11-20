@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Class_
     {
         if (! $node->extends instanceof Name) {
             return null;

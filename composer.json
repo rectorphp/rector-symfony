@@ -10,6 +10,7 @@
     "require-dev": {
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^10.5",
         "rector/rector-src": "dev-upgrade-to-php-parser5-and-phpstan-2",
         "symfony/config": "^6.4",

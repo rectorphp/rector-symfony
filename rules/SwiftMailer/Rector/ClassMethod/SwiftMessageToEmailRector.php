@@ -106,13 +106,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->traverseNodesWithCallable($node, function (Node $node): ?Node {
+        $hasChanged = false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged): ?Node {
             if (
                 $node instanceof ClassMethod &&
                 $node->returnType instanceof FullyQualified &&
                 $this->isName($node->returnType, self::SWIFT_MESSAGE_FQN)
             ) {
                 $node->returnType = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = true;
             }
 
             if ($node instanceof Param &&
@@ -120,6 +122,7 @@ CODE_SAMPLE
                 $this->isName($node->type, self::SWIFT_MESSAGE_FQN)
             ) {
                 $node->type = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = true;
             }
 
             if ($node instanceof New_) {
@@ -132,6 +135,7 @@ CODE_SAMPLE
                 } else {
                     $node->class = new FullyQualified(self::EMAIL_FQN);
                 }
+                $hasChanged = true;
             }
 
             if ($node instanceof MethodCall) {
@@ -149,6 +153,8 @@ CODE_SAMPLE
                         return null;
                     }
 
+                    $hasChanged = true;
+
                     $this->handleBasicMapping($node, $name);
                     $this->handleAddressMapping($node, $name);
                     $this->handleBody($node, $name);
@@ -163,6 +169,10 @@ CODE_SAMPLE
 
             return $node;
         });
+
+        if (! $hasChanged) {
+            return null;
+        }
 
         return $node;
     }
