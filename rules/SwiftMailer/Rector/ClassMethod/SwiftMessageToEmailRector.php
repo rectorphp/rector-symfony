@@ -6,8 +6,9 @@ namespace Rector\Symfony\SwiftMailer\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -105,13 +106,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->traverseNodesWithCallable($node, function (Node $node): ?Node {
+        $hasChanged = false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged): ?Node {
             if (
                 $node instanceof ClassMethod &&
                 $node->returnType instanceof FullyQualified &&
                 $this->isName($node->returnType, self::SWIFT_MESSAGE_FQN)
             ) {
                 $node->returnType = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = true;
             }
 
             if ($node instanceof Param &&
@@ -119,6 +122,7 @@ CODE_SAMPLE
                 $this->isName($node->type, self::SWIFT_MESSAGE_FQN)
             ) {
                 $node->type = new FullyQualified(self::EMAIL_FQN);
+                $hasChanged = true;
             }
 
             if ($node instanceof New_) {
@@ -131,6 +135,7 @@ CODE_SAMPLE
                 } else {
                     $node->class = new FullyQualified(self::EMAIL_FQN);
                 }
+                $hasChanged = true;
             }
 
             if ($node instanceof MethodCall) {
@@ -148,6 +153,8 @@ CODE_SAMPLE
                         return null;
                     }
 
+                    $hasChanged = true;
+
                     $this->handleBasicMapping($node, $name);
                     $this->handleAddressMapping($node, $name);
                     $this->handleBody($node, $name);
@@ -162,6 +169,10 @@ CODE_SAMPLE
 
             return $node;
         });
+
+        if (! $hasChanged) {
+            return null;
+        }
 
         return $node;
     }
@@ -194,9 +205,9 @@ CODE_SAMPLE
                     if ($item instanceof ArrayItem) {
                         $newArgs[] = $this->nodeFactory->createArg(
                             $this->createAddress(
-                                $item->key === null ? [new Arg($item->value)] : [new Arg($item->key), new Arg(
+                                $item->key instanceof Expr ? [new Arg($item->key), new Arg(
                                     $item->value
-                                )]
+                                )] : [new Arg($item->value)]
                             )
                         );
                     }

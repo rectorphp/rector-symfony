@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (\Symfony\Config\DoctrineConfig $doctrineConfig) : void {
+return static function (\Symfony\Config\DoctrineConfig $doctrineConfig): void {
     $doctrineConfig->dbal()->defaultConnection('default');
     $doctrineConfig->orm()->someValue('default');
 };

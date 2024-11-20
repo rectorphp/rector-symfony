@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -124,7 +124,7 @@ final readonly class GetSubscribedEventsClassMethodFactory
         if ($priority !== null && $priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($priority));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new Int_($priority));
 
             return new ArrayItem($methodNameWithPriorityArray, $expr);
         }
@@ -243,7 +243,7 @@ final readonly class GetSubscribedEventsClassMethodFactory
         if ($eventListenerTag->getPriority() !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($eventListenerTag->getMethod()));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($eventListenerTag->getPriority()));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new Int_($eventListenerTag->getPriority()));
 
             return new ArrayItem($methodNameWithPriorityArray);
         }

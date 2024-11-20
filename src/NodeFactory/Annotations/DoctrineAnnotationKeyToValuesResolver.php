@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use Rector\PhpParser\Node\Value\ValueResolver;
 
 final readonly class DoctrineAnnotationKeyToValuesResolver

@@ -7,7 +7,6 @@ namespace Rector\Symfony\Symfony62\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
@@ -196,11 +195,7 @@ CODE_SAMPLE
     private function parseArguments(Array_ $array, string &$method): array
     {
         foreach ($array->items as $item) {
-            if (
-                ! $item instanceof ArrayItem ||
-                ! $item->key instanceof Expr ||
-                ! $item->value instanceof Expr
-            ) {
+            if (! $item->value instanceof Expr) {
                 continue;
             }
             $key = (string) $this->valueResolver->getValue($item->key);

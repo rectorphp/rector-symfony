@@ -3,6 +3,8 @@ parameters:
 
     reportUnmatchedIgnoredErrors: false
 
+    treatPhpDocTypesAsCertain: false
+
     paths:
         - config
         - src
@@ -10,17 +12,18 @@ parameters:
         - rules
         - rules-tests
 
-    # https://github.com/rectorphp/type-perfect/
-    type_perfect:
-        no_mixed: true
-        null_over_false: true
-        narrow_param: true
-        narrow_return: true
+# to be enabled later once rector upgraded to use phpstan v2
+#    # https://github.com/rectorphp/type-perfect/
+#    type_perfect:
+#        no_mixed: true
+#        null_over_false: true
+#        narrow_param: true
+#        narrow_return: true
 
-    unused_public:
-        constants: true
-        methods: true
-        properties: true
+#    unused_public:
+#        constants: true
+#        methods: true
+#        properties: true
 
     scanDirectories:
         - stubs
@@ -45,3 +48,22 @@ parameters:
         - '#Parameters should have "PhpParser\\Node\\Expr\\Closure" types as the only types passed to this method#'
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
         - '#Parameter \#1 \$stmtsAware of method Rector\\NodeAnalyzer\\TerminatedNodeAnalyzer\:\:isAlwaysTerminated\(\) expects Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface, PhpParser\\Node\\Stmt\\ClassMethod given#'
+
+        # more advanced usage, but not always working
+        # see https://github.com/rectorphp/rector-src/actions/runs/11798721617/job/32865546672?pr=6422#step:5:110
+        - '#Doing instanceof PHPStan\\Type\\.+ is error\-prone and deprecated#'
+
+        # phpstan instanceof
+        -
+            identifier: phpstanApi.instanceofAssumption
+
+        -
+            identifier: phpstanApi.varTagAssumption
+
+        -
+            identifier: argument.type
+
+        -
+            identifier: assign.propertyType
+
+        - '#::provideMinPhpVersion\(\) never returns \d+ so it can be removed from the return type#'

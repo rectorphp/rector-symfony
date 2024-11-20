@@ -7,13 +7,13 @@ namespace Rector\Symfony\Configs\NodeVisitor;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
@@ -71,7 +71,7 @@ final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
         // 1. detect arg name + value
         $firstArg = $argMethodCall->getArgs()[0];
 
-        if ($firstArg->value instanceof String_ || $firstArg->value instanceof LNumber) {
+        if ($firstArg->value instanceof String_ || $firstArg->value instanceof Int_) {
             $argumentLocation = $firstArg->value->value;
             if (is_string($argumentLocation)) {
                 // remove $ prefix

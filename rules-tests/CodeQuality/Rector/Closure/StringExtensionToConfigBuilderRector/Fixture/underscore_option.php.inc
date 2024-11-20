@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (\Symfony\Config\FrameworkConfig $frameworkConfig) : void {
+return static function (\Symfony\Config\FrameworkConfig $frameworkConfig): void {
     $frameworkConfig->defaultLocale('en');
     $frameworkConfig->httpMethodOverride(true);
 };

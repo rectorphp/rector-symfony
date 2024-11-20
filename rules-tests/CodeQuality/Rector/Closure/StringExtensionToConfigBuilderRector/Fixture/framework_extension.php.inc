@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (\Symfony\Config\FrameworkConfig $frameworkConfig) : void {
+return static function (\Symfony\Config\FrameworkConfig $frameworkConfig): void {
     $frameworkConfig->secret('onetwothree');
     $frameworkConfig->router()->resource('%kernel.project_dir%/config/routing.php')->strictRequirements(null);
     $frameworkConfig->validation()->enableAnnotations(true);

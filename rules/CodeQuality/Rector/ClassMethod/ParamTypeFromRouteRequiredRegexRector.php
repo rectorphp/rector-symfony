@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($param->type !== null) {
+            if ($param->type instanceof Node) {
                 continue;
             }
 

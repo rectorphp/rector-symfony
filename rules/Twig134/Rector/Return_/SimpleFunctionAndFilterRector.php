@@ -6,9 +6,9 @@ namespace Rector\Symfony\Twig134\Rector\Return_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -31,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string>>
+     * @var array<string, class-string>
      */
     private const OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',

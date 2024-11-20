@@ -6,8 +6,8 @@ namespace Rector\Symfony\Symfony62\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -110,17 +110,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ArrayItem[]|null[] $arrayItems
+     * @param ArrayItem[]$arrayItems
      *
-     * @return array<ArrayItem|null>|null
+     * @return array<(ArrayItem)>|null
      */
     private function processRemoveCreateView(array $arrayItems): ?array
     {
         $replaced = false;
         foreach ($arrayItems as $arrayItem) {
-            if (! $arrayItem instanceof ArrayItem) {
-                continue;
-            }
             if (! $arrayItem->value instanceof MethodCall) {
                 continue;
             }
