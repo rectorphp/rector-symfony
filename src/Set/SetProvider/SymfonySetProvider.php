@@ -168,6 +168,12 @@ final class SymfonySetProvider implements SetProviderInterface
                 '7.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony71.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/*',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony72.php'
+            ),
 
             new Set(SetGroup::SYMFONY, 'Configs', __DIR__ . '/../../../config/sets/symfony/configs.php'),
             new Set(
