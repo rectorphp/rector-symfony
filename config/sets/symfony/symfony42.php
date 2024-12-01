@@ -15,7 +15,6 @@ use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Symfony42\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
@@ -49,8 +48,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->rules([
-        # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, @see https://github.com/rectorphp/rector/issues/1629
-        // ContainerGetToConstructorInjectionRector::class,
         # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
         StringToArrayArgumentProcessRector::class,
         RootNodeTreeBuilderRector::class,

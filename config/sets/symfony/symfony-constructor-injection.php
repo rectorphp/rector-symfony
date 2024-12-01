@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Symfony\DependencyInjection\Rector\Class_\GetBySymfonyStringToConstructorInjectionRector;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector;
 use Rector\Symfony\DependencyInjection\Rector\Class_\ControllerGetByTypeToConstructorInjectionRector;
@@ -15,7 +16,7 @@ return static function (RectorConfig $rectorConfig): void {
         // modern step-by-step narrow approach
         ControllerGetByTypeToConstructorInjectionRector::class,
         CommandGetByTypeToConstructorInjectionRector::class,
-        \Rector\Symfony\DependencyInjection\Rector\Class_\GetBySymfonyStringToConstructorInjectionRector::class,
+        GetBySymfonyStringToConstructorInjectionRector::class,
         TraitGetByTypeToInjectRector::class,
 
         // legacy rules that require container fetch

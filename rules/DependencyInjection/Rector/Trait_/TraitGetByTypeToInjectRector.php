@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\DependencyInjection\Rector\Trait_;
 
+use Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -30,7 +31,7 @@ final class TraitGetByTypeToInjectRector extends AbstractRector
     public function __construct(
         private readonly PropertyNaming $propertyNaming,
         private readonly ThisGetTypeMatcher $thisGetTypeMatcher,
-        private readonly \Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory $autowireClassMethodFactory,
+        private readonly AutowireClassMethodFactory $autowireClassMethodFactory,
     ) {
     }
 

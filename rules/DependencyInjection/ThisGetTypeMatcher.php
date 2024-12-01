@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\DependencyInjection;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -55,18 +56,13 @@ final readonly class ThisGetTypeMatcher
         if ($methodCall->var instanceof Variable && $this->nodeNameResolver->isName($methodCall->var, 'this')) {
             return true;
         }
-
-        if ($methodCall->var instanceof PropertyFetch && $this->nodeNameResolver->isName(
+        return $methodCall->var instanceof PropertyFetch && $this->nodeNameResolver->isName(
             $methodCall->var->var,
             'this'
-        ) && $this->nodeNameResolver->isName($methodCall->var->name, 'container')) {
-            return true;
-        }
-
-        return false;
+        ) && $this->nodeNameResolver->isName($methodCall->var->name, 'container');
     }
 
-    private function matchGetExpr(MethodCall $methodCall): ?\PhpParser\Node\Expr
+    private function matchGetExpr(MethodCall $methodCall): ?Expr
     {
         if ($methodCall->isFirstClassCallable()) {
             return null;
