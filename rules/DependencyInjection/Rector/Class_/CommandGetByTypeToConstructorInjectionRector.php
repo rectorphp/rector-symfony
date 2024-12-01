@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\DependencyInjection\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
@@ -16,6 +15,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Symfony\DependencyInjection\NodeDecorator\CommandConstructorDecorator;
+use Rector\Symfony\DependencyInjection\ThisGetTypeMatcher;
 use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,7 +28,8 @@ final class CommandGetByTypeToConstructorInjectionRector extends AbstractRector
     public function __construct(
         private readonly ClassDependencyManipulator $classDependencyManipulator,
         private readonly PropertyNaming $propertyNaming,
-        private readonly CommandConstructorDecorator $commandConstructorDecorator
+        private readonly CommandConstructorDecorator $commandConstructorDecorator,
+        private readonly ThisGetTypeMatcher $thisGetTypeMatcher
     ) {
     }
 
@@ -94,33 +95,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($node->isFirstClassCallable()) {
-                return null;
-            }
-
-            if (! $this->isName($node->name, 'get')) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
-                return null;
-            }
-
-            if (count($node->getArgs()) !== 1) {
-                return null;
-            }
-
-            $firstArg = $node->getArgs()[0];
-            if (! $firstArg->value instanceof ClassConstFetch) {
-                return null;
-            }
-
-            // must be class const fetch
-            if (! $this->isName($firstArg->value->name, 'class')) {
-                return null;
-            }
-
-            $className = $this->getName($firstArg->value->class);
+            $className = $this->thisGetTypeMatcher->match($node);
             if (! is_string($className)) {
                 return null;
             }
