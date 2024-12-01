@@ -35,4 +35,14 @@ final class SymfonyClass
      * @var string
      */
     public const VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
+
+    /**
+     * @var string
+     */
+    public const LOGGER_INTERFACE = 'Psr\Log\LoggerInterface';
+
+    /**
+     * @var string
+     */
+    public const SERIALIZER_INTERFACE = 'JMS\Serializer\SerializerInterface';
 }

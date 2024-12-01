@@ -30,6 +30,8 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
     private const SYMFONY_NAME_TO_TYPE_MAP = [
         'validator' => SymfonyClass::VALIDATOR_INTERFACE,
         'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE,
+        'logger' => SymfonyClass::LOGGER_INTERFACE,
+        'jms_serializer' => SymfonyClass::SERIALIZER_INTERFACE,
     ];
 
     public function __construct(
@@ -141,6 +143,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
+        return ! $classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
     }
 }

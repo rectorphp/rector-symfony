@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -23,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @deprecated This rule is deprecated as too vague and causing too many changes. Use more granular @see \Rector\Symfony\Set\SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION instead
  */
-final class ContainerGetToConstructorInjectionRector extends AbstractRector
+final class ContainerGetToConstructorInjectionRector extends AbstractRector implements DeprecatedInterface
 {
     public function __construct(
         private readonly DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
