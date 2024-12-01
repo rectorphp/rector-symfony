@@ -18,6 +18,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory;
 use Rector\Symfony\DependencyInjection\ThisGetTypeMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +31,7 @@ final class TraitGetByTypeToInjectRector extends AbstractRector
     public function __construct(
         private readonly PropertyNaming $propertyNaming,
         private readonly ThisGetTypeMatcher $thisGetTypeMatcher,
-        private readonly \Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory $autowireClassMethodFactory,
+        private readonly AutowireClassMethodFactory $autowireClassMethodFactory,
     ) {
     }
 

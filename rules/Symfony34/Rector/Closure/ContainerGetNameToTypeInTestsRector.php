@@ -102,7 +102,6 @@ CODE_SAMPLE
         }
 
         $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType->getClassName()), 'class');
-
         $node->args[0] = new Arg($classConstFetch);
 
         return $node;

@@ -20,7 +20,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
-final class AutowireClassMethodFactory
+final readonly class AutowireClassMethodFactory
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver
