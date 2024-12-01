@@ -22,8 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
  *
  * @deprecated This rule is deprecated as too vague and causing too many changes. Use more granular @see \Rector\Symfony\Set\SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION instead
- *
- * @see \Rector\Symfony\Tests\Symfony42\Rector\MethodCall\ContainerGetToConstructorInjectionRector\ContainerGetToConstructorInjectionRectorTest
  */
 final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {

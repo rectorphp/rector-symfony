@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\DependencyInjection\Rector\Trait_;
 
-use Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -19,6 +18,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\Symfony\DependencyInjection\NodeFactory\AutowireClassMethodFactory;
 use Rector\Symfony\DependencyInjection\ThisGetTypeMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
