@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\ValueObject\MethodName;
 
-final class CommandConstructorDecorator
+final readonly class CommandConstructorDecorator
 {
     public function __construct(
         private NodeTypeResolver $nodeTypeResolver
