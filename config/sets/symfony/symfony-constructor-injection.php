@@ -11,6 +11,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         // modern step-by-step narrow approach
         \Rector\Symfony\DependencyInjection\Rector\Class_\ControllerGetByTypeToConstructorInjectionRector::class,
+        \Rector\Symfony\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector::class,
 
         // legacy rules that require container fetch
         ContainerGetToConstructorInjectionRector::class,

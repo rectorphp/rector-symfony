@@ -20,4 +20,9 @@ final class SymfonyClass
      * @var string
      */
     public const COMMAND = 'Symfony\Component\Console\Command\Command';
+
+    /**
+     * @var string
+     */
+    public const CONTAINER_AWARE_COMMAND = 'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand';
 }
