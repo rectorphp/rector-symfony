@@ -28,8 +28,8 @@ final readonly class ServiceTypeMethodCallResolver
             return new MixedType();
         }
 
-        $argument = $methodCall->getArgs()[0]
-            ->value;
+        $firstArg = $methodCall->getArgs()[0];
+        $argument = $firstArg->value;
         $serviceMap = $this->serviceMapProvider->provide();
 
         if ($argument instanceof String_) {

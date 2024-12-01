@@ -9,6 +9,11 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const CONTROLLER = 'Symfony\Bundle\FrameworkBundle\Controller\Controller';
+
+    /**
+     * @var string
+     */
     public const RESPONSE = 'Symfony\Component\HttpFoundation\Response';
 
     /**

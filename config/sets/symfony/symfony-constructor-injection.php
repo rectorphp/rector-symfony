@@ -9,6 +9,10 @@ use Rector\Symfony\Symfony42\Rector\MethodCall\ContainerGetToConstructorInjectio
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
+        // modern step-by-step narrow approach
+        \Rector\Symfony\DependencyInjection\Rector\Class_\ControllerGetByTypeToConstructorInjectionRector::class,
+
+        // legacy rules that require container fetch
         ContainerGetToConstructorInjectionRector::class,
         ContainerGetNameToTypeInTestsRector::class,
         GetToConstructorInjectionRector::class,
