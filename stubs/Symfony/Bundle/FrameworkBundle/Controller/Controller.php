@@ -13,6 +13,8 @@ if (class_exists('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
 
 abstract class Controller
 {
+    protected $container;
+
     /**
      * @param string|AbstractType|FormInterface $formType
      */

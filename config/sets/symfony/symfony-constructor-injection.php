@@ -15,10 +15,11 @@ return static function (RectorConfig $rectorConfig): void {
         // modern step-by-step narrow approach
         ControllerGetByTypeToConstructorInjectionRector::class,
         CommandGetByTypeToConstructorInjectionRector::class,
+        \Rector\Symfony\DependencyInjection\Rector\Class_\GetBySymfonyStringToConstructorInjectionRector::class,
         TraitGetByTypeToInjectRector::class,
 
         // legacy rules that require container fetch
-        ContainerGetToConstructorInjectionRector::class,
+        // ContainerGetToConstructorInjectionRector::class,
         ContainerGetNameToTypeInTestsRector::class,
         GetToConstructorInjectionRector::class,
     ]);

@@ -37,7 +37,10 @@ final class ConvertRenderTemplateShortNotationToBundleSyntaxRector extends Abstr
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
-class BaseController extends Controller {
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class BaseController extends Controller
+{
     function indexAction()
     {
         $this->render('appBundle:Landing\Main:index.html.twig');
@@ -46,7 +49,10 @@ class BaseController extends Controller {
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-class BaseController extends Controller {
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class BaseController extends Controller
+{
     function indexAction()
     {
         $this->render('@app/Landing/Main/index.html.twig');

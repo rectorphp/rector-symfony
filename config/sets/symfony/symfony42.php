@@ -48,13 +48,13 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Translation\TranslatorInterface' => 'Symfony\Contracts\Translation\TranslatorInterface',
     ]);
 
-    # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, @see https://github.com/rectorphp/rector/issues/1629
-    $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
-
-    # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
-    $rectorConfig->rule(StringToArrayArgumentProcessRector::class);
-
-    $rectorConfig->rule(RootNodeTreeBuilderRector::class);
+    $rectorConfig->rules([
+        # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, @see https://github.com/rectorphp/rector/issues/1629
+        // ContainerGetToConstructorInjectionRector::class,
+        # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
+        StringToArrayArgumentProcessRector::class,
+        RootNodeTreeBuilderRector::class,
+    ]);
 
     $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [
         new ArgumentAdder(
