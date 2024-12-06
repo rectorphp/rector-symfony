@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,8 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RedirectToRouteRector extends AbstractRector
 {
     public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer,
-        private readonly ValueResolver $valueResolver
+        private readonly ControllerAnalyzer $controllerAnalyzer
     ) {
     }
 
