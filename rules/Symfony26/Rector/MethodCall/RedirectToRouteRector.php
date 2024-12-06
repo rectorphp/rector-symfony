@@ -6,11 +6,10 @@ namespace Rector\Symfony\Symfony26\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,8 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RedirectToRouteRector extends AbstractRector
 {
     public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer,
-        private readonly ValueResolver $valueResolver
+        private readonly ControllerAnalyzer $controllerAnalyzer
     ) {
     }
 
@@ -99,7 +97,15 @@ final class RedirectToRouteRector extends AbstractRector
             return false;
         }
 
-        return $this->valueResolver->isValue($refTypeArg->value, UrlGeneratorInterface::ABSOLUTE_PATH);
+        if (! $refTypeArg->value instanceof ClassConstFetch) {
+            return false;
+        }
+
+        if (! $this->isName($refTypeArg->value->class, 'Symfony\Component\Routing\Generator\UrlGeneratorInterface')) {
+            return false;
+        }
+
+        return $this->isName($refTypeArg->value->name, 'ABSOLUTE_PATH');
     }
 
     /**
