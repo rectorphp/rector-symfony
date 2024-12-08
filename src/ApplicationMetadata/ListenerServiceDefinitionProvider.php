@@ -53,6 +53,16 @@ final class ListenerServiceDefinitionProvider
                 }
 
                 $eventName = $tag->getEvent();
+
+                if ($tag->getMethod() === '') {
+                    // fill method based on the event
+                    if (str_starts_with($tag->getEvent(), 'kernel.')) {
+                        [, $event] = explode('.', $tag->getEvent());
+                        $methodName = 'onKernel' . ucfirst($event);
+                        $tag->changeMethod($methodName);
+                    }
+                }
+
                 $this->listenerClassesToEvents[$eventListener->getClass()][$eventName][] = $eventListener;
             }
         }
