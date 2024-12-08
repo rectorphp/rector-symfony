@@ -3,6 +3,7 @@
     <services>
         <service id="first_listener" class="Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\SomeListener">
             <tag name="kernel.event_listener" event="some_event" method="methodToBeCalled"/>
+            <tag name="kernel.event_listener" event="kernel.exception"/>
         </service>
 
         <service id="second_listener" class="Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\Fixture\WithPriorityListener">

@@ -25,7 +25,7 @@ class SomeEventSubscriber implements \Symfony\Component\EventDispatcher\EventSub
      */
     public static function getSubscribedEvents(): array
     {
-        return ['some_event' => 'methodToBeCalled'];
+        return ['some_event' => 'methodToBeCalled', \Symfony\Component\HttpKernel\KernelEvents::EXCEPTION => 'onKernelException'];
     }
 }
 

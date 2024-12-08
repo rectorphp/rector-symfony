@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
+use Rector\Symfony\Enum\SymfonyAttribute;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
@@ -24,26 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class EventListenerToEventSubscriberRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\Component\EventDispatcher\EventSubscriberInterface';
-
-    /**
-     * @var string
-     */
-    private const EVENT_LISTENER_ATTRIBUTE = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
-
-    /**
-     * @var string
-     */
-    private const KERNEL_EVENTS_CLASS = 'Symfony\Component\HttpKernel\KernelEvents';
-
-    /**
-     * @var string
-     */
-    private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
-
     /**
      * @var string
      * @changelog https://regex101.com/r/qiHZ4T/1
@@ -63,22 +45,26 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
-            new EventNameToClassAndConstant('kernel.request', self::KERNEL_EVENTS_CLASS, 'REQUEST'),
-            new EventNameToClassAndConstant('kernel.exception', self::KERNEL_EVENTS_CLASS, 'EXCEPTION'),
-            new EventNameToClassAndConstant('kernel.view', self::KERNEL_EVENTS_CLASS, 'VIEW'),
-            new EventNameToClassAndConstant('kernel.controller', self::KERNEL_EVENTS_CLASS, 'CONTROLLER'),
+            new EventNameToClassAndConstant('kernel.request', SymfonyClass::KERNEL_EVENTS_CLASS, 'REQUEST'),
+            new EventNameToClassAndConstant('kernel.exception', SymfonyClass::KERNEL_EVENTS_CLASS, 'EXCEPTION'),
+            new EventNameToClassAndConstant('kernel.view', SymfonyClass::KERNEL_EVENTS_CLASS, 'VIEW'),
+            new EventNameToClassAndConstant('kernel.controller', SymfonyClass::KERNEL_EVENTS_CLASS, 'CONTROLLER'),
             new EventNameToClassAndConstant(
                 'kernel.controller_arguments',
-                self::KERNEL_EVENTS_CLASS,
+                SymfonyClass::KERNEL_EVENTS_CLASS,
                 'CONTROLLER_ARGUMENTS'
             ),
-            new EventNameToClassAndConstant('kernel.response', self::KERNEL_EVENTS_CLASS, 'RESPONSE'),
-            new EventNameToClassAndConstant('kernel.terminate', self::KERNEL_EVENTS_CLASS, 'TERMINATE'),
-            new EventNameToClassAndConstant('kernel.finish_request', self::KERNEL_EVENTS_CLASS, 'FINISH_REQUEST'),
+            new EventNameToClassAndConstant('kernel.response', SymfonyClass::KERNEL_EVENTS_CLASS, 'RESPONSE'),
+            new EventNameToClassAndConstant('kernel.terminate', SymfonyClass::KERNEL_EVENTS_CLASS, 'TERMINATE'),
+            new EventNameToClassAndConstant(
+                'kernel.finish_request',
+                SymfonyClass::KERNEL_EVENTS_CLASS,
+                'FINISH_REQUEST'
+            ),
             // console events
-            new EventNameToClassAndConstant('console.command', self::CONSOLE_EVENTS_CLASS, 'COMMAND'),
-            new EventNameToClassAndConstant('console.terminate', self::CONSOLE_EVENTS_CLASS, 'TERMINATE'),
-            new EventNameToClassAndConstant('console.error', self::CONSOLE_EVENTS_CLASS, 'ERROR'),
+            new EventNameToClassAndConstant('console.command', SymfonyClass::CONSOLE_EVENTS_CLASS, 'COMMAND'),
+            new EventNameToClassAndConstant('console.terminate', SymfonyClass::CONSOLE_EVENTS_CLASS, 'TERMINATE'),
+            new EventNameToClassAndConstant('console.error', SymfonyClass::CONSOLE_EVENTS_CLASS, 'ERROR'),
         ];
     }
 
@@ -139,17 +125,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // anonymous class
-        if (! $node->name instanceof Identifier) {
-            return null;
-        }
-
-        // is already a subscriber
-        if ($this->classAnalyzer->hasImplements($node, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
-            return null;
-        }
-
-        if ($this->hasAsListenerAttribute($node)) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
 
@@ -173,7 +149,7 @@ CODE_SAMPLE
      */
     private function changeListenerToSubscriberWithMethods(Class_ $class, array $eventsToMethods): void
     {
-        $class->implements[] = new FullyQualified(self::EVENT_SUBSCRIBER_INTERFACE);
+        $class->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
 
         $classShortName = $this->nodeNameResolver->getShortName($class);
 
@@ -194,7 +170,7 @@ CODE_SAMPLE
      */
     private function hasAsListenerAttribute(Class_ $class): bool
     {
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, self::EVENT_LISTENER_ATTRIBUTE)) {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAttribute::EVENT_LISTENER_ATTRIBUTE)) {
             return true;
         }
 
@@ -203,11 +179,29 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::EVENT_LISTENER_ATTRIBUTE)) {
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute(
+                $classMethod,
+                SymfonyAttribute::EVENT_LISTENER_ATTRIBUTE
+            )) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        // anonymous class
+        if ($class->isAnonymous()) {
+            return true;
+        }
+
+        // is already a subscriber
+        if ($this->classAnalyzer->hasImplements($class, SymfonyClass::EVENT_SUBSCRIBER_INTERFACE)) {
+            return true;
+        }
+
+        return $this->hasAsListenerAttribute($class);
     }
 }
