@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 final class CommandGetWithType extends ContainerAwareCommand
 {
-    public function __construct(private \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector\Fixture\SomeService $someService)
+    public function __construct(private readonly \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector\Fixture\SomeService $someService)
     {
         parent::__construct();
     }

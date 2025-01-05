@@ -27,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class ClassWithNamedService2 extends Controller
 {
-    public function __construct(private \Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector\Source\Something $something, private \Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector\Source\Anything $anything)
+    public function __construct(private readonly \Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector\Source\Something $something, private readonly \Rector\Symfony\Tests\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector\Source\Anything $anything)
     {
     }
     public function render()

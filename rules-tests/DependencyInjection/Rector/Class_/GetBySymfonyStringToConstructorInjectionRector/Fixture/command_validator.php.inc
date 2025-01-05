@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 final class CommandValidator extends ContainerAwareCommand
 {
-    public function __construct(private \Symfony\Component\Validator\Validator\ValidatorInterface $validator)
+    public function __construct(private readonly \Symfony\Component\Validator\Validator\ValidatorInterface $validator)
     {
     }
     public function configure()

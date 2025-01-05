@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class EventDispatcherController extends Controller
 {
-    public function __construct(private \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
+    public function __construct(private readonly \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher)
     {
     }
     public function configure()

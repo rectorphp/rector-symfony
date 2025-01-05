@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ClassWithNamedService extends Controller
 {
-    public function __construct(private \stdClass $stdClass)
+    public function __construct(private readonly \stdClass $stdClass)
     {
     }
     public function render()

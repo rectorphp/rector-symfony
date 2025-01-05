@@ -32,7 +32,7 @@ final class IncludeConstructorCommandGetWithType extends ContainerAwareCommand
 {
     private string $value;
 
-    public function __construct(private \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector\Fixture\SomeService $someService)
+    public function __construct(private readonly \Rector\Symfony\Tests\DependencyInjection\Rector\Class_\CommandGetByTypeToConstructorInjectionRector\Fixture\SomeService $someService)
     {
         $this->value = 'some';
         parent::__construct();
