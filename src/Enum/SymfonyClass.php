@@ -44,7 +44,7 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const SERIALIZER_INTERFACE = 'JMS\Serializer\SerializerInterface';
+    public const JMS_SERIALIZER_INTERFACE = 'JMS\Serializer\SerializerInterface';
 
     /**
      * @var string
@@ -69,7 +69,7 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const SESSION = 'Symfony\Component\HttpFoundation\Session\Session';
+    public const SESSION_INTERFACRE = 'Symfony\Component\HttpFoundation\Session\SessionInterface';
 
     /**
      * @var string
