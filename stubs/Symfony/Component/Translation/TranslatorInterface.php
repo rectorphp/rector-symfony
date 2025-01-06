@@ -10,5 +10,4 @@ if (interface_exists('Symfony\Component\Translation\TranslatorInterface')) {
 
 interface TranslatorInterface
 {
-
 }

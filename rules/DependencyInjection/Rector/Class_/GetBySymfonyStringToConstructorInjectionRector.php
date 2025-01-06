@@ -32,6 +32,9 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
         'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE,
         'logger' => SymfonyClass::LOGGER_INTERFACE,
         'jms_serializer' => SymfonyClass::SERIALIZER_INTERFACE,
+        'translator' => SymfonyClass::TRANSLATOR_INTERFACE,
+        'session' => SymfonyClass::SESSION,
+        'security.token_storage' => SymfonyClass::TOKEN_STORAGE_INTERFACE,
     ];
 
     public function __construct(
