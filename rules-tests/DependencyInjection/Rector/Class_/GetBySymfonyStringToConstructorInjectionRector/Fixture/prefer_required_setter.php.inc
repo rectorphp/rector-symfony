@@ -33,20 +33,17 @@ namespace Rector\Symfony\Tests\DependencyInjection\Rector\Class_\GetBySymfonyStr
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PreferRequiredSetter extends Controller
 {
     private EventDispatcherInterface $eventDispatcher;
-
-    private ValidatorInterface $validator;
+    private \Symfony\Component\Validator\Validator\ValidatorInterface $validator;
 
     /**
      * @required
      */
     public function autowire(
-        EventDispatcherInterface $eventDispatcher,
-        ValidatorInterface $validator
+        EventDispatcherInterface $eventDispatcher, \Symfony\Component\Validator\Validator\ValidatorInterface $validator
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->validator = $validator;
