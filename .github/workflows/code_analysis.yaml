@@ -21,7 +21,7 @@ jobs:
                         name: 'Active Classes'
                         run: vendor/bin/class-leak check config src rules --ansi --skip-suffix "Rector" --skip-type "\Rector\Set\Contract\SetProviderInterface"
 
-        name: ${{ matrix.actions.name }}
+        name: ${{ matrix.actions.name }} (${{ matrix.php-versions }})
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
