@@ -30,4 +30,4 @@ jobs:
 
             -   uses: "ramsey/composer-install@v1"
 
-            -   run: vendor/bin/phpunit
+            -   run: vendor/bin/phpunit --display-deprecations
