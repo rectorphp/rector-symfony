@@ -18,7 +18,7 @@ jobs:
                 php-versions: ['8.2', '8.3', '8.4']
         runs-on: ubuntu-latest
 
-        name: Tests
+        name: Tests (${{ matrix.php-versions }})
         steps:
             -   uses: actions/checkout@v4
 
