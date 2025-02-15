@@ -15,4 +15,9 @@ final class SymfonyAttribute
      * @var string
      */
     public const EVENT_LISTENER_ATTRIBUTE = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
+
+    /**
+     * @var string
+     */
+    public const ROUTE = 'Symfony\Component\Routing\Attribute\Route';
 }
