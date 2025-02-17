@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -36,7 +37,18 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        new AddParamTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', 0, new MixedType(true)),
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Config\Loader\LoaderInterface',
+            'load',
+            0,
+            new MixedType(true)
+        ),
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Config\Loader\LoaderInterface',
+            'supports',
+            0,
+            new MixedType(true)
+        ),
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
             'configureRoutes',
