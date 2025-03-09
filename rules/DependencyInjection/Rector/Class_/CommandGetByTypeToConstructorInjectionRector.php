@@ -134,6 +134,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $classReflection->isSubclassOf(SymfonyClass::CONTAINER_AWARE_COMMAND);
+        return ! $classReflection->is(SymfonyClass::CONTAINER_AWARE_COMMAND);
     }
 }

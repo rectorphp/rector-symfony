@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $classReflection->isSubClassOf('Symfony\Component\Console\Command\Command')) {
+        if (! $classReflection->is('Symfony\Component\Console\Command\Command')) {
             return null;
         }
 

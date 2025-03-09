@@ -151,7 +151,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $classReflection->isSubclassOf('Twig_Extension')) {
+        if (! $classReflection->is('Twig_Extension')) {
             return true;
         }
 
