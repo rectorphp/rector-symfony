@@ -22,7 +22,7 @@ final readonly class SymfonyTestCaseAnalyzer
             return false;
         }
 
-        return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
+        return $classReflection->is('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
     }
 
     /**
@@ -35,6 +35,6 @@ final readonly class SymfonyTestCaseAnalyzer
             return false;
         }
 
-        return $classReflection->isSubclassOf('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase');
+        return $classReflection->is('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase');
     }
 }

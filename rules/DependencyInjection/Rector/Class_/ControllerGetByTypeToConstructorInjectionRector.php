@@ -130,6 +130,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $classReflection->isSubclassOf(SymfonyClass::CONTROLLER);
+        return ! $classReflection->is(SymfonyClass::CONTROLLER);
     }
 }

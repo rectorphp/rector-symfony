@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $scope->getClassReflection();
-        if (! $classReflection->isSubclassOf('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
+        if (! $classReflection->is('Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
             return null;
         }
 
