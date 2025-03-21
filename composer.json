@@ -8,11 +8,13 @@
         "ext-xml": "*"
     },
     "require-dev": {
+        "phpecs/phpecs": "^2.0.1",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1.8",
         "phpstan/phpstan-webmozart-assert": "^2.0",
         "phpunit/phpunit": "^11.4",
         "rector/rector-src": "dev-main",
+        "rector/type-perfect": "^2.0",
         "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
         "symfony/http-kernel": "^6.4",
@@ -20,9 +22,10 @@
         "symfony/security-core": "^6.4",
         "symfony/security-http": "^6.4",
         "symfony/validator": "^6.4",
-        "phpecs/phpecs": "^2.0.1",
         "symplify/vendor-patches": "^11.3",
         "tomasvotruba/class-leak": "^2.0",
+        "tomasvotruba/type-coverage": "^2.0",
+        "tomasvotruba/unused-public": "^2.0",
         "tracy/tracy": "^2.10"
     },
     "autoload": {

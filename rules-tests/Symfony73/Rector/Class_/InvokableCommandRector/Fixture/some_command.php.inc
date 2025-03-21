@@ -18,7 +18,7 @@ final class SomeCommand extends Command
         $this->addOption('option', 'o', InputOption::VALUE_NONE, 'Option description');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $someArgument = $input->getArgument('argument');
         $someOption = $input->getOption('option');
@@ -35,18 +35,20 @@ final class SomeCommand extends Command
 
 namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandRector\Fixture;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\Argument;
-use Symfony\Component\Console\Command\Option;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
+#[AsCommand(name: 'some_name')]
 final class SomeCommand
 {
-    public function __invoke(
-        #[Argument]
-        string $argument,
-        #[Option]
-        bool $option = false,
-    ) {
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Command\Argument]
+    string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
+    $option): int
+    {
         $someArgument = $argument;
         $someOption = $option;
 

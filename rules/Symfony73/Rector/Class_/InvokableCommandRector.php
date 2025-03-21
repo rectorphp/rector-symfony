@@ -6,19 +6,21 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
-use Rector\Symfony\Symfony73\ValueObject\CommandOptionMetadata;
+use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver;
+use Rector\Symfony\Symfony73\NodeFactory\CommandInvokeParamsFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -32,7 +34,8 @@ final class InvokableCommandRector extends AbstractRector
 {
     public function __construct(
         private readonly AttributeFinder $attributeFinder,
-        private readonly \Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver,
+        private readonly CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver,
+        private readonly CommandInvokeParamsFactory $commandInvokeParamsFactory
     ) {
     }
 
@@ -120,18 +123,18 @@ CODE_SAMPLE
 
         // as command attribute is required, its handled by previous symfony versions
         // @todo possibly to add it here to handle multiple cases
-        if (! $this->attributeFinder->findAttributeByClass($node, SymfonyAttribute::AS_COMMAND)) {
+        if (! $this->attributeFinder->findAttributeByClass($node, SymfonyAttribute::AS_COMMAND) instanceof Attribute) {
             return null;
         }
 
         // 1. fetch configure method to get arguments and options metadata
-        $configureClassMethod = $node->getMethod('configure');
+        $configureClassMethod = $node->getMethod(CommandMethodName::CONFIGURE);
         if (! $configureClassMethod instanceof ClassMethod) {
             return null;
         }
 
         // 2. rename execute to __invoke
-        $executeClassMethod = $node->getMethod('execute');
+        $executeClassMethod = $node->getMethod(CommandMethodName::EXECUTE);
         if (! $executeClassMethod instanceof ClassMethod) {
             return null;
         }
@@ -140,18 +143,24 @@ CODE_SAMPLE
 
         // 3. create arguments and options parameters
         // @todo
-
-        $commandOptionsMetadatas = $this->commandArgumentsAndOptionsResolver->collectCommandOptionsMetadatas(
+        $commandArguments = $this->commandArgumentsAndOptionsResolver->collectCommandArguments(
             $configureClassMethod
         );
 
-        // remove configure() method
+        $commandOptions = $this->commandArgumentsAndOptionsResolver->collectCommandOptions($configureClassMethod);
+
+        // 4. remove configure() method
         $this->removeConfigureClassMethod($node);
 
-        // decorate __invoke method with attributes
-        $invokeParams = $this->createOptionParams($commandOptionsMetadatas);
-
+        // 5. decorate __invoke method with attributes
+        $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
         $executeClassMethod->params = $invokeParams;
+
+        // 6. remove parent class
+        $node->extends = null;
+
+        // 7. replace input->getArgument() and input->getOption() calls with direct variable access
+        $this->replaceInputArgumentOptionFetchWithVariables($executeClassMethod);
 
         return $node;
     }
@@ -161,11 +170,11 @@ CODE_SAMPLE
      */
     private function isComplexCommand(Class_ $class): bool
     {
-        if ($class->getMethod('interact') instanceof ClassMethod) {
+        if ($class->getMethod(CommandMethodName::INTERACT) instanceof ClassMethod) {
             return true;
         }
 
-        return $class->getMethod('initialize') instanceof ClassMethod;
+        return $class->getMethod(CommandMethodName::INITIALIZE) instanceof ClassMethod;
     }
 
     private function removeConfigureClassMethod(Class_ $class): void
@@ -175,7 +184,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isName($stmt->name, 'configure')) {
+            if (! $this->isName($stmt->name, CommandMethodName::CONFIGURE)) {
                 continue;
             }
 
@@ -184,25 +193,30 @@ CODE_SAMPLE
         }
     }
 
-    /**
-     * @param CommandOptionMetadata[] $commandOptionMetadatas
-     * @return Param[]
-     */
-    private function createOptionParams(array $commandOptionMetadatas): array
+    private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod): void
     {
-        $optionParams = [];
+        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node): ?Variable {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
 
-        foreach ($commandOptionMetadatas as $commandOptionMetadata) {
-            $optionParam = new Param(new Variable($commandOptionMetadata->getName()));
+            if (! $this->isName($node->var, 'input')) {
+                return null;
+            }
 
-            // @todo fill type or default value
-            $optionParam->attrGroups[] = new AttributeGroup([
-                new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION)),
-            ]);
+            if (! $this->isNames($node->name, ['getOption', 'getArgument'])) {
+                return null;
+            }
 
-            $optionParams[] = $optionParam;
-        }
+            $firstArgValue = $node->getArgs()[0]
+                ->value;
 
-        return $optionParams;
+            if (! $firstArgValue instanceof String_) {
+                // unable to resolve argument/option name
+                throw new ShouldNotHappenException();
+            }
+
+            return new Variable($firstArgValue->value);
+        });
     }
 }

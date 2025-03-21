@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\ValueObject;
 
-final class CommandOptionMetadata
+final readonly class CommandArgument
 {
     public function __construct(
-        private readonly string $name,
+        private string $name
         // @todo type
         // @todo default value
     ) {

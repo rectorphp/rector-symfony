@@ -19,8 +19,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyAttribute;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -103,11 +103,11 @@ CODE_SAMPLE),
             return null;
         }
 
-        if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
+        if (! $this->reflectionProvider->hasClass(SymfonyAttribute::AS_COMMAND)) {
             return null;
         }
 
-        if (! $this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (! $this->isObjectType($node, new ObjectType(SymfonyClass::COMMAND))) {
             return null;
         }
 
@@ -140,7 +140,7 @@ CODE_SAMPLE),
         }
 
         if (! $asCommandAttribute instanceof Attribute) {
-            $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+            $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
 
             $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
 
