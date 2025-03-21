@@ -2,7 +2,6 @@ parameters:
     level: 8
 
     reportUnmatchedIgnoredErrors: false
-
     treatPhpDocTypesAsCertain: false
 
     paths:
@@ -12,18 +11,17 @@ parameters:
         - rules
         - rules-tests
 
-# to be enabled later once rector upgraded to use phpstan v2
-#    # https://github.com/rectorphp/type-perfect/
-#    type_perfect:
-#        no_mixed: true
-#        null_over_false: true
-#        narrow_param: true
-#        narrow_return: true
+    # https://github.com/rectorphp/type-perfect/
+    type_perfect:
+        no_mixed: true
+        null_over_false: true
+        narrow_param: true
+        narrow_return: true
 
-#    unused_public:
-#        constants: true
-#        methods: true
-#        properties: true
+    unused_public:
+        constants: true
+        methods: true
+        properties: true
 
     scanDirectories:
         - stubs
@@ -54,16 +52,12 @@ parameters:
         - '#Doing instanceof PHPStan\\Type\\.+ is error\-prone and deprecated#'
 
         # phpstan instanceof
-        -
-            identifier: phpstanApi.instanceofAssumption
-
-        -
-            identifier: phpstanApi.varTagAssumption
-
-        -
-            identifier: argument.type
-
-        -
-            identifier: assign.propertyType
+        - identifier: argument.type
+        - identifier: assign.propertyType
 
         - '#::provideMinPhpVersion\(\) never returns \d+ so it can be removed from the return type#'
+
+        # node finder
+        -
+            identifier: return.type
+            path: rules/Symfony73/NodeAnalyzer/CommandArgumentsAndOptionsResolver.php
