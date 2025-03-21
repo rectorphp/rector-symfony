@@ -15,14 +15,14 @@
         "rector/rector-src": "dev-main",
         "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
-        "symfony/http-kernel": "~6.3",
+        "symfony/http-kernel": "^6.4",
         "symfony/routing": "^6.4",
         "symfony/security-core": "^6.4",
         "symfony/security-http": "^6.4",
         "symfony/validator": "^6.4",
-        "symplify/easy-coding-standard": "^12.3",
+        "phpecs/phpecs": "^2.0.1",
         "symplify/vendor-patches": "^11.3",
-        "tomasvotruba/class-leak": "^1.0",
+        "tomasvotruba/class-leak": "^2.0",
         "tracy/tracy": "^2.10"
     },
     "autoload": {

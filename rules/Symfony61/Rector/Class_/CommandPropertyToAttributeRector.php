@@ -17,7 +17,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -91,7 +91,7 @@ CODE_SAMPLE),
         }
 
         // does attribute already exist?
-        if (! $this->reflectionProvider->hasClass(SymfonyAnnotation::AS_COMMAND)) {
+        if (! $this->reflectionProvider->hasClass(SymfonyAttribute::AS_COMMAND)) {
             return null;
         }
 
@@ -104,7 +104,7 @@ CODE_SAMPLE),
 
         $existingAsCommandAttribute = $this->attributeFinder->findAttributeByClass(
             $node,
-            SymfonyAnnotation::AS_COMMAND
+            SymfonyAttribute::AS_COMMAND
         );
 
         $attributeArgs = $this->createAttributeArgs($defaultNameExpr, $defaultDescriptionExpr);
@@ -126,7 +126,7 @@ CODE_SAMPLE),
     {
         Assert::allIsInstanceOf($args, Arg::class);
 
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAnnotation::AS_COMMAND);
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
         $attributeGroup->attrs[0]->args = $args;
 
         return $attributeGroup;
