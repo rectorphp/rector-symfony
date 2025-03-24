@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
@@ -28,6 +29,9 @@ return static function (RectorConfig $rectorConfig): void {
         ParamTypeFromRouteRequiredRegexRector::class,
         ActionSuffixRemoverRector::class,
         LoadValidatorMetadataToAnnotationRector::class,
+
+        // request method
+        RequestIsMainRector::class,
 
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
