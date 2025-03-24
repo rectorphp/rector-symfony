@@ -10,5 +10,16 @@ if (class_exists('Symfony\Component\HttpFoundation\Request')) {
 
 final class Request
 {
+    public function getRequestType()
+    {
+    }
 
+    // newer version
+    public function isMainRequest()
+    {
+    }
+
+    public function isMasterRequest()
+    {
+    }
 }
