@@ -5,5 +5,8 @@
         <service id="second_use" class="Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\SomeServiceType"></service>
 
         <service id="some_unique_name" class="Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\UniqueServiceType"></service>
+        <service id="excluded" class="Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSetStringNameToClassNameRector\Source\ExcludedService">
+            <tag name="container.excluded"/>
+        </service>
     </services>
 </container>
