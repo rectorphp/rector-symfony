@@ -90,6 +90,8 @@ CODE_SAMPLE
             return null;
         }
 
+        $this->hasChanged = false;
+
         $this->refactorReturnTypeDeclaration($executeClassMethod);
         $this->addReturn0ToExecuteClassMethod($executeClassMethod);
 
