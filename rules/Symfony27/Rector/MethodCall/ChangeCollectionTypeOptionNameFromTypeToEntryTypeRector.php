@@ -113,13 +113,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->refactorOptionsArray($optionsArray);
+        $hasChanged = $this->refactorOptionsArray($optionsArray);
 
+        if (! $hasChanged) {
+            return null;
+        }
         return $node;
     }
 
-    private function refactorOptionsArray(Array_ $optionsArray): void
+    private function refactorOptionsArray(Array_ $optionsArray): bool
     {
+        $hasChanged = false;
         foreach ($optionsArray->items as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
                 continue;
@@ -135,7 +139,9 @@ CODE_SAMPLE
                 }
 
                 $arrayItem->key = new String_($newName);
+                $hasChanged = true;
             }
         }
+        return $hasChanged;
     }
 }
