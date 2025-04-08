@@ -170,7 +170,7 @@ CODE_SAMPLE
      */
     private function hasAsListenerAttribute(Class_ $class): bool
     {
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAttribute::EVENT_LISTENER_ATTRIBUTE)) {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAttribute::AS_EVENT_LISTENER)) {
             return true;
         }
 
@@ -181,7 +181,7 @@ CODE_SAMPLE
 
             if ($this->phpAttributeAnalyzer->hasPhpAttribute(
                 $classMethod,
-                SymfonyAttribute::EVENT_LISTENER_ATTRIBUTE
+                SymfonyAttribute::AS_EVENT_LISTENER
             )) {
                 return true;
             }

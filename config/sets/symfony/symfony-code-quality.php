@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
@@ -38,5 +39,8 @@ return static function (RectorConfig $rectorConfig): void {
 
         // routing
         InlineClassRoutePrefixRector::class,
+
+        // narrow attributes
+        SecurityAttributeToIsGrantedAttributeRector::class,
     ]);
 };

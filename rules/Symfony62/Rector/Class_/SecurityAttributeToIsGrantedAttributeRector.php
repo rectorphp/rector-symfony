@@ -14,7 +14,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SensioAttribute;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,15 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    private const SECURITY_ATTRIBUTE = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Security';
-
-    /**
-     * @var string
-     */
-    private const IS_GRANTED_ATTRIBUTE = 'Symfony\Component\Security\Http\Attribute\IsGranted';
 
     /**
      * @var string
@@ -49,6 +43,11 @@ final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector i
      * @see https://regex101.com/r/NYRPrx/1
      */
     private const IS_GRANTED_AND_SUBJECT_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\'),\s+(?<subject>\w+)\)$#';
+
+    public function __construct(
+        private readonly ReflectionProvider $reflectionProvider
+    ) {
+    }
 
     public function provideMinPhpVersion(): int
     {
@@ -113,15 +112,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->hasSymfonySecurityAttribute()) {
+            return null;
+        }
+
         $hasChanged = false;
 
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if (! $this->isName($attribute->name, self::SECURITY_ATTRIBUTE)) {
+                if (! $this->isName($attribute->name, SensioAttribute::SECURITY)) {
                     continue;
                 }
 
-                $attribute->name = new FullyQualified(self::IS_GRANTED_ATTRIBUTE);
+                // 1. resolve closest existing name of IsGranted
+                $isGrantedName = $this->resolveIsGrantedAttributeName();
+
+                $attribute->name = new FullyQualified($isGrantedName);
 
                 $firstArg = $attribute->args[0];
                 $firstArg->name = new Identifier('attribute');
@@ -178,5 +184,27 @@ CODE_SAMPLE
         $args = [new Arg($expr)];
 
         return new New_(new FullyQualified('Symfony\Component\ExpressionLanguage\Expression'), $args);
+    }
+
+    private function resolveIsGrantedAttributeName(): string
+    {
+        if ($this->reflectionProvider->hasClass(SymfonyAttribute::IS_GRANTED)) {
+            return SymfonyAttribute::IS_GRANTED;
+        }
+
+        // fallback to sensio, if available
+        return SensioAttribute::IS_GRANTED;
+    }
+
+    private function hasSymfonySecurityAttribute(): bool
+    {
+        // run only if the sensio attribute is available
+        if (! $this->reflectionProvider->hasClass(SensioAttribute::SECURITY)) {
+            return false;
+        }
+
+        // must be attribute, not just annotation
+        $securityClassReflection = $this->reflectionProvider->getClass(SensioAttribute::SECURITY);
+        return $securityClassReflection->isAttributeClass();
     }
 }
