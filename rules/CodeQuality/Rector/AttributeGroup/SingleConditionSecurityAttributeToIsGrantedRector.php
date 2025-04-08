@@ -19,6 +19,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/pull/27305/
  * @see https://stackoverflow.com/a/65439590/1348344
+ *
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector\SingleConditionSecurityAttributeToIsGrantedRectorTest
  */
 final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRector
 {
