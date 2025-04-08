@@ -8,6 +8,9 @@ use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see https://github.com/symfony/symfony/pull/27305/
+ */
 final class SingleConditionSecurityAttributeToIsGrantedRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
