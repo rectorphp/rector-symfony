@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 use Rector\Config\RectorConfig;
+use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
@@ -16,6 +16,7 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerAc
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
+use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
@@ -41,6 +42,6 @@ return static function (RectorConfig $rectorConfig): void {
         InlineClassRoutePrefixRector::class,
 
         // narrow attributes
-        SecurityAttributeToIsGrantedAttributeRector::class,
+        SingleConditionSecurityAttributeToIsGrantedRector::class,
     ]);
 };

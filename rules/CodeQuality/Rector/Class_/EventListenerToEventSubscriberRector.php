@@ -179,10 +179,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->phpAttributeAnalyzer->hasPhpAttribute(
-                $classMethod,
-                SymfonyAttribute::AS_EVENT_LISTENER
-            )) {
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, SymfonyAttribute::AS_EVENT_LISTENER)) {
                 return true;
             }
         }
