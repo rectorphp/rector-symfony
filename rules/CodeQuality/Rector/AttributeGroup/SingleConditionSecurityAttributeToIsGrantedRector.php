@@ -16,6 +16,10 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see https://github.com/symfony/symfony/pull/27305/
+ * @see https://stackoverflow.com/a/65439590/1348344
+ */
 final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRector
 {
     public function __construct(
