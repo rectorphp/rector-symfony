@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
-use PhpParser\Node\Name\FullyQualified;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -82,11 +82,16 @@ CODE_SAMPLE
                 }
 
                 // we look for "and"s
-                if (! str_contains($content, ' and')) {
+                if (! str_contains($content, ' and ') && ! str_contains($content, ' && ')) {
                     continue;
                 }
 
-                $andItems = explode(' and ', $content);
+                // split by && and "and"
+                if (str_contains($content, ' && ')) {
+                    $andItems = explode(' && ', $content);
+                } else {
+                    $andItems = explode(' and ', $content);
+                }
 
                 $accessRights = [];
 
@@ -106,9 +111,7 @@ CODE_SAMPLE
 
                 foreach ($accessRights as $accessRight) {
                     $attributeGroup = new AttributeGroup([
-                        new Attribute(new FullyQualified(IsGranted::class), [
-                            new Arg(new String_($accessRight)),
-                        ]),
+                        new Attribute(new FullyQualified(IsGranted::class), [new Arg(new String_($accessRight))]),
                     ]);
 
                     $node->attrGroups[] = $attributeGroup;
