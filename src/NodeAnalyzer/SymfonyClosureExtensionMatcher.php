@@ -29,6 +29,10 @@ final readonly class SymfonyClosureExtensionMatcher
                 return null;
             }
 
+            if ($extensionNames === []) {
+                return null;
+            }
+
             // warn use early about it, to avoid silent skip
             $errorMessage = sprintf(
                 'Split extensions "%s" to multiple separated files first',
