@@ -24,6 +24,7 @@ final class CommandValidator extends ContainerAwareCommand
 {
     public function __construct(private readonly \Symfony\Component\Validator\Validator\ValidatorInterface $validator)
     {
+        parent::__construct();
     }
     public function configure()
     {
