@@ -6,10 +6,8 @@ namespace Rector\Symfony\Tests\DependencyInjection\Rector\Class_\CommandGetByTyp
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-#[RunClassInSeparateProcess]
 final class CommandGetByTypeToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
