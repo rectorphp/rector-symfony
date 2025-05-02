@@ -24,6 +24,11 @@ final class MessengerHelper
 
     private string $messengerTagName = 'messenger.message_handler';
 
+    /**
+     * @var ServiceDefinition[]
+     */
+    private array $handlersFromServices = [];
+
     public function __construct(
         private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private readonly AttributeArrayNameInliner $attributeArrayNameInliner,
@@ -42,6 +47,7 @@ final class MessengerHelper
                 $options = $tag->getData();
             }
         }
+
         if ($options['from_transport']) {
             $options['fromTransport'] = $options['from_transport'];
             unset($options['from_transport']);
@@ -54,8 +60,15 @@ final class MessengerHelper
      */
     public function getHandlersFromServices(): array
     {
+        if ($this->handlersFromServices !== []) {
+            return $this->handlersFromServices;
+        }
+
         $serviceMap = $this->serviceMapProvider->provide();
-        return $serviceMap->getServicesByTag($this->messengerTagName);
+
+        $this->handlersFromServices = $serviceMap->getServicesByTag($this->messengerTagName);
+
+        return $this->handlersFromServices;
     }
 
     /**
