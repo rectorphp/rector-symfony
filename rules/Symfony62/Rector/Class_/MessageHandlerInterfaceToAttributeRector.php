@@ -6,10 +6,11 @@ namespace Rector\Symfony\Symfony62\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Helper\MessengerHelper;
-use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\ValueObject\PhpVersionFeature;
@@ -25,8 +26,8 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
     public function __construct(
         private readonly MessengerHelper $messengerHelper,
         private readonly ClassManipulator $classManipulator,
-        private readonly ClassAnalyzer $classAnalyzer,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -84,11 +85,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->reflectionProvider->hasClass(MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
+            return null;
+        }
+
         if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, MessengerHelper::AS_MESSAGE_HANDLER_ATTRIBUTE)) {
             return null;
         }
 
-        if (! $this->classAnalyzer->hasImplements($node, MessengerHelper::MESSAGE_HANDLER_INTERFACE)) {
+        $classType = $this->getType($node);
+
+        $messageHandlerObjectType = new ObjectType(MessengerHelper::MESSAGE_HANDLER_INTERFACE);
+
+        if (! $messageHandlerObjectType->isSuperTypeOf($classType)->yes()) {
             $handlers = $this->messengerHelper->getHandlersFromServices();
             if ($handlers === []) {
                 return null;
@@ -98,6 +107,11 @@ CODE_SAMPLE
         }
 
         $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_HANDLER_INTERFACE]);
+
+        // no need to add the attribute
+        if ($node->isAbstract()) {
+            return $node;
+        }
 
         return $this->messengerHelper->addAttribute($node);
     }
