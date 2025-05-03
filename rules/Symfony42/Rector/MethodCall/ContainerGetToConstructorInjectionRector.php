@@ -5,17 +5,10 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony42\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Rector\NodeManipulator\ClassDependencyManipulator;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\DependencyInjection\NodeDecorator\CommandConstructorDecorator;
-use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,14 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ContainerGetToConstructorInjectionRector extends AbstractRector implements DeprecatedInterface
 {
-    public function __construct(
-        private readonly DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer,
-        private readonly TestsNodeAnalyzer $testsNodeAnalyzer,
-        private readonly ClassDependencyManipulator $classDependencyManipulator,
-        private readonly CommandConstructorDecorator $commandConstructorDecorator,
-    ) {
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -86,61 +71,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-
-        $class = $node;
-        $propertyMetadatas = [];
-
-        $this->traverseNodesWithCallable($class, function (Node $node) use ($class, &$propertyMetadatas): ?Node {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $this->isName($node->name, 'get')) {
-                return null;
-            }
-
-            if (! $this->isObjectType(
-                $node->var,
-                new ObjectType('Symfony\Component\DependencyInjection\ContainerInterface')
-            )) {
-                return null;
-            }
-
-            if ($node->isFirstClassCallable()) {
-                return null;
-            }
-
-            $args = $node->getArgs();
-            if (count($args) === 1 && $args[0]->value instanceof ClassConstFetch) {
-                return null;
-            }
-
-            $propertyMetadata = $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency(
-                $class,
-                $node
-            );
-
-            if (! $propertyMetadata instanceof PropertyMetadata) {
-                return null;
-            }
-
-            $propertyMetadatas[] = $propertyMetadata;
-            return $this->nodeFactory->createPropertyFetch('this', $propertyMetadata->getName());
-        });
-
-        if ($propertyMetadatas === []) {
-            return null;
-        }
-
-        foreach ($propertyMetadatas as $propertyMetadata) {
-            $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
-        }
-
-        $this->commandConstructorDecorator->decorate($class);
-
-        return $node;
+        throw new ShouldNotHappenException(sprintf(
+            'The %s rule is deprecated. Use more reliable set \Rector\Symfony\Set\SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION instead',
+            self::class
+        ));
     }
 }
