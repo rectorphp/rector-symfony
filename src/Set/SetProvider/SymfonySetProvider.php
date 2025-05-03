@@ -20,28 +20,40 @@ final class SymfonySetProvider implements SetProviderInterface
         return [
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.5',
                 __DIR__ . '/../../../config/sets/symfony/symfony25.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.6',
                 __DIR__ . '/../../../config/sets/symfony/symfony26.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.7',
                 __DIR__ . '/../../../config/sets/symfony/symfony27.php'
             ),
+
+            // symfony 3.0
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony30.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-forms.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
