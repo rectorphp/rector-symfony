@@ -8,8 +8,18 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\StringFormTypeToClassRector;
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->rules([
+        // forms
+        FormTypeInstanceToClassConstRector::class,
+        StringFormTypeToClassRector::class,
+        RemoveDefaultGetBlockPrefixRector::class,
+    ]);
+
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
         new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
         new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),

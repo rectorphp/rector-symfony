@@ -28,10 +28,7 @@ return static function (RectorConfig $rectorConfig): void {
         OptionNameRector::class,
         ReadOnlyOptionToAttributeRector::class,
 
-        // forms
-        FormTypeInstanceToClassConstRector::class,
-        StringFormTypeToClassRector::class,
-        RemoveDefaultGetBlockPrefixRector::class,
+
 
         // forms - collection
         ChangeStringCollectionOptionToConstantRector::class,
