@@ -210,25 +210,25 @@ final class SymfonySetProvider implements SetProviderInterface
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony41.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony42.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.3',
-                __DIR__ . '/../../../config/sets/symfony/symfony43.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.4',
-                __DIR__ . '/../../../config/sets/symfony/symfony44.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
