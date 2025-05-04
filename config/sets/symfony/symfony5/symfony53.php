@@ -24,9 +24,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-console.php');
+    $rectorConfig->import(__DIR__ . '/symfony53/symfony53-http-kernel.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\Component\HttpKernel\Event\KernelEvent', 'isMasterRequest', 'isMainRequest'),
         new MethodCallRename(
             'Symfony\Component\Security\Core\Authentication\Token\TokenInterface',
             'getUsername',
@@ -70,16 +70,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Mailer\Transport\AbstractTransportFactory',
             'getEndpoint',
             new StringType(),
-        ),
-    ]);
-
-    // rename constant
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
-        // @see https://github.com/symfony/symfony/pull/40536
-        new RenameClassConstFetch(
-            'Symfony\Component\HttpKernel\HttpKernelInterface',
-            'MASTER_REQUEST',
-            'MAIN_REQUEST'
         ),
     ]);
 
