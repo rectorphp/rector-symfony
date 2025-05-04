@@ -7,6 +7,7 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -19,6 +20,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
@@ -38,6 +40,7 @@ final class CommandHelpToAttributeRector extends AbstractRector implements MinPh
 {
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
+        private readonly AttributeFinder $attributeFinder
     ) {
     }
 
@@ -53,8 +56,10 @@ final class CommandHelpToAttributeRector extends AbstractRector implements MinPh
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
+#[AsCommand(name: 'app:some')]
 final class SomeCommand extends Command
 {
     protected function configure(): void
@@ -105,8 +110,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $asCommandAttribute = $this->getAsCommandAttribute($node);
-        if ($asCommandAttribute === null) {
+        $asCommandAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAttribute::AS_COMMAND);
+        if (! $asCommandAttribute instanceof Attribute) {
             return null;
         }
 
@@ -126,7 +131,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $wrappedHelp = new String_(
+        $wrappedHelpString = new String_(
             $helpExpr->value,
             [
                 Attributekey::KIND => String_::KIND_NOWDOC,
@@ -134,7 +139,7 @@ CODE_SAMPLE
             ]
         );
 
-        $asCommandAttribute->args[] = new Arg($wrappedHelp, false, false, [], new Identifier('help'));
+        $asCommandAttribute->args[] = new Arg($wrappedHelpString, false, false, [], new Identifier('help'));
 
         if ($configureClassMethod->stmts === []) {
             unset($configureClassMethod);
@@ -143,29 +148,16 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function getAsCommandAttribute(Class_ $class): ?Attribute
-    {
-        foreach ($class->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isName($attribute->name, SymfonyAttribute::AS_COMMAND)) {
-                    return $attribute;
-                }
-            }
-        }
-
-        return null;
-    }
-
     /**
      * Returns the argument passed to setHelp() and removes the MethodCall node.
      */
-    private function findAndRemoveSetHelpExpr(ClassMethod $configureMethod): ?String_
+    private function findAndRemoveSetHelpExpr(ClassMethod $configureClassMethod): ?String_
     {
         $helpString = null;
 
         $this->traverseNodesWithCallable(
-            (array) $configureMethod->stmts,
-            function (Node $node) use (&$helpString) {
+            (array) $configureClassMethod->stmts,
+            function (Node $node) use (&$helpString): int|null|Expr {
                 if ($node instanceof Class_ || $node instanceof Function_) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
@@ -196,9 +188,9 @@ CODE_SAMPLE
             }
         );
 
-        foreach ((array) $configureMethod->stmts as $key => $stmt) {
+        foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
             if ($this->isExpressionVariableThis($stmt)) {
-                unset($configureMethod->stmts[$key]);
+                unset($configureClassMethod->stmts[$key]);
             }
         }
 

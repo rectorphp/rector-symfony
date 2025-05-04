@@ -248,9 +248,9 @@ CODE_SAMPLE
         });
     }
 
-    private function isFluentArgumentOptionChain(MethodCall $call): bool
+    private function isFluentArgumentOptionChain(MethodCall $methodCall): bool
     {
-        $current = $call;
+        $current = $methodCall;
 
         while ($current instanceof MethodCall) {
             // every link must be addArgument() or addOption()
