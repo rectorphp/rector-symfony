@@ -204,31 +204,60 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-forms.php'
             ),
 
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/symfony',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/workflow',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-workflow.php'
+            ),
+
             // @todo split rest
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony41.php'
-            ),
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/*',
                 '4.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony42.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.3',
-                __DIR__ . '/../../../config/sets/symfony/symfony43.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '4.4',
-                __DIR__ . '/../../../config/sets/symfony/symfony44.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,

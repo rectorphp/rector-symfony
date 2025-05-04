@@ -69,22 +69,22 @@ final class SymfonySetList
     /**
      * @var string
      */
-    final public const SYMFONY_41 = __DIR__ . '/../../config/sets/symfony/symfony41.php';
+    final public const SYMFONY_41 = __DIR__ . '/../../config/sets/symfony/symfony4/symfony41.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_42 = __DIR__ . '/../../config/sets/symfony/symfony42.php';
+    final public const SYMFONY_42 = __DIR__ . '/../../config/sets/symfony/symfony4/symfony42.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_43 = __DIR__ . '/../../config/sets/symfony/symfony43.php';
+    final public const SYMFONY_43 = __DIR__ . '/../../config/sets/symfony/symfony4/symfony43.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_44 = __DIR__ . '/../../config/sets/symfony/symfony44.php';
+    final public const SYMFONY_44 = __DIR__ . '/../../config/sets/symfony/symfony4/symfony44.php';
 
     /**
      * @var string
