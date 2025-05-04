@@ -6,71 +6,15 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Symfony30\Rector\ClassMethod\FormTypeGetParentRector;
-use Rector\Symfony\Symfony30\Rector\ClassMethod\GetRequestRector;
-use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
-use Rector\Symfony\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
-use Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector;
-use Rector\Symfony\Symfony30\Rector\MethodCall\OptionNameRector;
-use Rector\Symfony\Symfony30\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
-use Rector\Symfony\Symfony30\Rector\MethodCall\StringFormTypeToClassRector;
 
+// resources:
+// https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->import(__DIR__ . '/symfony30/*');
-
-    # resources:
-    # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
-
-    $rectorConfig->rules([
-        // php
-        GetRequestRector::class,
-        FormTypeGetParentRector::class,
-        OptionNameRector::class,
-        ReadOnlyOptionToAttributeRector::class,
-
-
-
-        // forms - collection
-        ChangeStringCollectionOptionToConstantRector::class,
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-forms.php');
+    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-http-foundation.php');
+    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-class-loader.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'registerNamespaces',
-            'addPrefixes'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'registerPrefixes',
-            'addPrefixes'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'registerNamespace',
-            'addPrefix'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'registerPrefix',
-            'addPrefix'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'getNamespaces',
-            'getPrefixes'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'getNamespaceFallbacks',
-            'getFallbackDirs'
-        ),
-        new MethodCallRename(
-            'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
-            'getPrefixFallbacks',
-            'getFallbackDirs'
-        ),
-
         new MethodCallRename('Symfony\Component\Process\Process', 'setStdin', 'setInput'),
         new MethodCallRename('Symfony\Component\Process\Process', 'getStdin', 'getInput'),
         // monolog
@@ -120,9 +64,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        # class loader
-        # partial with method rename
-        'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => 'Symfony\Component\ClassLoader\ClassLoader',
         # console
         'Symfony\Component\Console\Helper\ProgressHelper' => 'Symfony\Component\Console\Helper\ProgressBar',
         # http kernel
