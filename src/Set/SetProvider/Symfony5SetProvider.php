@@ -78,9 +78,9 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/form',
                 '5.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony51/symfony51-forms.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony51/symfony51-form.php'
             ),
 
             new ComposerTriggeredSet(
@@ -140,9 +140,9 @@ final class Symfony5SetProvider implements SetProviderInterface
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/form',
                 '5.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-forms.php',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-form.php',
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,

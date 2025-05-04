@@ -10,7 +10,7 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-class-loader.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-console.php');
-    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-forms.php');
+    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-form.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-security.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-process.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-property-access.php');

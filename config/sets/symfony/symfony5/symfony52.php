@@ -11,7 +11,7 @@ return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-dependency-injection.php');
-    $rectorConfig->import(__DIR__ . '/symfony52/symfony52-forms.php');
+    $rectorConfig->import(__DIR__ . '/symfony52/symfony52-form.php');
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-mime.php');
     $rectorConfig->import(__DIR__ . '/symfony52/symfony52-notifier.php');
