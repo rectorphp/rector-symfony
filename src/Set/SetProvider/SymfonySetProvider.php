@@ -143,32 +143,69 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony31/symfony31-yaml.php'
             ),
 
-            // @todo split rest
-
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony32.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony34.php'
             ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '4.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony40.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '4.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-dependency-injection.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/process',
+                '4.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-process.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '4.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-validator.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/var-dumper',
+                '4.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-var-dumper.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '4.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-forms.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
