@@ -15,7 +15,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-config.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-dom-crawler.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-finder.php');
-    $rectorConfig->import(__DIR__ . '/symfony42/symfony42-bridge-monolog.php');
+    $rectorConfig->import(__DIR__ . '/symfony42/symfony42-monolog-bridge.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-serializer.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-forms.php');
     $rectorConfig->import(__DIR__ . '/symfony42/symfony42-cache.php');

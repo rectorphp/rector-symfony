@@ -204,7 +204,6 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-forms.php'
             ),
 
-<<<<<<< HEAD
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
@@ -240,59 +239,106 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-workflow.php'
             ),
 
-            // @todo split rest
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/*',
-<<<<<<< HEAD
-=======
-=======
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
->>>>>>> 0f95e7a ([symfony 4.1] split to particular configs)
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/console',
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-console.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/framework-bundle',
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-framework-bundle.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/http-foundation',
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-http-foundation.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/workflow',
-                '4.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-workflow.php'
-            ),
-
-            // @todo split rest
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/*',
->>>>>>> b7c411c (move)
                 '4.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/monolog-bridge',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-monolog-bridge.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/cache',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-cache.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/config',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-config.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dom-crawler',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-dom-crawler.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-forms.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/finder',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-finder.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/process',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-process.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/serializer',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-serializer.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '4.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-translation.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
