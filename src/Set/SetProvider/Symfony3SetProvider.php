@@ -17,7 +17,6 @@ final class Symfony3SetProvider implements SetProviderInterface
     public function provide(): array
     {
         return [
-            // symfony 3.0
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',

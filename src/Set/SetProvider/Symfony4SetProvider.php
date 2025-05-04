@@ -285,7 +285,42 @@ final class Symfony4SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/console',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-dependency-injection.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-security-core.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/templating',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-templating.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/symfony',
                 '4.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44.php'
             ),

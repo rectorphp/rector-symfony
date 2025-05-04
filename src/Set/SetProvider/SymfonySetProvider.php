@@ -40,7 +40,9 @@ final class SymfonySetProvider implements SetProviderInterface
                 'FOS Rest',
                 __DIR__ . '/../../../config/sets/fosrest/annotations-to-attributes.php'
             ),
+
             new Set(SetGroup::ATTRIBUTES, 'JMS', __DIR__ . '/../../../config/sets/jms/annotations-to-attributes.php'),
+
             new Set(
                 SetGroup::ATTRIBUTES,
                 'Sensiolabs',

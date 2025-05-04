@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\IterableType;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\ValueObject\ChangeMethodVisibility;
+use Rector\ValueObject\Visibility;
+use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
+use Rector\Transform\ValueObject\WrapReturn;
 use PHPStan\Type\MixedType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -12,12 +20,12 @@ return static function (RectorConfig $rectorConfig): void {
         new MethodCallRename('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType', 'getExtendedTypes'),
     ]);
 
-    $iterableType = new \PHPStan\Type\IterableType(new MixedType(), new MixedType());
+    $iterableType = new IterableType(new MixedType(), new MixedType());
 
     $rectorConfig->ruleWithConfiguration(
-        \Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class,
+        AddReturnTypeDeclarationRector::class,
         [
-            new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration(
+            new AddReturnTypeDeclaration(
                 'Symfony\Component\Form\AbstractTypeExtension',
                 'getExtendedTypes',
                 $iterableType
@@ -26,19 +34,19 @@ return static function (RectorConfig $rectorConfig): void {
     );
 
     $rectorConfig->ruleWithConfiguration(
-        \Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::class,
-        [new \Rector\Visibility\ValueObject\ChangeMethodVisibility(
+        ChangeMethodVisibilityRector::class,
+        [new ChangeMethodVisibility(
             'Symfony\Component\Form\AbstractTypeExtension',
             'getExtendedTypes',
-            \Rector\ValueObject\Visibility::STATIC
+            Visibility::STATIC
         ),
         ]
     );
 
     $rectorConfig->ruleWithConfiguration(
-        \Rector\Transform\Rector\ClassMethod\WrapReturnRector::class,
+        WrapReturnRector::class,
         [
-            new \Rector\Transform\ValueObject\WrapReturn(
+            new WrapReturn(
                 'Symfony\Component\Form\AbstractTypeExtension',
                 'getExtendedTypes',
                 true
