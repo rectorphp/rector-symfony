@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 use Rector\Config\RectorConfig;
+use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([
-        TwigBundleFilesystemLoaderToTwigRector::class,
-    ]);
+    $rectorConfig->rules([TwigBundleFilesystemLoaderToTwigRector::class]);
 };
