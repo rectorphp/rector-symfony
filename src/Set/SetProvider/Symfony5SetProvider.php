@@ -202,6 +202,13 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/console',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '5.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53.php'

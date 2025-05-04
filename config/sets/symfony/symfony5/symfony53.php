@@ -23,14 +23,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-http-foundation.php');
+    $rectorConfig->import(__DIR__ . '/symfony53/symfony53-console.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'),
-        new MethodCallRename(
-            'Symfony\Component\Console\Helper\Helper',
-            'strlenWithoutDecoration',
-            'removeDecoration',
-        ),
         new MethodCallRename('Symfony\Component\HttpKernel\Event\KernelEvent', 'isMasterRequest', 'isMainRequest'),
         new MethodCallRename(
             'Symfony\Component\Security\Core\Authentication\Token\TokenInterface',
