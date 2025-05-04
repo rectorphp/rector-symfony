@@ -127,10 +127,72 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '5.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-dependency-injection.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-forms.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-http-foundation.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/mime',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-mime.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/notifier',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-notifier.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/property-access',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-property-access.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/property-info',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-property-info.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-security-core.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-http',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-security-http.php',
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '5.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52/symfony52-validator.php',
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',

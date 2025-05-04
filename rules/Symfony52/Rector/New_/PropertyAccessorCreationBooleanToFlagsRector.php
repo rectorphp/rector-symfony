@@ -31,6 +31,8 @@ final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector
         return new RuleDefinition('Changes first argument of PropertyAccessor::__construct() to flags from boolean', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+
 class SomeClass
 {
     public function run()
@@ -41,6 +43,8 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+
 class SomeClass
 {
     public function run()
