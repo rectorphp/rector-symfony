@@ -337,14 +337,99 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-translation.php'
             ),
 
-            // @todo split rest
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/workflow',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-workflow.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/browser-kit',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-browser-kit.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/cache',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-cache.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/event-dispatcher',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-event-dispatcher.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/intl',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-intl.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-security-core.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-http',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-security-http.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/twig-bundle',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-twig-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/workflow',
+                '4.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43/symfony43-workflow.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/symfony',
                 '4.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony43.php'
             ),
+
+            // ...
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',

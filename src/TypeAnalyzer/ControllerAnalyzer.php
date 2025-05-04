@@ -14,6 +14,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Reflection\ReflectionResolver;
+use Rector\Symfony\Enum\SymfonyClass;
 
 final readonly class ControllerAnalyzer
 {
@@ -68,11 +69,11 @@ final readonly class ControllerAnalyzer
 
     private function isControllerClassReflection(ClassReflection $classReflection): bool
     {
-        if ($classReflection->is('Symfony\Bundle\FrameworkBundle\Controller\Controller')) {
+        if ($classReflection->is(SymfonyClass::CONTROLLER)) {
             return true;
         }
 
-        return $classReflection->is('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
+        return $classReflection->is(SymfonyClass::ABSTRACT_CONTROLLER);
     }
 
     private function isControllerClass(Class_ $class): bool
