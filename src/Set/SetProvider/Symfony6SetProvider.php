@@ -21,31 +21,31 @@ final class Symfony6SetProvider implements SetProviderInterface
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '6.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony60.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '6.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony61.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '6.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony62.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '6.3',
-                __DIR__ . '/../../../config/sets/symfony/symfony63.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony63.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
                 '6.4',
-                __DIR__ . '/../../../config/sets/symfony/symfony64.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64.php'
             ),
         ];
     }

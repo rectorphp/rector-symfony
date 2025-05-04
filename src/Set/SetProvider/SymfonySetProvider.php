@@ -56,7 +56,7 @@ final class SymfonySetProvider implements SetProviderInterface
             new Set(
                 SetGroup::ATTRIBUTES,
                 'Symfony Validator',
-                __DIR__ . '/../../../config/sets/symfony/symfony52-validator-attributes.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony52-validator-attributes.php'
             ),
         ];
     }

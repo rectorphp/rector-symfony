@@ -89,63 +89,63 @@ final class SymfonySetList
     /**
      * @var string
      */
-    final public const SYMFONY_50 = __DIR__ . '/../../config/sets/symfony/symfony50.php';
+    final public const SYMFONY_50 = __DIR__ . '/../../config/sets/symfony/symfony5/symfony50.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_50_TYPES = __DIR__ . '/../../config/sets/symfony/symfony50-types.php';
+    final public const SYMFONY_50_TYPES = __DIR__ . '/../../config/sets/symfony/symfony5/symfony50/symfony50-types.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_51 = __DIR__ . '/../../config/sets/symfony/symfony51.php';
+    final public const SYMFONY_51 = __DIR__ . '/../../config/sets/symfony/symfony5/symfony51.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_52 = __DIR__ . '/../../config/sets/symfony/symfony52.php';
+    final public const SYMFONY_52 = __DIR__ . '/../../config/sets/symfony/symfony5/symfony52.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_53 = __DIR__ . '/../../config/sets/symfony/symfony53.php';
+    final public const SYMFONY_53 = __DIR__ . '/../../config/sets/symfony/symfony5/symfony53.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_54 = __DIR__ . '/../../config/sets/symfony/symfony54.php';
+    final public const SYMFONY_54 = __DIR__ . '/../../config/sets/symfony/symfony5/symfony54.php';
 
     /**
      * @deprecated Use ->withAttributesSets(symfony: true) in rector.php config instead
      * @var string
      */
-    final public const SYMFONY_52_VALIDATOR_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/symfony52-validator-attributes.php';
+    final public const SYMFONY_52_VALIDATOR_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/symfony5/symfony52-validator-attributes.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_60 = __DIR__ . '/../../config/sets/symfony/symfony60.php';
+    final public const SYMFONY_60 = __DIR__ . '/../../config/sets/symfony/symfony6/symfony60.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_61 = __DIR__ . '/../../config/sets/symfony/symfony61.php';
+    final public const SYMFONY_61 = __DIR__ . '/../../config/sets/symfony/symfony6/symfony61.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_62 = __DIR__ . '/../../config/sets/symfony/symfony62.php';
+    final public const SYMFONY_62 = __DIR__ . '/../../config/sets/symfony/symfony6/symfony62.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_63 = __DIR__ . '/../../config/sets/symfony/symfony63.php';
+    final public const SYMFONY_63 = __DIR__ . '/../../config/sets/symfony/symfony6/symfony63.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_64 = __DIR__ . '/../../config/sets/symfony/symfony64.php';
+    final public const SYMFONY_64 = __DIR__ . '/../../config/sets/symfony/symfony6/symfony64.php';
 
     /**
      * @var string
