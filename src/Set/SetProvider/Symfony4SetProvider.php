@@ -54,9 +54,9 @@ final class Symfony4SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/form',
                 '4.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-forms.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-form.php'
             ),
 
             new ComposerTriggeredSet(
@@ -152,9 +152,9 @@ final class Symfony4SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/form',
                 '4.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-forms.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42/symfony42-form.php'
             ),
 
             new ComposerTriggeredSet(

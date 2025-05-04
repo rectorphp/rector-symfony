@@ -10,7 +10,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-console.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-event-dispatcher.php');
-    $rectorConfig->import(__DIR__ . '/symfony51/symfony51-forms.php');
+    $rectorConfig->import(__DIR__ . '/symfony51/symfony51-form.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-framework-bundle.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-inflector.php');

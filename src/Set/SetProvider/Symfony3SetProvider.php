@@ -47,9 +47,9 @@ final class Symfony3SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/form',
                 '3.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony30/symfony30-forms.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony30/symfony30-form.php'
             ),
 
             new ComposerTriggeredSet(
