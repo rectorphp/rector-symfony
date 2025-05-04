@@ -54,6 +54,13 @@ final class SymfonySetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/console',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/class-loader',
                 '3.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-class-loader.php'
