@@ -52,6 +52,20 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-forms.php'
             ),
 
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/class-loader',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-class-loader.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-http-foundation.php'
+            ),
+
             // @todo split rest
 
             new ComposerTriggeredSet(

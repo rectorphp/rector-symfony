@@ -36,7 +36,9 @@ final class OptionNameRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turns old option names to new ones in FormTypes in Form in Symfony', [
+        return new RuleDefinition(
+            'Turns old option names to new ones in FormTypes in Form in Symfony',
+            [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Form\FormBuilder;
