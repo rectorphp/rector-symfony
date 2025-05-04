@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Config\RectorConfig;
@@ -15,7 +16,7 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             false,
             null,
-            \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope::SCOPE_METHOD_CALL
+            ArgumentAddingScope::SCOPE_METHOD_CALL
         ),
     ]);
 };

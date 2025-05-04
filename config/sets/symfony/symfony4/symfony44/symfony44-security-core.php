@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 use Rector\Config\RectorConfig;
+use Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
-        TwigBundleFilesystemLoaderToTwigRector::class,
+        AuthorizationCheckerIsGrantedExtractorRector::class,
     ]);
 };
