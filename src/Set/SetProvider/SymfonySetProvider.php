@@ -20,28 +20,117 @@ final class SymfonySetProvider implements SetProviderInterface
         return [
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.5',
                 __DIR__ . '/../../../config/sets/symfony/symfony25.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.6',
                 __DIR__ . '/../../../config/sets/symfony/symfony26.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '2.7',
                 __DIR__ . '/../../../config/sets/symfony/symfony27.php'
             ),
+
+            // symfony 3.0
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony30.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/bridge-swift-mailer',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-bridge-swift-mailer.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/class-loader',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-class-loader.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-forms.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/process',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-process.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/property-access',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-property-access.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-security.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-translation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/twig-bundle',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-twig-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-validator.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
