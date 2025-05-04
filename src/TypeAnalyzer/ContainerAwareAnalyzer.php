@@ -22,7 +22,7 @@ final class ContainerAwareAnalyzer
         $this->getMethodAwareObjectTypes = [
             new ObjectType(SymfonyClass::ABSTRACT_CONTROLLER),
             new ObjectType(SymfonyClass::CONTROLLER),
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'),
+            new ObjectType(SymfonyClass::CONTROLLER_TRAIT),
         ];
     }
 

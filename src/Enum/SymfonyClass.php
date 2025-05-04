@@ -95,4 +95,9 @@ final class SymfonyClass
      * @var string
      */
     public const ABSTRACT_CONTROLLER = 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController';
+
+    /**
+     * @var string
+     */
+    public const CONTROLLER_TRAIT = 'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait';
 }
