@@ -195,6 +195,13 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/symfony',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/http-foundation',
                 '5.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-http-foundation.php'
