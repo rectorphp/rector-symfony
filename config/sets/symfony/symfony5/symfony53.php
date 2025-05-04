@@ -16,6 +16,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-security-core.php');
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-mailer.php');
     $rectorConfig->import(__DIR__ . '/symfony53/symfony53-form.php');
-
-    $rectorConfig->rules([KernelTestCaseContainerPropertyDeprecationRector::class]);
+    $rectorConfig->import(__DIR__ . '/symfony53/symfony53-framework-bundle.php');
 };
