@@ -355,5 +355,30 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             new StringType()
         ),
+
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Security\Core\User\UserProviderInterface',
+            'loadUserByUsername',
+            0,
+            new StringType(),
+        ),
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Security\Core\User\UserProviderInterface',
+            'supportsClass',
+            0,
+            new StringType(),
+        ),
+        new AddParamTypeDeclaration(
+            'Symfony\Bridge\Doctrine\Security\User\EntityUserProvider',
+            'loadUserByUsername',
+            0,
+            new StringType(),
+        ),
+        new AddParamTypeDeclaration(
+            'Symfony\Bridge\Doctrine\Security\User\EntityUserProvider',
+            'supportsClass',
+            0,
+            new StringType(),
+        ),
     ]);
 };
