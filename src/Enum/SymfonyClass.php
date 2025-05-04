@@ -90,4 +90,9 @@ final class SymfonyClass
      * @var string
      */
     public const REQUEST = 'Symfony\Component\HttpFoundation\Request';
+
+    /**
+     * @var string
+     */
+    public const ABSTRACT_CONTROLLER = 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController';
 }

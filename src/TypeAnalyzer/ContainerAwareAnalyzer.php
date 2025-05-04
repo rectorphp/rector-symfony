@@ -7,6 +7,7 @@ namespace Rector\Symfony\TypeAnalyzer;
 use PhpParser\Node\Expr;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\Symfony\Enum\SymfonyClass;
 
 final class ContainerAwareAnalyzer
 {
@@ -19,8 +20,8 @@ final class ContainerAwareAnalyzer
         private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
         $this->getMethodAwareObjectTypes = [
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\AbstractController'),
-            new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\Controller'),
+            new ObjectType(SymfonyClass::ABSTRACT_CONTROLLER),
+            new ObjectType(SymfonyClass::CONTROLLER),
             new ObjectType('Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait'),
         ];
     }
