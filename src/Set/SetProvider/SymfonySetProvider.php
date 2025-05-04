@@ -244,6 +244,15 @@ final class SymfonySetProvider implements SetProviderInterface
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
+<<<<<<< HEAD
+=======
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/*',
+>>>>>>> b7c411c (move)
                 '4.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony42.php'
             ),
