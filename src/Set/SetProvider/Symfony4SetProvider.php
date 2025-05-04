@@ -285,6 +285,7 @@ final class Symfony4SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+<<<<<<< HEAD
                 'symfony/console',
                 '4.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-console.php'
@@ -321,6 +322,9 @@ final class Symfony4SetProvider implements SetProviderInterface
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
+=======
+                'symfony/*',
+>>>>>>> 2206c56 (split SymfonySetProvider per versions)
                 '4.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44.php'
             ),

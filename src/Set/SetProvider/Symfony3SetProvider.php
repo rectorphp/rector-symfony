@@ -17,6 +17,10 @@ final class Symfony3SetProvider implements SetProviderInterface
     public function provide(): array
     {
         return [
+<<<<<<< HEAD
+=======
+            // symfony 3.0
+>>>>>>> 2206c56 (split SymfonySetProvider per versions)
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
