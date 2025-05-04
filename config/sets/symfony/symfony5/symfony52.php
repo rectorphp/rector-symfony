@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Set\SymfonySetList;
 
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 
