@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Set;
 
 /**
+ * @deprecated Set list are too generic and do not handle package differences. Use ->withComposerBased(symfony: true) instead
+ *
  * @api
  */
 final class SymfonySetList
@@ -37,27 +39,27 @@ final class SymfonySetList
     /**
      * @var string
      */
-    final public const SYMFONY_30 = __DIR__ . '/../../config/sets/symfony/symfony30.php';
+    final public const SYMFONY_30 = __DIR__ . '/../../config/sets/symfony/symfony3/symfony30.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_31 = __DIR__ . '/../../config/sets/symfony/symfony31.php';
+    final public const SYMFONY_31 = __DIR__ . '/../../config/sets/symfony/symfony3/symfony31.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_32 = __DIR__ . '/../../config/sets/symfony/symfony32.php';
+    final public const SYMFONY_32 = __DIR__ . '/../../config/sets/symfony/symfony3/symfony32.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_33 = __DIR__ . '/../../config/sets/symfony/symfony33.php';
+    final public const SYMFONY_33 = __DIR__ . '/../../config/sets/symfony/symfony3/symfony33.php';
 
     /**
      * @var string
      */
-    final public const SYMFONY_34 = __DIR__ . '/../../config/sets/symfony/symfony34.php';
+    final public const SYMFONY_34 = __DIR__ . '/../../config/sets/symfony/symfony3/symfony34.php';
 
     /**
      * @var string

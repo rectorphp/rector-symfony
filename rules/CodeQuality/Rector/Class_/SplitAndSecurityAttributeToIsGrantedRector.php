@@ -87,11 +87,7 @@ CODE_SAMPLE
                 }
 
                 // split by && and "and"
-                if (str_contains($content, ' && ')) {
-                    $andItems = explode(' && ', $content);
-                } else {
-                    $andItems = explode(' and ', $content);
-                }
+                $andItems = str_contains($content, ' && ') ? explode(' && ', $content) : explode(' and ', $content);
 
                 $accessRights = [];
 
