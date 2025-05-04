@@ -64,7 +64,7 @@ final class SymfonySetList
     /**
      * @var string
      */
-    final public const SYMFONY_40 = __DIR__ . '/../../config/sets/symfony/symfony40.php';
+    final public const SYMFONY_40 = __DIR__ . '/../../config/sets/symfony/symfony4/symfony40.php';
 
     /**
      * @var string
