@@ -8,6 +8,10 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 
 return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        'Symfony\Bridge\Monolog\Logger' => 'Psr\Log\LoggerInterface',
+    ]);
+
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'emerg', 'emergency'),
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'crit', 'critical'),
@@ -15,8 +19,4 @@ return static function (RectorConfig $rectorConfig): void {
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'warn', 'warning'),
     ]);
 
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        // partial with method rename
-        'Symfony\Bridge\Monolog\Logger' => 'Psr\Log\LoggerInterface',
-    ]);
 };

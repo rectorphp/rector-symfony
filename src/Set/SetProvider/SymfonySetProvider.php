@@ -47,16 +47,9 @@ final class SymfonySetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/forms',
+                'symfony/bridge-swift-mailer',
                 '3.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-forms.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
-                'symfony/console',
-                '3.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-console.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-bridge-swift-mailer.php'
             ),
 
             new ComposerTriggeredSet(
@@ -68,9 +61,72 @@ final class SymfonySetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/console',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/forms',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-forms.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/http-foundation',
                 '3.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/process',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-process.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/property-access',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-property-access.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-security.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-translation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/twig-bundle',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-twig-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '3.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-validator.php'
             ),
 
             // @todo split rest
