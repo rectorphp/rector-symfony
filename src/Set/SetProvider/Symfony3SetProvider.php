@@ -17,13 +17,6 @@ final class Symfony3SetProvider implements SetProviderInterface
     public function provide(): array
     {
         return [
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            // symfony 3.0
->>>>>>> 2206c56 (split SymfonySetProvider per versions)
-=======
->>>>>>> a6205d9 ([symfony 4.4] Split of per package configs)
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
@@ -135,17 +128,75 @@ final class Symfony3SetProvider implements SetProviderInterface
                 '3.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony32.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '3.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony32/symfony32-dependency-injection.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
                 '3.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '3.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33/symfony33-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/debug',
+                '3.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33/symfony33-debug.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '3.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33/symfony33-dependency-injection.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '3.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony33/symfony33-framework-bundle.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
                 '3.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony34.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '3.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony34/symfony34-dependency-injection.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'sensio/framework-extra-bundle',
+                '3.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony34/symfony34-sensio-framework-extra-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/yaml',
+                '3.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony34/symfony34-yaml.php'
             ),
         ];
     }
