@@ -18,9 +18,12 @@ final class Symfony3SetProvider implements SetProviderInterface
     {
         return [
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             // symfony 3.0
 >>>>>>> 2206c56 (split SymfonySetProvider per versions)
+=======
+>>>>>>> a6205d9 ([symfony 4.4] Split of per package configs)
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
