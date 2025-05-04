@@ -129,14 +129,23 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony30/symfony30-validator.php'
             ),
 
-            // @todo split rest
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '3.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony31.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/yaml',
+                '3.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony31-yaml.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
