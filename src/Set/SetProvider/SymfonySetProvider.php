@@ -204,6 +204,7 @@ final class SymfonySetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony40/symfony40-forms.php'
             ),
 
+<<<<<<< HEAD
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/symfony',
@@ -246,9 +247,45 @@ final class SymfonySetProvider implements SetProviderInterface
                 'symfony/*',
 <<<<<<< HEAD
 =======
+=======
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/symfony',
+>>>>>>> 0f95e7a ([symfony 4.1] split to particular configs)
                 '4.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/workflow',
+                '4.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony41/symfony41-workflow.php'
+            ),
+
+            // @todo split rest
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',

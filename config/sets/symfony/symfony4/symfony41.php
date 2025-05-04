@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # https://github.com/symfony/symfony/blob/master/UPGRADE-4.1.md
 return static function (RectorConfig $rectorConfig): void {
@@ -16,8 +17,11 @@ return static function (RectorConfig $rectorConfig): void {
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+=======
+>>>>>>> 0f95e7a ([symfony 4.1] split to particular configs)
 
 return static function (RectorConfig $rectorConfig): void {
+<<<<<<< HEAD
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
         new MethodCallRename(
@@ -55,4 +59,11 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ]);
 >>>>>>> b7c411c (move)
+=======
+    $rectorConfig->import(__DIR__ . '/symfony41/symfony41-console.php');
+    $rectorConfig->import(__DIR__ . '/symfony41/symfony41-http-foundation.php');
+    $rectorConfig->import(__DIR__ . '/symfony41/symfony41-workflow.php');
+    $rectorConfig->import(__DIR__ . '/symfony41/symfony41-framework-bundle.php');
+
+>>>>>>> 0f95e7a ([symfony 4.1] split to particular configs)
 };
