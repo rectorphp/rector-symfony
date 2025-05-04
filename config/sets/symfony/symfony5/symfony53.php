@@ -22,7 +22,7 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    $rectorConfig->import(__DIR__ . '/symfony53/symfony53-dependency-injection.php');
+    $rectorConfig->import(__DIR__ . '/symfony53/symfony53-http-foundation.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'),
