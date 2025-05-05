@@ -11,7 +11,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-validator.php');
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security-bundle.php');
-    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security.php');
+    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security-core.php');
+    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security-http.php');
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-cache.php');
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-notifier.php');
