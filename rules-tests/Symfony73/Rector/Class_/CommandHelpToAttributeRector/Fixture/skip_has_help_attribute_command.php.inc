@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\Fixture;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

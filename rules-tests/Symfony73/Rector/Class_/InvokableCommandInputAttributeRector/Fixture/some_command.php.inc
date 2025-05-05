@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\Fixture;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -10,11 +10,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'some_name')]
-final class SomeCommandWithSetHelp extends Command
+final class SomeCommand extends Command
 {
     public function configure()
     {
-        $this->setHelp('argument');
         $this->addArgument('argument', InputArgument::REQUIRED, 'Argument description');
         $this->addOption('option', 'o', InputOption::VALUE_NONE, 'Option description');
     }
@@ -34,7 +33,7 @@ final class SomeCommandWithSetHelp extends Command
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\Fixture;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -44,13 +43,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'some_name')]
-final class SomeCommandWithSetHelp
+final class SomeCommand
 {
-    public function configure()
-    {
-        $this->setHelp('argument');
-    }
-
     public function __invoke(#[\Symfony\Component\Console\Attribute\Command\Argument]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
     $option): int
