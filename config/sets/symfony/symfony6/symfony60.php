@@ -20,20 +20,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony-return-types.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-contracts.php');
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-config.php');
 
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        new AddParamTypeDeclaration(
-            'Symfony\Component\Config\Loader\LoaderInterface',
-            'load',
-            0,
-            new MixedType(true)
-        ),
-        new AddParamTypeDeclaration(
-            'Symfony\Component\Config\Loader\LoaderInterface',
-            'supports',
-            0,
-            new MixedType(true)
-        ),
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
             'configureRoutes',
