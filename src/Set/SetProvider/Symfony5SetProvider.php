@@ -293,6 +293,13 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/notifier',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-notifier.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '5.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54.php'
