@@ -251,9 +251,51 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '5.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-validator.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-bundle',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-security-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-bundle',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-security.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/cache',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-cache.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/notifier',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-notifier.php'
             ),
         ];
     }
