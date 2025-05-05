@@ -195,10 +195,60 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '5.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-http-foundation.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-security-core.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-mailer',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-mailer.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/form',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-form.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '5.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony53-framework-bundle.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',

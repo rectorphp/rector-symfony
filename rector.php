@@ -54,4 +54,4 @@ return RectorConfig::configure()
         naming: true,
         rectorPreset: true
     )
-    ->withImportNames();
+    ->withImportNames(removeUnusedImports: true);
