@@ -17,20 +17,7 @@ return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-validator.php');
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        // @see https://github.com/symfony/symfony/pull/42582
-        new MethodCallRename(
-            'Symfony\Bundle\SecurityBundle\Security\FirewallConfig',
-            'getListeners',
-            'getAuthenticators'
-        ),
-        // @see https://github.com/symfony/symfony/pull/41754
-        new MethodCallRename(
-            'Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension',
-            'addSecurityListenerFactory',
-            'addAuthenticatorFactory'
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security-bundle.php');
 
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
