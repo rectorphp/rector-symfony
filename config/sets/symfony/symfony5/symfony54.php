@@ -18,32 +18,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-validator.php');
     $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security-bundle.php');
-
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\AuthenticationEvents',
-            'AUTHENTICATION_SUCCESS',
-            'Symfony\Component\Security\Core\Event\AuthenticationSuccessEvent',
-            'class'
-        ),
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\AuthenticationEvents',
-            'AUTHENTICATION_FAILURE',
-            'Symfony\Component\Security\Core\Event\AuthenticationFailureEvent',
-            'class'
-        ),
-        // @see https://github.com/symfony/symfony/pull/42510
-        new RenameClassConstFetch(
-            'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter',
-            'IS_ANONYMOUS',
-            'PUBLIC_ACCESS'
-        ),
-        new RenameClassConstFetch(
-            'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter',
-            'IS_AUTHENTICATED_ANONYMOUSLY',
-            'PUBLIC_ACCESS'
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-security.php');
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/42050
