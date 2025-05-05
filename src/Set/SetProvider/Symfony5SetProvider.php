@@ -260,7 +260,7 @@ final class Symfony5SetProvider implements SetProviderInterface
                 SetGroup::SYMFONY,
                 'symfony/validator',
                 '5.4',
-                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony54-validator.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-validator.php'
             ),
 
             new ComposerTriggeredSet(
