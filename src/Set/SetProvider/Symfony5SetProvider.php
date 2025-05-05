@@ -251,6 +251,20 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/symfony',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony53/symfony54-validator.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '5.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54.php'

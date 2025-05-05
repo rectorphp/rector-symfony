@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -16,16 +14,9 @@ use Rector\Symfony\Set\SymfonySetList;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.4.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
+    // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
-    // @see https://github.com/symfony/symfony/pull/41994
-    $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
-        new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),
-        new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Collection'),
-        new AnnotationToAttribute('Symfony\Component\Validator\Constraints\AtLeastOneOf'),
-        new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Sequentially'),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony54/symfony54-validator.php');
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/42582
         new MethodCallRename(
