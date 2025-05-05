@@ -2,33 +2,23 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Set\SymfonySetList;
-use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
-use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
+    // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
     $rectorConfig->import(__DIR__ . '/symfony-return-types.php');
-    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
-        new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')),
-        new ReplaceServiceArgument(
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            new String_('service_container')
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-dependency-injection.php');
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/39484

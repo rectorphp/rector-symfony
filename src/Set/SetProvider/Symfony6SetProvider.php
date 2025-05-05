@@ -19,10 +19,19 @@ final class Symfony6SetProvider implements SetProviderInterface
         return [
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-dependency-injection.php'
+            ),
+
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
