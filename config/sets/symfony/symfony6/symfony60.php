@@ -19,6 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->import(__DIR__ . '/symfony-return-types.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-dependency-injection.php');
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-contracts.php');
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/39484

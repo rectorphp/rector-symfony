@@ -31,6 +31,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-dependency-injection.php'
             ),
 
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/contracts',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-contracts.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
