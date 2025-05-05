@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 
 # https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 
@@ -23,14 +17,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-contracts.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-config.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-framework-bundle.php');
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-doctrine-bridge.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        // @see https://github.com/symfony/symfony/pull/40403
-        new MethodCallRename(
-            'Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface',
-            'loadUserByUsername',
-            'loadUserByIdentifier'
-        ),
         new MethodCallRename(
             'Symfony\Component\Security\Core\User\UserProviderInterface',
             'loadUserByUsername',
