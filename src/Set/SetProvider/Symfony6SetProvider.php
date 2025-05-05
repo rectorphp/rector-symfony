@@ -47,6 +47,13 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-framework-bundle.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '6.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61.php'

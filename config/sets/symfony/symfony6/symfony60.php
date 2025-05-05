@@ -17,19 +17,12 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    $rectorConfig->import(__DIR__ . '/symfony-return-types.php');
+    $rectorConfig->import(__DIR__ . '/symfony-return-types.php'); // todo: extract this as well
+
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-contracts.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-config.php');
-
-    $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        new AddParamTypeDeclaration(
-            'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
-            'configureRoutes',
-            0,
-            new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator'),
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-framework-bundle.php');
 
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40403
@@ -50,5 +43,4 @@ return static function (RectorConfig $rectorConfig): void {
             'getUserIdentifier',
         ),
     ]);
-    $rectorConfig->rule(GetHelperControllerToServiceRector::class);
 };
