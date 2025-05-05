@@ -286,6 +286,13 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-http-kernel.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '5.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54.php'
