@@ -272,9 +272,16 @@ final class Symfony5SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/security-bundle',
+                'symfony/security-core',
                 '5.4',
-                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-security.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-security-core.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-http',
+                '5.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony5/symfony54/symfony54-security-http.php'
             ),
 
             new ComposerTriggeredSet(

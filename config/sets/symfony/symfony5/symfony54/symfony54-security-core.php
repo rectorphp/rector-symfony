@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 
@@ -33,10 +32,5 @@ return static function (RectorConfig $rectorConfig): void {
             'IS_AUTHENTICATED_ANONYMOUSLY',
             'PUBLIC_ACCESS'
         ),
-    ]);
-
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        // @see https://github.com/symfony/symfony/pull/42050
-        'Symfony\Component\Security\Http\Event\DeauthenticatedEvent' => 'Symfony\Component\Security\Http\Event\TokenDeauthenticatedEvent',
     ]);
 };
