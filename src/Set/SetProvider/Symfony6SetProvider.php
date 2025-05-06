@@ -229,6 +229,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-http-foundation.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/error-handler',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-error-handler.php'
+            ),
         ];
     }
 }
