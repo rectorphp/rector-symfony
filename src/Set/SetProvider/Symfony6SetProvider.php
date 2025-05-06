@@ -115,6 +115,12 @@ final class Symfony6SetProvider implements SetProviderInterface
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/security-http',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-security-http.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/mime',
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-mime.php'
