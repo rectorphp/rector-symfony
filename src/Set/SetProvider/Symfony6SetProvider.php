@@ -192,6 +192,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony63/symfony63-http-client.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/messenger',
+                '6.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony63/symfony63-messenger.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
