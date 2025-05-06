@@ -68,10 +68,39 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/serializer',
+                '6.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61/symfony61-serializer.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '6.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61/symfony61-validator.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '6.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61/symfony61-console.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/twig-bridge',
+                '6.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony61/symfony61-twig-bridge.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
