@@ -79,10 +79,9 @@ return static function (RectorConfig $rectorConfig): void {
                 'getContentType',
                 'getContentTypeFormat'
             ),
-            // @see https://github.com/symfony/symfony/pull/47711
-            new MethodCallRename('Symfony\Component\Mime\Email', 'attachPart', 'addPart'),
         ],
     );
 
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-security-core.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-mime.php');
 };
