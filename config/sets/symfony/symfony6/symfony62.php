@@ -11,13 +11,10 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
-use Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
-use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
-        SimplifyFormRenderingRector::class,
         SecurityAttributeToIsGrantedAttributeRector::class,
         ParamConverterAttributeToMapEntityAttributeRector::class,
 
@@ -63,12 +60,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         RenameMethodRector::class,
         [
-            // @see https://github.com/symfony/symfony/pull/46854
-            new MethodCallRename(
-                'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
-                'renderForm',
-                'render'
-            ),
             // @see https://github.com/symfony/symfony/pull/45034
             new MethodCallRename(
                 'Symfony\Component\HttpFoundation\Request',
@@ -81,4 +72,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-security-core.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-mime.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-kernel.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-framework-bundle.php');
 };

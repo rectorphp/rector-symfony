@@ -125,6 +125,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-http-kernel.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-framework-bundle.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
