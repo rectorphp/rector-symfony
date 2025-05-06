@@ -18,18 +18,6 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     );
 
-    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\DataTransformerInterface',
-            'transform',
-            new MixedType(),
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\DataTransformerInterface',
-            'reverseTransform',
-            new MixedType(),
-        ),
-    ]);
-
     $rectorConfig->import(__DIR__ . '/symfony64/symfony64-routing.php');
+    $rectorConfig->import(__DIR__ . '/symfony64/symfony64-form.php');
 };
