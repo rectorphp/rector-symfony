@@ -41,8 +41,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpApiTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceApiTransport',
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpSmtpTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceSmtpTransport',
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpTransportFactory' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory',
-            // @see https://github.com/symfony/symfony/pull/46161
-            'Symfony\Component\Translation\Extractor\PhpAstExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
         ],
     );
 
@@ -53,4 +51,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-framework-bundle.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-twig-bridge.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-translation.php');
 };
