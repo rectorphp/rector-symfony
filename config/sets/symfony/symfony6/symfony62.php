@@ -8,12 +8,9 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
-use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
-        ParamConverterAttributeToMapEntityAttributeRector::class,
-
         // @see https://github.com/symfony/symfony/pull/47068, #[AsMessageHandler] attribute
         MessageHandlerInterfaceToAttributeRector::class,
         MessageSubscriberInterfaceToAttributeRector::class,
@@ -50,4 +47,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-twig-bridge.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-translation.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-doctrine-bridge.php');
 };

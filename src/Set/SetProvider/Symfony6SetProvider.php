@@ -155,6 +155,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-translation.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/doctrine-bridge',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-doctrine-bridge.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
