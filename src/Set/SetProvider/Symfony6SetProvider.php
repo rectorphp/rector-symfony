@@ -223,6 +223,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-form.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-http-foundation.php'
+            ),
         ];
     }
 }
