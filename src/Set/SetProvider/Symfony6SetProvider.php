@@ -207,9 +207,33 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/routing',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-routing.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/form',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-form.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-http-foundation.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/error-handler',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-error-handler.php'
             ),
         ];
     }
