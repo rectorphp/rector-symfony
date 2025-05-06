@@ -5,9 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
@@ -51,21 +49,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpTransportFactory' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory',
             // @see https://github.com/symfony/symfony/pull/46161
             'Symfony\Component\Translation\Extractor\PhpAstExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
-            // @see https://github.com/symfony/symfony/pull/47595
-            'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
-            'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\ChainRequestMatcher',
-        ],
-    );
-
-    $rectorConfig->ruleWithConfiguration(
-        RenameMethodRector::class,
-        [
-            // @see https://github.com/symfony/symfony/pull/45034
-            new MethodCallRename(
-                'Symfony\Component\HttpFoundation\Request',
-                'getContentType',
-                'getContentTypeFormat'
-            ),
         ],
     );
 
@@ -73,4 +56,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-mime.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-framework-bundle.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-foundation.php');
 };
