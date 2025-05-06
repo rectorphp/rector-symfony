@@ -13,8 +13,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
         [
-            // @see https://github.com/symfony/symfony/commit/b653adf426aedc66d16c5fc1cf71e261f20b9638
-            'Symfony\Component\DependencyInjection\Attribute\MapDecorated' => 'Symfony\Component\DependencyInjection\Attribute\AutowireDecorated',
             // @see https://github.com/symfony/symfony/commit/20ab567385e3812ef661dae01a1fdc5d1bde2666
             '\Http\Client\HttpClient' => 'Psr\Http\Client\ClientInterface',
             // @see https://github.com/symfony/symfony/commit/9415b438b75204c72ff66b838307b73646393cbf
@@ -31,4 +29,6 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
         ParamAndEnvAttributeRector::class,
     ]);
+
+    $rectorConfig->import(__DIR__ . '/symfony63/symfony63-dependency-injection.php');
 };
