@@ -13,8 +13,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
         [
-            // @see https://github.com/symfony/symfony/commit/20ab567385e3812ef661dae01a1fdc5d1bde2666
-            '\Http\Client\HttpClient' => 'Psr\Http\Client\ClientInterface',
             // @see https://github.com/symfony/symfony/commit/9415b438b75204c72ff66b838307b73646393cbf
             'Symfony\Component\Messenger\EventListener\StopWorkerOnSigtermSignalListener' => 'Symfony\Component\Messenger\EventListener\StopWorkerOnSignalsListener',
             // @see https://github.com/symfony/symfony/commit/a7926b2d83f35fe53c41a28d8055490cc1955928
@@ -31,4 +29,5 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->import(__DIR__ . '/symfony63/symfony63-dependency-injection.php');
+    $rectorConfig->import(__DIR__ . '/symfony63/symfony63-http-client.php');
 };

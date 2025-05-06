@@ -186,6 +186,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony63/symfony63-dependency-injection.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-client',
+                '6.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony63/symfony63-http-client.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
