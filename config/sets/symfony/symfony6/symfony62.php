@@ -6,16 +6,8 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
-use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([
-        // @see https://github.com/symfony/symfony/pull/47068, #[AsMessageHandler] attribute
-        MessageHandlerInterfaceToAttributeRector::class,
-        MessageSubscriberInterfaceToAttributeRector::class,
-    ]);
-
     // change to attribute before rename
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
     // @see https://github.com/rectorphp/rector-symfony/issues/535#issuecomment-1783983383
@@ -48,4 +40,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-twig-bridge.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-translation.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-doctrine-bridge.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-messenger.php');
 };
