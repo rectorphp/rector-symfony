@@ -167,6 +167,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-messenger.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/mail-pace-mailer',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-mail-pace-mailer.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
