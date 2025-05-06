@@ -39,8 +39,6 @@ return static function (RectorConfig $rectorConfig): void {
         [
             // @see https://github.com/symfony/symfony/pull/46907
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted' => 'Symfony\Component\Security\Http\Attribute\IsGranted',
-            // @see https://github.com/symfony/symfony/pull/46906
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => 'Symfony\Bridge\Twig\Attribute\Template',
             // @see https://github.com/symfony/symfony/pull/46714
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpApiTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceApiTransport',
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpSmtpTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceSmtpTransport',
@@ -55,4 +53,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-framework-bundle.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-http-foundation.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-twig-bridge.php');
 };
