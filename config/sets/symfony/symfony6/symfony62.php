@@ -39,8 +39,6 @@ return static function (RectorConfig $rectorConfig): void {
         [
             // @see https://github.com/symfony/symfony/pull/46907
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted' => 'Symfony\Component\Security\Http\Attribute\IsGranted',
-            // @see https://github.com/symfony/symfony/pull/46880
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache' => 'Symfony\Component\HttpKernel\Attribute\Cache',
             // @see https://github.com/symfony/symfony/pull/46906
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => 'Symfony\Bridge\Twig\Attribute\Template',
             // @see https://github.com/symfony/symfony/pull/46714

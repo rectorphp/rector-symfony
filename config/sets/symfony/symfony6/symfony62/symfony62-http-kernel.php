@@ -16,6 +16,8 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
         [
+            // @see https://github.com/symfony/symfony/pull/46880
+            'Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache' => 'Symfony\Component\HttpKernel\Attribute\Cache',
             // @see https://github.com/symfony/symfony/pull/47363
             'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface' => 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface',
         ],
