@@ -103,10 +103,77 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-security-core.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-http',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-security-http.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/mime',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-mime.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-kernel',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-http-kernel.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/framework-bundle',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-framework-bundle.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-http-foundation.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/twig-bridge',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-twig-bridge.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-translation.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/doctrine-bridge',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-doctrine-bridge.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/messenger',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-messenger.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/mail-pace-mailer',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-mail-pace-mailer.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
