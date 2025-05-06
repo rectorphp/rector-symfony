@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 use PHPStan\Type\MixedType;
 use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\Class_\RenameAttributeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
-use Rector\Renaming\ValueObject\RenameAttribute;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 
@@ -20,13 +18,6 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     );
 
-    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
-        new RenameAttribute(
-            'Symfony\Component\Routing\Annotation\Route',
-            'Symfony\Component\Routing\Attribute\Route'
-        ),
-    ]);
-
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
@@ -39,4 +30,6 @@ return static function (RectorConfig $rectorConfig): void {
             new MixedType(),
         ),
     ]);
+
+    $rectorConfig->import(__DIR__ . '/symfony64/symfony64-routing.php');
 };

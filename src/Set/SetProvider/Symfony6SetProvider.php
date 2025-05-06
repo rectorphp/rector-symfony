@@ -207,9 +207,15 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/routing',
+                '6.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony64/symfony64-routing.php'
             ),
         ];
     }
