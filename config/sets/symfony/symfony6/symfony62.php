@@ -5,11 +5,9 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
@@ -58,8 +56,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpTransportFactory' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory',
             // @see https://github.com/symfony/symfony/pull/47363
             'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface' => 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface',
-            // @see https://github.com/symfony/symfony/pull/46094
-            'Symfony\Component\Security\Core\Security' => 'Symfony\Bundle\SecurityBundle\Security',
             // @see https://github.com/symfony/symfony/pull/46161
             'Symfony\Component\Translation\Extractor\PhpAstExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
             // @see https://github.com/symfony/symfony/pull/47595
@@ -88,32 +84,5 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     );
 
-    // @see https://github.com/symfony/symfony/pull/46094
-    // @see https://github.com/symfony/symfony/pull/48554
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\Security',
-            'ACCESS_DENIED_ERROR',
-            'Symfony\Component\Security\Http\SecurityRequestAttributes',
-            'ACCESS_DENIED_ERROR'
-        ),
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\Security',
-            'AUTHENTICATION_ERROR',
-            'Symfony\Component\Security\Http\SecurityRequestAttributes',
-            'AUTHENTICATION_ERROR'
-        ),
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\Security',
-            'LAST_USERNAME',
-            'Symfony\Component\Security\Http\SecurityRequestAttributes',
-            'LAST_USERNAME'
-        ),
-        new RenameClassAndConstFetch(
-            'Symfony\Component\Security\Core\Security',
-            'MAX_USERNAME_LENGTH',
-            'Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge',
-            'MAX_USERNAME_LENGTH'
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-security-core.php');
 };

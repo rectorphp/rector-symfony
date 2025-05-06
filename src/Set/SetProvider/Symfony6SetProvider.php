@@ -103,10 +103,18 @@ final class Symfony6SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/security-core',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-security-core.php'
+            ),
+
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
