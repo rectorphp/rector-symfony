@@ -155,7 +155,7 @@ final class SymfonySetList
     /**
      * @var string
      */
-    final public const SYMFONY_71 = __DIR__ . '/../../config/sets/symfony/symfony71.php';
+    final public const SYMFONY_71 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony71.php';
 
     /**
      * @var string

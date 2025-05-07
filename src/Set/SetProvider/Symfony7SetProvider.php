@@ -50,10 +50,23 @@ final class Symfony7SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '7.1',
-                __DIR__ . '/../../../config/sets/symfony/symfony71.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony71.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '7.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony71/symfony71-dependency-injection.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/serializer',
+                '7.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony71/symfony71-serializer.php'
+            ),
+
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/*',
