@@ -138,6 +138,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-templating.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/event-dispatcher',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-event-dispatcher.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,

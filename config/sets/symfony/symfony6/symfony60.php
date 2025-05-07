@@ -23,6 +23,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-property-info.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-routing.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-templating.php');
+    $rectorConfig->import(__DIR__ . '/symfony60/symfony60-event-dispatcher.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-contracts.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-config.php');

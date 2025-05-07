@@ -44,11 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
-            'Symfony\Component\EventDispatcher\EventSubscriberInterface',
-            'getSubscribedEvents',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
             'Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface',
             'getFunctions',
             $arrayType
