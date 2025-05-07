@@ -5,17 +5,12 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\TemplateAnnotation
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class CleanupArrayReturnShape extends AbstractController
+final class NestedTernaryRedirect extends AbstractController
 {
-    /**
-     * @return array{hello: string}
-     */
     #[Template("with_some_template.twig")]
     public function indexAction()
     {
-        return [
-            'hello' => 'world'
-        ];
+        return mt_rand(0, 5) ? $this->redirectToRoute('one') : $this->redirectToRoute('two');
     }
 }
 
@@ -28,13 +23,11 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\TemplateAnnotation
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class CleanupArrayReturnShape extends AbstractController
+final class NestedTernaryRedirect extends AbstractController
 {
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
-        return $this->render('with_some_template.twig', [
-            'hello' => 'world'
-        ]);
+        return mt_rand(0, 5) ? $this->redirectToRoute('one') : $this->redirectToRoute('two');
     }
 }
 

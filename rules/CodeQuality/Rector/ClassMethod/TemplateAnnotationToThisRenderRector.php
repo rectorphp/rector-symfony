@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -30,6 +30,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -62,6 +63,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly AttributeFinder $attributeFinder,
+        private readonly AttrinationFinder $attrinationFinder,
     ) {
     }
 
@@ -118,21 +120,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->decorateAbstractControllerParentClass($node);
-
         $hasChanged = false;
 
-        $classDoctrineAnnotationTagValueNode = $this->annotationAnalyzer->getDoctrineAnnotationTagValueNode(
-            $node,
-            SymfonyAnnotation::TEMPLATE
-        );
-
-        $classTemplateAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAnnotation::TEMPLATE);
+        $classTemplateTagValueNodeOrAttribute = $this->attrinationFinder->getByOne($node, SymfonyAnnotation::TEMPLATE);
 
         foreach ($node->getMethods() as $classMethod) {
             $hasClassMethodChanged = $this->replaceTemplateAnnotation(
                 $classMethod,
-                $classDoctrineAnnotationTagValueNode ?: $classTemplateAttribute,
+                $classTemplateTagValueNodeOrAttribute
             );
 
             if ($hasClassMethodChanged) {
@@ -144,9 +139,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $this->decorateAbstractControllerParentClass($node);
+
         // cleanup Class_ @Template annotation
-        if ($classDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            $this->removeDoctrineAnnotationTagValueNode($node, $classDoctrineAnnotationTagValueNode);
+        if ($classTemplateTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
+            $this->removeDoctrineAnnotationTagValueNode($node, $classTemplateTagValueNodeOrAttribute);
         }
 
         return $node;
@@ -170,18 +167,16 @@ CODE_SAMPLE
             return false;
         }
 
-        $doctrineAnnotationTagValueNode = $this->annotationAnalyzer->getDoctrineAnnotationTagValueNode(
+        $methodTemplateTagValueNodeOrAttribute = $this->attrinationFinder->getByOne(
             $classMethod,
             SymfonyAnnotation::TEMPLATE
         );
 
-        $templateAttribute = $this->attributeFinder->findAttributeByClass($classMethod, SymfonyAnnotation::TEMPLATE);
-
-        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode || $templateAttribute instanceof Attribute) {
-            return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode ?: $templateAttribute);
+        if ($methodTemplateTagValueNodeOrAttribute !== null) {
+            return $this->refactorClassMethod($classMethod, $methodTemplateTagValueNodeOrAttribute);
         }
 
-        // global @Template/#[Template] access
+        // fallback to global @Template/#[Template] access
         if ($classTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode || $classTagValueNodeOrAttribute instanceof Attribute) {
             return $this->refactorClassMethod($classMethod, $classTagValueNodeOrAttribute);
         }
@@ -391,7 +386,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            // just created node, skip it
+            // just created class, skip it
             if ($stmt->getAttributes() === []) {
                 return false;
             }
