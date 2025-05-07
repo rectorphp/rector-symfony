@@ -73,4 +73,8 @@ class Response
     public const HTTP_LOOP_DETECTED = 508;                                               // RFC5842
     public const HTTP_NOT_EXTENDED = 510;                                                // RFC2774
     public const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;                             // RFC6585
+
+    public function __construct(string $contents, int $status = 200, array $headers = [])
+    {
+    }
 }
