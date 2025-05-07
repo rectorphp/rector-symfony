@@ -79,6 +79,19 @@ final class Symfony7SetProvider implements SetProviderInterface
                 '7.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-serializer.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/symfony',
+                '7.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony73.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/console',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony73/symfony73-console.php'
+            ),
         ];
     }
 }
