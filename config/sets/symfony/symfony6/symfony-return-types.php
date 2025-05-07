@@ -62,11 +62,6 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', new MixedType()),
         new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
         new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\KernelInterface',
-            'registerBundles',
-            $iterableType,
-        ),
-        new AddReturnTypeDeclaration(
             'Symfony\Component\Config\Definition\ConfigurationInterface',
             'getConfigTreeBuilder',
             new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
@@ -169,51 +164,7 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'getParent', $nullableStringType),
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'buildForm', new VoidType()),
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'configureOptions', new VoidType()),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface',
-            'isOptional',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface',
-            'warmUp',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\DataCollector\DataCollector',
-            'getCasters',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface',
-            'getName',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\HttpCache\HttpCache',
-            'forward',
-            $httpFoundationResponseType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\HttpKernelBrowser',
-            'doRequest',
-            $httpFoundationResponseType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\HttpKernelBrowser',
-            'getScript',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\Log\DebugLoggerInterface',
-            'getLogs',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\HttpKernel\Log\DebugLoggerInterface',
-            'countErrors',
-            new IntegerType()
-        ),
+
         new AddReturnTypeDeclaration(
             'Symfony\Component\OptionsResolver\OptionsResolver',
             'setNormalizer',
