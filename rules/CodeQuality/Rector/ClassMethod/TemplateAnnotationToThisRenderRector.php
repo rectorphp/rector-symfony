@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
@@ -24,6 +25,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -37,8 +39,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @changelog https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
- * @changelog https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
+ * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
+ * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
  *
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
@@ -54,6 +56,7 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly AttributeFinder $attributeFinder,
     ) {
     }
 
@@ -119,15 +122,14 @@ CODE_SAMPLE
             SymfonyAnnotation::TEMPLATE
         );
 
-        foreach ($node->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic()) {
-                continue;
-            }
+        $classTemplateAttribute = $this->attributeFinder->findAttributeByClass($node, SymfonyAnnotation::TEMPLATE);
 
+        foreach ($node->getMethods() as $classMethod) {
             $hasClassMethodChanged = $this->replaceTemplateAnnotation(
                 $classMethod,
-                $classDoctrineAnnotationTagValueNode
+                $classDoctrineAnnotationTagValueNode ?: $classTemplateAttribute,
             );
+
             if ($hasClassMethodChanged) {
                 $hasChanged = true;
             }
@@ -137,7 +139,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // cleanup Class_ @Template annotaion
+        // cleanup Class_ @Template annotation
         if ($classDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             $this->removeDoctrineAnnotationTagValueNode($node, $classDoctrineAnnotationTagValueNode);
         }
@@ -157,7 +159,7 @@ CODE_SAMPLE
 
     private function replaceTemplateAnnotation(
         ClassMethod $classMethod,
-        ?DoctrineAnnotationTagValueNode $classDoctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode | Attribute | null $classTagValueNodeOrAttribute
     ): bool {
         if (! $classMethod->isPublic()) {
             return false;
@@ -168,13 +170,15 @@ CODE_SAMPLE
             SymfonyAnnotation::TEMPLATE
         );
 
-        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode);
+        $templateAttribute = $this->attributeFinder->findAttributeByClass($classMethod, SymfonyAnnotation::TEMPLATE);
+
+        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode || $templateAttribute instanceof Attribute) {
+            return $this->refactorClassMethod($classMethod, $doctrineAnnotationTagValueNode ?: $templateAttribute);
         }
 
         // global @Template access
-        if ($classDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return $this->refactorClassMethod($classMethod, $classDoctrineAnnotationTagValueNode);
+        if ($classTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode || $classTagValueNodeOrAttribute instanceof Attribute) {
+            return $this->refactorClassMethod($classMethod, $classTagValueNodeOrAttribute);
         }
 
         return false;
@@ -182,14 +186,14 @@ CODE_SAMPLE
 
     private function refactorClassMethod(
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
     ): bool {
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
         $hasChanged = false;
 
         $this->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            $templateDoctrineAnnotationTagValueNode,
+            $templateTagValueNodeOrAttribute,
             $hasThisRenderOrReturnsResponse,
             $classMethod,
             &$hasChanged
@@ -206,7 +210,7 @@ CODE_SAMPLE
 
             $hasChangedNode = $this->refactorStmtsAwareNode(
                 $node,
-                $templateDoctrineAnnotationTagValueNode,
+                $templateTagValueNodeOrAttribute,
                 $hasThisRenderOrReturnsResponse,
                 $classMethod
             );
@@ -223,11 +227,11 @@ CODE_SAMPLE
 
         $thisRenderMethodCall = $this->thisRenderFactory->create(
             null,
-            $templateDoctrineAnnotationTagValueNode,
+            $templateTagValueNodeOrAttribute,
             $classMethod
         );
 
-        $this->refactorNoReturn($classMethod, $thisRenderMethodCall, $templateDoctrineAnnotationTagValueNode);
+        $this->refactorNoReturn($classMethod, $thisRenderMethodCall, $templateTagValueNodeOrAttribute);
 
         return true;
     }
@@ -254,7 +258,7 @@ CODE_SAMPLE
 
     private function refactorReturn(
         Return_ $return,
-        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
+        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): bool {
@@ -266,7 +270,7 @@ CODE_SAMPLE
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
         $thisRenderMethodCall = $this->thisRenderFactory->create(
             $return,
-            $templateDoctrineAnnotationTagValueNode,
+            $templateTagValueNodeOrAttribute,
             $classMethod
         );
 
@@ -275,7 +279,7 @@ CODE_SAMPLE
             $hasThisRenderOrReturnsResponse,
             $thisRenderMethodCall,
             $classMethod,
-            $templateDoctrineAnnotationTagValueNode
+            $templateTagValueNodeOrAttribute
         );
     }
 
@@ -295,7 +299,7 @@ CODE_SAMPLE
         bool $hasThisRenderOrReturnsResponse,
         MethodCall $thisRenderMethodCall,
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode | Attribute $doctrineTagValueNodeOrAttribute
     ): bool {
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
@@ -324,24 +328,41 @@ CODE_SAMPLE
         }
 
         // already response
-        $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineAnnotationTagValueNode);
+        $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineTagValueNodeOrAttribute);
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
         return true;
     }
 
     private function removeDoctrineAnnotationTagValueNode(
         Class_|ClassMethod $node,
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+        DoctrineAnnotationTagValueNode | Attribute $doctrineTagValueNodeOrAttribute
     ): void {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
+        if ($doctrineTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNodeOrAttribute);
 
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+
+            return;
+        }
+
+        foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attribute) {
+                if ($attribute === $doctrineTagValueNodeOrAttribute) {
+                    unset($attrGroup->attrs[$attributeKey]);
+                }
+            }
+
+            // no attributes left? remove the whole dgroup
+            if ($attrGroup->attrs === []) {
+                unset($node->attrGroups[$attrGroupKey]);
+            }
+        }
     }
 
     private function refactorStmtsAwareNode(
         StmtsAwareInterface $stmtsAware,
-        DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode,
+        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): bool {
@@ -362,7 +383,7 @@ CODE_SAMPLE
 
             $hasChangedReturn = $this->refactorReturn(
                 $stmt,
-                $templateDoctrineAnnotationTagValueNode,
+                $templateTagValueNodeOrAttribute,
                 $hasThisRenderOrReturnsResponse,
                 $classMethod
             );
