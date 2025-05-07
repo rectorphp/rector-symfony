@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([

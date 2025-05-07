@@ -7,7 +7,5 @@ use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([
-        CommandHelpToAttributeRector::class, InvokableCommandInputAttributeRector::class
-    ]);
+    $rectorConfig->rules([CommandHelpToAttributeRector::class, InvokableCommandInputAttributeRector::class]);
 };
