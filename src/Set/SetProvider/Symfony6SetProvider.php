@@ -108,6 +108,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-form.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-translation.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,

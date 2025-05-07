@@ -198,15 +198,5 @@ return static function (RectorConfig $rectorConfig): void {
             'getName',
             new StringType()
         ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Translation\Extractor\AbstractFileExtractor',
-            'canBeExtracted',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Translation\Extractor\AbstractFileExtractor',
-            'extractFromDirectory',
-            $iterableType
-        ),
     ]);
 };
