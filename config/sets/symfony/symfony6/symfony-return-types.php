@@ -44,12 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
-            'Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface',
-            'getFunctions',
-            $arrayType
-        ),
-
-        new AddReturnTypeDeclaration(
             'Symfony\Component\OptionsResolver\OptionsResolver',
             'setNormalizer',
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
