@@ -13,17 +13,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony70/symfony70-dependency-injection.php');
     $rectorConfig->import(__DIR__ . '/symfony70/symfony70-serializer.php');
-
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
-        // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#httpfoundation
-        'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\ChainRequestMatcher',
-        'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
-    ]);
-
-    // @see https://github.com/symfony/symfony/pull/50826
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\Component\HttpFoundation\Request', 'getContentType', 'getContentTypeFormat'),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony70/symfony70-http-foundation.php');
 
     // the "@required" was dropped, use attribute instead
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [

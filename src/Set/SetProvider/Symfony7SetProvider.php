@@ -35,6 +35,12 @@ final class Symfony7SetProvider implements SetProviderInterface
                 '7.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony70/symfony70-serializer.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '7.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony70/symfony70-http-foundation.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
