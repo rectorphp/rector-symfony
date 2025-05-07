@@ -102,6 +102,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-validator.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/form',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-form.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,

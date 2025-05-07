@@ -10,10 +10,8 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\VoidType;
 use Rector\Config\RectorConfig;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -27,17 +25,10 @@ return static function (RectorConfig $rectorConfig): void {
     $iterableType = new IterableType(new MixedType(), new MixedType());
     $arrayType = new ArrayType(new MixedType(), new MixedType());
 
-    $nullableStringType = new UnionType([new NullType(), new StringType()]);
     $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
     $nullableArrayType = new UnionType([new NullType(), $arrayType]);
 
     $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
-    $httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
-    $typeGuessType = new ObjectType('Symfony\Component\Form\Guess\TypeGuess');
-    $nullableValueGuessType = new UnionType([
-        new NullType(),
-        new ObjectType('Symfony\Component\Form\Guess\ValueGuess'),
-    ]);
 
     $scalarTypes = [
         $arrayType,
@@ -108,62 +99,6 @@ return static function (RectorConfig $rectorConfig): void {
             'getFunctions',
             $arrayType
         ),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'loadTypes', $arrayType),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\AbstractExtension',
-            'loadTypeGuesser',
-            new UnionType([new NullType(), new ObjectType('Symfony\Component\Form\FormTypeGuesserInterface')])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\AbstractRendererEngine',
-            'loadResourceForBlockName',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractType', 'getBlockPrefix', new StringType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractType', 'getParent', $nullableStringType),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\DataTransformerInterface',
-            'transform',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\DataTransformerInterface',
-            'reverseTransform',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormRendererEngineInterface',
-            'renderBlock',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormTypeGuesserInterface',
-            'guessType',
-            new UnionType([new NullType(), $typeGuessType]),
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormTypeGuesserInterface',
-            'guessRequired',
-            $nullableValueGuessType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormTypeGuesserInterface',
-            'guessMaxLength',
-            $nullableValueGuessType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormTypeGuesserInterface',
-            'guessPattern',
-            $nullableValueGuessType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Form\FormTypeInterface',
-            'getBlockPrefix',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'getParent', $nullableStringType),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'buildForm', new VoidType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'configureOptions', new VoidType()),
 
         new AddReturnTypeDeclaration(
             'Symfony\Component\OptionsResolver\OptionsResolver',
