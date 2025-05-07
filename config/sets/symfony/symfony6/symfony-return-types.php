@@ -44,45 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
     $privatesAccessor = new PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
-        new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', new MixedType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Config\Definition\ConfigurationInterface',
-            'getConfigTreeBuilder',
-            new ObjectType('Symfony\Component\Config\Definition\Builder\TreeBuilder')
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocator', 'locate', new UnionType([
-            new StringType(),
-            $arrayType,
-        ])),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\FileLocatorInterface', 'locate', new UnionType([
-            new StringType(),
-            $arrayType,
-        ])),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\FileLoader', 'import', new MixedType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', new MixedType()),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Config\Loader\LoaderInterface',
-            'supports',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Config\Loader\LoaderInterface',
-            'getResolver',
-            new ObjectType('Symfony\Component\Config\Loader\LoaderResolverInterface')
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Config\ResourceCheckerInterface',
-            'supports',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Config\ResourceCheckerInterface',
-            'isFresh',
-            new BooleanType()
-        ),
-
         new AddReturnTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventSubscriberInterface',
             'getSubscribedEvents',
