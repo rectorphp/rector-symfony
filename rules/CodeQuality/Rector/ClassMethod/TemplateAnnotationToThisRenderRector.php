@@ -304,7 +304,7 @@ CODE_SAMPLE
         $lastReturnExpr = $return->expr;
 
         $returnStaticType = $this->getType($lastReturnExpr);
-        $responseObjectType = new ObjectType(Response::class);
+        $responseObjectType = new ObjectType(SymfonyClass::RESPONSE);
 
         // change contents only if the value is not Response yet
         if (! $responseObjectType->isSuperTypeOf($returnStaticType)->yes()) {
