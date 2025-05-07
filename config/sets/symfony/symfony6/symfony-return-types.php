@@ -126,6 +126,16 @@ return static function (RectorConfig $rectorConfig): void {
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
         ),
         new AddReturnTypeDeclaration(
+            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
+            'isReadable',
+            $nullableBooleanType
+        ),
+        new AddReturnTypeDeclaration(
+            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
+            'isWritable',
+            $nullableBooleanType
+        ),
+        new AddReturnTypeDeclaration(
             'Symfony\Component\PropertyInfo\PropertyListExtractorInterface',
             'getProperties',
             $nullableArrayType
