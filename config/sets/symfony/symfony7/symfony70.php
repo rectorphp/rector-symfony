@@ -5,21 +5,13 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Renaming\Rector\Class_\RenameAttributeRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameAttribute;
 
 // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md
 return static function (RectorConfig $rectorConfig): void {
-    // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#dependencyinjection
-    $rectorConfig->ruleWithConfiguration(RenameAttributeRector::class, [
-        new RenameAttribute(
-            'Symfony\Component\DependencyInjection\Attribute\MapDecorated',
-            'Symfony\Component\DependencyInjection\Attribute\AutowireDecorated',
-        ),
-    ]);
+    $rectorConfig->import(__DIR__ . '/symfony70/symfony70-dependency-injection.php');
 
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#frameworkbundle

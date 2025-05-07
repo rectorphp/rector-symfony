@@ -25,6 +25,13 @@ final class Symfony7SetProvider implements SetProviderInterface
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/dependency-injection',
+                '7.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony70/symfony70-dependency-injection.php'
+            ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/*',
                 '7.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony71.php'
