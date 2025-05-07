@@ -273,17 +273,5 @@ return static function (RectorConfig $rectorConfig): void {
             'extractFromDirectory',
             $iterableType
         ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Validator\Constraint',
-            'getDefaultOption',
-            $nullableStringType
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'getRequiredOptions', $arrayType),
-        new AddReturnTypeDeclaration('Symfony\Component\Validator\Constraint', 'validatedBy', new StringType()),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Validator\Constraint',
-            'getTargets',
-            new UnionType([new StringType(), $arrayType])
-        ),
     ]);
 };
