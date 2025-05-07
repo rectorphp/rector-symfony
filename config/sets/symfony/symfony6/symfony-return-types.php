@@ -80,25 +80,5 @@ return static function (RectorConfig $rectorConfig): void {
             'addAllowedTypes',
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
         ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Routing\Loader\AnnotationClassLoader',
-            'getDefaultRouteName',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Routing\Router',
-            'getRouteCollection',
-            $routeCollectionType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Routing\RouterInterface',
-            'getRouteCollection',
-            $routeCollectionType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Templating\Helper\HelperInterface',
-            'getName',
-            new StringType()
-        ),
     ]);
 };
