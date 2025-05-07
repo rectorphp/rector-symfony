@@ -22,7 +22,6 @@ use Rector\Util\Reflection\PrivatesAccessor;
 
 return static function (RectorConfig $rectorConfig): void {
     $arrayType = new ArrayType(new MixedType(), new MixedType());
-    $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
 
     $scalarTypes = [
         $arrayType,
