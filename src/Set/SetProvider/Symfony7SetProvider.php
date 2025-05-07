@@ -69,9 +69,15 @@ final class Symfony7SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '7.2',
-                __DIR__ . '/../../../config/sets/symfony/symfony72.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/serializer',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-serializer.php'
             ),
         ];
     }
