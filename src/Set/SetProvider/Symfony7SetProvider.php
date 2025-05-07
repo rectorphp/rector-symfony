@@ -89,7 +89,7 @@ final class Symfony7SetProvider implements SetProviderInterface
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
                 'symfony/console',
-                '7.2',
+                '7.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony73/symfony73-console.php'
             ),
         ];
