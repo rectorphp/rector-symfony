@@ -126,6 +126,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-property-info.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/routing',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-routing.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
