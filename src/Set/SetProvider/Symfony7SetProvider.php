@@ -19,9 +19,9 @@ final class Symfony7SetProvider implements SetProviderInterface
         return [
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/*',
+                'symfony/symfony',
                 '7.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony70.php'
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony70.php'
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
