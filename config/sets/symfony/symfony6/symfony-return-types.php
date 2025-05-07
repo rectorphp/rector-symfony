@@ -457,77 +457,6 @@ return static function (RectorConfig $rectorConfig): void {
             $arrayType
         ),
         new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Encoder\DecoderInterface',
-            'decode',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Encoder\DecoderInterface',
-            'supportsDecoding',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
-            'getAllowedAttributes',
-            new UnionType([$arrayType, new BooleanType()])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
-            'isAllowedAttribute',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractNormalizer',
-            'instantiateObject',
-            new ObjectWithoutClassType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'supportsNormalization',
-            new BooleanType()
-        ),
-
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'instantiateObject',
-            new ObjectWithoutClassType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'extractAttributes',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'getAttributeValue',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'supportsDenormalization',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'denormalize',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\DenormalizerInterface',
-            'denormalize',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\DenormalizerInterface',
-            'supportsDenormalization',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-            'supportsNormalization',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
             'Symfony\Component\Templating\Helper\HelperInterface',
             'getName',
             new StringType()
@@ -554,12 +483,6 @@ return static function (RectorConfig $rectorConfig): void {
             'getTargets',
             new UnionType([new StringType(), $arrayType])
         ),
-
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer',
-            'normalize',
-            $scalarArrayObjectUnionType
-        ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\DependencyInjection\Container',
             'getParameter',
@@ -569,11 +492,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\DependencyInjection\ContainerInterface',
             'getParameter',
             new UnionType($scalarTypes)
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-            'normalize',
-            $scalarArrayObjectUnionType
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface',
