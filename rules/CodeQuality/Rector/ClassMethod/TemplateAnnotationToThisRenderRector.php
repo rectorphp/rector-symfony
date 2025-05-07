@@ -9,7 +9,6 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -29,7 +28,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -62,7 +60,6 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly AttributeFinder $attributeFinder,
         private readonly AttrinationFinder $attrinationFinder,
     ) {
     }
@@ -307,33 +304,30 @@ CODE_SAMPLE
         $lastReturnExpr = $return->expr;
 
         $returnStaticType = $this->getType($lastReturnExpr);
+        $responseObjectType = new ObjectType(Response::class);
 
-        // is new response? keep it
-        $isResponseType = false;
-        if ($return->expr instanceof New_) {
-            $new = $return->expr;
-            if ($this->isObjectType($new->class, new ObjectType(Response::class))) {
-                $isResponseType = true;
-            }
-        } elseif (! $return->expr instanceof MethodCall) {
-            if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
+        // change contents only if the value is not Response yet
+        if (! $responseObjectType->isSuperTypeOf($returnStaticType)->yes()) {
+            if (! $return->expr instanceof MethodCall) {
+                if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
+                    $return->expr = $thisRenderMethodCall;
+                }
+            } elseif ($returnStaticType instanceof ArrayType) {
                 $return->expr = $thisRenderMethodCall;
+            } elseif ($returnStaticType instanceof MixedType) {
+                // nothing we can do
+                return false;
             }
-        } elseif ($returnStaticType instanceof ArrayType) {
-            $return->expr = $thisRenderMethodCall;
-        } elseif ($returnStaticType instanceof MixedType) {
-            // nothing we can do
-            return false;
-        }
 
-        $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
-            $returnStaticType,
-            SymfonyClass::RESPONSE
-        );
+            $isArrayOrResponseType = $this->arrayUnionResponseTypeAnalyzer->isArrayUnionResponseType(
+                $returnStaticType,
+                SymfonyClass::RESPONSE
+            );
 
-        // skip as the original class method has to change first
-        if ($isArrayOrResponseType && $isResponseType === false) {
-            return false;
+            // skip as the original class method has to change first
+            if ($isArrayOrResponseType) {
+                return false;
+            }
         }
 
         // already response
