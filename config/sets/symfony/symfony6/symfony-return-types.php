@@ -67,12 +67,6 @@ return static function (RectorConfig $rectorConfig): void {
             'registerBundles',
             $iterableType,
         ),
-        // @see https://wouterj.nl/2021/09/symfony-6-native-typing#when-upgrading-to-symfony-54
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\User\UserInterface',
-            'getRoles',
-            new ArrayType(new MixedType(), new MixedType())
-        ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\BrowserKit\AbstractBrowser',
             'doRequestInProcess',
@@ -333,31 +327,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Routing\RouterInterface',
             'getRouteCollection',
             $routeCollectionType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface',
-            'loadTokenBySeries',
-            new ObjectType('Symfony\Component\Security\Core\Authentication\RememberMe\PersistentTokenInterface')
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface',
-            'vote',
-            new IntegerType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\Exception\AuthenticationException',
-            'getMessageKey',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\User\UserProviderInterface',
-            'refreshUser',
-            new ObjectType('Symfony\Component\Security\Core\User\UserInterface')
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Core\User\UserProviderInterface',
-            'supportsClass',
-            new BooleanType()
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Templating\Helper\HelperInterface',
