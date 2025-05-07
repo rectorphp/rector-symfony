@@ -32,7 +32,6 @@ return static function (RectorConfig $rectorConfig): void {
     $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
     $nullableArrayType = new UnionType([new NullType(), $arrayType]);
 
-    $commandType = new ObjectType('Symfony\Component\Console\Command\Command');
     $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
     $httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
     $browserKitResponseType = new ObjectType('Symfony\Component\BrowserKit\Response');
@@ -76,12 +75,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Security\Core\User\UserInterface',
             'getRoles',
             new ArrayType(new MixedType(), new MixedType())
-        ),
-        // @see https://github.com/symfony/symfony/pull/43028/files
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Console\Helper\HelperInterface',
-            'getName',
-            new StringType()
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\BrowserKit\AbstractBrowser',
@@ -138,38 +131,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Config\ResourceCheckerInterface',
             'isFresh',
             new BooleanType()
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'doRun', new IntegerType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'getLongVersion', new StringType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'add', new UnionType([
-            new NullType(),
-            $commandType,
-        ])),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'get', $commandType),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'find', $commandType),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'all', $arrayType),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Application', 'doRunCommand', new IntegerType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Command\Command', 'isEnabled', new BooleanType()),
-        new AddReturnTypeDeclaration('Symfony\Component\Console\Command\Command', 'execute', new IntegerType()),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Console\Helper\HelperInterface',
-            'getName',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Console\Input\InputInterface',
-            'getParameterOption',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Console\Input\InputInterface',
-            'getArgument',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Console\Input\InputInterface',
-            'getOption',
-            new MixedType()
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass',
@@ -446,17 +407,6 @@ return static function (RectorConfig $rectorConfig): void {
             new BooleanType()
         ),
         new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface',
-            'start',
-            $httpFoundationResponseType
-        ),
-        new AddReturnTypeDeclaration('Symfony\Component\Security\Http\Firewall', 'getSubscribedEvents', $arrayType),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Http\FirewallMapInterface',
-            'getListeners',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
             'Symfony\Component\Templating\Helper\HelperInterface',
             'getName',
             new StringType()
@@ -492,11 +442,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\DependencyInjection\ContainerInterface',
             'getParameter',
             new UnionType($scalarTypes)
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface',
-            'authenticate',
-            new ObjectType('Symfony\Component\Security\Http\Authenticator\Passport\Passport')
         ),
     ]);
 };
