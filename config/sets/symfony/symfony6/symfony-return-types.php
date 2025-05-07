@@ -33,7 +33,6 @@ return static function (RectorConfig $rectorConfig): void {
 
     $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
     $httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
-    $browserKitResponseType = new ObjectType('Symfony\Component\BrowserKit\Response');
     $typeGuessType = new ObjectType('Symfony\Component\Form\Guess\TypeGuess');
     $nullableValueGuessType = new UnionType([
         new NullType(),
@@ -66,26 +65,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\HttpKernel\KernelInterface',
             'registerBundles',
             $iterableType,
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\BrowserKit\AbstractBrowser',
-            'doRequestInProcess',
-            new ObjectWithoutClassType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\BrowserKit\AbstractBrowser',
-            'doRequest',
-            new ObjectWithoutClassType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\BrowserKit\AbstractBrowser',
-            'filterRequest',
-            new ObjectWithoutClassType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\BrowserKit\AbstractBrowser',
-            'filterResponse',
-            $browserKitResponseType
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Config\Definition\ConfigurationInterface',
