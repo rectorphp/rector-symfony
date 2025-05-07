@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
@@ -40,8 +39,6 @@ return static function (RectorConfig $rectorConfig): void {
         new NullType(),
         new ObjectType('Symfony\Component\Form\Guess\ValueGuess'),
     ]);
-
-    $configurationType = new ObjectType('Symfony\Component\Config\Definition\ConfigurationInterface');
 
     $scalarTypes = [
         $arrayType,
@@ -132,51 +129,7 @@ return static function (RectorConfig $rectorConfig): void {
             'isFresh',
             new BooleanType()
         ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass',
-            'processValue',
-            new MixedType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface',
-            'getConfiguration',
-            new UnionType([new NullType(), $configurationType])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\Extension',
-            'getXsdValidationBasePath',
-            new UnionType([new StringType(), new ConstantBooleanType(false)])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\Extension',
-            'getNamespace',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\Extension',
-            'getConfiguration',
-            new UnionType([new NullType(), $configurationType])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
-            'getNamespace',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
-            'getXsdValidationBasePath',
-            new UnionType([new StringType(), new ConstantBooleanType(false)])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface',
-            'getAlias',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface',
-            'instantiateProxy',
-            new ObjectWithoutClassType()
-        ),
+
         new AddReturnTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventSubscriberInterface',
             'getSubscribedEvents',
@@ -432,16 +385,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Validator\Constraint',
             'getTargets',
             new UnionType([new StringType(), $arrayType])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\Container',
-            'getParameter',
-            new UnionType($scalarTypes)
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            'getParameter',
-            new UnionType($scalarTypes)
         ),
     ]);
 };
