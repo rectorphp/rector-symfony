@@ -126,49 +126,6 @@ return static function (RectorConfig $rectorConfig): void {
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
         ),
         new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'getLength',
-            new IntegerType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'getParent',
-            new UnionType([
-                new NullType(),
-                new ObjectType('Symfony\Component\PropertyAccess\PropertyPathInterface'),
-            ])
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'getElements',
-            $arrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'getElement',
-            new StringType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'isProperty',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyAccess\PropertyPathInterface',
-            'isIndex',
-            new BooleanType()
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
-            'isReadable',
-            $nullableBooleanType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
-            'isWritable',
-            $nullableBooleanType
-        ),
-        new AddReturnTypeDeclaration(
             'Symfony\Component\PropertyInfo\PropertyListExtractorInterface',
             'getProperties',
             $nullableArrayType

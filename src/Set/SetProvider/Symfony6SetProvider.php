@@ -114,6 +114,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-translation.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/property-access',
+                '6.0',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony60/symfony60-property-access.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
