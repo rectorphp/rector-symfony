@@ -9,8 +9,6 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     // $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
 
-    $rectorConfig->import(__DIR__ . '/symfony-return-types.php'); // todo: extract this as well
-
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-serializer.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-security-http.php');
     $rectorConfig->import(__DIR__ . '/symfony60/symfony60-console.php');
