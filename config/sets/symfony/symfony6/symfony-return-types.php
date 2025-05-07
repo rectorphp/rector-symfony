@@ -6,7 +6,6 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -22,12 +21,7 @@ use Rector\Util\Reflection\PrivatesAccessor;
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 
 return static function (RectorConfig $rectorConfig): void {
-    $iterableType = new IterableType(new MixedType(), new MixedType());
     $arrayType = new ArrayType(new MixedType(), new MixedType());
-
-    $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
-    $nullableArrayType = new UnionType([new NullType(), $arrayType]);
-
     $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
 
     $scalarTypes = [
@@ -124,26 +118,6 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\OptionsResolver\OptionsResolver',
             'addAllowedTypes',
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
-            'isReadable',
-            $nullableBooleanType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
-            'isWritable',
-            $nullableBooleanType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyListExtractorInterface',
-            'getProperties',
-            $nullableArrayType
-        ),
-        new AddReturnTypeDeclaration(
-            'Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface',
-            'getTypes',
-            $nullableArrayType
         ),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Routing\Loader\AnnotationClassLoader',
