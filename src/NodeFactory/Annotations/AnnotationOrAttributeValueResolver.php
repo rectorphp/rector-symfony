@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
@@ -64,7 +65,7 @@ final readonly class AnnotationOrAttributeValueResolver
 
     private function isKeyEmptyOrMatch(Arg $attributeArg, string $desiredKey): bool
     {
-        if ($attributeArg->name === null) {
+        if (!$attributeArg->name instanceof Identifier) {
             return true;
         }
 

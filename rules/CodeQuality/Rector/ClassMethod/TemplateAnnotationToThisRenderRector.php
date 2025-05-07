@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
@@ -38,6 +39,7 @@ use Rector\Symfony\NodeFactory\ThisRenderFactory;
 use Rector\Symfony\NodeFinder\EmptyReturnNodeFinder;
 use Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer;
 use Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater;
+use Symfony\Component\HttpFoundation\Response;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -201,7 +203,6 @@ CODE_SAMPLE
             $classMethod,
             &$hasChanged
         ): ?int {
-
             // keep as similar type
             if ($node instanceof Closure || $node instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -312,7 +313,14 @@ CODE_SAMPLE
 
         $returnStaticType = $this->getType($lastReturnExpr);
 
-        if (! $return->expr instanceof MethodCall) {
+        // is new response? keep it
+        $isResponseType = false;
+        if ($return->expr instanceof New_) {
+            $new = $return->expr;
+            if ($this->isObjectType($new->class, new ObjectType(Response::class))) {
+                $isResponseType = true;
+            }
+        } elseif (! $return->expr instanceof MethodCall) {
             if (! $hasThisRenderOrReturnsResponse || $returnStaticType instanceof ConstantArrayType) {
                 $return->expr = $thisRenderMethodCall;
             }
@@ -329,13 +337,14 @@ CODE_SAMPLE
         );
 
         // skip as the original class method has to change first
-        if ($isArrayOrResponseType) {
+        if ($isArrayOrResponseType && $isResponseType === false) {
             return false;
         }
 
         // already response
         $this->removeDoctrineAnnotationTagValueNode($classMethod, $doctrineTagValueNodeOrAttribute);
         $this->returnTypeDeclarationUpdater->updateClassMethod($classMethod, SymfonyClass::RESPONSE);
+
         return true;
     }
 
