@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 
@@ -26,14 +27,15 @@ final readonly class GetMethodToAsTwigAttributeTransformer
     public function __construct(
         private LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher,
         private ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover,
-        private ReflectionProvider $reflectionProvider,
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
     public function transformClassGetMethodToAttributeMarker(
         Class_ $class,
         string $methodName,
-        string $attributeClass
+        string $attributeClass,
+        ObjectType $objectType
     ): bool {
 
         // check if attribute even exists
@@ -64,6 +66,10 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                     continue;
                 }
 
+                if ($arrayItem->value->isFirstClassCallable()) {
+                    continue;
+                }
+
                 $new = $arrayItem->value;
                 if (count($new->getArgs()) !== 2) {
                     continue;
@@ -72,7 +78,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 $secondArg = $new->getArgs()[1];
 
                 if ($this->isLocalCallable($secondArg->value)) {
-                    $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value);
+                    $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
                     if (! is_string($localMethodName)) {
                         continue;
                     }

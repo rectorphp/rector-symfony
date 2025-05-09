@@ -89,7 +89,8 @@ CODE_SAMPLE
         $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker(
             $node,
             'getFilters',
-            TwigClass::AS_TWIG_FILTER_ATTRIBUTE
+            TwigClass::AS_TWIG_FILTER_ATTRIBUTE,
+            $twigExtensionObjectType
         );
 
         if ($hasChanged) {
