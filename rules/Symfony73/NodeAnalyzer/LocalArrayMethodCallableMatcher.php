@@ -10,14 +10,15 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Webmozart\Assert\Assert;
 
 final class LocalArrayMethodCallableMatcher
 {
     public function match(Expr $expr): ?string
     {
         if ($expr instanceof MethodCall) {
-            Assert::isInstanceOf($expr->name, Identifier::class);
+            if (! $expr->name instanceof Identifier) {
+                return null;
+            }
 
             return $expr->name->toString();
         }
