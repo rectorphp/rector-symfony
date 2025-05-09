@@ -148,7 +148,9 @@ CODE_SAMPLE
                 }
             }
 
-            $this->removeGetFilterMethodIfEmpty($returnArray, $node);
+            if ($hasChanged) {
+                $this->removeGetFilterMethodIfEmpty($returnArray, $node);
+            }
         }
 
         if ($hasChanged) {
