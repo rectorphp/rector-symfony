@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
@@ -18,7 +19,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\TwigClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -96,7 +96,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isObjectType($node, new ObjectType(TwigClass::TWIG_EXTENSION))) {
+        $twigExtensionObjectType = new ObjectType(TwigClass::TWIG_EXTENSION);
+        if (! $this->isObjectType($node, $twigExtensionObjectType)) {
             return null;
         }
 
@@ -133,33 +134,21 @@ CODE_SAMPLE
                 }
 
                 $secondArg = $new->getArgs()[1];
-                if ($secondArg->value instanceof MethodCall && $secondArg->value->isFirstClassCallable()) {
-                    throw new ShouldNotHappenException('Not supported yet');
-                }
-
-                if ($secondArg->value instanceof Array_ && count($secondArg->value->items) === 2) {
-                    $localMethodName = $this->matchLocalMethodName($secondArg->value);
-                    if (! is_string($localMethodName)) {
-                        continue;
+                if ($secondArg->value instanceof MethodCall && $secondArg->value->isFirstClassCallable() && $this->isObjectType(
+                    $secondArg->value->var,
+                    $twigExtensionObjectType
+                )) {
+                    if ($this->processSetAttribute($secondArg, $node, $returnArray, $key)) {
+                        $hasChanged = true;
                     }
-
-                    $localMethod = $node->getMethod($localMethodName);
-                    if (! $localMethod instanceof ClassMethod) {
-                        continue;
+                } elseif ($secondArg->value instanceof Array_ && count($secondArg->value->items) === 2) {
+                    if ($this->processSetAttribute($secondArg, $node, $returnArray, $key)) {
+                        $hasChanged = true;
                     }
-
-                    $localMethod->attrGroups[] = new AttributeGroup([
-                        new Attribute(new FullyQualified(TwigClass::AS_TWIG_FILTER_ATTRIBUTE)),
-                    ]);
-
-                    // remove old new fuction instance
-                    unset($returnArray->items[$key]);
-
-                    $hasChanged = true;
                 }
             }
 
-            $this->removeGetFilterMethodIfEmpty($returnArray, $node, $stmt);
+            $this->removeGetFilterMethodIfEmpty($returnArray, $node);
         }
 
         if ($hasChanged) {
@@ -169,26 +158,52 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchLocalMethodName(Array_ $callableArray): ?string
+    private function processSetAttribute(Arg $secondArg, Class_ $class, Array_ $returnArray, int $key): bool
     {
-        $firstItem = $callableArray->items[0];
-        if (! $firstItem->value instanceof Variable) {
-            return null;
+        $localMethodName = $this->matchLocalMethodName($secondArg->value);
+        if (! is_string($localMethodName)) {
+            return false;
         }
 
-        if (! $this->isName($firstItem->value, 'this')) {
-            return null;
+        $localMethod = $class->getMethod($localMethodName);
+        if (! $localMethod instanceof ClassMethod) {
+            return false;
         }
 
-        $secondItem = $callableArray->items[1];
-        if (! $secondItem->value instanceof String_) {
-            return null;
-        }
+        $localMethod->attrGroups[] = new AttributeGroup([
+            new Attribute(new FullyQualified(TwigClass::AS_TWIG_FILTER_ATTRIBUTE)),
+        ]);
 
-        return $secondItem->value->value;
+        // remove old new fuction instance
+        unset($returnArray->items[$key]);
+
+        return true;
     }
 
-    private function removeGetFilterMethodIfEmpty(Array_ $getFilterReturnArray, Class_ $class, Return_ $return): void
+    private function matchLocalMethodName(Array_|MethodCall $callable): ?string
+    {
+        if ($callable instanceof Array_) {
+            $firstItem = $callable->items[0];
+            if (! $firstItem->value instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->isName($firstItem->value, 'this')) {
+                return null;
+            }
+
+            $secondItem = $callable->items[1];
+            if (! $secondItem->value instanceof String_) {
+                return null;
+            }
+
+            return $secondItem->value->value;
+        }
+
+        return $this->getName($callable->name);
+    }
+
+    private function removeGetFilterMethodIfEmpty(Array_ $getFilterReturnArray, Class_ $class): void
     {
         if (count($getFilterReturnArray->items) !== 0) {
             return;
