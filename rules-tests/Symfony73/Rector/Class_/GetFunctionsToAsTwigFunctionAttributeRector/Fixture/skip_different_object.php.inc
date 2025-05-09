@@ -13,6 +13,11 @@ final class SkipDifferentObject extends AbstractExtension
             new \Twig\TwigFunction('some_function', $differentObject->someFunction(...)),
         ];
     }
+
+    public function someFunction($value)
+    {
+        return $value;
+    }
 }
 
 ?>
