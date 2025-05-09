@@ -27,7 +27,7 @@ final readonly class LocalArrayMethodCallableMatcher
             }
 
             if (! $this->nodeTypeResolver->isObjectType($expr->var, $objectType)) {
-                //return null;
+                return null;
             }
 
             return $expr->name->toString();
