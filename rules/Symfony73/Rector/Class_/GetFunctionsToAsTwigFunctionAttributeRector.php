@@ -16,19 +16,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-7-3-twig-extension-attributes
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector\GetFiltersToAsTwigFilterAttributeRectorTest
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\GetFunctionsToAsTwigFunctionAttributeRectorTest
  */
-final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector
+final class GetFunctionsToAsTwigFunctionAttributeRector extends AbstractRector
 {
     public function __construct(
-        private readonly GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer
+        private readonly GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer,
     ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes getFilters() in TwigExtension to #[TwigFilter] marker attribute above function',
+            'Changes getFunctions() in TwigExtension to #[AsTwigFunction] marker attribute above local class method',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -36,10 +36,10 @@ use Twig\Extension\AbstractExtension;
 
 class SomeClass extends AbstractExtension
 {
-    public function getFilters()
+    public function getFunctions()
     {
         return [
-            new \Twig\TwigFilter('filter_name', [$this, 'localMethod']),
+            new \Twig\TwigFunction('function_name', [$this, 'localMethod']),
         ];
     }
 
@@ -52,11 +52,11 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
-use Twig\Attribute\AsTwigFilter;
+use Twig\Attribute\AsTwigFunction;
 
 class SomeClass extends AbstractExtension
 {
-    #[TwigFilter('filter_name')]
+    #[AsTwigFunction('function_name')]
     public function localMethod($value)
     {
         return $value;
@@ -81,21 +81,20 @@ CODE_SAMPLE
             return null;
         }
 
-        $twigExtensionObjectType = new ObjectType(TwigClass::TWIG_EXTENSION);
-        if (! $this->isObjectType($node, $twigExtensionObjectType)) {
+        if (! $this->isObjectType($node, new ObjectType(TwigClass::TWIG_EXTENSION))) {
             return null;
         }
 
         $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker(
             $node,
-            'getFilters',
-            TwigClass::AS_TWIG_FILTER_ATTRIBUTE
+            'getFunctions',
+            TwigClass::AS_TWIG_FUNCTION_ATTRIBUTE
         );
 
-        if ($hasChanged) {
-            return $node;
+        if (! $hasChanged) {
+            return null;
         }
 
-        return null;
+        return $node;
     }
 }
