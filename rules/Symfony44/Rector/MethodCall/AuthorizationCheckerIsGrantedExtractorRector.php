@@ -110,7 +110,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isName($node->name, 'isGranted')) {
+        if (! $this->isName($node->name, 'isGranted')) {
             return null;
         }
 
@@ -177,7 +177,7 @@ CODE_SAMPLE
 
     private function processControllerMethods(MethodCall $methodCall): MethodCall|BooleanOr|null
     {
-        if ($this->nodeNameResolver->isName($methodCall->name, 'isGranted')) {
+        if ($this->isName($methodCall->name, 'isGranted')) {
             return $this->handleIsGranted($methodCall);
         }
 

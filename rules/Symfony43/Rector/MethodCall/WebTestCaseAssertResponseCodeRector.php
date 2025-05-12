@@ -131,7 +131,7 @@ CODE_SAMPLE
 
         $nestedMethodCall = $secondArg->value;
 
-        if (! $this->nodeNameResolver->isName($nestedMethodCall->name, 'getStatusCode')) {
+        if (! $this->isName($nestedMethodCall->name, 'getStatusCode')) {
             return null;
         }
 

@@ -140,7 +140,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($node->name, 'get');
+            return $this->isName($node->name, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -159,7 +159,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($methodCall->var, 'this')) {
+        if (! $this->isName($methodCall->var, 'this')) {
             return false;
         }
 
@@ -187,7 +187,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($node->name, 'getRequest');
+            return $this->isName($node->name, 'getRequest');
         });
     }
 

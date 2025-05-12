@@ -96,12 +96,12 @@ CODE_SAMPLE
 
             $returnedValue = $this->valueResolver->getValue($returnedExpr);
 
-            $className = $this->nodeNameResolver->getName($node);
+            $className = $this->getName($node);
             if (! is_string($className)) {
                 continue;
             }
 
-            $shortClassName = $this->nodeNameResolver->getShortName($className);
+            $shortClassName = $this->getShortName($className);
             if (\str_ends_with($shortClassName, 'Type')) {
                 $shortClassName = (string) Strings::before($shortClassName, 'Type');
             }

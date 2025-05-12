@@ -155,7 +155,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->nodeNameResolver->isNames($classMethod, ['getFunctions', 'getFilters']);
+        return ! $this->isNames($classMethod, ['getFunctions', 'getFilters']);
     }
 
     private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType, bool &$hasChanged): void

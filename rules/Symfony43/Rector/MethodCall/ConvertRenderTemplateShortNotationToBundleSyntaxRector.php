@@ -79,8 +79,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->nodeNameResolver->isName($node->name, 'render') &&
-            ! $this->nodeNameResolver->isName($node->name, 'renderView')) {
+        if (! $this->isName($node->name, 'render') &&
+            ! $this->isName($node->name, 'renderView')) {
             return null;
         }
 

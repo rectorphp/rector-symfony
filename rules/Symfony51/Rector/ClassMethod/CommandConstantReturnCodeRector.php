@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isName($node, 'execute')) {
+        if (! $this->isName($node, 'execute')) {
             return null;
         }
 
