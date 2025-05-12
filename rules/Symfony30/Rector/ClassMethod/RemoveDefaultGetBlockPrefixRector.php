@@ -96,7 +96,7 @@ CODE_SAMPLE
 
             $returnedValue = $this->valueResolver->getValue($returnedExpr);
 
-            $className = $this->nodeNameResolver->getName($node);
+            $className = $this->getName($node);
             if (! is_string($className)) {
                 continue;
             }

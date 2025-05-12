@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->nodeNameResolver->getName($node->name) !== 'container') {
+        if ($this->getName($node->name) !== 'container') {
             return null;
         }
 

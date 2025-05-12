@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeNameResolver->isName($node->name, 'addViolationAt')) {
+        if (! $this->isName($node->name, 'addViolationAt')) {
             return null;
         }
 

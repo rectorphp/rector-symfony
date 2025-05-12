@@ -99,7 +99,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): CallLike|null
     {
-        $methodCallName = $this->nodeNameResolver->getName($methodCall->name);
+        $methodCallName = $this->getName($methodCall->name);
         if (! is_string($methodCallName)) {
             return null;
         }
