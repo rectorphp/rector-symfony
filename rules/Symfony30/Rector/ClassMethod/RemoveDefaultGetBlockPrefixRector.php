@@ -101,7 +101,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $shortClassName = $this->getShortName($className);
+            $shortClassName = $this->nodeNameResolver->getShortName($className);
             if (\str_ends_with($shortClassName, 'Type')) {
                 $shortClassName = (string) Strings::before($shortClassName, 'Type');
             }

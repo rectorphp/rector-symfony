@@ -151,7 +151,7 @@ CODE_SAMPLE
     {
         $class->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
 
-        $classShortName = $this->getShortName($class);
+        $classShortName = $this->nodeNameResolver->getShortName($class);
 
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
