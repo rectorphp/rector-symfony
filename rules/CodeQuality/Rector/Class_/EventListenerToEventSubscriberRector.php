@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
@@ -42,6 +43,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly ClassNaming $classNaming
     ) {
         $this->eventNamesToClassConstants = [
             // kernel events
@@ -151,7 +153,7 @@ CODE_SAMPLE
     {
         $class->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
 
-        $classShortName = $this->nodeNameResolver->getShortName($class);
+        $classShortName = $this->classNaming->getShortName($class);
 
         // remove suffix
         $classShortName = Strings::replace($classShortName, self::LISTENER_MATCH_REGEX, '$1');
