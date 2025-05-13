@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://github.com/symfony/symfony-docs/issues/20553
  * @see https://github.com/symfony/symfony/pull/59340
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandRectorTest
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandInputAttributeRectorTest
  */
 final class InvokableCommandInputAttributeRector extends AbstractRector
 {
@@ -155,12 +155,26 @@ CODE_SAMPLE
         // 4. remove configure() method
         $this->removeConfigureClassMethod($node);
 
+
+
         // 5. decorate __invoke method with attributes
         $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
         $executeClassMethod->params = $invokeParams;
 
         // 6. remove parent class
         $node->extends = null;
+
+        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attr) {
+                if ($this->isName($attr->name, 'Override')) {
+                    unset($attrGroup->attrs[$attributeKey]);
+                }
+            }
+
+            if ($attrGroup->attrs === []) {
+                unset($executeClassMethod->attrGroups[$attrGroupKey]);
+            }
+        }
 
         // 7. replace input->getArgument() and input->getOption() calls with direct variable access
         $this->replaceInputArgumentOptionFetchWithVariables($executeClassMethod);
