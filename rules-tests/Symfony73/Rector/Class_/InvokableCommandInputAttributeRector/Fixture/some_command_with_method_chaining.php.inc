@@ -46,7 +46,7 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class SomeCommandWithMethodChaining
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument]
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', mode: InputArgument::REQUIRED, description: 'Argument description')]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
     $option): int
     {

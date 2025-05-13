@@ -83,7 +83,7 @@ use Symfony\Component\Console\Command\Option;
 final class SomeCommand
 {
     public function __invoke(
-        #[Argument]
+        #[Argument(name: 'argument', mode: Argument::REQUIRED, description: 'Argument description')]
         string $argument,
         #[Option]
         bool $option = false,
@@ -154,8 +154,6 @@ CODE_SAMPLE
 
         // 4. remove configure() method
         $this->removeConfigureClassMethod($node);
-
-
 
         // 5. decorate __invoke method with attributes
         $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
