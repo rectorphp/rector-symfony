@@ -10,6 +10,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -50,6 +51,12 @@ final readonly class CommandInvokeParamsFactory
             )));
 
             $argumentParam->type = new Identifier('string');
+
+            $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
+            if ($modeValue === null || $modeValue === 2) {
+                $argumentParam->type = new NullableType($argumentParam->type);
+            }
+
             // @todo fill type or default value
             // @todo default string, multiple values array
 
