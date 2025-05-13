@@ -56,7 +56,7 @@ The <info>%command.name%</info> command will do some
 TXT)]
 final class SomeCommand
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Command\Argument]
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
     $option): int
     {
