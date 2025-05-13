@@ -157,7 +157,7 @@ CODE_SAMPLE
 
         // 5. decorate __invoke method with attributes
         $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
-        $executeClassMethod->params = $invokeParams;
+        $executeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
 
         // 6. remove parent class
         $node->extends = null;
