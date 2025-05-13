@@ -48,7 +48,7 @@ final class SomeCommandWithMethodChaining
 {
     public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', mode: InputArgument::REQUIRED, description: 'Argument description')]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
-    $option): int
+    $option, OutputInterface $output): int
     {
         $someArgument = $argument;
         $someOption = $option;
