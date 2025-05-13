@@ -155,8 +155,6 @@ CODE_SAMPLE
         // 4. remove configure() method
         $this->removeConfigureClassMethod($node);
 
-
-
         // 5. decorate __invoke method with attributes
         $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
         $executeClassMethod->params = $invokeParams;
