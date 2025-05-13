@@ -51,7 +51,7 @@ final class SomeCommandWithSetHelp
         $this->setHelp('argument');
     }
 
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Command\Argument]
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
     $option): int
     {
