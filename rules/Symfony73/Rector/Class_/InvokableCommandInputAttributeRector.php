@@ -164,15 +164,15 @@ CODE_SAMPLE
         // 6. remove parent class
         $node->extends = null;
 
-        foreach ($executeClassMethod->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $key => $attr) {
+        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attr) {
                 if ($this->isName($attr->name, 'Override')) {
-                    unset($attrGroup->attrs[$key]);
+                    unset($attrGroup->attrs[$attributeKey]);
                 }
             }
 
             if ($attrGroup->attrs === []) {
-                unset($executeClassMethod->attrGroups[$key]);
+                unset($executeClassMethod->attrGroups[$attrGroupKey]);
             }
         }
 
