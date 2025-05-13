@@ -53,9 +53,7 @@ final class WithOverride
     {
         $someArgument = $argument;
         $someOption = $option;
-
         // ...
-
         return 1;
     }
 }
