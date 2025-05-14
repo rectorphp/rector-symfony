@@ -239,7 +239,7 @@ CODE_SAMPLE
 
     private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod): void
     {
-        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node): null|Variable|ClassConstFetch|ConstFetch {
+        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node): ?Variable {
             if (! $node instanceof MethodCall) {
                 return null;
             }
