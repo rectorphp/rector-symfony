@@ -4,31 +4,28 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttr
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-#[AsCommand(
-    name: 'app:hello',
-    description: 'Greet the user.',
-)]
-class NameFromConstant extends Command
+#[AsCommand(name: 'some_name')]
+final class SomeCommand extends Command
 {
-    private const string ARGUMENT_NAME = 'name';
-
-    #[\Override]
-    protected function configure(): void
+    public function configure()
     {
-        $this->addArgument(self::ARGUMENT_NAME, InputArgument::OPTIONAL, 'The name of the person to greet.');
+        $this->addArgument('argument', InputArgument::REQUIRED, 'Argument description');
+        $this->addOption('option', 'o', InputOption::VALUE_NONE, 'Option description');
     }
 
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $name = $input->getArgument(self::ARGUMENT_NAME);
-        $output->writeln("Hello {$name}!");
+        $someArgument = $input->getArgument('argument');
+        $someOption = $input->getOption('option');
 
-        return Command::SUCCESS;
+        // ...
+
+        return 1;
     }
 }
 
@@ -40,24 +37,24 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttr
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-#[AsCommand(
-    name: 'app:hello',
-    description: 'Greet the user.',
-)]
-class NameFromConstant
+#[AsCommand(name: 'some_name')]
+final class SomeCommand
 {
-    private const string ARGUMENT_NAME = 'name';
-
-    protected function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME, description: 'The name of the person to greet.')]
-    ?string $name, OutputInterface $output): int
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
+    string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
+    $option, OutputInterface $output): int
     {
-        $name = self::ARGUMENT_NAME;
-        $output->writeln("Hello {$name}!");
-        return Command::SUCCESS;
+        $someArgument = $argument;
+        $someOption = $option;
+
+        // ...
+
+        return 1;
     }
 }
 
