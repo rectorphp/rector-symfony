@@ -65,7 +65,6 @@ final readonly class CommandInvokeParamsFactory
                     new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT),
                     [
                         new Arg(value: $commandArgument->getName(), name: new Identifier('name')),
-                        new Arg(value: $commandArgument->getMode(), name: new Identifier('mode')),
                         new Arg(value: $commandArgument->getDescription(), name: new Identifier('description')),
                     ]
                 ),

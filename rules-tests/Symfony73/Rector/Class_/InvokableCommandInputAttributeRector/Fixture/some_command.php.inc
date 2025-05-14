@@ -45,7 +45,7 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class SomeCommand
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', mode: InputArgument::REQUIRED, description: 'Argument description')]
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
     string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
     $option, OutputInterface $output): int
     {
