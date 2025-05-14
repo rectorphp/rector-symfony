@@ -55,7 +55,7 @@ class NameFromConstant
     protected function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME, description: 'The name of the person to greet.')]
     ?string $name, OutputInterface $output): int
     {
-        $name = self::ARGUMENT_NAME;
+        $name = $name;
         $output->writeln("Hello {$name}!");
         return Command::SUCCESS;
     }
