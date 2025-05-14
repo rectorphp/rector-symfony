@@ -52,7 +52,7 @@ class NameFromConstant
 {
     private const string ARGUMENT_NAME = 'name';
 
-    protected function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME, description: 'The name of the person to greet.')]
+    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME, description: 'The name of the person to greet.')]
     ?string $name, OutputInterface $output): int
     {
         $name = $name;
