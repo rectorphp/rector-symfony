@@ -13,14 +13,14 @@ use Symfony\Component\Console\Input\InputOption;
 final class WithOverride extends Command
 {
     #[\Override]
-    public function configure()
+    protected function configure()
     {
         $this->addArgument('argument', InputArgument::REQUIRED, 'Argument description');
         $this->addOption('option', 'o', InputOption::VALUE_NONE, 'Option description');
     }
 
     #[\Override]
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $someArgument = $input->getArgument('argument');
         $someOption = $input->getOption('option');

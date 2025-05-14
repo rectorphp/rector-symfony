@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -42,7 +43,8 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
         private readonly AttributeFinder $attributeFinder,
         private readonly CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver,
         private readonly CommandInvokeParamsFactory $commandInvokeParamsFactory,
-        private readonly ValueResolver $valueResolver
+        private readonly ValueResolver $valueResolver,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 
@@ -147,6 +149,7 @@ CODE_SAMPLE
         }
 
         $executeClassMethod->name = new Identifier('__invoke');
+        $this->visibilityManipulator->makePublic($executeClassMethod);
 
         // 3. create arguments and options parameters
         // @todo

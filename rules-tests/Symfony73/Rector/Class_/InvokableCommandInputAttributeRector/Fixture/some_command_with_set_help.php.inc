@@ -12,14 +12,14 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class SomeCommandWithSetHelp extends Command
 {
-    public function configure()
+    protected function configure()
     {
         $this->setHelp('argument');
         $this->addArgument('argument', InputArgument::REQUIRED, 'Argument description');
         $this->addOption('option', 'o', InputOption::VALUE_NONE, 'Option description');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $someArgument = $input->getArgument('argument');
         $someOption = $input->getOption('option');
@@ -46,7 +46,7 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class SomeCommandWithSetHelp
 {
-    public function configure()
+    protected function configure()
     {
         $this->setHelp('argument');
     }
