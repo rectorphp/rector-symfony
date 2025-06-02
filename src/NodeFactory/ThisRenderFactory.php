@@ -108,7 +108,20 @@ final readonly class ThisRenderFactory
             return null;
         }
 
-        if ($return->expr instanceof Array_ && $return->expr->items !== []) {
+        if (! $return->expr instanceof Expr) {
+            return null;
+        }
+
+        $returnExprType = $this->nodeTypeResolver->getType($return->expr);
+
+        if ($return->expr instanceof Array_) {
+            $array = $return->expr;
+
+            // no point in returning empty items
+            if ($array->items === []) {
+                return null;
+            }
+
             return $return->expr;
         }
 
@@ -119,6 +132,10 @@ final readonly class ThisRenderFactory
         if ($return->expr instanceof FuncCall && $this->nodeNameResolver->isName($return->expr, 'compact')) {
             $compactFunCall = $return->expr;
             return $this->arrayFromCompactFactory->createArrayFromCompactFuncCall($compactFunCall);
+        }
+
+        if ($returnExprType->isArray()->yes()) {
+            return $return->expr;
         }
 
         return null;
