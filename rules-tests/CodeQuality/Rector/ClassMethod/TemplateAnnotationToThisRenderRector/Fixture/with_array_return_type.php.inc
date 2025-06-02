@@ -16,6 +16,16 @@ final class WithArrayReturnType extends AbstractController
     {
         return [];
     }
+
+    /**
+     * @Template("AppBundle:Module:next.html.twig")
+     *
+     * @return array{items: mixed[]}
+     */
+    public function list(): array
+    {
+        return ['items' => []];
+    }
 }
 
 ?>
@@ -35,6 +45,11 @@ final class WithArrayReturnType extends AbstractController
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:Module:index.html.twig');
+    }
+
+    public function list(): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('AppBundle:Module:next.html.twig', ['items' => []]);
     }
 }
 
