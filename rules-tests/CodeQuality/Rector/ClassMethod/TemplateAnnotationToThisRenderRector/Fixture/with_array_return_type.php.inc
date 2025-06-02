@@ -39,9 +39,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class WithArrayReturnType extends AbstractController
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:Module:index.html.twig');
