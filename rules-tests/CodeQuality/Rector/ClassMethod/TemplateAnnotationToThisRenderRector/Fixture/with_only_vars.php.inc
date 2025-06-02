@@ -14,6 +14,14 @@ class WithOnlyVarsController extends AbstractController
     public function index(Post $post)
     {
     }
+
+    /**
+     * @Template("@SensioBlog/post/show.html.twig", vars={"post"})
+     */
+    public function list(Post $post): array
+    {
+        return [];
+    }
 }
 
 ?>
@@ -31,6 +39,11 @@ class WithOnlyVarsController extends AbstractController
     public function index(Post $post): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('@App/with_only_vars/index.html.twig', ['post' => $post]);
+    }
+
+    public function list(Post $post): \Symfony\Component\HttpFoundation\Response
+    {
+        return $this->render('@SensioBlog/post/show.html.twig', ['post' => $post]);
     }
 }
 
