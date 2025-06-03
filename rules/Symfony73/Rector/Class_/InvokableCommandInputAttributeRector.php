@@ -259,7 +259,8 @@ CODE_SAMPLE
                 ->value;
 
             if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
-                return new Variable($this->valueResolver->getValue($firstArgValue));
+                $variableName = $this->valueResolver->getValue($firstArgValue);
+                return new Variable(str_replace('-', '_', $variableName));
             }
 
             if (! $firstArgValue instanceof String_) {
@@ -267,7 +268,8 @@ CODE_SAMPLE
                 throw new ShouldNotHappenException();
             }
 
-            return new Variable($firstArgValue->value);
+            $variableName = $firstArgValue->value;
+            return new Variable(str_replace('-', '_', $variableName));
         });
     }
 

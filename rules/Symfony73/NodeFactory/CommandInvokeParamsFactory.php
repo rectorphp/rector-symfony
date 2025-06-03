@@ -46,9 +46,10 @@ final readonly class CommandInvokeParamsFactory
         $argumentParams = [];
 
         foreach ($commandArguments as $commandArgument) {
-            $argumentParam = new Param(new Variable((string) $this->valueResolver->getValue(
-                $commandArgument->getName()
-            )));
+            $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
+            $variableName = str_replace('-', '_', $argumentName);
+
+            $argumentParam = new Param(new Variable($variableName));
 
             $argumentParam->type = new Identifier('string');
 
@@ -85,8 +86,10 @@ final readonly class CommandInvokeParamsFactory
         $optionParams = [];
 
         foreach ($commandOptions as $commandOption) {
-            $optionParam = new Param(new Variable($commandOption->getName()));
+            $optionName = $commandOption->getName();
+            $variableName = str_replace('-', '_', $optionName);
 
+            $optionParam = new Param(new Variable($variableName));
             // @todo fill type or default value
             $optionParam->attrGroups[] = new AttributeGroup([
                 new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION)),
