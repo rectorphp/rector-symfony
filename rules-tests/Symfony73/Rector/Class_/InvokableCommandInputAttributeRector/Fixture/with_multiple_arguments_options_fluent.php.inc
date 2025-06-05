@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'some_name')]
-final class SomeCommand extends Command
+final class WithMultipleArgumentsOptionsFluent extends Command
 {
     public function configure()
     {
@@ -49,7 +49,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(name: 'some_name')]
-final class SomeCommand
+final class WithMultipleArgumentsOptionsFluent
 {
     public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument1', description: 'Argument1 description')]
     string $argument1, #[\Symfony\Component\Console\Attribute\Argument(name: 'argument2', description: 'Argument2 description')]
