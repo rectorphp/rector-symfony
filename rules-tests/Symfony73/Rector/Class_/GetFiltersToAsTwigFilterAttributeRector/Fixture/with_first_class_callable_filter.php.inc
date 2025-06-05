@@ -29,7 +29,7 @@ use Twig\Extension\AbstractExtension;
 
 final class WithFirstClassCallableFilter extends AbstractExtension
 {
-    #[\Twig\Attribute\AsTwigFilter]
+    #[\Twig\Attribute\AsTwigFilter('some_filter')]
     public function someFilter($value)
     {
         return $value;

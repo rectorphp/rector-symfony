@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -75,6 +77,11 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                     continue;
                 }
 
+                $nameArg = $new->getArgs()[0];
+                if (!$nameArg->value instanceof String_) {
+                    continue;
+                }
+
                 $secondArg = $new->getArgs()[1];
 
                 if ($this->isLocalCallable($secondArg->value)) {
@@ -88,7 +95,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                         continue;
                     }
 
-                    $this->decorateMethodWithAttribute($localMethod, $attributeClass);
+                    $this->decorateMethodWithAttribute($localMethod, $attributeClass, $nameArg);
 
                     // remove old new fuction instance
                     unset($returnArray->items[$key]);
@@ -103,9 +110,9 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         return $hasChanged;
     }
 
-    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass): void
+    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $name): void
     {
-        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass))]);
+        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), [$name])]);
     }
 
     private function isLocalCallable(Expr $expr): bool

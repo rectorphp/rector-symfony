@@ -35,13 +35,13 @@ use Twig\Extension\AbstractExtension;
 
 final class SomeGetFunctions extends AbstractExtension
 {
-    #[\Twig\Attribute\AsTwigFunction]
+    #[\Twig\Attribute\AsTwigFunction('some_function')]
     public function someFunction($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction]
+    #[\Twig\Attribute\AsTwigFunction('another_function')]
     public function anotherFunction($value)
     {
         return $value;
