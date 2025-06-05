@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Symfony73\ValueObject\CommandArgument;
 use Rector\Symfony\Symfony73\ValueObject\CommandOption;
@@ -18,7 +19,8 @@ use Rector\Symfony\Symfony73\ValueObject\CommandOption;
 final readonly class CommandArgumentsAndOptionsResolver
 {
     public function __construct(
-        private ValueResolver $valueResolver
+        private ValueResolver $valueResolver,
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 
@@ -99,18 +101,30 @@ final readonly class CommandArgumentsAndOptionsResolver
      */
     private function findMethodCallsByName(ClassMethod $classMethod, string $desiredMethodName): array
     {
-        $nodeFinder = new NodeFinder();
+        $calls = [];
 
-        return $nodeFinder->find($classMethod, function (Node $node) use ($desiredMethodName): bool {
-            if (! $node instanceof MethodCall) {
-                return false;
-            }
+        $shouldReverse = false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            $classMethod, function (Node $node) use (&$calls, $desiredMethodName, &$shouldReverse) {
+                if (! $node instanceof MethodCall) {
+                    return null;
+                }
 
-            if (! $node->name instanceof Identifier) {
-                return false;
-            }
+                if (! $node->name instanceof Identifier) {
+                    return null;
+                }
 
-            return $node->name->toString() === $desiredMethodName;
-        });
+                if ($node->name->toString() === $desiredMethodName) {
+                    if ($node->var instanceof MethodCall) {
+                        $shouldReverse = true;
+                    }
+
+                    $calls[] = $node;
+                }
+
+                return null;
+            });
+
+        return $shouldReverse ? array_reverse($calls) : $calls;
     }
 }
