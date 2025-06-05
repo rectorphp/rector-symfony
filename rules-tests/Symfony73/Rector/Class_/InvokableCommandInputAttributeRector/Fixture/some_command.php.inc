@@ -46,7 +46,7 @@ use Symfony\Component\Console\Input\InputOption;
 final class SomeCommand
 {
     public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
-    string $argument, #[\Symfony\Component\Console\Attribute\Command\Option]
+    string $argument, #[\Symfony\Component\Console\Attribute\Option]
     $option, OutputInterface $output): int
     {
         $someArgument = $argument;
