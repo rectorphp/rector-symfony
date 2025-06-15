@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -105,7 +104,8 @@ final readonly class CommandArgumentsAndOptionsResolver
 
         $shouldReverse = false;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
-            $classMethod, function (Node $node) use (&$calls, $desiredMethodName, &$shouldReverse) {
+            $classMethod,
+            function (Node $node) use (&$calls, $desiredMethodName, &$shouldReverse): null {
                 if (! $node instanceof MethodCall) {
                     return null;
                 }
@@ -123,7 +123,8 @@ final readonly class CommandArgumentsAndOptionsResolver
                 }
 
                 return null;
-            });
+            }
+        );
 
         return $shouldReverse ? array_reverse($calls) : $calls;
     }

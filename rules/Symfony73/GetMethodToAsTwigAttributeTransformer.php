@@ -78,7 +78,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 }
 
                 $nameArg = $new->getArgs()[0];
-                if (!$nameArg->value instanceof String_) {
+                if (! $nameArg->value instanceof String_) {
                     continue;
                 }
 
@@ -110,9 +110,9 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         return $hasChanged;
     }
 
-    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $name): void
+    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $arg): void
     {
-        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), [$name])]);
+        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), [$arg])]);
     }
 
     private function isLocalCallable(Expr $expr): bool

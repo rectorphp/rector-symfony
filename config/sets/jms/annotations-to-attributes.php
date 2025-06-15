@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Symfony\JMS\Rector\AccessTypeAnnotationToAttributeRector;
 
 /**
  * @see https://github.com/schmittjoh/serializer/pull/1320
@@ -15,7 +16,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
         new AnnotationToAttribute('JMS\Serializer\Annotation\Accessor'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\AccessorOrder'),
-        new AnnotationToAttribute('JMS\Serializer\Annotation\AccessType'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\Discriminator'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\Exclude'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\ExclusionPolicy'),
@@ -45,4 +45,6 @@ return static function (RectorConfig $rectorConfig): void {
         new AnnotationToAttribute('JMS\Serializer\Annotation\XmlRoot'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\XmlValue'),
     ]);
+
+    $rectorConfig->rules([AccessTypeAnnotationToAttributeRector::class]);
 };
