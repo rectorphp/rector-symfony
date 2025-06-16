@@ -22,7 +22,7 @@ namespace Rector\Symfony\Tests\JMS\Rector\Class_\AccessTypeAnnotationToAttribute
 
 use JMS\Serializer\Annotation as Serializer;
 
-#[Serializer\AccessType(values: ['public_method'])]
+#[Serializer\AccessType(type: 'public_method')]
 final class AnnotationTypes
 {
     public function run(): void
