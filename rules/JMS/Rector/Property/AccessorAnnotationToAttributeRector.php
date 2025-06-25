@@ -87,9 +87,9 @@ CODE_SAMPLE
 
             $value = $this->valueResolver->getValue($attributeArg->value);
 
-            if (str_starts_with($value, 'get')) {
+            if (str_starts_with((string) $value, 'get')) {
                 $attributeArg->name = new Identifier('getter');
-            } elseif (str_starts_with($value, 'set')) {
+            } elseif (str_starts_with((string) $value, 'set')) {
                 $attributeArg->name = new Identifier('setter');
             } else {
                 // skip, not getter/setter
