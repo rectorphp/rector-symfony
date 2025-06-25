@@ -82,6 +82,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+
         // there cannot be any custom message
         $args = $node->getArgs();
         if (count($args) !== 3) {
