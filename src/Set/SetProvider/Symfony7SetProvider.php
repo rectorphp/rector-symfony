@@ -94,6 +94,12 @@ final class Symfony7SetProvider implements SetProviderInterface
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/security-core',
+                '7.3',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony73/symfony73-security-core.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/twig-bundle',
                 '7.3',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony73/symfony73-twig-bundle.php'
