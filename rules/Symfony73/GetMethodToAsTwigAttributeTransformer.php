@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 
@@ -29,7 +30,8 @@ final readonly class GetMethodToAsTwigAttributeTransformer
     public function __construct(
         private LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher,
         private ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private VisibilityManipulator $visibilityManipulator
     ) {
     }
 
@@ -96,6 +98,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                     }
 
                     $this->decorateMethodWithAttribute($localMethod, $attributeClass, $nameArg);
+                    $this->visibilityManipulator->makePublic($localMethod);
 
                     // remove old new fuction instance
                     unset($returnArray->items[$key]);

@@ -11,6 +11,7 @@ final class SomeGetFunctions extends AbstractExtension
         return [
             new \Twig\TwigFunction('some_function', [$this, 'someFunction']),
             new \Twig\TwigFunction('another_function', $this->anotherFunction(...)),
+            new \Twig\TwigFunction('third_function', $this->thirdFunction(...)),
         ];
     }
 
@@ -19,7 +20,12 @@ final class SomeGetFunctions extends AbstractExtension
         return $value;
     }
 
-    public function anotherFunction($value)
+    protected function anotherFunction($value)
+    {
+        return $value;
+    }
+
+    private function thirdFunction($value)
     {
         return $value;
     }
@@ -43,6 +49,12 @@ final class SomeGetFunctions extends AbstractExtension
 
     #[\Twig\Attribute\AsTwigFunction('another_function')]
     public function anotherFunction($value)
+    {
+        return $value;
+    }
+
+    #[\Twig\Attribute\AsTwigFunction('third_function')]
+    public function thirdFunction($value)
     {
         return $value;
     }
