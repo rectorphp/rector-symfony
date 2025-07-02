@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
@@ -39,7 +40,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 $constraint = new NotBlank(message: 'This field should not be blank.');
 CODE_SAMPLE
-                )]);
+                )]
+        );
     }
 
     public function getNodeTypes(): array
@@ -67,7 +69,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (0 === count($node->args) || !$node->args[0]->value instanceof Array_) {
+        if (
+            0 === count($node->args) ||
+            !$node->args[0] instanceof Arg ||
+            !$node->args[0]->value instanceof Array_
+        ) {
             return null;
         }
 
