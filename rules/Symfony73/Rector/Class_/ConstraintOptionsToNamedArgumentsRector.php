@@ -77,6 +77,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $argName = $node->args[0]->name;
+        if (null !== $argName && 'options' !== $argName->name) {
+            return null;
+        }
+
         $array = $node->args[0]->value;
         $namedArgs = [];
 
