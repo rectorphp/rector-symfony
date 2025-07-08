@@ -51,34 +51,34 @@ CODE_SAMPLE
 
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof New_) {
+        if (! $node instanceof New_) {
             return null;
         }
 
         // Match classes starting with Symfony\Component\Validator\Constraints\
-        if (!$node->class instanceof FullyQualified && !$node->class instanceof Name) {
+        if (! $node->class instanceof FullyQualified && ! $node->class instanceof Name) {
             return null;
         }
 
         $className = $this->getName($node->class);
-        if (!is_string($className)) {
+        if (! is_string($className)) {
             return null;
         }
 
-        if (!str_starts_with($className, 'Symfony\Component\Validator\Constraints\\')) {
+        if (! str_starts_with($className, 'Symfony\Component\Validator\Constraints\\')) {
             return null;
         }
 
         if (
-            0 === count($node->args) ||
-            !$node->args[0] instanceof Arg ||
-            !$node->args[0]->value instanceof Array_
+            count($node->args) === 0 ||
+            ! $node->args[0] instanceof Arg ||
+            ! $node->args[0]->value instanceof Array_
         ) {
             return null;
         }
 
         $argName = $node->args[0]->name;
-        if (null !== $argName && 'options' !== $argName->name) {
+        if ($argName !== null && $argName->name !== 'options') {
             return null;
         }
 
@@ -86,12 +86,12 @@ CODE_SAMPLE
         $namedArgs = [];
 
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem || null === $item->key) {
+            if (! $item instanceof ArrayItem || $item->key === null) {
                 continue;
             }
 
             $keyValue = $this->valueResolver->getValue($item->key);
-            if (!is_string($keyValue)) {
+            if (! is_string($keyValue)) {
                 continue;
             }
 
