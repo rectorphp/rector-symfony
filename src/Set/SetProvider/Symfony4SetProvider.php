@@ -324,6 +324,13 @@ final class Symfony4SetProvider implements SetProviderInterface
                 '4.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44.php'
             ),
+
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/web-link',
+                '4.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony4/symfony44/symfony44-web-link.php'
+            ),
         ];
     }
 }
