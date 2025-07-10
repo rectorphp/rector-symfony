@@ -170,6 +170,11 @@ final class SymfonySetList
     /**
      * @var string
      */
+    final public const SYMFONY_74 = __DIR__ . '/../../config/sets/symfony/symfony7/symfony74.php';
+
+    /**
+     * @var string
+     */
     final public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../config/sets/symfony/symfony-code-quality.php';
 
     /**
