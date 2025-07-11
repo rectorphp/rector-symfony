@@ -111,11 +111,6 @@ CODE_SAMPLE
             $namedArgs[] = $arg;
         }
 
-        // skip same result
-        if ($this->nodeComparator->areNodesEqual($node->args, $namedArgs)) {
-            return null;
-        }
-
         $node->args = $namedArgs;
 
         return $node;
