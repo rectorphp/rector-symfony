@@ -94,12 +94,7 @@ class NestedConstraintForm extends AbstractType
                 'constraints' => [
                     new Count(min: 3, max: 30),
                     new All([
-                        new Length(
-                            min: 2,
-                            max: 50,
-                            minMessage: 'Your foo must be at least {{ limit }} characters long',
-                            maxMessage: 'Your foo cannot be longer than {{ limit }} characters',
-                        ),
+                        new Length(min: 2, max: 50, minMessage: 'Your foo must be at least {{ limit }} characters long', maxMessage: 'Your foo cannot be longer than {{ limit }} characters'),
                         new NotBlank(allowNull: false),
                         new Regex(pattern: '/\d/', message: 'Your foo cannot contain a number', match: false),
                     ]),
