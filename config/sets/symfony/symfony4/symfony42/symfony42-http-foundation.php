@@ -34,5 +34,34 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             'lax'
         ),
+
+        new ReplaceArgumentDefaultValue(
+            'Symfony\Component\HttpFoundation\Cookie',
+            '__construct',
+            8,
+            'none',
+            'Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE'
+        ),
+        new ReplaceArgumentDefaultValue(
+            'Symfony\Component\HttpFoundation\Cookie',
+            'create',
+            8,
+            'none',
+            'Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE'
+        ),
+        new ReplaceArgumentDefaultValue(
+            'Symfony\Component\HttpFoundation\Cookie',
+            'create',
+            8,
+            'lax',
+            'Symfony\Component\HttpFoundation\Cookie::SAMESITE_LAX'
+        ),
+        new ReplaceArgumentDefaultValue(
+            'Symfony\Component\HttpFoundation\Cookie',
+            'create',
+            8,
+            'strict',
+            'Symfony\Component\HttpFoundation\Cookie::SAMESITE_STRICT'
+        ),
     ]);
 };
