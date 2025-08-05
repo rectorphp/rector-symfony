@@ -107,6 +107,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if (count($node->getArgs()) > 1) {
+                return null;
+            }
+
             // is autoconfigureable tag?
             $firstArg = $node->getArgs()[0];
 
