@@ -4,5 +4,5 @@ namespace Rector\Symfony\Tests\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRe
 
 function constraintUrlOptionRector()
 {
-    $containt = new Url(['checkDNS' => true]);
+    $constraint = new Url(['checkDNS' => true]);
 }

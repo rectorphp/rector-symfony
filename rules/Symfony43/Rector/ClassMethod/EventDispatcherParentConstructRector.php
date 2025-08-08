@@ -109,7 +109,7 @@ CODE_SAMPLE
     }
 
     /**
-     * Looks for "parent::<methodName>
+     * Looks for "parent::<methodName>"
      */
     private function hasParentCallOfMethod(ClassMethod $classMethod, string $method): bool
     {

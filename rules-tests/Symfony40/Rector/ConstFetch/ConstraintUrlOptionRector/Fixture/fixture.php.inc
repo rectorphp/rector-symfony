@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints\Url;
 
 function constraintUrlOptionRector()
 {
-    $containt = new Url(['checkDNS' => true]);
+    $constraint = new Url(['checkDNS' => true]);
 }
 
 ?>
@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints\Url;
 
 function constraintUrlOptionRector()
 {
-    $containt = new Url(['checkDNS' => \Symfony\Component\Validator\Constraints\Url::CHECK_DNS_TYPE_ANY]);
+    $constraint = new Url(['checkDNS' => \Symfony\Component\Validator\Constraints\Url::CHECK_DNS_TYPE_ANY]);
 }
 
 ?>

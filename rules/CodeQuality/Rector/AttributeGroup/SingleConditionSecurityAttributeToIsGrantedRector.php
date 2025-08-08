@@ -32,7 +32,7 @@ final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRe
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Narrow #[Security] attribute with inner sigle "is_granted/has_role" condition string to #[IsGranted] attribute',
+            'Narrow #[Security] attribute with inner single "is_granted/has_role" condition string to #[IsGranted] attribute',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

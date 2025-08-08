@@ -40,8 +40,8 @@ final readonly class FormInstanceToFormClassConstFetchConverter
             return null;
         }
 
-        // better skip and ahndle manualyl
-        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParmaeters($argValue)) {
+        // better skip and handle manually
+        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParameters($argValue)) {
             return null;
         }
 
@@ -67,7 +67,7 @@ final readonly class FormInstanceToFormClassConstFetchConverter
         return $methodCall;
     }
 
-    private function isVariableOfTypeWithRequiredConstructorParmaeters(Variable $variable): bool
+    private function isVariableOfTypeWithRequiredConstructorParameters(Variable $variable): bool
     {
         // if form type is object with constructor args, handle manually
         $variableType = $this->nodeTypeResolver->getType($variable);
