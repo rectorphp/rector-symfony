@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReplaceDepricatedInterfacesSerializer implements DenormalizerInterface, NormalizerInterface, ContextAwareNormalizerInterface, ContextAwareDenormalizerInterface
+class ReplaceDeprecatedInterfacesSerializer implements DenormalizerInterface, NormalizerInterface, ContextAwareNormalizerInterface, ContextAwareDenormalizerInterface
 {
 }
 
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReplaceDepricatedInterfacesSerializer implements DenormalizerInterface, NormalizerInterface
+class ReplaceDeprecatedInterfacesSerializer implements DenormalizerInterface, NormalizerInterface
 {
 }
 

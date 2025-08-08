@@ -30,15 +30,15 @@ final readonly class CommandConstructorDecorator
             return;
         }
 
-        $constuctClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (! $constuctClassMethod instanceof ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (! $constructClassMethod instanceof ClassMethod) {
             return;
         }
 
         // empty stmts? add parent::__construct() to setup command
-        if ((array) $constuctClassMethod->stmts === []) {
+        if ((array) $constructClassMethod->stmts === []) {
             $parentConstructStaticCall = new StaticCall(new Name('parent'), '__construct');
-            $constuctClassMethod->stmts[] = new Expression($parentConstructStaticCall);
+            $constructClassMethod->stmts[] = new Expression($parentConstructStaticCall);
         }
     }
 }

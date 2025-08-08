@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceTo
 
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-abstract class OnlyRemoveInterfaceFromAbstactClass implements MessageHandlerInterface
+abstract class OnlyRemoveInterfaceFromAbstractClass implements MessageHandlerInterface
 {
 }
 
@@ -16,7 +16,7 @@ namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceTo
 
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-abstract class OnlyRemoveInterfaceFromAbstactClass
+abstract class OnlyRemoveInterfaceFromAbstractClass
 {
 }
 

@@ -7,10 +7,10 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 function stringToArgumentArray2()
 {
-    $procesHelper = new ProcessHelper();
+    $processHelper = new ProcessHelper();
     $output = new ConsoleOutput();
 
-    $procesHelper->run($output, 'ls -l');
+    $processHelper->run($output, 'ls -l');
 }
 
 ?>
@@ -24,10 +24,10 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 function stringToArgumentArray2()
 {
-    $procesHelper = new ProcessHelper();
+    $processHelper = new ProcessHelper();
     $output = new ConsoleOutput();
 
-    $procesHelper->run($output, ['ls', '-l']);
+    $processHelper->run($output, ['ls', '-l']);
 }
 
 ?>

@@ -6,11 +6,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {
-    public function run(EventDispatcherInterface $eventDisptacher)
+    public function run(EventDispatcherInterface $eventDispatcher)
     {
-        $eventDisptacher->dispatch('event_name', new Event());
+        $eventDispatcher->dispatch('event_name', new Event());
 
-        $eventDisptacher->dispatch(new Event(), 'event_name');
+        $eventDispatcher->dispatch(new Event(), 'event_name');
     }
 }
 
@@ -24,11 +24,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {
-    public function run(EventDispatcherInterface $eventDisptacher)
+    public function run(EventDispatcherInterface $eventDispatcher)
     {
-        $eventDisptacher->dispatch(new Event(), 'event_name');
+        $eventDispatcher->dispatch(new Event(), 'event_name');
 
-        $eventDisptacher->dispatch(new Event(), 'event_name');
+        $eventDispatcher->dispatch(new Event(), 'event_name');
     }
 }
 

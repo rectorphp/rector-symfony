@@ -2,7 +2,7 @@
 
 use Symfony\Component\Form\FormBuilderInterface;
 
-trait FormTraitDataMappter
+trait FormTraitDataMapper
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

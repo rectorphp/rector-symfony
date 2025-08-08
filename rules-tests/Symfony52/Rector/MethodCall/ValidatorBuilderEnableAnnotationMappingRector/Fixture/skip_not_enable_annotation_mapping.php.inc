@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Symfony52\Rector\MethodCall\ValidatorBuilderEnabl
 
 use Symfony\Component\Validator\ValidatorBuilder;
 
-class SkipNotEnableAnnotatinoMapping
+class SkipNotEnableAnnotationMapping
 {
     public function run(ValidatorBuilder $builder)
     {
