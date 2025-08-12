@@ -6,10 +6,11 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -79,14 +80,14 @@ CODE_SAMPLE
         }
 
         $argName = $node->args[0]->name;
-        if ($argName !== null && $argName->name !== 'options') {
+        if ($argName instanceof Identifier && $argName->name !== 'options') {
             return null;
         }
 
         $array = $node->args[0]->value;
         $namedArgs = [];
 
-        foreach ($array->items as $key => $item) {
+        foreach ($array->items as $item) {
             if (! $item instanceof ArrayItem) {
                 continue;
             }
@@ -105,8 +106,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            $arg = new Node\Arg($item->value);
-            $arg->name = new Node\Identifier($keyValue);
+            $arg = new Arg($item->value);
+            $arg->name = new Identifier($keyValue);
 
             $namedArgs[] = $arg;
         }
