@@ -129,6 +129,12 @@ final class Symfony7SetProvider implements SetProviderInterface
                 '7.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony74/symfony74-framework-bundle.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/routing',
+                '7.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony74/symfony74-routing.php'
+            ),
         ];
     }
 }
