@@ -67,7 +67,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add config builder classes', [
+        return new RuleDefinition('Convert PHP fluent configs to Symfony 5.3 builder classes with method API', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -126,10 +126,8 @@ CODE_SAMPLE
 
         $configClass = self::EXTENSION_KEY_TO_CLASS_MAP[$extensionKeyAndConfiguration->getKey()] ?? null;
         if ($configClass === null) {
-            throw new NotImplementedYetException(sprintf(
-                'The extensions "%s" is not supported yet. Check the rule and add keyword.',
-                $extensionKeyAndConfiguration->getKey()
-            ));
+            // better return null, to avoid failure on 3rd party extension that do not have a config class
+            return null;
         }
 
         $configVariable = $this->createConfigVariable($configClass);
