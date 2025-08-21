@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\ConfigArrayHandler;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\Symfony\Configs\Enum\GroupingMethods;
@@ -24,11 +26,16 @@ final readonly class NestedConfigCallsFactory
      * @param mixed[] $values
      * @return array<Expression<MethodCall>>
      */
-    public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
-    {
+    public function create(
+        array $values,
+        Variable|MethodCall $configCaller,
+        string $mainMethodName,
+        bool $nextKeyArgument,
+        string|int|null $nextKey = null
+    ): array {
         $methodCallStmts = [];
 
-        foreach ($values as $value) {
+        foreach ($values as $key => $value) {
             if (is_array($value)) {
                 // doctrine
                 foreach (GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
@@ -52,8 +59,11 @@ final readonly class NestedConfigCallsFactory
                 }
 
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
-                $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
+                if ($key === 0 && $nextKeyArgument && is_string($nextKey)) {
+                    $mainMethodCall->args[] = new Arg(new String_($nextKey));
+                }
 
+                $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
                 $methodCallStmts[] = new Expression($mainMethodCall);
             }
         }

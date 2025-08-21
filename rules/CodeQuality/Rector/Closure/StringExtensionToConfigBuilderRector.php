@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Exception\NotImplementedYetException;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
@@ -152,13 +151,22 @@ CODE_SAMPLE
         foreach ($configurationValues as $key => $value) {
             $splitMany = false;
             $nested = false;
+            $nextKeyArgument = false;
 
-            // doctrine
             if (in_array($key, [DoctrineConfigKey::DBAL, DoctrineConfigKey::ORM], true)) {
+                // doctrine
                 $methodCallName = $key;
                 $splitMany = true;
                 $nested = true;
+
+            } elseif ($key === 'handlers') {
+                // monolog
+                $methodCallName = 'handler';
+                $splitMany = true;
+                $nextKeyArgument = true;
+
             } elseif ($key === SecurityConfigKey::PROVIDERS) {
+                // symfony security
                 $methodCallName = SecurityConfigKey::PROVIDER;
                 $splitMany = true;
             } elseif ($key === SecurityConfigKey::FIREWALLS) {
@@ -210,7 +218,9 @@ CODE_SAMPLE
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
                         [$itemConfiguration],
                         $currentConfigCaller,
-                        $methodCallName
+                        $methodCallName,
+                        $nextKeyArgument,
+                        $itemName
                     );
 
                     $methodCallStmts = array_merge($methodCallStmts, $nextMethodCallExpressions);
@@ -227,7 +237,9 @@ CODE_SAMPLE
                     $simpleMethodCallStmts = $this->nestedConfigCallsFactory->create(
                         [$value],
                         $configVariable,
-                        $simpleMethodName
+                        $simpleMethodName,
+                        false,
+                        null
                     );
 
                     $methodCallStmts = array_merge($methodCallStmts, $simpleMethodCallStmts);
