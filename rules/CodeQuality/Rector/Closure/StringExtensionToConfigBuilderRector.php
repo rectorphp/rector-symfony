@@ -199,6 +199,7 @@ CODE_SAMPLE
                 if (! is_array($value)) {
                     return null;
                 }
+
                 foreach ($value as $itemName => $itemConfiguration) {
                     if ($nested && is_array($itemConfiguration)) {
                         $methodCallName = $itemName;

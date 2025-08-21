@@ -17,6 +17,14 @@ use Webmozart\Assert\Assert;
 
 final readonly class NestedConfigCallsFactory
 {
+    /**
+     * @var array<string, string>
+     */
+    private const METHOD_RENAMES = [
+        // monolog
+        'excludedHttpCodes' => 'excludedHttpCode',
+    ];
+
     public function __construct(
         private NodeFactory $nodeFactory
     ) {
@@ -77,14 +85,17 @@ final readonly class NestedConfigCallsFactory
     private function createMainMethodCall(array $value, MethodCall $mainMethodCall): MethodCall
     {
         foreach ($value as $methodName => $parameters) {
+            Assert::string($methodName);
+
             // security
             if ($methodName === SecurityConfigKey::ROLE) {
                 $methodName = SecurityConfigKey::ROLES;
                 $parameters = [$parameters];
             } else {
-                Assert::string($methodName);
                 $methodName = StringUtils::underscoreToCamelCase($methodName);
             }
+
+            $methodName = self::METHOD_RENAMES[$methodName] ?? $methodName;
 
             if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
                 $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
