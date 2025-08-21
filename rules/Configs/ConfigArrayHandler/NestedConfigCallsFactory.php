@@ -23,6 +23,9 @@ final readonly class NestedConfigCallsFactory
     private const METHOD_RENAMES = [
         // monolog
         'excludedHttpCodes' => 'excludedHttpCode',
+        // doctrine
+        'result_cache_driver' => 'resultCacheDriver',
+        'query_cache_driver' => 'queryCacheDriver',
     ];
 
     public function __construct(
@@ -65,6 +68,8 @@ final readonly class NestedConfigCallsFactory
                         continue 2;
                     }
                 }
+
+                $mainMethodName = self::METHOD_RENAMES[$mainMethodName] ?? $mainMethodName;
 
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
                 if ($key === 0 && $nextKeyArgument && is_string($nextKey)) {

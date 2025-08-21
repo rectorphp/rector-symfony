@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (\Symfony\Config\DoctrineConfig $doctrineConfig): void {
     $doctrineConfig->orm()->entityManager('default')->queryCacheDriver()->type('pool')->pool('pool_name_one');
-    $doctrineConfig->orm()->entityManager('default')->queryCacheDriver()->type('pool')->pool('pool_name_two');
+    $doctrineConfig->orm()->entityManager('default')->resultCacheDriver()->type('pool')->pool('pool_name_two');
 };
 
 ?>

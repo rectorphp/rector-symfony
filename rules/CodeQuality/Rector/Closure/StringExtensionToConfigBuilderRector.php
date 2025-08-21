@@ -213,23 +213,27 @@ CODE_SAMPLE
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
 
                         // doctrine: implicit default connection now must be explicit
-                        if ($currentConfigCaller instanceof MethodCall && $this->isName(
-                            $currentConfigCaller->name,
-                            'dbal'
-                        )) {
-                            // this option requires call on connection(...)
-                            if (in_array($itemName, ['dbnameSuffix'], true)) {
-                                $currentConfigCaller = new MethodCall(
-                                    $currentConfigCaller,
-                                    'connection',
-                                    $this->nodeFactory->createArgs(['default'])
-                                );
-                            }
+                        // this option requires call on connection(...)
+                        if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'dbal') && $itemName === 'dbnameSuffix') {
+                            $currentConfigCaller = new MethodCall(
+                                $currentConfigCaller,
+                                'connection',
+                                $this->nodeFactory->createArgs(['default'])
+                            );
                         }
 
                         $methodCall = new MethodCall($currentConfigCaller, $itemName, $args);
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
+                    }
+
+                    if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'orm') && in_array($itemName, ['query_cache_driver', 'result_cache_driver'], true)) {
+                        // implicit entityManagerDefault(...)
+                        $currentConfigCaller = new MethodCall(
+                            $currentConfigCaller,
+                            'entityManager',
+                            $this->nodeFactory->createArgs(['default'])
+                        );
                     }
 
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
