@@ -214,7 +214,10 @@ CODE_SAMPLE
 
                         // doctrine: implicit default connection now must be explicit
                         // this option requires call on connection(...)
-                        if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'dbal') && $itemName === 'dbnameSuffix') {
+                        if ($currentConfigCaller instanceof MethodCall && $this->isName(
+                            $currentConfigCaller->name,
+                            'dbal'
+                        ) && $itemName === 'dbnameSuffix') {
                             $currentConfigCaller = new MethodCall(
                                 $currentConfigCaller,
                                 'connection',
@@ -227,7 +230,14 @@ CODE_SAMPLE
                         continue;
                     }
 
-                    if ($currentConfigCaller instanceof MethodCall && $this->isName($currentConfigCaller->name, 'orm') && in_array($itemName, ['query_cache_driver', 'result_cache_driver'], true)) {
+                    if ($currentConfigCaller instanceof MethodCall && $this->isName(
+                        $currentConfigCaller->name,
+                        'orm'
+                    ) && in_array(
+                        $itemName,
+                        ['query_cache_driver', 'result_cache_driver'],
+                        true
+                    )) {
                         // implicit entityManagerDefault(...)
                         $currentConfigCaller = new MethodCall(
                             $currentConfigCaller,
