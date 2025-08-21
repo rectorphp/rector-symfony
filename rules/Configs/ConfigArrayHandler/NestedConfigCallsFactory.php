@@ -56,7 +56,6 @@ final readonly class NestedConfigCallsFactory
                             $connectionArgs = $this->nodeFactory->createArgs([$connectionName]);
 
                             $connectionMethodCall = new MethodCall($configCaller, $splitMethodName, $connectionArgs);
-
                             $connectionMethodCall = $this->createMainMethodCall(
                                 $connectionConfiguration,
                                 $connectionMethodCall
@@ -102,7 +101,15 @@ final readonly class NestedConfigCallsFactory
 
             $methodName = self::METHOD_RENAMES[$methodName] ?? $methodName;
 
-            if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
+            // special case for dbal()->connection()
+            if ($methodName === 'mappingTypes') {
+                foreach ($parameters as $name => $type) {
+                    $args = $this->nodeFactory->createArgs([$name, $type]);
+                    $mainMethodCall = new MethodCall($mainMethodCall, 'mappingType', $args);
+                }
+
+                continue;
+            } elseif (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
                 $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
 
                 foreach ($parameters as $splitName => $splitParameters) {
