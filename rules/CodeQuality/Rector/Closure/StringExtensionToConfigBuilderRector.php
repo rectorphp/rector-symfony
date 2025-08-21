@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Exception\NotImplementedYetException;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
@@ -67,7 +66,7 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add config builder classes', [
+        return new RuleDefinition('Convert PHP fluent configs to Symfony 5.3 builder classes with method API', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -126,10 +125,8 @@ CODE_SAMPLE
 
         $configClass = self::EXTENSION_KEY_TO_CLASS_MAP[$extensionKeyAndConfiguration->getKey()] ?? null;
         if ($configClass === null) {
-            throw new NotImplementedYetException(sprintf(
-                'The extensions "%s" is not supported yet. Check the rule and add keyword.',
-                $extensionKeyAndConfiguration->getKey()
-            ));
+            // better return null, to avoid failure on 3rd party extension that do not have a config class
+            return null;
         }
 
         $configVariable = $this->createConfigVariable($configClass);
@@ -154,13 +151,22 @@ CODE_SAMPLE
         foreach ($configurationValues as $key => $value) {
             $splitMany = false;
             $nested = false;
+            $nextKeyArgument = false;
 
-            // doctrine
             if (in_array($key, [DoctrineConfigKey::DBAL, DoctrineConfigKey::ORM], true)) {
+                // doctrine
                 $methodCallName = $key;
                 $splitMany = true;
                 $nested = true;
+
+            } elseif ($key === 'handlers') {
+                // monolog
+                $methodCallName = 'handler';
+                $splitMany = true;
+                $nextKeyArgument = true;
+
             } elseif ($key === SecurityConfigKey::PROVIDERS) {
+                // symfony security
                 $methodCallName = SecurityConfigKey::PROVIDER;
                 $splitMany = true;
             } elseif ($key === SecurityConfigKey::FIREWALLS) {
@@ -173,6 +179,7 @@ CODE_SAMPLE
                 $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
 
+            // security
             if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], true)) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
 
@@ -193,6 +200,7 @@ CODE_SAMPLE
                 if (! is_array($value)) {
                     return null;
                 }
+
                 foreach ($value as $itemName => $itemConfiguration) {
                     if ($nested && is_array($itemConfiguration)) {
                         $methodCallName = $itemName;
@@ -204,6 +212,21 @@ CODE_SAMPLE
 
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
 
+                        // doctrine: implicit default connection now must be explicit
+                        if ($currentConfigCaller instanceof MethodCall && $this->isName(
+                            $currentConfigCaller->name,
+                            'dbal'
+                        )) {
+                            // this option requires call on connection(...)
+                            if (in_array($itemName, ['dbnameSuffix'], true)) {
+                                $currentConfigCaller = new MethodCall(
+                                    $currentConfigCaller,
+                                    'connection',
+                                    $this->nodeFactory->createArgs(['default'])
+                                );
+                            }
+                        }
+
                         $methodCall = new MethodCall($currentConfigCaller, $itemName, $args);
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
@@ -212,7 +235,9 @@ CODE_SAMPLE
                     $nextMethodCallExpressions = $this->nestedConfigCallsFactory->create(
                         [$itemConfiguration],
                         $currentConfigCaller,
-                        $methodCallName
+                        $methodCallName,
+                        $nextKeyArgument,
+                        $itemName
                     );
 
                     $methodCallStmts = array_merge($methodCallStmts, $nextMethodCallExpressions);
@@ -229,7 +254,8 @@ CODE_SAMPLE
                     $simpleMethodCallStmts = $this->nestedConfigCallsFactory->create(
                         [$value],
                         $configVariable,
-                        $simpleMethodName
+                        $simpleMethodName,
+                        false,
                     );
 
                     $methodCallStmts = array_merge($methodCallStmts, $simpleMethodCallStmts);

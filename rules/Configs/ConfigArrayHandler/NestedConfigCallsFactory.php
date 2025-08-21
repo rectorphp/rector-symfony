@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Configs\ConfigArrayHandler;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\Symfony\Configs\Enum\GroupingMethods;
@@ -15,6 +17,14 @@ use Webmozart\Assert\Assert;
 
 final readonly class NestedConfigCallsFactory
 {
+    /**
+     * @var array<string, string>
+     */
+    private const METHOD_RENAMES = [
+        // monolog
+        'excludedHttpCodes' => 'excludedHttpCode',
+    ];
+
     public function __construct(
         private NodeFactory $nodeFactory
     ) {
@@ -24,11 +34,16 @@ final readonly class NestedConfigCallsFactory
      * @param mixed[] $values
      * @return array<Expression<MethodCall>>
      */
-    public function create(array $values, Variable|MethodCall $configCaller, string $mainMethodName): array
-    {
+    public function create(
+        array $values,
+        Variable|MethodCall $configCaller,
+        string $mainMethodName,
+        bool $nextKeyArgument,
+        string|int|null $nextKey = null
+    ): array {
         $methodCallStmts = [];
 
-        foreach ($values as $value) {
+        foreach ($values as $key => $value) {
             if (is_array($value)) {
                 // doctrine
                 foreach (GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
@@ -52,8 +67,11 @@ final readonly class NestedConfigCallsFactory
                 }
 
                 $mainMethodCall = new MethodCall($configCaller, $mainMethodName);
-                $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
+                if ($key === 0 && $nextKeyArgument && is_string($nextKey)) {
+                    $mainMethodCall->args[] = new Arg(new String_($nextKey));
+                }
 
+                $mainMethodCall = $this->createMainMethodCall($value, $mainMethodCall);
                 $methodCallStmts[] = new Expression($mainMethodCall);
             }
         }
@@ -67,14 +85,17 @@ final readonly class NestedConfigCallsFactory
     private function createMainMethodCall(array $value, MethodCall $mainMethodCall): MethodCall
     {
         foreach ($value as $methodName => $parameters) {
+            Assert::string($methodName);
+
             // security
             if ($methodName === SecurityConfigKey::ROLE) {
                 $methodName = SecurityConfigKey::ROLES;
                 $parameters = [$parameters];
             } else {
-                Assert::string($methodName);
                 $methodName = StringUtils::underscoreToCamelCase($methodName);
             }
+
+            $methodName = self::METHOD_RENAMES[$methodName] ?? $methodName;
 
             if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
                 $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
