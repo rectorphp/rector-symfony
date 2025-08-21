@@ -179,6 +179,7 @@ CODE_SAMPLE
                 $methodCallName = StringUtils::underscoreToCamelCase($key);
             }
 
+            // security
             if (in_array($key, [SecurityConfigKey::ACCESS_DECISION_MANAGER, SecurityConfigKey::ENTITY], true)) {
                 $mainMethodName = StringUtils::underscoreToCamelCase($key);
 
@@ -211,6 +212,21 @@ CODE_SAMPLE
 
                         $itemName = StringUtils::underscoreToCamelCase($itemName);
 
+                        // doctrine: implicit default connection now must be explicit
+                        if ($currentConfigCaller instanceof MethodCall && $this->isName(
+                            $currentConfigCaller->name,
+                            'dbal'
+                        )) {
+                            // this option requires call on connection(...)
+                            if (in_array($itemName, ['dbnameSuffix'], true)) {
+                                $currentConfigCaller = new MethodCall(
+                                    $currentConfigCaller,
+                                    'connection',
+                                    $this->nodeFactory->createArgs(['default'])
+                                );
+                            }
+                        }
+
                         $methodCall = new MethodCall($currentConfigCaller, $itemName, $args);
                         $methodCallStmts[] = new Expression($methodCall);
                         continue;
@@ -240,7 +256,6 @@ CODE_SAMPLE
                         $configVariable,
                         $simpleMethodName,
                         false,
-                        null
                     );
 
                     $methodCallStmts = array_merge($methodCallStmts, $simpleMethodCallStmts);
