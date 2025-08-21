@@ -120,6 +120,20 @@ final readonly class NestedConfigCallsFactory
         foreach ($value as $methodName => $parameters) {
             Assert::string($methodName);
 
+            // special nested case for monolog
+            if ($methodName === 'channels') {
+                if (count($parameters) === 1) {
+                    // sole channel
+                    $args = $this->nodeFactory->createArgs($parameters);
+                    return new MethodCall($mainMethodCall, 'channel', $args);
+                }
+
+                $mainMethodCall = new MethodCall($mainMethodCall, 'channels');
+
+                $args = $this->nodeFactory->createArgs([$parameters]);
+                return new MethodCall($mainMethodCall, 'elements', $args);
+            }
+
             // security
             if ($methodName === SecurityConfigKey::ROLE) {
                 $methodName = SecurityConfigKey::ROLES;
