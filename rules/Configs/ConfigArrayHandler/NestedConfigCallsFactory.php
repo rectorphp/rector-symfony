@@ -48,6 +48,35 @@ final readonly class NestedConfigCallsFactory
 
         foreach ($values as $key => $value) {
             if (is_array($value)) {
+                // symfony framework cache
+                if ($mainMethodName === 'cache') {
+                    $configCaller = new MethodCall($configCaller, 'cache', []);
+
+                    foreach ($value as $subKey => $subValue) {
+                        if ($subKey === 'pools') {
+                            foreach ($subValue as $poolName => $poolConfiguration) {
+                                $poolMethodCall = new MethodCall($configCaller, 'pool', [
+                                    new Arg(new String_($poolName)),
+                                ]);
+
+                                foreach ($poolConfiguration as $poolMethodName => $poolParameters) {
+                                    Assert::string($poolMethodName);
+
+                                    $poolMethodCall = new MethodCall(
+                                        $poolMethodCall,
+                                        $poolMethodName,
+                                        $this->nodeFactory->createArgs([$poolParameters]),
+                                    );
+                                }
+
+                                $methodCallStmts[] = new Expression($poolMethodCall);
+                            }
+                        }
+                    }
+
+                    continue;
+                }
+
                 // doctrine
                 foreach (GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT as $groupingMethodName => $splitMethodName) {
                     if ($mainMethodName === $groupingMethodName) {

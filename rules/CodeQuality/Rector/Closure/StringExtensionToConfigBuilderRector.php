@@ -62,6 +62,9 @@ final class StringExtensionToConfigBuilderRector extends AbstractRector
         private readonly SecurityAccessDecisionManagerConfigArrayHandler $securityAccessDecisionManagerConfigArrayHandler,
         private readonly SymfonyClosureFactory $symfonyClosureFactory
     ) {
+        // make sure to avoid duplicates
+        Assert::uniqueValues(self::EXTENSION_KEY_TO_CLASS_MAP);
+        Assert::uniqueValues(array_keys(self::EXTENSION_KEY_TO_CLASS_MAP));
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -114,10 +117,6 @@ CODE_SAMPLE
             return null;
         }
 
-        // make sure to avoid duplicates
-        Assert::uniqueValues(self::EXTENSION_KEY_TO_CLASS_MAP);
-        Assert::uniqueValues(array_keys(self::EXTENSION_KEY_TO_CLASS_MAP));
-
         $extensionKeyAndConfiguration = $this->symfonyClosureExtensionMatcher->match($node);
         if (! $extensionKeyAndConfiguration instanceof ExtensionKeyAndConfiguration) {
             return null;
@@ -131,12 +130,12 @@ CODE_SAMPLE
 
         $configVariable = $this->createConfigVariable($configClass);
 
-        $stmts = $this->createMethodCallStmts($extensionKeyAndConfiguration->getArray(), $configVariable);
-        if ($stmts === null) {
+        $methodCallStmts = $this->createMethodCallStmts($extensionKeyAndConfiguration->getArray(), $configVariable);
+        if ($methodCallStmts === null) {
             return null;
         }
 
-        return $this->symfonyClosureFactory->create($configClass, $node, $stmts);
+        return $this->symfonyClosureFactory->create($configClass, $node, $methodCallStmts);
     }
 
     /**
@@ -233,11 +232,7 @@ CODE_SAMPLE
                     if ($currentConfigCaller instanceof MethodCall && $this->isName(
                         $currentConfigCaller->name,
                         'orm'
-                    ) && in_array(
-                        $itemName,
-                        ['query_cache_driver', 'result_cache_driver'],
-                        true
-                    )) {
+                    ) && in_array($itemName, ['query_cache_driver', 'result_cache_driver'], true)) {
                         // implicit entityManagerDefault(...)
                         $currentConfigCaller = new MethodCall(
                             $currentConfigCaller,
