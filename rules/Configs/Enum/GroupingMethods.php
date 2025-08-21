@@ -14,5 +14,6 @@ final class GroupingMethods
         'entity_managers' => 'entityManager',
         'mappings' => 'mapping',
         'handlers' => 'handler',
+        'mappingTypes' => 'mappingType',
     ];
 }

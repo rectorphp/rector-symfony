@@ -102,6 +102,11 @@ final readonly class NestedConfigCallsFactory
 
             $methodName = self::METHOD_RENAMES[$methodName] ?? $methodName;
 
+            // special case for dbal()->connection()
+            if ($methodName === 'mappingTypes') {
+
+            }
+
             if (isset(GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName])) {
                 $splitMethodName = GroupingMethods::GROUPING_METHOD_NAME_TO_SPLIT[$methodName];
 
