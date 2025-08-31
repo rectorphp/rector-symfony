@@ -44,6 +44,19 @@ class NestedConstraintForm extends AbstractType
                             'match' => false,
                         ]),
                     ]),
+                    new Sequentially([
+                        new Length([
+                            'min' => 2,
+                            'max' => 50,
+                            'minMessage' => 'Your foo must be at least {{ limit }} characters long',
+                            'maxMessage' => 'Your foo cannot be longer than {{ limit }} characters',
+                        ]),
+                        new NotBlank(['allowNull' => false]),
+                        new Choice([
+                            'choices' => ['New York', 'Berlin', 'Tokyo'],
+                            'message' => 'Choose a valid genre.',
+                        ]),
+                    ]),
                 ],
             ])
             ->add('bar', CollectionType::class, [
@@ -97,6 +110,11 @@ class NestedConstraintForm extends AbstractType
                         new Length(min: 2, max: 50, minMessage: 'Your foo must be at least {{ limit }} characters long', maxMessage: 'Your foo cannot be longer than {{ limit }} characters'),
                         new NotBlank(allowNull: false),
                         new Regex(pattern: '/\d/', message: 'Your foo cannot contain a number', match: false),
+                    ]),
+                    new Sequentially([
+                        new Length(min: 2, max: 50, minMessage: 'Your foo must be at least {{ limit }} characters long', maxMessage: 'Your foo cannot be longer than {{ limit }} characters'),
+                        new NotBlank(allowNull: false),
+                        new Choice(choices: ['New York', 'Berlin', 'Tokyo'], message: 'Choose a valid genre.']),
                     ]),
                 ],
             ])
