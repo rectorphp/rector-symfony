@@ -88,6 +88,10 @@ CODE_SAMPLE
 
     private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
+
         // default value must be defined
         if (count($methodCall->getArgs()) !== 2) {
             return null;
