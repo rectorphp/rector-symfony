@@ -31,12 +31,12 @@ final class SomeController
 {
     public function index(Request $request)
     {
-        return $request->isMainRequest();
+        return $request->isMasterRequest();
     }
 
     public function second(Request $request)
     {
-        return $request->isMainRequest();
+        return $request->isMasterRequest();
     }
 }
 
