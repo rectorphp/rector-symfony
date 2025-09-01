@@ -149,7 +149,7 @@ CODE_SAMPLE
         }
 
         $exprArg = $funcCall->getArgs()[0];
-        if (!$exprArg->value instanceof MethodCall) {
+        if (! $exprArg->value instanceof MethodCall) {
             return null;
         }
 
