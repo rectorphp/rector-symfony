@@ -8,7 +8,10 @@ final class GetOnBoolean
 {
     public function run(Request $request)
     {
-        $debug = filter_var($request->query->get('debug', false), FILTER_VALIDATE_BOOLEAN);
+        $debug = filter_var(
+            $request->query->get('debug', false),
+            FILTER_VALIDATE_BOOLEAN
+        );
     }
 }
 
