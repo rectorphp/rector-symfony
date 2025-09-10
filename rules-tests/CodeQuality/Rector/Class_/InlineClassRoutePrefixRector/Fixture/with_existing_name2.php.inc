@@ -23,6 +23,7 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\InlineClassRoutePrefixR
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[\Symfony\Component\Routing\Attribute\Route(name: "some_org.")]
 final class WithExistingName2 extends Controller
 {
     #[\Symfony\Component\Routing\Attribute\Route('/city/street', name: 'some_org.some')]

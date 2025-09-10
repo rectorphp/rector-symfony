@@ -61,7 +61,7 @@ final class InlineClassRoutePrefixRector extends AbstractRector
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api")
+ * @Route("/api", name="api_")
  */
 class SomeController
 {
@@ -77,6 +77,9 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route(name="api_")
+ */
 class SomeController
 {
     /**
@@ -189,7 +192,7 @@ CODE_SAMPLE
                             continue;
                         }
 
-                        if ($methodRouteArg->name->toString() === 'name') {
+                        if ($this->isName($methodRouteArg->name, 'name')) {
                             if (! $methodRouteArg->value instanceof String_) {
                                 continue;
                             }
@@ -220,7 +223,27 @@ CODE_SAMPLE
         } else {
             foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
                 foreach ($attrGroup->attrs as $attribute) {
-                    if ($attribute === $routeAttributeOrAnnotation) {
+                    if ($attribute !== $routeAttributeOrAnnotation) {
+                        continue;
+                    }
+
+                    // keep attribute if there are other parameters set
+                    $attrGroup = $node->attrGroups[$attrGroupKey];
+                    foreach ($attrGroup->attrs as $attributeKey => $attribute) {
+                        foreach ($attribute->args as $attributeArgKey => $attributeArg) {
+                            // silent or "path"
+                            if ($attributeArg->name === null || $attributeArg->name->toString() === self::PATH) {
+                                unset($attribute->args[$attributeArgKey]);
+                            }
+                        }
+
+                        // nothing to keep, remove whole attribute
+                        if ($attribute->args === []) {
+                            unset($attrGroup->attrs[$attributeKey]);
+                        }
+                    }
+
+                    if ($attrGroup->attrs === []) {
                         unset($node->attrGroups[$attrGroupKey]);
                     }
                 }
