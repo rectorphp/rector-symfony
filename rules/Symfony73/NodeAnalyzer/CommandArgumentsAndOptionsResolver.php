@@ -89,7 +89,7 @@ final readonly class CommandArgumentsAndOptionsResolver
 
             $optionName = $nameArgValue->value;
 
-            $commandOptionMetadatas[] = new CommandOption($optionName);
+            $commandOptionMetadatas[] = new CommandOption($nameArgValue);
         }
 
         return $commandOptionMetadatas;
