@@ -37,6 +37,8 @@ final class SomeGetFunctions extends AbstractExtension
 
 namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
 
+use Twig\Extension\AbstractExtension;
+
 final class SomeGetFunctions
 {
     #[\Twig\Attribute\AsTwigFunction('some_function')]

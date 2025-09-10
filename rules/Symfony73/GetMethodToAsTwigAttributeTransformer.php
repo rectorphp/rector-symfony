@@ -9,6 +9,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
@@ -18,7 +19,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use Rector\Symfony\Enum\TwigClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 
@@ -31,7 +35,9 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         private LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher,
         private ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover,
         private ReflectionProvider $reflectionProvider,
-        private VisibilityManipulator $visibilityManipulator
+        private VisibilityManipulator $visibilityManipulator,
+        private NodeNameResolver $nodeNameResolver,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
     }
 
@@ -53,7 +59,6 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         }
 
         $hasChanged = false;
-
         foreach ((array) $getMethod->stmts as $stmt) {
             // handle return array simple case
             if (! $stmt instanceof Return_) {
@@ -108,6 +113,10 @@ final readonly class GetMethodToAsTwigAttributeTransformer
             }
 
             $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
+        }
+
+        if ($hasChanged && $class->extends instanceof FullyQualified && $class->extends->toString() == TwigClass::TWIG_EXTENSION) {
+            $class->extends = null;
         }
 
         return $hasChanged;

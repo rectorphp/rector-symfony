@@ -10,7 +10,6 @@ final class SkipDifferentClass extends AbstractExtension
     {
         return [
             new \Twig\TwigFunction('some_function', [DifferentClass::class, 'someFunction']),
-            new \Twig\TwigFunction('some_function', $this->someFunction(...)),
         ];
     }
 
