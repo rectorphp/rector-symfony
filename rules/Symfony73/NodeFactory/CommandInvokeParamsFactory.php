@@ -49,7 +49,12 @@ final readonly class CommandInvokeParamsFactory
         foreach ($commandArguments as $commandArgument) {
             $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
-            $argumentParam->type = new Identifier('string');
+
+            if ($commandArgument->isArray()) {
+                $argumentParam->type = new Identifier('array');
+            } else {
+                $argumentParam->type = new Identifier('string');
+            }
 
             if ($commandArgument->getDefault() instanceof Expr) {
                 $argumentParam->default = $commandArgument->getDefault();
