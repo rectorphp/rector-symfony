@@ -17,31 +17,31 @@ final class MinimalSharedStringSolverTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        static::$minimalSharedStringSolver = new MinimalSharedStringSolver();
+        self::$minimalSharedStringSolver = new MinimalSharedStringSolver();
     }
 
     #[DataProvider('twoStringsSymmetricValuesProvider')]
     public function testTwoStringsSymmetric(string $stringLeft, string $stringRight, string $expected): void
     {
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringRight, $stringLeft));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringRight, $stringLeft));
     }
 
     #[DataProvider('twoStringsOrderedValuesProvider')]
     public function testTwoStringsOrdered(string $stringLeft, string $stringRight, string $expected): void
     {
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringLeft, $stringRight));
     }
 
     #[DataProvider('threeStringsSymmetricValuesProvider')]
     public function testThreeStringsSymmetric(string $stringA, string $stringB, string $stringC, string $expected): void
     {
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringA, $stringB, $stringC));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringA, $stringC, $stringB));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringB, $stringA, $stringC));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringB, $stringC, $stringA));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringC, $stringA, $stringB));
-        $this->assertSame($expected, static::$minimalSharedStringSolver->solve($stringC, $stringB, $stringA));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringA, $stringB, $stringC));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringA, $stringC, $stringB));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringB, $stringA, $stringC));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringB, $stringC, $stringA));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringC, $stringA, $stringB));
+        $this->assertSame($expected, self::$minimalSharedStringSolver->solve($stringC, $stringB, $stringA));
     }
 
     /**
