@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
@@ -26,6 +20,8 @@ use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver;
 use Rector\Symfony\Symfony73\NodeFactory\CommandInvokeParamsFactory;
+use Rector\Symfony\Symfony73\NodeTransformer\ConsoleOptionAndArgumentMethodCallVariableReplacer;
+use Rector\Symfony\Symfony73\NodeTransformer\OutputInputSymfonyStyleReplacer;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,8 +42,9 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
         private readonly AttributeFinder $attributeFinder,
         private readonly CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver,
         private readonly CommandInvokeParamsFactory $commandInvokeParamsFactory,
-        private readonly ValueResolver $valueResolver,
+        private readonly ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer,
         private readonly VisibilityManipulator $visibilityManipulator,
+        private readonly OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer
     ) {
     }
 
@@ -162,7 +159,7 @@ CODE_SAMPLE
             $commandOptions = $this->commandArgumentsAndOptionsResolver->collectCommandOptions($configureClassMethod);
 
             // 4. remove configure() method
-            $this->removeConfigureClassMethod($node);
+            $this->removeConfigureClassMethodIfNotUseful($node);
 
             // 5. decorate __invoke method with attributes
             $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
@@ -189,7 +186,7 @@ CODE_SAMPLE
 
         if ($configureClassMethod instanceof ClassMethod) {
             // 7. replace input->getArgument() and input->getOption() calls with direct variable access
-            $this->replaceInputArgumentOptionFetchWithVariables($executeClassMethod);
+            $this->consoleOptionAndArgumentMethodCallVariableReplacer->replace($executeClassMethod);
         }
 
         return $node;
@@ -207,7 +204,7 @@ CODE_SAMPLE
         return $class->getMethod(CommandMethodName::INITIALIZE) instanceof ClassMethod;
     }
 
-    private function removeConfigureClassMethod(Class_ $class): void
+    private function removeConfigureClassMethodIfNotUseful(Class_ $class): void
     {
         foreach ($class->stmts as $key => $stmt) {
             if (! $stmt instanceof ClassMethod) {
@@ -239,46 +236,13 @@ CODE_SAMPLE
                 }
             }
 
-            // 2. if configure() has become empty → remove the method itself
+            // 2. if configure() has became empty → remove the method itself
             if ($stmt->stmts === [] || $stmt->stmts === null) {
                 unset($class->stmts[$key]);
             }
 
             return;
         }
-    }
-
-    private function replaceInputArgumentOptionFetchWithVariables(ClassMethod $executeClassMethod): void
-    {
-        $this->traverseNodesWithCallable($executeClassMethod->stmts, function (Node $node): ?Variable {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'input')) {
-                return null;
-            }
-
-            if (! $this->isNames($node->name, ['getOption', 'getArgument'])) {
-                return null;
-            }
-
-            $firstArgValue = $node->getArgs()[0]
-                ->value;
-
-            if ($firstArgValue instanceof ClassConstFetch || $firstArgValue instanceof ConstFetch) {
-                $variableName = $this->valueResolver->getValue($firstArgValue);
-                return new Variable(str_replace('-', '_', $variableName));
-            }
-
-            if (! $firstArgValue instanceof String_) {
-                // unable to resolve argument/option name
-                throw new ShouldNotHappenException();
-            }
-
-            $variableName = $firstArgValue->value;
-            return new Variable(str_replace('-', '_', $variableName));
-        });
     }
 
     private function isFluentArgumentOptionChain(MethodCall $methodCall): bool
@@ -291,7 +255,8 @@ CODE_SAMPLE
                 return false;
             }
 
-            $current = $current->var;   // go one step left
+            // go one step left
+            $current = $current->var;
         }
 
         // the left-most var must be $this
