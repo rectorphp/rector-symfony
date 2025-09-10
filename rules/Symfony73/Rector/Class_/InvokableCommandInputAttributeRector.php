@@ -26,10 +26,13 @@ use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver;
 use Rector\Symfony\Symfony73\NodeFactory\CommandInvokeParamsFactory;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @see https://symfony.com/blog/new-in-symfony-7-3-invokable-commands-and-input-attributes
+ *
  * @see https://github.com/symfony/symfony-docs/issues/20553
  * @see https://github.com/symfony/symfony/pull/59340
  *
@@ -133,18 +136,17 @@ CODE_SAMPLE
         }
 
         // as command attribute is required, its handled by previous symfony versions
-        // @todo possibly to add it here to handle multiple cases
-        if (! $this->attributeFinder->findAttributeByClass($node, SymfonyAttribute::AS_COMMAND) instanceof Attribute) {
+        if (! $this->attributeFinder->hasAttributeByClasses($node, [SymfonyAttribute::AS_COMMAND])) {
             return null;
         }
 
-        // 1. rename execute to __invoke
         $executeClassMethod = $node->getMethod(CommandMethodName::EXECUTE);
         if (! $executeClassMethod instanceof ClassMethod) {
             return null;
         }
 
-        $executeClassMethod->name = new Identifier('__invoke');
+        // 1. rename execute to __invoke
+        $executeClassMethod->name = new Identifier(MethodName::INVOKE);
         $this->visibilityManipulator->makePublic($executeClassMethod);
 
         // 2. fetch configure method to get arguments and options metadata
