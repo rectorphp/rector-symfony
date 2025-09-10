@@ -20,6 +20,7 @@ use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver;
 use Rector\Symfony\Symfony73\NodeFactory\CommandInvokeParamsFactory;
+use Rector\Symfony\Symfony73\NodeTransformer\CommandUnusedInputOutputRemover;
 use Rector\Symfony\Symfony73\NodeTransformer\ConsoleOptionAndArgumentMethodCallVariableReplacer;
 use Rector\Symfony\Symfony73\NodeTransformer\OutputInputSymfonyStyleReplacer;
 use Rector\ValueObject\MethodName;
@@ -44,7 +45,8 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
         private readonly CommandInvokeParamsFactory $commandInvokeParamsFactory,
         private readonly ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer,
         private readonly VisibilityManipulator $visibilityManipulator,
-        private readonly OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer
+        private readonly OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer,
+        private readonly CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover
     ) {
     }
 
@@ -188,6 +190,9 @@ CODE_SAMPLE
             // 7. replace input->getArgument() and input->getOption() calls with direct variable access
             $this->consoleOptionAndArgumentMethodCallVariableReplacer->replace($executeClassMethod);
         }
+
+        $this->outputInputSymfonyStyleReplacer->replace($executeClassMethod);
+        $this->commandUnusedInputOutputRemover->remove($executeClassMethod);
 
         return $node;
     }

@@ -6,10 +6,7 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-<<<<<<< HEAD
 use PhpParser\Node\ArrayItem;
-=======
->>>>>>> cf6f011c (fixup! fixup! apply rector)
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\New_;
@@ -91,8 +88,6 @@ CODE_SAMPLE
         $namedArgs = [];
 
         foreach ($array->items as $item) {
-<<<<<<< HEAD
-<<<<<<< HEAD
             if (! $item instanceof ArrayItem) {
                 continue;
             }
@@ -103,12 +98,6 @@ CODE_SAMPLE
                     return null;
                 }
 
-=======
-            if (! $item instanceof ArrayItem || !$item->key instanceof Expr) {
->>>>>>> 80213bcd (apply rector)
-=======
-            if (! $item instanceof ArrayItem || ! $item->key instanceof Expr) {
->>>>>>> cf6f011c (fixup! fixup! apply rector)
                 continue;
             }
 
