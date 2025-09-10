@@ -35,9 +35,9 @@ final readonly class CommandOptionsResolver
                 throw new ShouldNotHappenException('Option name is required');
             }
 
-            $shortcutExpr = $addOptionArgs[1]?->value ?? null;
-            $modeExpr = $addOptionArgs[2]?->value ?? null;
-            $descriptionExpr = $addOptionArgs[3]?->value ?? null;
+            $shortcutExpr = $addOptionArgs[1]->value ?? null;
+            $modeExpr = $addOptionArgs[2]->value ?? null;
+            $descriptionExpr = $addOptionArgs[3]->value ?? null;
 
             $commandOptions[] = new CommandOption($nameArgValue, $shortcutExpr, $modeExpr, $descriptionExpr);
         }
