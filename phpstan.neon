@@ -3,6 +3,7 @@ rules:
 
 parameters:
     level: 8
+    errorFormat: symplify
 
     reportUnmatchedIgnoredErrors: false
     treatPhpDocTypesAsCertain: false

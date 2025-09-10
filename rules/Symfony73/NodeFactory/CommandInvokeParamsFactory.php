@@ -7,6 +7,7 @@ namespace Rector\Symfony\Symfony73\NodeFactory;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
@@ -86,13 +87,27 @@ final readonly class CommandInvokeParamsFactory
         $optionParams = [];
 
         foreach ($commandOptions as $commandOption) {
-            $optionName = $commandOption->getName();
+            $optionName = $commandOption->getStringName();
             $variableName = str_replace('-', '_', $optionName);
 
             $optionParam = new Param(new Variable($variableName));
-            // @todo fill type or default value
+
+            $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
+
+            if ($commandOption->getShortcut() instanceof Expr) {
+                $optionArgs[] = new Arg(value: $commandOption->getShortcut(), name: new Identifier('shortcut'));
+            }
+
+            if ($commandOption->getMode() instanceof Expr) {
+                $optionArgs[] = new Arg(value: $commandOption->getMode(), name: new Identifier('mode'));
+            }
+
+            if ($commandOption->getDescription() instanceof Expr) {
+                $optionArgs[] = new Arg(value: $commandOption->getDescription(), name: new Identifier('description'));
+            }
+
             $optionParam->attrGroups[] = new AttributeGroup([
-                new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION)),
+                new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_OPTION), $optionArgs),
             ]);
 
             $optionParams[] = $optionParam;

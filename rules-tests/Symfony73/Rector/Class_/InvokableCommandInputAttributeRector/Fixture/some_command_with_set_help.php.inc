@@ -52,7 +52,7 @@ final class SomeCommandWithSetHelp
     }
 
     public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
-    string $argument, #[\Symfony\Component\Console\Attribute\Option]
+    string $argument, #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
     $option): int
     {
         $someArgument = $argument;
