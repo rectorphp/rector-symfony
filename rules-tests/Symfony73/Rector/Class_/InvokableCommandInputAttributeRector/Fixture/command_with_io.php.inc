@@ -6,18 +6,19 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'some_name')]
-final class WithoutConfigure extends Command
+#[AsCommand('app:my-command')]
+final class MyCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // ...
+        $io = new SymfonyStyle($input, $output);
+        $io->info('Great success!');
 
         return 1;
     }
 }
-
 ?>
 -----
 <?php
@@ -28,15 +29,15 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'some_name')]
-final class WithoutConfigure
+#[AsCommand('app:my-command')]
+final class MyCommand
 {
-    public function __invoke(): int
+    public function __invoke(\Symfony\Component\Console\Style\SymfonyStyle $io): int
     {
-        // ...
+        $io->info('Great success!');
         return 1;
     }
 }
-
 ?>

@@ -56,19 +56,22 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class WithMultipleArgumentsOptionsNotFluent
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument1', description: 'Argument1 description')]
-    string $argument1, #[\Symfony\Component\Console\Attribute\Argument(name: 'argument2', description: 'Argument2 description')]
-    string $argument2, #[\Symfony\Component\Console\Attribute\Option]
-    $option1, #[\Symfony\Component\Console\Attribute\Option]
-    $option2, OutputInterface $output): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'argument1', description: 'Argument1 description')]
+        string $argument1,
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'argument2', description: 'Argument2 description')]
+        string $argument2,
+        #[\Symfony\Component\Console\Attribute\Option]
+        $option1,
+        #[\Symfony\Component\Console\Attribute\Option]
+        $option2
+    ): int
     {
         $arg1 = $argument1;
         $arg2 = $argument2;
         $opt1 = $option1;
         $opt2 = $option2;
-
         // ...
-
         return 1;
     }
 }
