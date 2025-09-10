@@ -47,10 +47,7 @@ final readonly class CommandInvokeParamsFactory
         $argumentParams = [];
 
         foreach ($commandArguments as $commandArgument) {
-            // create camelCase variable name
-            $rawName = $commandArgument->getArgumentName();
-            $variableName = str_replace('-', '_', $commandArgument->getArgumentName());
-
+            $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
 
             $argumentParam->type = new Identifier('string');
@@ -92,9 +89,7 @@ final readonly class CommandInvokeParamsFactory
         $optionParams = [];
 
         foreach ($commandOptions as $commandOption) {
-            $optionName = $commandOption->getNameValue();
-            $variableName = str_replace('-', '_', $optionName);
-
+            $variableName = $this->createCamelCase($commandOption->getNameValue());
             $optionParam = new Param(new Variable($variableName));
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
@@ -119,5 +114,17 @@ final readonly class CommandInvokeParamsFactory
         }
 
         return $optionParams;
+    }
+
+    private function createCamelCase(string $value): string
+    {
+        // Replace dashes/underscores with spaces
+        $value = str_replace(['-', '_'], ' ', strtolower($value));
+
+        // Capitalize each word, then remove spaces
+        $value = str_replace(' ', '', ucwords($value));
+
+        // Lowercase first character to make it camelCase
+        return lcfirst($value);
     }
 }
