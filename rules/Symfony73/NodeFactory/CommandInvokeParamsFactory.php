@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeFactory;
 
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -99,6 +101,8 @@ final readonly class CommandInvokeParamsFactory
 
             if ($commandOption->getDefault() instanceof Expr) {
                 $optionParam->default = $commandOption->getDefault();
+            } elseif ($commandOption->isImplicitBoolean()) {
+                $optionParam->default = new ConstFetch(new Name('false'));
             }
 
             $this->decorateParamType($optionParam, $commandOption);
@@ -165,6 +169,11 @@ final readonly class CommandInvokeParamsFactory
         Param $argumentParam,
         CommandArgument|CommandOption $commandArgumentOrOption
     ): void {
+        if ($commandArgumentOrOption instanceof CommandOption && $commandArgumentOrOption->isImplicitBoolean()) {
+            $argumentParam->type = new Identifier('bool');
+            return;
+        }
+
         if ($commandArgumentOrOption->isArray()) {
             $argumentParam->type = new Identifier('array');
             return;

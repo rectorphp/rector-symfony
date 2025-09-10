@@ -156,7 +156,6 @@ CODE_SAMPLE
         if ($configureClassMethod instanceof ClassMethod) {
             // 3. create arguments and options parameters
             $commandArguments = $this->commandArgumentsResolver->resolve($configureClassMethod);
-
             $commandOptions = $this->commandOptionsResolver->resolve($configureClassMethod);
 
             // 4. remove configure() method
@@ -173,17 +172,7 @@ CODE_SAMPLE
         // 6. remove parent class
         $node->extends = null;
 
-        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
-            foreach ($attrGroup->attrs as $attributeKey => $attr) {
-                if ($this->isName($attr->name, 'Override')) {
-                    unset($attrGroup->attrs[$attributeKey]);
-                }
-            }
-
-            if ($attrGroup->attrs === []) {
-                unset($executeClassMethod->attrGroups[$attrGroupKey]);
-            }
-        }
+        $this->removeOverrideAttributeAsDifferentMethod($executeClassMethod);
 
         if ($configureClassMethod instanceof ClassMethod) {
             // 7. replace input->getArgument() and input->getOption() calls with direct variable access
@@ -265,5 +254,21 @@ CODE_SAMPLE
 
         // the left-most var must be $this
         return $current instanceof Variable && $this->isName($current, 'this');
+    }
+
+    private function removeOverrideAttributeAsDifferentMethod(ClassMethod $executeClassMethod): void
+    {
+        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attributeKey => $attr) {
+                if ($this->isName($attr->name, 'Override')) {
+                    unset($attrGroup->attrs[$attributeKey]);
+                }
+            }
+
+            // is attribute empty? remove whole group
+            if ($attrGroup->attrs === []) {
+                unset($executeClassMethod->attrGroups[$attrGroupKey]);
+            }
+        }
     }
 }

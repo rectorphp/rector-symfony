@@ -62,9 +62,9 @@ final class WithMultipleArgumentsOptionsNotFluent
         #[\Symfony\Component\Console\Attribute\Argument(name: 'argument2', description: 'Argument2 description')]
         string $argument2,
         #[\Symfony\Component\Console\Attribute\Option(name: 'option1', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option1 description')]
-        $option1,
+        bool $option1 = false,
         #[\Symfony\Component\Console\Attribute\Option(name: 'option2', shortcut: 'p', mode: InputOption::VALUE_NONE, description: 'Option2 description')]
-        $option2
+        bool $option2 = false
     ): int
     {
         $arg1 = $argument1;

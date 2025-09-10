@@ -51,7 +51,7 @@ final class WithOverride
         #[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
         string $argument,
         #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
-        $option
+        bool $option = false
     ): int
     {
         $someArgument = $argument;

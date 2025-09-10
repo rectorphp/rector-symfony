@@ -17,6 +17,7 @@ final readonly class CommandOption
         private ?Expr $description,
         private ?Expr $default,
         private bool $isArray,
+        private bool $isImplicitBoolean,
         private ?Type $defaultType
     ) {
     }
@@ -59,5 +60,10 @@ final readonly class CommandOption
     public function isArray(): bool
     {
         return $this->isArray;
+    }
+
+    public function isImplicitBoolean(): bool
+    {
+        return $this->isImplicitBoolean;
     }
 }
