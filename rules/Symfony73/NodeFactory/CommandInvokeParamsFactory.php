@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeFactory;
 
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
@@ -54,7 +55,7 @@ final readonly class CommandInvokeParamsFactory
             $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
 
-            $this->decorateArgumentParamType($argumentParam, $commandArgument);
+            $this->decorateParamType($argumentParam, $commandArgument);
 
             if ($commandArgument->getDefault() instanceof Expr) {
                 $argumentParam->default = $commandArgument->getDefault();
@@ -100,7 +101,7 @@ final readonly class CommandInvokeParamsFactory
                 $optionParam->default = $commandOption->getDefault();
             }
 
-            $this->decorateParamTypeByDefault($optionParam, $commandOption);
+            $this->decorateParamType($optionParam, $commandOption);
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
 
@@ -160,25 +161,20 @@ final readonly class CommandInvokeParamsFactory
         return ! $this->valueResolver->isValue($expr, '');
     }
 
-    private function decorateArgumentParamType(Param $argumentParam, CommandArgument $commandArgument): void
-    {
-        if ($commandArgument->isArray()) {
+    private function decorateParamType(
+        Param $argumentParam,
+        CommandArgument|CommandOption $commandArgumentOrOption
+    ): void {
+        if ($commandArgumentOrOption->isArray()) {
             $argumentParam->type = new Identifier('array');
             return;
         }
 
-        $this->decorateParamTypeByDefault($argumentParam, $commandArgument);
-    }
-
-    private function decorateParamTypeByDefault(
-        Param $argumentParam,
-        CommandArgument|CommandOption $commandArgumentOrOption
-    ): void {
         $defaultType = $commandArgumentOrOption->getDefaultType();
         if ($defaultType instanceof Type) {
             $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($defaultType, TypeKind::PARAM);
 
-            if ($paramType instanceof \PhpParser\Node) {
+            if ($paramType instanceof Node) {
                 $argumentParam->type = $paramType;
                 return;
             }

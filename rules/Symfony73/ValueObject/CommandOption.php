@@ -16,6 +16,7 @@ final readonly class CommandOption
         private ?Expr $mode,
         private ?Expr $description,
         private ?Expr $default,
+        private bool $isArray,
         private ?Type $defaultType
     ) {
     }
@@ -53,5 +54,10 @@ final readonly class CommandOption
     public function getDefaultType(): ?Type
     {
         return $this->defaultType;
+    }
+
+    public function isArray(): bool
+    {
+        return $this->isArray;
     }
 }

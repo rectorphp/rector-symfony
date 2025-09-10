@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -42,6 +43,7 @@ final readonly class CommandOptionsResolver
                 $addOptionArgs[2]->value ?? null,
                 $addOptionArgs[3]->value ?? null,
                 $addOptionArgs[4]->value ?? null,
+                $this->isArrayMode($addOptionArgs),
                 $this->resolveDefaultType($addOptionArgs)
             );
         }
@@ -60,5 +62,20 @@ final readonly class CommandOptionsResolver
         }
 
         return $this->nodeTypeResolver->getType($defaultArg->value);
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function isArrayMode(array $args): bool
+    {
+        $modeExpr = $args[2]->value ?? null;
+        if (! $modeExpr instanceof Expr) {
+            return false;
+        }
+
+        $modeValue = $this->valueResolver->getValue($modeExpr);
+        // binary check for InputOptions::VALUE_IS_ARRAY
+        return (bool) ($modeValue & 8);
     }
 }
