@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -52,7 +53,7 @@ final readonly class CommandArgumentsResolver
     /**
      * @param Node\Arg[] $addArgumentArgs
      */
-    private function resolveArgumentModeExpr(array $addArgumentArgs): ?Node\Expr
+    private function resolveArgumentModeExpr(array $addArgumentArgs): ?Expr
     {
         if (! isset($addArgumentArgs[1])) {
             return null;
@@ -70,7 +71,7 @@ final readonly class CommandArgumentsResolver
     /**
      * @param Node\Arg[] $addArgumentArgs
      */
-    private function resolveArgumentDescriptionExpr(array $addArgumentArgs): ?Node\Expr
+    private function resolveArgumentDescriptionExpr(array $addArgumentArgs): ?Expr
     {
         if (! isset($addArgumentArgs[2])) {
             return null;

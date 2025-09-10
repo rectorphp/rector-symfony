@@ -24,7 +24,8 @@ final readonly class CommandOptionsResolver
     {
         $addOptionMethodCalls = $this->methodCallFinder->find($configureClassMethod, 'addOption');
 
-        $commandOptionMetadatas = [];
+        $commandOptions = [];
+
         foreach ($addOptionMethodCalls as $addOptionMethodCall) {
             $addOptionArgs = $addOptionMethodCall->getArgs();
 
@@ -34,9 +35,13 @@ final readonly class CommandOptionsResolver
                 throw new ShouldNotHappenException('Option name is required');
             }
 
-            $commandOptionMetadatas[] = new CommandOption($nameArgValue);
+            $shortcutExpr = $addOptionArgs[1]?->value ?? null;
+            $modeExpr = $addOptionArgs[2]?->value ?? null;
+            $descriptionExpr = $addOptionArgs[3]?->value ?? null;
+
+            $commandOptions[] = new CommandOption($nameArgValue, $shortcutExpr, $modeExpr, $descriptionExpr);
         }
 
-        return $commandOptionMetadatas;
+        return $commandOptions;
     }
 }
