@@ -12,8 +12,6 @@ final readonly class CommandOption
 {
     public function __construct(
         private Expr $name,
-        // @todo type
-        // @todo default value
     ) {
     }
 

@@ -18,7 +18,8 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
-use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsAndOptionsResolver;
+use Rector\Symfony\Symfony73\NodeAnalyzer\CommandArgumentsResolver;
+use Rector\Symfony\Symfony73\NodeAnalyzer\CommandOptionsResolver;
 use Rector\Symfony\Symfony73\NodeFactory\CommandInvokeParamsFactory;
 use Rector\Symfony\Symfony73\NodeTransformer\CommandUnusedInputOutputRemover;
 use Rector\Symfony\Symfony73\NodeTransformer\ConsoleOptionAndArgumentMethodCallVariableReplacer;
@@ -41,7 +42,8 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
 
     public function __construct(
         private readonly AttributeFinder $attributeFinder,
-        private readonly CommandArgumentsAndOptionsResolver $commandArgumentsAndOptionsResolver,
+        private readonly CommandArgumentsResolver $commandArgumentsResolver,
+        private readonly CommandOptionsResolver $commandOptionsResolver,
         private readonly CommandInvokeParamsFactory $commandInvokeParamsFactory,
         private readonly ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer,
         private readonly VisibilityManipulator $visibilityManipulator,
@@ -153,12 +155,9 @@ CODE_SAMPLE
 
         if ($configureClassMethod instanceof ClassMethod) {
             // 3. create arguments and options parameters
-            // @todo
-            $commandArguments = $this->commandArgumentsAndOptionsResolver->collectCommandArguments(
-                $configureClassMethod
-            );
+            $commandArguments = $this->commandArgumentsResolver->resolve($configureClassMethod);
 
-            $commandOptions = $this->commandArgumentsAndOptionsResolver->collectCommandOptions($configureClassMethod);
+            $commandOptions = $this->commandOptionsResolver->resolve($configureClassMethod);
 
             // 4. remove configure() method
             $this->removeConfigureClassMethodIfNotUseful($node);

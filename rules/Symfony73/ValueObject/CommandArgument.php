@@ -10,8 +10,8 @@ final readonly class CommandArgument
 {
     public function __construct(
         private Expr $name,
-        private Expr $mode,
-        private Expr $description
+        private ?Expr $mode,
+        private ?Expr $description
     ) {
     }
 
@@ -20,12 +20,12 @@ final readonly class CommandArgument
         return $this->name;
     }
 
-    public function getMode(): Expr
+    public function getMode(): ?Expr
     {
         return $this->mode;
     }
 
-    public function getDescription(): Expr
+    public function getDescription(): ?Expr
     {
         return $this->description;
     }
