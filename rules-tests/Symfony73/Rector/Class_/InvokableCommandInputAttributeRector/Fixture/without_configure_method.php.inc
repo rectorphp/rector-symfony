@@ -32,10 +32,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'some_name')]
 final class WithoutConfigure
 {
-    public function __invoke(OutputInterface $output): int
+    public function __invoke(): int
     {
         // ...
-
         return 1;
     }
 }

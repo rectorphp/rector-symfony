@@ -47,7 +47,7 @@ final class WithOptionalArgument
 {
     public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
     ?string $argument, #[\Symfony\Component\Console\Attribute\Option]
-    $option, OutputInterface $output): int
+    $option): int
     {
         $someArgument = $argument;
         $someOption = $option;

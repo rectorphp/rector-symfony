@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeTransformer;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -45,7 +46,7 @@ final readonly class OutputInputSymfonyStyleReplacer
         // 2. remove new symfony style inside
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $executeClassMethod,
-            function (\PhpParser\Node $node) {
+            function (Node $node): ?int {
                 if (! $node instanceof Expression) {
                     return null;
                 }
