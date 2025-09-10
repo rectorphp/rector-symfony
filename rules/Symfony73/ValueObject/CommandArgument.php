@@ -14,6 +14,7 @@ final readonly class CommandArgument
         private ?Expr $mode,
         private ?Expr $description,
         private ?Expr $default,
+        private bool $isArray
     ) {
     }
 
@@ -40,5 +41,10 @@ final readonly class CommandArgument
     public function getDefault(): ?Expr
     {
         return $this->default;
+    }
+
+    public function isArray(): bool
+    {
+        return $this->isArray;
     }
 }

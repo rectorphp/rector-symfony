@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Symfony73\NodeFinder\MethodCallFinder;
@@ -30,12 +31,22 @@ final readonly class CommandArgumentsResolver
 
             $argumentName = $this->valueResolver->getValue($addArgumentArgs[0]->value);
 
+            $modeExpr = $addArgumentArgs[1]->value ?? null;
+
+            $isArray = false;
+            if ($modeExpr instanceof Expr) {
+                $modeValue = $this->valueResolver->getValue($modeExpr);
+                // binary check for InputArgument::IS_ARRAY
+                $isArray = (bool) ($modeValue & 4);
+            }
+
             $commandArguments[] = new CommandArgument(
                 $argumentName,
                 $addArgumentArgs[0]->value,
                 $addArgumentArgs[1]->value ?? null,
                 $addArgumentArgs[2]->value ?? null,
                 $addArgumentArgs[3]->value ?? null,
+                $isArray
             );
         }
 
