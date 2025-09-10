@@ -35,6 +35,7 @@ final readonly class CommandArgumentsResolver
                 $addArgumentArgs[0]->value,
                 $addArgumentArgs[1]->value ?? null,
                 $addArgumentArgs[2]->value ?? null,
+                $addArgumentArgs[3]->value ?? null,
             );
         }
 

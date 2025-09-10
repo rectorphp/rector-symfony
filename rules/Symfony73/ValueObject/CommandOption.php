@@ -14,6 +14,7 @@ final readonly class CommandOption
         private ?Expr $shortcut,
         private ?Expr $mode,
         private ?Expr $description,
+        private ?Expr $default,
     ) {
     }
 
@@ -40,5 +41,10 @@ final readonly class CommandOption
     public function getNameValue(): string
     {
         return $this->nameValue;
+    }
+
+    public function getDefault(): ?Expr
+    {
+        return $this->default;
     }
 }
