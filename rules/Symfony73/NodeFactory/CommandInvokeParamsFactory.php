@@ -21,7 +21,7 @@ use Rector\Symfony\Symfony73\ValueObject\CommandOption;
 final readonly class CommandInvokeParamsFactory
 {
     public function __construct(
-        private ValueResolver $valueResolver
+        private ValueResolver $valueResolver,
     ) {
     }
 
@@ -47,7 +47,10 @@ final readonly class CommandInvokeParamsFactory
         $argumentParams = [];
 
         foreach ($commandArguments as $commandArgument) {
+            // create camelCase variable name
+            $rawName = $commandArgument->getArgumentName();
             $variableName = str_replace('-', '_', $commandArgument->getArgumentName());
+
             $argumentParam = new Param(new Variable($variableName));
 
             $argumentParam->type = new Identifier('string');
