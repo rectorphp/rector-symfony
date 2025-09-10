@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\ValueObject;
 
+use PHPStan\Type\Type;
 use PhpParser\Node\Expr;
 
 final readonly class CommandOption
@@ -15,6 +16,7 @@ final readonly class CommandOption
         private ?Expr $mode,
         private ?Expr $description,
         private ?Expr $default,
+        private ?Type $defaultType
     ) {
     }
 
@@ -46,5 +48,10 @@ final readonly class CommandOption
     public function getDefault(): ?Expr
     {
         return $this->default;
+    }
+
+    public function getDefaultType(): ?Type
+    {
+        return $this->defaultType;
     }
 }

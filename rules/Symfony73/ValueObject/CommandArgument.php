@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\ValueObject;
 
+use PHPStan\Type\Type;
 use PhpParser\Node\Expr;
 
 final readonly class CommandArgument
@@ -14,7 +15,8 @@ final readonly class CommandArgument
         private ?Expr $mode,
         private ?Expr $description,
         private ?Expr $default,
-        private bool $isArray
+        private bool $isArray,
+        private ?Type $defaultType
     ) {
     }
 
@@ -46,5 +48,10 @@ final readonly class CommandArgument
     public function isArray(): bool
     {
         return $this->isArray;
+    }
+
+    public function getDefaultType(): ?Type
+    {
+        return $this->defaultType;
     }
 }
