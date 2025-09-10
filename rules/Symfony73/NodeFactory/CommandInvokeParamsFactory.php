@@ -47,29 +47,31 @@ final readonly class CommandInvokeParamsFactory
         $argumentParams = [];
 
         foreach ($commandArguments as $commandArgument) {
-            $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
-            $variableName = str_replace('-', '_', $argumentName);
-
+            $variableName = str_replace('-', '_', $commandArgument->getArgumentName());
             $argumentParam = new Param(new Variable($variableName));
 
             $argumentParam->type = new Identifier('string');
 
-            $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
-            if ($modeValue === null || $modeValue === 2) {
+            // is argument optional?
+            if ($commandArgument->getMode() === null) {
+                $argumentParam->type = new NullableType($argumentParam->type);
+            } elseif ($this->valueResolver->isValue($commandArgument->getMode(), 2)) {
                 $argumentParam->type = new NullableType($argumentParam->type);
             }
 
             // @todo fill type or default value
             // @todo default string, multiple values array
 
+            $argumentArgs = [new Arg(value: $commandArgument->getName(), name: new Identifier('name'))];
+
+            if ($commandArgument->getDescription() instanceof Expr) {
+                $argumentArgs[] = new Arg(value: $commandArgument->getDescription(), name: new Identifier(
+                    'description'
+                ));
+            }
+
             $argumentParam->attrGroups[] = new AttributeGroup([
-                new Attribute(
-                    new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT),
-                    [
-                        new Arg(value: $commandArgument->getName(), name: new Identifier('name')),
-                        new Arg(value: $commandArgument->getDescription(), name: new Identifier('description')),
-                    ]
-                ),
+                new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), $argumentArgs),
             ]);
 
             $argumentParams[] = $argumentParam;
@@ -87,7 +89,7 @@ final readonly class CommandInvokeParamsFactory
         $optionParams = [];
 
         foreach ($commandOptions as $commandOption) {
-            $optionName = $commandOption->getStringName();
+            $optionName = $commandOption->getNameValue();
             $variableName = str_replace('-', '_', $optionName);
 
             $optionParam = new Param(new Variable($variableName));

@@ -9,10 +9,16 @@ use PhpParser\Node\Expr;
 final readonly class CommandArgument
 {
     public function __construct(
+        private string $argumentName,
         private Expr $name,
         private ?Expr $mode,
         private ?Expr $description
     ) {
+    }
+
+    public function getArgumentName(): string
+    {
+        return $this->argumentName;
     }
 
     public function getName(): Expr
