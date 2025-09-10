@@ -58,6 +58,8 @@ final readonly class GetMethodToAsTwigAttributeTransformer
             return false;
         }
 
+        $originalMethod = clone $getMethod;
+
         $hasChanged = false;
         foreach ((array) $getMethod->stmts as $stmt) {
             // handle return array simple case
@@ -94,7 +96,8 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 if ($this->isLocalCallable($secondArg->value)) {
                     $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
                     if (! is_string($localMethodName)) {
-                        continue;
+                        $getMethod = $originalMethod;
+                        return false;
                     }
 
                     $localMethod = $class->getMethod($localMethodName);
