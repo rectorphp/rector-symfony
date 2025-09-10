@@ -16,7 +16,7 @@ class ArgumentWithDefaultValue extends Command
     protected function configure(): void
     {
         $this->addArgument('first', InputArgument::OPTIONAL, null, 'optional value');
-        $this->addArgument('second', InputArgument::REQUIRED, null, 'require value');
+        $this->addArgument('second', InputArgument::REQUIRED, null, 'required value');
         $this->addOption('third', null, null, '', 'third value');
     }
     protected function execute(InputInterface $input, OutputInterface $output): int

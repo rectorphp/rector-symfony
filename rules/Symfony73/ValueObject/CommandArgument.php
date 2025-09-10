@@ -12,7 +12,8 @@ final readonly class CommandArgument
         private string $nameValue,
         private Expr $name,
         private ?Expr $mode,
-        private ?Expr $description
+        private ?Expr $description,
+        private ?Expr $default,
     ) {
     }
 
@@ -34,5 +35,10 @@ final readonly class CommandArgument
     public function getDescription(): ?Expr
     {
         return $this->description;
+    }
+
+    public function getDefault(): ?Expr
+    {
+        return $this->default;
     }
 }

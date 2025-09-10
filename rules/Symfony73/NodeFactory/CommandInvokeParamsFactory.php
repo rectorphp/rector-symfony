@@ -49,17 +49,16 @@ final readonly class CommandInvokeParamsFactory
         foreach ($commandArguments as $commandArgument) {
             $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
-
             $argumentParam->type = new Identifier('string');
 
-            // is argument optional?
-            if ($commandArgument->getMode() === null) {
-                $argumentParam->type = new NullableType($argumentParam->type);
-            } elseif ($this->valueResolver->isValue($commandArgument->getMode(), 2)) {
+            if ($commandArgument->getDefault() instanceof Expr) {
+                $argumentParam->default = $commandArgument->getDefault();
+            }
+
+            if ($this->isOptionalArgument($commandArgument)) {
                 $argumentParam->type = new NullableType($argumentParam->type);
             }
 
-            // @todo fill type or default value
             // @todo default string, multiple values array
 
             $argumentArgs = [new Arg(value: $commandArgument->getName(), name: new Identifier('name'))];
@@ -92,13 +91,21 @@ final readonly class CommandInvokeParamsFactory
             $variableName = $this->createCamelCase($commandOption->getNameValue());
             $optionParam = new Param(new Variable($variableName));
 
+            if ($commandOption->getDefault() instanceof Expr) {
+                $optionParam->default = $commandOption->getDefault();
+            }
+
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
 
-            if ($commandOption->getShortcut() instanceof Expr && ! $this->valueResolver->isNull($commandOption->getShortcut())) {
+            if ($commandOption->getShortcut() instanceof Expr && ! $this->valueResolver->isNull(
+                $commandOption->getShortcut()
+            )) {
                 $optionArgs[] = new Arg(value: $commandOption->getShortcut(), name: new Identifier('shortcut'));
             }
 
-            if ($commandOption->getMode() instanceof Expr && ! $this->valueResolver->isNull($commandOption->getMode())) {
+            if ($commandOption->getMode() instanceof Expr && ! $this->valueResolver->isNull(
+                $commandOption->getMode()
+            )) {
                 $optionArgs[] = new Arg(value: $commandOption->getMode(), name: new Identifier('mode'));
             }
 
@@ -140,5 +147,14 @@ final readonly class CommandInvokeParamsFactory
         }
 
         return ! $this->valueResolver->isValue($expr, '');
+    }
+
+    private function isOptionalArgument(CommandArgument $commandArgument): bool
+    {
+        if (! $commandArgument->getMode() instanceof Expr) {
+            return true;
+        }
+
+        return $this->valueResolver->isValue($commandArgument->getMode(), 2);
     }
 }

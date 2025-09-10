@@ -36,7 +36,8 @@ final readonly class CommandOptionsResolver
                 $addOptionArgs[0]->value,
                 $addOptionArgs[1]->value ?? null,
                 $addOptionArgs[2]->value ?? null,
-                $addOptionArgs[3]->value ?? null
+                $addOptionArgs[3]->value ?? null,
+                $addOptionArgs[4]->value ?? null
             );
         }
 
