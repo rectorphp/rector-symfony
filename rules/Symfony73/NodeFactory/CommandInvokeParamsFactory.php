@@ -63,7 +63,7 @@ final readonly class CommandInvokeParamsFactory
 
             $argumentArgs = [new Arg(value: $commandArgument->getName(), name: new Identifier('name'))];
 
-            if ($this->hasUsefulDescription($commandArgument)) {
+            if ($this->isNonEmptyExpr($commandArgument->getDescription())) {
                 $argumentArgs[] = new Arg(value: $commandArgument->getDescription(), name: new Identifier(
                     'description'
                 ));
@@ -97,19 +97,15 @@ final readonly class CommandInvokeParamsFactory
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
 
-            if ($commandOption->getShortcut() instanceof Expr && ! $this->valueResolver->isNull(
-                $commandOption->getShortcut()
-            )) {
+            if ($this->isNonEmptyExpr($commandOption->getShortcut())) {
                 $optionArgs[] = new Arg(value: $commandOption->getShortcut(), name: new Identifier('shortcut'));
             }
 
-            if ($commandOption->getMode() instanceof Expr && ! $this->valueResolver->isNull(
-                $commandOption->getMode()
-            )) {
+            if ($this->isNonEmptyExpr($commandOption->getMode())) {
                 $optionArgs[] = new Arg(value: $commandOption->getMode(), name: new Identifier('mode'));
             }
 
-            if ($this->hasUsefulDescription($commandOption)) {
+            if ($this->isNonEmptyExpr($commandOption->getDescription())) {
                 $optionArgs[] = new Arg(value: $commandOption->getDescription(), name: new Identifier('description'));
             }
 
@@ -135,20 +131,6 @@ final readonly class CommandInvokeParamsFactory
         return lcfirst($value);
     }
 
-    private function hasUsefulDescription(CommandArgument|CommandOption $commandArgumentOrOption): bool
-    {
-        if (! $commandArgumentOrOption->getDescription() instanceof Expr) {
-            return false;
-        }
-
-        $expr = $commandArgumentOrOption->getDescription();
-        if ($this->valueResolver->isNull($expr)) {
-            return false;
-        }
-
-        return ! $this->valueResolver->isValue($expr, '');
-    }
-
     private function isOptionalArgument(CommandArgument $commandArgument): bool
     {
         if (! $commandArgument->getMode() instanceof Expr) {
@@ -156,5 +138,18 @@ final readonly class CommandInvokeParamsFactory
         }
 
         return $this->valueResolver->isValue($commandArgument->getMode(), 2);
+    }
+
+    private function isNonEmptyExpr(?Expr $expr): bool
+    {
+        if (! $expr instanceof Expr) {
+            return false;
+        }
+
+        if ($this->valueResolver->isNull($expr)) {
+            return false;
+        }
+
+        return ! $this->valueResolver->isValue($expr, '');
     }
 }
