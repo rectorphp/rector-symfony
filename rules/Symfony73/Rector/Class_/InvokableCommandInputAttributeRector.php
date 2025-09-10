@@ -80,7 +80,7 @@ final class SomeCommand extends Command
 
         // ...
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
 CODE_SAMPLE
@@ -105,7 +105,7 @@ final class SomeCommand
 
         // ...
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
 CODE_SAMPLE
