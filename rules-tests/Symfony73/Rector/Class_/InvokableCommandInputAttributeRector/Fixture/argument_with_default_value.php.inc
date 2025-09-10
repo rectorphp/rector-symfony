@@ -17,6 +17,7 @@ class ArgumentWithDefaultValue extends Command
     {
         $this->addArgument('first', InputArgument::OPTIONAL, null, 'optional value');
         $this->addArgument('second', InputArgument::REQUIRED, null, 'require value');
+        $this->addOption('third', null, null, '', 'third value');
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -40,9 +41,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class ArgumentWithDefaultValue
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'first', description: null)]
-    ?string $first = 'optional value', #[\Symfony\Component\Console\Attribute\Argument(name: 'second', description: null)]
-    string $second = 'required value'): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'first')]
+        ?string $first = 'optional value',
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'second')]
+        string $second = 'required value',
+        #[\Symfony\Component\Console\Attribute\Option(name: 'third')]
+        $third = 'third value'
+    ): int
     {
     }
 }

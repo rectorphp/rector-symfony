@@ -64,7 +64,7 @@ final readonly class CommandInvokeParamsFactory
 
             $argumentArgs = [new Arg(value: $commandArgument->getName(), name: new Identifier('name'))];
 
-            if ($commandArgument->getDescription() instanceof Expr) {
+            if ($this->hasUsefulDescription($commandArgument)) {
                 $argumentArgs[] = new Arg(value: $commandArgument->getDescription(), name: new Identifier(
                     'description'
                 ));
@@ -94,15 +94,15 @@ final readonly class CommandInvokeParamsFactory
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
 
-            if ($commandOption->getShortcut() instanceof Expr) {
+            if ($commandOption->getShortcut() instanceof Expr && ! $this->valueResolver->isNull($commandOption->getShortcut())) {
                 $optionArgs[] = new Arg(value: $commandOption->getShortcut(), name: new Identifier('shortcut'));
             }
 
-            if ($commandOption->getMode() instanceof Expr) {
+            if ($commandOption->getMode() instanceof Expr && ! $this->valueResolver->isNull($commandOption->getMode())) {
                 $optionArgs[] = new Arg(value: $commandOption->getMode(), name: new Identifier('mode'));
             }
 
-            if ($commandOption->getDescription() instanceof Expr) {
+            if ($this->hasUsefulDescription($commandOption)) {
                 $optionArgs[] = new Arg(value: $commandOption->getDescription(), name: new Identifier('description'));
             }
 
@@ -126,5 +126,19 @@ final readonly class CommandInvokeParamsFactory
 
         // Lowercase first character to make it camelCase
         return lcfirst($value);
+    }
+
+    private function hasUsefulDescription(CommandArgument|CommandOption $commandArgumentOrOption): bool
+    {
+        if (! $commandArgumentOrOption->getDescription() instanceof Expr) {
+            return false;
+        }
+
+        $expr = $commandArgumentOrOption->getDescription();
+        if ($this->valueResolver->isNull($expr)) {
+            return false;
+        }
+
+        return ! $this->valueResolver->isValue($expr, '');
     }
 }
