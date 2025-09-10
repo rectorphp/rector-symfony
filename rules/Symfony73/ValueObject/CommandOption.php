@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\ValueObject;
 
-use PHPStan\Type\Type;
 use PhpParser\Node\Expr;
+use PHPStan\Type\Type;
 
 final readonly class CommandOption
 {

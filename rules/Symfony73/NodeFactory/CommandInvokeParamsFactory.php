@@ -13,7 +13,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PHPStan\Type\Type;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Symfony73\ValueObject\CommandArgument;
 use Rector\Symfony\Symfony73\ValueObject\CommandOption;
@@ -22,6 +25,7 @@ final readonly class CommandInvokeParamsFactory
 {
     public function __construct(
         private ValueResolver $valueResolver,
+        private StaticTypeMapper $staticTypeMapper
     ) {
     }
 
@@ -50,11 +54,7 @@ final readonly class CommandInvokeParamsFactory
             $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
 
-            if ($commandArgument->isArray()) {
-                $argumentParam->type = new Identifier('array');
-            } else {
-                $argumentParam->type = new Identifier('string');
-            }
+            $this->decorateArgumentParamType($argumentParam, $commandArgument);
 
             if ($commandArgument->getDefault() instanceof Expr) {
                 $argumentParam->default = $commandArgument->getDefault();
@@ -99,6 +99,8 @@ final readonly class CommandInvokeParamsFactory
             if ($commandOption->getDefault() instanceof Expr) {
                 $optionParam->default = $commandOption->getDefault();
             }
+
+            $this->decorateParamTypeByDefault($optionParam, $commandOption);
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
 
@@ -156,5 +158,37 @@ final readonly class CommandInvokeParamsFactory
         }
 
         return ! $this->valueResolver->isValue($expr, '');
+    }
+
+    private function decorateArgumentParamType(Param $argumentParam, CommandArgument $commandArgument): void
+    {
+        if ($commandArgument->isArray()) {
+            $argumentParam->type = new Identifier('array');
+            return;
+        }
+
+        $this->decorateParamTypeByDefault($argumentParam, $commandArgument);
+    }
+
+    private function decorateParamTypeByDefault(
+        Param $argumentParam,
+        CommandArgument|CommandOption $commandArgumentOrOption
+    ): void {
+        $defaultType = $commandArgumentOrOption->getDefaultType();
+        if ($defaultType instanceof Type) {
+            $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($defaultType, TypeKind::PARAM);
+
+            if ($paramType instanceof \PhpParser\Node) {
+                $argumentParam->type = $paramType;
+                return;
+            }
+        }
+
+        // fallback
+        if ($commandArgumentOrOption instanceof CommandOption) {
+            return;
+        }
+
+        $argumentParam->type = new Identifier('string');
     }
 }

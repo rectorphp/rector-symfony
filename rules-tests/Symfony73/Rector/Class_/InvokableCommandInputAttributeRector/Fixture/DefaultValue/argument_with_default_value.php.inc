@@ -47,7 +47,7 @@ class ArgumentWithDefaultValue
         #[\Symfony\Component\Console\Attribute\Argument(name: 'second')]
         string $second = 'required value',
         #[\Symfony\Component\Console\Attribute\Option(name: 'third')]
-        $third = 'third value'
+        string $third = 'third value'
     ): int
     {
     }

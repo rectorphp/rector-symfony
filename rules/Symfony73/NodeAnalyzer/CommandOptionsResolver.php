@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
-use PHPStan\Type\Type;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Symfony73\NodeFinder\MethodCallFinder;
