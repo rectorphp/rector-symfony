@@ -6,18 +6,21 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:hello',
 )]
-class ArgumentWithDefaultValue extends Command
+class MatchScalarType extends Command
 {
     protected function configure(): void
     {
-        $this->addArgument('first', InputArgument::OPTIONAL, null, 'optional value');
-        $this->addArgument('second', InputArgument::REQUIRED, null, 'required value');
-        $this->addOption('third', null, null, '', 'third value');
+        $this->addArgument('first', InputArgument::OPTIONAL, null, 100);
+        $this->addArgument('second', InputArgument::REQUIRED, null, 200.5);
+
+        $this->addOption('third', '', null, null, 200);
+        $this->addOption('fourth', '', null, null, 400.5);
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -34,20 +37,23 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:hello',
 )]
-class ArgumentWithDefaultValue
+class MatchScalarType
 {
     public function __invoke(
         #[\Symfony\Component\Console\Attribute\Argument(name: 'first')]
-        ?string $first = 'optional value',
+        ?int $first = 100,
         #[\Symfony\Component\Console\Attribute\Argument(name: 'second')]
-        string $second = 'required value',
+        float $second = 200.5,
         #[\Symfony\Component\Console\Attribute\Option(name: 'third')]
-        string $third = 'third value'
+        int $third = 200,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'fourth')]
+        float $fourth = 400.5
     ): int
     {
     }
