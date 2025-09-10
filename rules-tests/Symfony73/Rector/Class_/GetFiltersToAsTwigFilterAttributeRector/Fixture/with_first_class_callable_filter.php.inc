@@ -39,7 +39,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterA
 
 use Twig\Extension\AbstractExtension;
 
-final class WithFirstClassCallableFilter extends AbstractExtension
+final class WithFirstClassCallableFilter
 {
     #[\Twig\Attribute\AsTwigFilter('some_filter')]
     public function someFilter($value)
