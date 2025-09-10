@@ -21,7 +21,7 @@ use Rector\Symfony\Symfony73\ValueObject\CommandOption;
 final readonly class CommandInvokeParamsFactory
 {
     public function __construct(
-        private ValueResolver $valueResolver
+        private ValueResolver $valueResolver,
     ) {
     }
 
@@ -47,29 +47,31 @@ final readonly class CommandInvokeParamsFactory
         $argumentParams = [];
 
         foreach ($commandArguments as $commandArgument) {
-            $argumentName = (string) $this->valueResolver->getValue($commandArgument->getName());
-            $variableName = str_replace('-', '_', $argumentName);
-
+            $variableName = $this->createCamelCase($commandArgument->getNameValue());
             $argumentParam = new Param(new Variable($variableName));
 
             $argumentParam->type = new Identifier('string');
 
-            $modeValue = $this->valueResolver->getValue($commandArgument->getMode());
-            if ($modeValue === null || $modeValue === 2) {
+            // is argument optional?
+            if ($commandArgument->getMode() === null) {
+                $argumentParam->type = new NullableType($argumentParam->type);
+            } elseif ($this->valueResolver->isValue($commandArgument->getMode(), 2)) {
                 $argumentParam->type = new NullableType($argumentParam->type);
             }
 
             // @todo fill type or default value
             // @todo default string, multiple values array
 
+            $argumentArgs = [new Arg(value: $commandArgument->getName(), name: new Identifier('name'))];
+
+            if ($commandArgument->getDescription() instanceof Expr) {
+                $argumentArgs[] = new Arg(value: $commandArgument->getDescription(), name: new Identifier(
+                    'description'
+                ));
+            }
+
             $argumentParam->attrGroups[] = new AttributeGroup([
-                new Attribute(
-                    new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT),
-                    [
-                        new Arg(value: $commandArgument->getName(), name: new Identifier('name')),
-                        new Arg(value: $commandArgument->getDescription(), name: new Identifier('description')),
-                    ]
-                ),
+                new Attribute(new FullyQualified(SymfonyAttribute::COMMAND_ARGUMENT), $argumentArgs),
             ]);
 
             $argumentParams[] = $argumentParam;
@@ -87,9 +89,7 @@ final readonly class CommandInvokeParamsFactory
         $optionParams = [];
 
         foreach ($commandOptions as $commandOption) {
-            $optionName = $commandOption->getStringName();
-            $variableName = str_replace('-', '_', $optionName);
-
+            $variableName = $this->createCamelCase($commandOption->getNameValue());
             $optionParam = new Param(new Variable($variableName));
 
             $optionArgs = [new Arg(value: $commandOption->getName(), name: new Identifier('name'))];
@@ -114,5 +114,17 @@ final readonly class CommandInvokeParamsFactory
         }
 
         return $optionParams;
+    }
+
+    private function createCamelCase(string $value): string
+    {
+        // Replace dashes/underscores with spaces
+        $value = str_replace(['-', '_'], ' ', strtolower($value));
+
+        // Capitalize each word, then remove spaces
+        $value = str_replace(' ', '', ucwords($value));
+
+        // Lowercase first character to make it camelCase
+        return lcfirst($value);
     }
 }

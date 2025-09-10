@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Symfony73\NodeFinder\MethodCallFinder;
 use Rector\Symfony\Symfony73\ValueObject\CommandOption;
 
@@ -14,6 +13,7 @@ final readonly class CommandOptionsResolver
 {
     public function __construct(
         private MethodCallFinder $methodCallFinder,
+        private ValueResolver $valueResolver
     ) {
     }
 
@@ -29,17 +29,15 @@ final readonly class CommandOptionsResolver
         foreach ($addOptionMethodCalls as $addOptionMethodCall) {
             $addOptionArgs = $addOptionMethodCall->getArgs();
 
-            $nameArgValue = $addOptionArgs[0]->value;
-            if (! $nameArgValue instanceof String_) {
-                // we need string value, otherwise param will not have a name
-                throw new ShouldNotHappenException('Option name is required');
-            }
+            $optionName = $this->valueResolver->getValue($addOptionArgs[0]->value);
 
-            $shortcutExpr = $addOptionArgs[1]->value ?? null;
-            $modeExpr = $addOptionArgs[2]->value ?? null;
-            $descriptionExpr = $addOptionArgs[3]->value ?? null;
-
-            $commandOptions[] = new CommandOption($nameArgValue, $shortcutExpr, $modeExpr, $descriptionExpr);
+            $commandOptions[] = new CommandOption(
+                $optionName,
+                $addOptionArgs[0]->value,
+                $addOptionArgs[1]->value ?? null,
+                $addOptionArgs[2]->value ?? null,
+                $addOptionArgs[3]->value ?? null
+            );
         }
 
         return $commandOptions;

@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony73\ValueObject;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
-use Rector\Exception\NotImplementedYetException;
 
 final readonly class CommandOption
 {
     public function __construct(
+        private string $nameValue,
         private Expr $name,
         private ?Expr $shortcut,
         private ?Expr $mode,
@@ -38,12 +37,8 @@ final readonly class CommandOption
         return $this->description;
     }
 
-    public function getStringName(): string
+    public function getNameValue(): string
     {
-        if ($this->name instanceof String_) {
-            return $this->name->value;
-        }
-
-        throw new NotImplementedYetException(sprintf('Add more options to "%s"', self::class));
+        return $this->nameValue;
     }
 }
