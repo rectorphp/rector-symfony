@@ -98,7 +98,7 @@ final class SomeCommand
         #[Argument(name: 'argument', description: 'Argument description')]
         string $argument,
         #[Option(name: 'option', shortcut: 'o', mode: Option::VALUE_NONE, description: 'Option description')]
-        $option,
+        bool $option = false,
     ) {
         $someArgument = $argument;
         $someOption = $option;
