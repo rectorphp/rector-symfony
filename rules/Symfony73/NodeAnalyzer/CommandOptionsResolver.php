@@ -36,6 +36,8 @@ final readonly class CommandOptionsResolver
 
             $optionName = $this->valueResolver->getValue($addOptionArgs[0]->value);
 
+            $isImplicitBoolean = $this->isImplicitBoolean($addOptionArgs);
+
             $commandOptions[] = new CommandOption(
                 $optionName,
                 $addOptionArgs[0]->value,
@@ -44,6 +46,7 @@ final readonly class CommandOptionsResolver
                 $addOptionArgs[3]->value ?? null,
                 $addOptionArgs[4]->value ?? null,
                 $this->isArrayMode($addOptionArgs),
+                $isImplicitBoolean,
                 $this->resolveDefaultType($addOptionArgs)
             );
         }
@@ -75,7 +78,22 @@ final readonly class CommandOptionsResolver
         }
 
         $modeValue = $this->valueResolver->getValue($modeExpr);
-        // binary check for InputOptions::VALUE_IS_ARRAY
+        // binary check for InputOption::VALUE_IS_ARRAY
         return (bool) ($modeValue & 8);
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    private function isImplicitBoolean(array $args): bool
+    {
+        $modeExpr = $args[2]->value ?? null;
+        if (! $modeExpr instanceof Expr) {
+            return false;
+        }
+
+        $modeValue = $this->valueResolver->getValue($modeExpr);
+        // binary check for InputOption::VALUE_NONE
+        return (bool) ($modeValue & 1);
     }
 }
