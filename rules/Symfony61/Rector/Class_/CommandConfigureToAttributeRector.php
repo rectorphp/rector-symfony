@@ -25,6 +25,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see https://symfony.com/doc/current/console.html#registering-the-command
@@ -147,11 +148,24 @@ CODE_SAMPLE),
             $node->attrGroups[] = $asCommandAttributeGroup;
         }
 
+        $existingAttributeNames = array_map(
+            function (Arg $arg): string {
+                Assert::isInstanceOf($arg->name, Identifier::class);
+                return $arg->name->toString();
+            },
+            $attributeArgs
+        );
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
-            if ($resolvedExpr instanceof Expr) {
-                $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
+            if (! $resolvedExpr instanceof Expr) {
+                continue;
             }
+
+            if (in_array($attributeName, $existingAttributeNames, true)) {
+                continue;
+            }
+
+            $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
         }
 
         $asCommandAttribute->args = $attributeArgs;
