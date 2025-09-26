@@ -145,4 +145,9 @@ final class SymfonyClass
      * @var string
      */
     public const SYMFONY_STYLE = 'Symfony\Component\Console\Style\SymfonyStyle';
+
+    /**
+     * @var string
+     */
+    public const LOGOUT_SUCCESS_HANDLER = 'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface';
 }
