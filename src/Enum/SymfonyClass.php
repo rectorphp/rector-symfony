@@ -150,4 +150,9 @@ final class SymfonyClass
      * @var string
      */
     public const LOGOUT_SUCCESS_HANDLER = 'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface';
+
+    /**
+     * @var string
+     */
+    public const SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION = 'Symfony\Component\Validator\Constraints\Collection';
 }
