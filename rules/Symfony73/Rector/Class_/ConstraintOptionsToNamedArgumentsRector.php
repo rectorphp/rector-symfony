@@ -57,6 +57,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+
         // Match classes starting with Symfony\Component\Validator\Constraints\
         if (! $node->class instanceof FullyQualified && ! $node->class instanceof Name) {
             return null;
@@ -82,6 +86,18 @@ CODE_SAMPLE
         $argName = $node->args[0]->name;
         if ($argName instanceof Identifier && $argName->name !== 'options') {
             return null;
+        }
+
+        if ($className === 'Symfony\Component\Validator\Constraints\Collection'
+            && count($node->getArgs()) === 1
+            && $node->args[0]->value instanceof Array_) {
+
+            if ($node->args[0]->name instanceof Identifier) {
+                return null;
+            }
+
+            $node->args[0]->name = new Identifier('fields');
+            return $node;
         }
 
         $array = $node->args[0]->value;
