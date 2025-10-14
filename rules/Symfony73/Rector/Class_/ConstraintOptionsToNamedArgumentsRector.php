@@ -88,15 +88,16 @@ CODE_SAMPLE
             return null;
         }
 
+        $args = $node->getArgs();
         if ($className === 'Symfony\Component\Validator\Constraints\Collection'
-            && count($node->getArgs()) === 1
-            && $node->args[0]->value instanceof Array_) {
+            && count($args) === 1
+            && $args[0]->value instanceof Array_) {
 
-            if ($node->args[0]->name instanceof Identifier) {
+            if ($args[0]->name instanceof Identifier) {
                 return null;
             }
 
-            $node->args[0]->name = new Identifier('fields');
+            $args[0]->name = new Identifier('fields');
             return $node;
         }
 
