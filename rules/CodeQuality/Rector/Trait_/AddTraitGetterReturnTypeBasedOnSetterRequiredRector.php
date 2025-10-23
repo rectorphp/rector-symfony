@@ -15,6 +15,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyAttribute;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,11 +25,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddTraitGetterReturnTypeBasedOnSetterRequiredRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const REQUIRED_ATTRIBUTE = 'Symfony\Contracts\Service\Attribute\Required';
-
     public function __construct(
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
@@ -181,6 +178,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::REQUIRED_ATTRIBUTE);
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, SymfonyAttribute::REQUIRED);
     }
 }

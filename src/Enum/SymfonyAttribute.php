@@ -40,4 +40,9 @@ final class SymfonyAttribute
      * @var string
      */
     public const IS_GRANTED = 'Symfony\Component\Security\Http\Attribute\IsGranted';
+
+    /**
+     * @var string
+     */
+    public const REQUIRED = 'Symfony\Contracts\Service\Attribute\Required';
 }
