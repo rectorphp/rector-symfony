@@ -19,6 +19,9 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector\ConstraintOptionsToNamedArgumentsRectorTest
+ */
 final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector
 {
     public function __construct(
@@ -128,6 +131,10 @@ CODE_SAMPLE
             $arg->name = new Identifier($keyValue);
 
             $namedArgs[] = $arg;
+        }
+
+        if ($namedArgs === []) {
+            return null;
         }
 
         $node->args = $namedArgs;
