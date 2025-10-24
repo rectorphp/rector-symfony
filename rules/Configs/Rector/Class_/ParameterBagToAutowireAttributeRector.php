@@ -11,9 +11,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\NodeFactory\AutowiredParamFactory;
+use Rector\Symfony\Enum\SymfonyAttribute;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -28,13 +31,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParameterBagToAutowireAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    private const PARAMETER_BAG_CLASS = 'Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface';
-
     public function __construct(
-        private readonly AutowiredParamFactory $autowiredParamFactory
+        private readonly AutowiredParamFactory $autowiredParamFactory,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -85,6 +84,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Class_
     {
+        if (! $this->reflectionProvider->hasClass(SymfonyAttribute::AUTOWIRE)) {
+            return null;
+        }
+
         if ($node->isAnonymous()) {
             return null;
         }
@@ -112,7 +115,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isObjectType($node->var, new ObjectType(self::PARAMETER_BAG_CLASS))) {
+            if (! $this->isObjectType($node->var, new ObjectType(SymfonyClass::PARAMETER_BAG_INTERFACE))) {
                 return null;
             }
 
@@ -191,6 +194,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isName($param->type, self::PARAMETER_BAG_CLASS);
+        return $this->isName($param->type, SymfonyClass::PARAMETER_BAG_INTERFACE);
     }
 }
