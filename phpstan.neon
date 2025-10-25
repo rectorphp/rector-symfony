@@ -39,15 +39,9 @@ parameters:
         # pointless check
         - '#expects class-string, string given#'
 
-        - '#Calling PHPStan\\Reflection\\Php\\PhpParameterReflection\:\:getName\(\) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
-
         # false positive
         - '#but class PhpParser\\Node\\Stmt\\Expression is not generic#'
         - '#Access to an undefined property Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
-
-        # false positive
-        - '#Parameters should have "PhpParser\\Node\\Expr\\Closure" types as the only types passed to this method#'
-        - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
 
         # more advanced usage, but not always working
         # see https://github.com/rectorphp/rector-src/actions/runs/11798721617/job/32865546672?pr=6422#step:5:110
@@ -59,3 +53,9 @@ parameters:
 
         # avoid notice on run on php 8.3
         - identifier: typeCoverage.constantTypeCoverage
+
+        # false postitive
+        -
+            identifier: typePerfect.narrowPublicClassMethodParamType
+            path: src/NodeAnalyzer/SymfonyPhpClosureDetector.php
+        - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'

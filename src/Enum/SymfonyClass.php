@@ -170,4 +170,14 @@ final class SymfonyClass
      * @var string
      */
     public const SERVICES_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator';
+
+    /**
+     * @var string
+     */
+    public const ARGUMENT_RESOLVER_INTERFACE = 'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface';
+
+    /**
+     * @var string
+     */
+    public const VALUE_RESOLVER_INTERFACE = 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface';
 }
