@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasDefaultsAutoconfigure = $this->symfonyPhpClosureDetector->hasDefaultsAutoconfigure($node);
+        $hasDefaultsAutoconfigure = $this->symfonyPhpClosureDetector->hasDefaultsConfigured($node, 'autoconfigure');
 
         $hasChanged = false;
 

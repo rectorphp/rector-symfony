@@ -14,11 +14,11 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\Php\PhpParameterReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -162,9 +162,8 @@ CODE_SAMPLE
             $extendedMethodReflection->getVariants()
         );
 
-        foreach ($extendedParametersAcceptor->getParameters() as $parameterReflectionWithPhpDoc) {
-            /** @var PhpParameterReflection $parameterReflectionWithPhpDoc */
-            $constructorParameterNames[] = '$' . $parameterReflectionWithPhpDoc->getName();
+        foreach ($extendedParametersAcceptor->getParameters() as $extendedParameterReflection) {
+            $constructorParameterNames[] = '$' . $extendedParameterReflection->getName();
         }
 
         return $constructorParameterNames;
@@ -176,10 +175,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType(
-            $methodCall->var,
-            new ObjectType('Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator')
-        );
+        return $this->isObjectType($methodCall->var, new ObjectType(SymfonyClass::SERVICE_CONFIGURATOR));
     }
 
     private function createArgMethodCall(
