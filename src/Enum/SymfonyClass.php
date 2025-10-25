@@ -69,6 +69,11 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const SERVICE_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator';
+
+    /**
+     * @var string
+     */
     public const SESSION_INTERFACRE = 'Symfony\Component\HttpFoundation\Session\SessionInterface';
 
     /**
@@ -160,4 +165,19 @@ final class SymfonyClass
      * @var string
      */
     public const SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION = 'Symfony\Component\Validator\Constraints\Collection';
+
+    /**
+     * @var string
+     */
+    public const SERVICES_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator';
+
+    /**
+     * @var string
+     */
+    public const ARGUMENT_RESOLVER_INTERFACE = 'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface';
+
+    /**
+     * @var string
+     */
+    public const VALUE_RESOLVER_INTERFACE = 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface';
 }
