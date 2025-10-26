@@ -21,6 +21,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
@@ -130,10 +131,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isObjectType(
-            $methodCall->var,
-            new ObjectType('Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator')
-        )) {
+        if (! $this->isObjectType($methodCall->var, new ObjectType(SymfonyClass::SERVICES_CONFIGURATOR))) {
             return false;
         }
 

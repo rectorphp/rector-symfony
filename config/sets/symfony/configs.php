@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Symfony\Configs\Rector\Closure\FromServicePublicToDefaultsPublicRector;
 use Rector\Symfony\Configs\Rector\Closure\MergeServiceNameTypeRector;
 use Rector\Symfony\Configs\Rector\Closure\RemoveConstructorAutowireServiceRector;
 use Rector\Symfony\Configs\Rector\Closure\ServiceArgsToServiceNamedArgRector;
@@ -18,5 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
         ServiceSettersToSettersAutodiscoveryRector::class,
         ServiceTagsToDefaultsAutoconfigureRector::class,
         RemoveConstructorAutowireServiceRector::class,
+
+        FromServicePublicToDefaultsPublicRector::class,
     ]);
 };
