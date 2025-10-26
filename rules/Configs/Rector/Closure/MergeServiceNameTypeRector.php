@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -131,9 +132,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isObjectType(
-            $methodCall->var,
-            new ObjectType('Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator')
-        );
+        return $this->isObjectType($methodCall->var, new ObjectType(SymfonyClass::SERVICES_CONFIGURATOR));
     }
 }
