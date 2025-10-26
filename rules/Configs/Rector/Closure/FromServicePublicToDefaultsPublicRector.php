@@ -28,7 +28,7 @@ final class FromServicePublicToDefaultsPublicRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Instead of per service public() call, use it once in defaults()',
+            'Instead of per service public() call, use it once in $services->defaults()->public()',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -94,12 +94,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isName($node->name, 'public') && $node->getArgs() === []) {
+            if (! $this->isName($node->name, 'public')) {
                 return null;
             }
 
-            // not the ->defaults()->public()
-            if ($this->isDefaultCall($node)) {
+            // skip ->defaults()->public()
+            if ($this->isDefaultsCall($node)) {
                 return null;
             }
 
@@ -119,7 +119,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    public function isDefaultCall(MethodCall $methodCall): bool
+    public function isDefaultsCall(MethodCall $methodCall): bool
     {
         $currentMethodCall = $methodCall;
         while ($currentMethodCall instanceof MethodCall) {
