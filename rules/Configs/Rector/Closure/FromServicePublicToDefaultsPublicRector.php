@@ -98,6 +98,11 @@ CODE_SAMPLE
                 return null;
             }
 
+            // not the ->defaults()->public()
+            if ($this->isDefaultCall($node)) {
+                return null;
+            }
+
             $hasChanged = true;
 
             return $node->var;
@@ -112,5 +117,18 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    public function isDefaultCall(MethodCall $methodCall): bool
+    {
+        $currentMethodCall = $methodCall;
+        while ($currentMethodCall instanceof MethodCall) {
+            if ($this->isName($currentMethodCall->name, 'defaults')) {
+                return true;
+            }
+            $currentMethodCall = $currentMethodCall->var;
+        }
+
+        return false;
     }
 }
