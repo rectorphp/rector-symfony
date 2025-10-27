@@ -217,6 +217,10 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($serviceArgExpr->isFirstClassCallable()) {
+            return false;
+        }
+
         $dependencyServiceExpr = $serviceArgExpr->getArgs()[0]
             ->value;
         $dependencyService = $this->valueResolver->getValue($dependencyServiceExpr);
