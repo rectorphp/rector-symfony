@@ -129,6 +129,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+
             $argName = $node->getArgs()[0]
                 ->value;
             $serviceArgExpr = $node->getArgs()[1]
@@ -183,6 +187,10 @@ CODE_SAMPLE
         }
 
         if (! $methodCall instanceof MethodCall) {
+            return null;
+        }
+
+        if ($methodCall->isFirstClassCallable()) {
             return null;
         }
 
