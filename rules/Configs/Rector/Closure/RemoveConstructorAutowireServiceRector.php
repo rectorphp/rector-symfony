@@ -129,6 +129,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+
             $argName = $node->getArgs()[0]
                 ->value;
             $serviceArgExpr = $node->getArgs()[1]
@@ -186,6 +190,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
+
         foreach ($methodCall->getArgs() as $arg) {
             if (! $arg->value instanceof ClassConstFetch) {
                 continue;
@@ -206,6 +214,10 @@ CODE_SAMPLE
         }
 
         if (! $this->isName($serviceArgExpr->name, SymfonyFunction::SERVICE)) {
+            return false;
+        }
+
+        if ($serviceArgExpr->isFirstClassCallable()) {
             return false;
         }
 
