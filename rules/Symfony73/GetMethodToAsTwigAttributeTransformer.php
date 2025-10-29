@@ -11,6 +11,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -28,6 +29,15 @@ use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
  */
 final readonly class GetMethodToAsTwigAttributeTransformer
 {
+    private const OPTION_TO_NAMED_ARG = [
+        'is_safe' => 'isSafe',
+        'needs_environment' => 'needsEnvironment',
+        'needs_context' => 'needsContext',
+        'needs_charset' => 'needsCharset',
+        'is_safe_callback' => 'isSafeCallback',
+        'deprecation_info' => 'deprecationInfo',
+    ];
+
     public function __construct(
         private LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher,
         private ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover,
@@ -36,11 +46,15 @@ final readonly class GetMethodToAsTwigAttributeTransformer
     ) {
     }
 
+    /**
+     * @param array<string, string> $additionalOptionMapping
+     */
     public function transformClassGetMethodToAttributeMarker(
         Class_ $class,
         string $methodName,
         string $attributeClass,
-        ObjectType $objectType
+        ObjectType $objectType,
+        array $additionalOptionMapping = []
     ): bool {
 
         // check if attribute even exists
@@ -77,7 +91,8 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 }
 
                 $new = $arrayItem->value;
-                if (count($new->getArgs()) !== 2) {
+                $argCount = count($new->getArgs());
+                if ($argCount > 3 || $argCount < 2) {
                     continue;
                 }
 
@@ -87,6 +102,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 }
 
                 $secondArg = $new->getArgs()[1];
+                $thirdArg = $new->getArgs()[2] ?? null;
 
                 if ($this->isLocalCallable($secondArg->value)) {
                     $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
@@ -100,7 +116,12 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                         continue;
                     }
 
-                    $this->decorateMethodWithAttribute($localMethod, $attributeClass, $nameArg);
+                    $optionArguments = $this->getArgumentsFromOptionArray($thirdArg, $additionalOptionMapping);
+                    if ($optionArguments === null) {
+                        continue;
+                    }
+
+                    $this->decorateMethodWithAttribute($localMethod, $attributeClass, [$nameArg, ...$optionArguments]);
                     $this->visibilityManipulator->makePublic($localMethod);
 
                     // remove old new function instance
@@ -120,9 +141,12 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         return $hasChanged;
     }
 
-    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, Arg $arg): void
+    /**
+     * @param Arg[] $args
+     */
+    private function decorateMethodWithAttribute(ClassMethod $classMethod, string $attributeClass, array $args): void
     {
-        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), [$arg])]);
+        $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified($attributeClass), $args)]);
     }
 
     private function isLocalCallable(Expr $expr): bool
@@ -132,5 +156,45 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         }
 
         return $expr instanceof Array_ && count($expr->items) === 2;
+    }
+
+    /**
+     * @param array<string, string> $additionalOptionMapping
+     *
+     * @return Arg[]|null
+     */
+    private function getArgumentsFromOptionArray(?Arg $optionArgument, array $additionalOptionMapping): ?array
+    {
+        if (! $optionArgument?->value instanceof Array_) {
+            return [];
+        }
+
+        $allOptionMappings = [...self::OPTION_TO_NAMED_ARG, ...$additionalOptionMapping];
+
+        $args = [];
+        foreach ($optionArgument->value->items as $item) {
+            if (! $item->key instanceof String_) {
+                continue;
+            }
+
+            $mappedName = $allOptionMappings[$item->key->value] ?? null;
+            if ($mappedName === null) {
+                continue;
+            }
+
+            if ($mappedName === 'isSafeCallback') {
+                if ($item->value instanceof MethodCall && $item->value->isFirstClassCallable()) {
+                    continue;
+                }
+            }
+
+            $arg = new Arg($item->value);
+            $arg->name = new Identifier($mappedName);
+            $args[] = $arg;
+        }
+
+        $totalItems = count($optionArgument->value->items);
+
+        return count($args) === $totalItems ? $args : null;
     }
 }
