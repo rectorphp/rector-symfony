@@ -33,17 +33,18 @@ final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
+use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new \Twig\TwigFilter('filter_name', [$this, 'localMethod']),
+            new \Twig\TwigFilter('filter_name', [$this, 'localMethod', 'needs_environment' => true]),
         ];
     }
 
-    public function localMethod($value)
+    public function localMethod(Environment $env, $value)
     {
         return $value;
     }
@@ -53,11 +54,12 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
 use Twig\Attribute\AsTwigFilter;
+use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
-    #[TwigFilter('filter_name')]
-    public function localMethod($value)
+    #[TwigFilter('filter_name', needsEnvironment: true)]
+    public function localMethod(Environment $env, $value)
     {
         return $value;
     }
@@ -90,7 +92,11 @@ CODE_SAMPLE
             $node,
             'getFilters',
             TwigClass::AS_TWIG_FILTER_ATTRIBUTE,
-            $twigExtensionObjectType
+            $twigExtensionObjectType,
+            [
+                'preserves_safety' => 'preservesSafety',
+                'pre_escape' => 'preEscape',
+            ]
         );
 
         if ($hasChanged) {
