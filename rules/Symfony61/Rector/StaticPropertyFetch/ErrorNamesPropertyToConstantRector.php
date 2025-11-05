@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony61\Rector\StaticPropertyFetch;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\Const_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -61,11 +68,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StaticPropertyFetch::class];
+        return [StaticPropertyFetch::class, Class_::class];
     }
 
     /**
-     * @param StaticPropertyFetch $node
+     * @param StaticPropertyFetch|Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -73,9 +80,40 @@ CODE_SAMPLE
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }
-        if (! $classReflection->is('Symfony\Component\Validator\Constraint')) {
+
+        if (! $classReflection->is(SymfonyClass::VALIDATOR_CONSTRAINT)) {
             return null;
         }
+
+        if ($node instanceof StaticPropertyFetch) {
+            return $this->refactorStaticPropertyFetch($node, $classReflection);
+        }
+
+        foreach ($node->stmts as $key => $stmt) {
+            if (! $stmt instanceof Property) {
+                continue;
+            }
+
+            if (! $stmt->isStatic()) {
+                continue;
+            }
+
+            if (! $this->isName($stmt->props[0], 'errorNames')) {
+                continue;
+            }
+
+            $node->stmts[$key] = $this->createClassConst($stmt, $stmt);
+
+            return $node;
+        }
+
+        return null;
+    }
+
+    private function refactorStaticPropertyFetch(
+        StaticPropertyFetch $node,
+        ClassReflection $classReflection
+    ): ?ClassConstFetch {
         if (! $this->isName($node->name, 'errorNames')) {
             return null;
         }
@@ -86,5 +124,18 @@ CODE_SAMPLE
         }
 
         return $this->nodeFactory->createClassConstFetch($parentClass->getName(), 'ERROR_NAMES');
+    }
+
+    private function createClassConst(Property $property, Property $stmt): ClassConst
+    {
+        $propertyItem = $property->props[0];
+
+        $const = new Const_('ERROR_NAMES', $propertyItem->default);
+
+        $classConst = new ClassConst([$const], $stmt->flags & ~Modifiers::STATIC);
+
+        $classConst->setDocComment($property->getDocComment());
+
+        return $classConst;
     }
 }

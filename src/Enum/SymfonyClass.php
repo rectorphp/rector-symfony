@@ -169,6 +169,11 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const VALIDATOR_CONSTRAINT = 'Symfony\Component\Validator\Constraint';
+
+    /**
+     * @var string
+     */
     public const SERVICES_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator';
 
     /**
