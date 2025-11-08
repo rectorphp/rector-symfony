@@ -137,6 +137,12 @@ final class Symfony7SetProvider implements SetProviderInterface
             ),
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
+                'symfony/json-streamer',
+                '7.4',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony74/symfony74-json-streamer.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
                 'symfony/workflow',
                 '7.4',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony74/symfony74-workflow.php'
