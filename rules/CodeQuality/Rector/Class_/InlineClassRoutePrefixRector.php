@@ -234,9 +234,10 @@ CODE_SAMPLE
                             // silent or "path"
                             if ($attributeArg->name === null || $attributeArg->name->toString() === self::PATH) {
                                 unset($attribute->args[$attributeArgKey]);
-                                $attribute->args = array_values($attribute->args);
                             }
                         }
+
+                        $attribute->args = array_values($attribute->args);
 
                         // nothing to keep, remove whole attribute
                         if ($attribute->args === []) {
