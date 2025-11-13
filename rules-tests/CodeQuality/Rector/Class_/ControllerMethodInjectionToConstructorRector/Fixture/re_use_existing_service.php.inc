@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ReUseExistingService extends AbstractController
 {
-    public function __construct(private readonly \Psr\Log\LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 
