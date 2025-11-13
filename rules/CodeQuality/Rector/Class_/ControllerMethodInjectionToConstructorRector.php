@@ -171,7 +171,7 @@ CODE_SAMPLE
 
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if ($classMethod->isMagic() && !$this->isName($classMethod->name, MethodName::INVOKE)) {
+        if ($classMethod->isMagic() && ! $this->isName($classMethod->name, MethodName::INVOKE)) {
             return true;
         }
 
