@@ -6,8 +6,10 @@ namespace CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+#[RunClassInSeparateProcess]
 final class PrePromotedTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
