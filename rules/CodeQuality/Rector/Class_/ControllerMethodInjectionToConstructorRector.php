@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
@@ -102,11 +103,7 @@ CODE_SAMPLE
         $propertyMetadatas = [];
 
         foreach ($node->getMethods() as $classMethod) {
-            if ($classMethod->isMagic() && ! $this->isName($classMethod->name, MethodName::INVOKE)) {
-                continue;
-            }
-
-            if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
 
@@ -145,7 +142,7 @@ CODE_SAMPLE
         }
 
         foreach ($node->getMethods() as $classMethod) {
-            if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
 
@@ -170,5 +167,14 @@ CODE_SAMPLE
         // 2. replace in method bodies
 
         return $node;
+    }
+
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->isMagic() && !$this->isName($classMethod->name, MethodName::INVOKE)) {
+            return true;
+        }
+
+        return ! $this->controllerMethodAnalyzer->isAction($classMethod);
     }
 }
