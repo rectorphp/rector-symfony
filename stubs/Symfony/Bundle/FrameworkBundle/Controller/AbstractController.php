@@ -78,4 +78,29 @@ abstract class AbstractController implements \Symfony\Component\DependencyInject
     protected function isGranted($attributes, $subject = null): bool
     {
     }
+
+    public function set(string $id, ?object $service)
+    {
+        // TODO: Implement set() method.
+    }
+
+    public function initialized(string $id): bool
+    {
+        // TODO: Implement initialized() method.
+    }
+
+    public function getParameter(string $name)
+    {
+        // TODO: Implement getParameter() method.
+    }
+
+    public function hasParameter(string $name): bool
+    {
+        // TODO: Implement hasParameter() method.
+    }
+
+    public function setParameter(string $name, \UnitEnum|float|array|bool|int|string|null $value)
+    {
+        // TODO: Implement setParameter() method.
+    }
 }

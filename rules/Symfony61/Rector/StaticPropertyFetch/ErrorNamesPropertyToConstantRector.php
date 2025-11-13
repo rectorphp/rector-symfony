@@ -111,10 +111,10 @@ CODE_SAMPLE
     }
 
     private function refactorStaticPropertyFetch(
-        StaticPropertyFetch $node,
+        StaticPropertyFetch $staticPropertyFetch,
         ClassReflection $classReflection
     ): ?ClassConstFetch {
-        if (! $this->isName($node->name, 'errorNames')) {
+        if (! $this->isName($staticPropertyFetch->name, 'errorNames')) {
             return null;
         }
 
