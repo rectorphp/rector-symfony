@@ -218,7 +218,10 @@ CODE_SAMPLE
                 $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
 
                 if ($this->isExprAutowired($arrayItemValue)) {
-                    $argMethodCall = $methodCall->var;
+                    if ($argMethodCall === null) {
+                        $argMethodCall = $methodCall->var;
+                    }
+
                     continue;
                 }
 

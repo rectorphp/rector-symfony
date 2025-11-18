@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class SomeClassWithRequestStack
 {
-    public function __construct(RequestStack $requestStack)
+    public function __construct(int $count, RequestStack $requestStack)
     {
     }
 }
