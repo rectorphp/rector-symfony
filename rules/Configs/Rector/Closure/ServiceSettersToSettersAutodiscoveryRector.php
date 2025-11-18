@@ -110,6 +110,10 @@ CODE_SAMPLE
             $classNamesAndFilesPaths
         );
 
+        if (count($classNames) < 2) {
+            return null;
+        }
+
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
 
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
