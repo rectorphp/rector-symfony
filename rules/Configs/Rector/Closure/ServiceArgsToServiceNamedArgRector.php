@@ -11,6 +11,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -107,7 +108,6 @@ CODE_SAMPLE
             $constructorParameterNames = $this->resolveConstructorParameterNames($serviceClass);
 
             $mainArgMethodCall = $this->createMainArgMethodCall($node, $constructorParameterNames);
-
             if (! $mainArgMethodCall instanceof MethodCall) {
                 return null;
             }
@@ -195,7 +195,7 @@ CODE_SAMPLE
     /**
      * @param string[] $constructorParameterNames
      */
-    private function createMainArgMethodCall(MethodCall $methodCall, array $constructorParameterNames): ?MethodCall
+    private function createMainArgMethodCall(MethodCall $methodCall, array $constructorParameterNames): ?Expr
     {
         if ($constructorParameterNames === []) {
             return null;
@@ -218,7 +218,7 @@ CODE_SAMPLE
                 $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
 
                 if ($this->isExprAutowired($arrayItemValue)) {
-                    if ($argMethodCall === null) {
+                    if (! $argMethodCall instanceof Expr) {
                         $argMethodCall = $methodCall->var;
                     }
 
@@ -249,7 +249,7 @@ CODE_SAMPLE
 
     private function isExprAutowired(Expr $expr): bool
     {
-        if (! $expr instanceof Expr\FuncCall) {
+        if (! $expr instanceof FuncCall) {
             return false;
         }
 

@@ -52,6 +52,7 @@ return RectorConfig::configure()
         typeDeclarations: true,
         privatization: true,
         naming: true,
-        rectorPreset: true
+        rectorPreset: true,
+        phpunitCodeQuality: true,
     )
     ->withImportNames(removeUnusedImports: true);
