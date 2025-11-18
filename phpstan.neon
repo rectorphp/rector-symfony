@@ -5,7 +5,7 @@ parameters:
     level: 8
     errorFormat: symplify
 
-    reportUnmatchedIgnoredErrors: false
+    # reportUnmatchedIgnoredErrors: false
     treatPhpDocTypesAsCertain: false
 
     paths:
