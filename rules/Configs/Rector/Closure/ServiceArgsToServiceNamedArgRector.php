@@ -20,6 +20,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
+use Symplify\PHPStanRules\Enum\SymfonyFunctionName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -216,6 +217,11 @@ CODE_SAMPLE
                 $arrayItemValue = $arrayItem->value;
                 $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
 
+                if ($this->isExprAutowired($arrayItemValue)) {
+                    $argMethodCall = $methodCall->var;
+                    continue;
+                }
+
                 $argMethodCall = $this->createArgMethodCall(
                     $constructorParameterNames[$parameterPosition],
                     $arrayItemValue,
@@ -236,5 +242,23 @@ CODE_SAMPLE
 
         // fallback in case of empty array item
         return $key;
+    }
+
+    private function isExprAutowired(Expr $expr): bool
+    {
+        if (! $expr instanceof Expr\FuncCall) {
+            return false;
+        }
+
+        if (! $this->isNames($expr->name, [SymfonyFunctionName::SERVICE, SymfonyFunctionName::REF])) {
+            return false;
+        }
+
+        $firstArg = $expr->getArgs()[0];
+        if (! $firstArg->value instanceof String_) {
+            return false;
+        }
+
+        return $this->valueResolver->isValue($firstArg->value, 'request_stack');
     }
 }
