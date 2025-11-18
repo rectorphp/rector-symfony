@@ -19,7 +19,6 @@ return static function (RectorConfig $rectorConfig): void {
         ServiceSettersToSettersAutodiscoveryRector::class,
         ServiceTagsToDefaultsAutoconfigureRector::class,
         RemoveConstructorAutowireServiceRector::class,
-
         FromServicePublicToDefaultsPublicRector::class,
     ]);
 };
