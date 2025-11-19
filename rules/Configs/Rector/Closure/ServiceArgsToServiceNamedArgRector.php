@@ -20,8 +20,8 @@ use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\Symfony\Enum\SymfonyFunctionName;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-use Symplify\PHPStanRules\Enum\SymfonyFunctionName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
