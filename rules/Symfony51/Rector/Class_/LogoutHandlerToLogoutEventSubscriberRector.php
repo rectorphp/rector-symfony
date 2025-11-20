@@ -9,9 +9,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
 use Rector\Symfony\ValueObject\EventReferenceToMethodName;
@@ -30,11 +29,8 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
     public function __construct(
         private readonly OnLogoutClassMethodFactory $onLogoutClassMethodFactory,
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
-        private readonly ClassAnalyzer $classAnalyzer,
     ) {
-        $this->logoutHandlerObjectType = new ObjectType(
-            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
-        );
+        $this->logoutHandlerObjectType = new ObjectType(SymfonyClass::LOGOUT_HANDLER_INTERFACE);
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -100,44 +96,41 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->classAnalyzer->hasImplements(
-            $node,
-            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
-        )) {
-            return null;
-        }
-
+        // 1. replace LogoutHandlerInterface with EventSubscriberInterface
         foreach ($node->implements as $key => $implement) {
             if ($this->isName($implement, $this->logoutHandlerObjectType->getClassName())) {
                 unset($node->implements[$key]);
             }
         }
 
-        $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $node->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
 
         // 2. refactor logout() class method to onLogout()
+        foreach ($node->stmts as $key => $classStmt) {
+            if (! $classStmt instanceof ClassMethod) {
+                continue;
+            }
 
-        $logoutClassMethod = $node->getMethod('logout');
-        if (! $logoutClassMethod instanceof ClassMethod) {
-            return null;
+            if (! $this->isName($classStmt, 'logout')) {
+                continue;
+            }
+
+            // replace logout() with onLogout() method
+            $node->stmts[$key] = $this->onLogoutClassMethodFactory->createFromLogoutClassMethod($classStmt);
         }
 
-        $node->stmts[] = $this->onLogoutClassMethodFactory->createFromLogoutClassMethod($logoutClassMethod);
-
-        $classMethodStmtKey = $logoutClassMethod->getAttribute(AttributeKey::STMT_KEY);
-        unset($node->stmts[$classMethodStmtKey]);
-
         // 3. add getSubscribedEvents() class method
-        $classConstFetch = $this->nodeFactory->createClassConstReference(
-            'Symfony\Component\Security\Http\Event\LogoutEvent'
-        );
-
-        $eventReferencesToMethodNames = [new EventReferenceToMethodName($classConstFetch, 'onLogout')];
-        $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create(
-            $eventReferencesToMethodNames
-        );
-        $node->stmts[] = $getSubscribedEventsClassMethod;
+        $node->stmts[] = $this->createGetSubsribersClassMethod();
 
         return $node;
+    }
+
+    private function createGetSubsribersClassMethod(): ClassMethod
+    {
+        $classConstFetch = $this->nodeFactory->createClassConstReference(SymfonyClass::LOGOUT_EVENT);
+
+        $eventReferencesToMethodNames = [new EventReferenceToMethodName($classConstFetch, 'onLogout')];
+
+        return $this->getSubscribedEventsClassMethodFactory->create($eventReferencesToMethodNames);
     }
 }

@@ -159,6 +159,16 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const LOGOUT_EVENT = 'Symfony\Component\Security\Http\Event\LogoutEvent';
+
+    /**
+     * @var string
+     */
+    public const LOGOUT_HANDLER_INTERFACE = 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface';
+
+    /**
+     * @var string
+     */
     public const LOGOUT_SUCCESS_HANDLER = 'Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface';
 
     /**
