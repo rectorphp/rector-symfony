@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver;
 use Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver;
@@ -134,16 +135,8 @@ CODE_SAMPLE
 
         // remove empty class method
         if ($loadValidatorMetadataClassMethod->stmts === []) {
-            foreach ($node->stmts as $stmtKey => $stmt) {
-                if (! $stmt instanceof ClassMethod) {
-                    continue;
-                }
-
-                if ($this->isName($stmt, 'loadValidatorMetadata')) {
-                    unset($node->stmts[$stmtKey]);
-                    return $node;
-                }
-            }
+            $classMethodStmtKey = $loadValidatorMetadataClassMethod->getAttribute(AttributeKey::STMT_KEY);
+            unset($node->stmts[$classMethodStmtKey]);
         }
 
         return $node;
