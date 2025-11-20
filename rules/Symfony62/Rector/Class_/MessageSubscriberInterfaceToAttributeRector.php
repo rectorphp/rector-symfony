@@ -122,39 +122,37 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->subscriberClass = $node;
+        foreach ($node->stmts as $key => $classStmt) {
+            if (! $classStmt instanceof ClassMethod) {
+                continue;
+            }
 
-        $getHandledMessagesClassMethod = $node->getMethod('getHandledMessages');
-        if (! $getHandledMessagesClassMethod instanceof ClassMethod) {
-            return null;
+            if (! $this->isName($classStmt, 'getHandledMessages')) {
+                continue;
+            }
+
+            $getHandledMessagesClassMethod = $classStmt;
+
+            $stmts = (array) $getHandledMessagesClassMethod->stmts;
+            if ($stmts === []) {
+                return null;
+            }
+
+            $this->handleYields($getHandledMessagesClassMethod);
+
+            $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
+            unset($node->stmts[$key]);
+
+            return $node;
         }
 
-        $stmts = (array) $getHandledMessagesClassMethod->stmts;
-        if ($stmts === []) {
-            return null;
-        }
-
-        if (
-            ($stmts[0] instanceof Expression) &&
-            $stmts[0]->expr instanceof Yield_
-        ) {
-            $this->handleYields($stmts);
-        }
-
-        $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
-        unset($node->stmts[$getHandledMessagesClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
-
-        return $node;
+        return null;
     }
 
-    /**
-     * @param array<int, Node\Stmt> $expressions
-     */
-    private function handleYields(array $expressions): void
+    private function handleYields(ClassMethod $getHandledMessagesClassMethod): void
     {
-        foreach ($expressions as $expression) {
-            if (! $expression instanceof Expression ||
-                 ! $expression->expr instanceof Yield_
+        foreach ((array) $getHandledMessagesClassMethod->stmts as $stmt) {
+            if (! $stmt instanceof Expression || ! $stmt->expr instanceof Yield_
             ) {
                 continue;
             }
@@ -162,8 +160,8 @@ CODE_SAMPLE
             $method = MethodName::INVOKE;
             $arguments = [];
 
-            if ($expression->expr->key instanceof ClassConstFetch) {
-                $array = $expression->expr->value;
+            if ($stmt->expr->key instanceof ClassConstFetch) {
+                $array = $stmt->expr->value;
                 if (! $array instanceof Array_) {
                     continue;
                 }
@@ -173,7 +171,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $value = $expression->expr->value;
+            $value = $stmt->expr->value;
             if (
                 (! $value instanceof ClassConstFetch) ||
                 ! $value->class instanceof Name
