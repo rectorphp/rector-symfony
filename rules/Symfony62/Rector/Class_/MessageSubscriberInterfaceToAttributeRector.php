@@ -14,7 +14,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Helper\MessengerHelper;
@@ -145,7 +144,17 @@ CODE_SAMPLE
         }
 
         $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
-        unset($node->stmts[$getHandledMessagesClassMethod->getAttribute(AttributeKey::STMT_KEY)]);
+
+        foreach ($node->stmts as $stmtKey => $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
+
+            if ($this->isName($stmt, 'getHandledMessages')) {
+                unset($node->stmts[$stmtKey]);
+                return $node;
+            }
+        }
 
         return $node;
     }
