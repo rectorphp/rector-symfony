@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
@@ -32,9 +33,7 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
         private readonly GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory,
         private readonly ClassAnalyzer $classAnalyzer,
     ) {
-        $this->logoutHandlerObjectType = new ObjectType(
-            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
-        );
+        $this->logoutHandlerObjectType = new ObjectType(SymfonyClass::LOGOUT_HANDLER_INTERFACE);
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -100,10 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->classAnalyzer->hasImplements(
-            $node,
-            'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface'
-        )) {
+        if (! $this->classAnalyzer->hasImplements($node, SymfonyClass::LOGOUT_HANDLER_INTERFACE)) {
             return null;
         }
 
@@ -113,7 +109,7 @@ CODE_SAMPLE
             }
         }
 
-        $node->implements[] = new FullyQualified('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $node->implements[] = new FullyQualified(SymfonyClass::EVENT_SUBSCRIBER_INTERFACE);
 
         // 2. refactor logout() class method to onLogout()
 
@@ -128,9 +124,7 @@ CODE_SAMPLE
         unset($node->stmts[$classMethodStmtKey]);
 
         // 3. add getSubscribedEvents() class method
-        $classConstFetch = $this->nodeFactory->createClassConstReference(
-            'Symfony\Component\Security\Http\Event\LogoutEvent'
-        );
+        $classConstFetch = $this->nodeFactory->createClassConstReference(SymfonyClass::LOGOUT_EVENT);
 
         $eventReferencesToMethodNames = [new EventReferenceToMethodName($classConstFetch, 'onLogout')];
         $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create(
