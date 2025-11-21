@@ -116,6 +116,7 @@ CODE_SAMPLE
         if (! $hasChanged) {
             return null;
         }
+
         return $node;
     }
 
@@ -147,6 +148,7 @@ CODE_SAMPLE
             $args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
             $hasChanged = true;
         }
+
         return $hasChanged;
     }
 

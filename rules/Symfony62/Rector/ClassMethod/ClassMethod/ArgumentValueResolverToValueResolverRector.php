@@ -48,6 +48,7 @@ final class ArgumentValueResolverToValueResolverRector extends AbstractRector
                     $classMethod
                 );
             }
+
             if ($this->isName(
                 $classMethod->name,
                 'resolve'
@@ -115,22 +116,27 @@ CODE_SAMPLE
     private function extractSupportsArguments(Class_ $class, int $key, ClassMethod $classMethod): array
     {
         $isIdentical = true;
-        $supportFirstArg = $supportSecondArg = null;
+        $supportFirstArg = null;
+        $supportSecondArg = null;
 
         if ($classMethod->getStmts() === null) {
             return [$isIdentical, $supportFirstArg, $supportSecondArg];
         }
+
         foreach ($classMethod->getStmts() as $stmt) {
             if (! $stmt instanceof Return_) {
                 continue;
             }
+
             $expression = $stmt->expr;
             if (! $expression instanceof BinaryOp) {
                 continue;
             }
+
             if ($expression instanceof NotIdentical) {
                 $isIdentical = false;
             }
+
             $supportFirstArg = $expression->left;
             $supportSecondArg = $expression->right;
             unset($class->stmts[$key]);

@@ -200,9 +200,11 @@ final readonly class GetSubscribedEventsClassMethodFactory
             if (! $eventTag instanceof EventListenerTag) {
                 continue;
             }
+
             if ($eventTag->getEvent() !== $eventName) {
                 continue;
             }
+
             return $eventTag->getMethod();
         }
 
@@ -217,9 +219,11 @@ final readonly class GetSubscribedEventsClassMethodFactory
             if (! $eventTag instanceof EventListenerTag) {
                 continue;
             }
+
             if ($eventTag->getEvent() !== $eventName) {
                 continue;
             }
+
             return $eventTag->getPriority();
         }
 

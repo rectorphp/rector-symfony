@@ -56,6 +56,7 @@ final readonly class ThisGetTypeMatcher
         if ($methodCall->var instanceof Variable && $this->nodeNameResolver->isName($methodCall->var, 'this')) {
             return true;
         }
+
         return $methodCall->var instanceof PropertyFetch && $this->nodeNameResolver->isName(
             $methodCall->var->var,
             'this'

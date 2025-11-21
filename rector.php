@@ -23,6 +23,7 @@ return RectorConfig::configure()
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+        \Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
 
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
@@ -49,6 +50,7 @@ return RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
+        codingStyle: true,
         typeDeclarations: true,
         privatization: true,
         naming: true,

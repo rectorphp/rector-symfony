@@ -18,10 +18,10 @@ final class SymfonyInternalSetList
     /**
      * @var string
      */
-    final public const FOS_REST_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/fosrest/annotations-to-attributes.php';
+    public const FOS_REST_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/fosrest/annotations-to-attributes.php';
 
     /**
      * @var string
      */
-    final public const SENSIOLABS_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/sensiolabs/annotations-to-attributes.php';
+    public const SENSIOLABS_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/sensiolabs/annotations-to-attributes.php';
 }

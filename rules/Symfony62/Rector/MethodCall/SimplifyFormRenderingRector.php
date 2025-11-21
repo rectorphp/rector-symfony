@@ -121,12 +121,15 @@ CODE_SAMPLE
             if (! $arrayItem->value instanceof MethodCall) {
                 continue;
             }
+
             if (! $this->isName($arrayItem->value->name, 'createView')) {
                 continue;
             }
+
             if (! $this->isObjectType($arrayItem->value->var, new ObjectType('Symfony\Component\Form\FormInterface'))) {
                 continue;
             }
+
             $replaced = true;
             $arrayItem->value = $arrayItem->value->var;
         }

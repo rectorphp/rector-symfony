@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -149,8 +150,8 @@ CODE_SAMPLE
             // replace param use with property fetch
             $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
                 $paramNamesToReplace
-            ) {
-                if ($node instanceof Node\Expr\Closure) {
+            ): Closure|null|PropertyFetch {
+                if ($node instanceof Closure) {
                     foreach ($node->uses as $key => $closureUse) {
                         if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
                             unset($node->uses[$key]);

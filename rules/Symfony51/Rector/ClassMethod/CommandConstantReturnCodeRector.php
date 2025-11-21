@@ -97,6 +97,7 @@ CODE_SAMPLE
             if (! $return->expr instanceof Int_) {
                 continue;
             }
+
             $classConstFetch = $this->convertNumberToConstant($return->expr);
             if (! $classConstFetch instanceof ClassConstFetch) {
                 continue;

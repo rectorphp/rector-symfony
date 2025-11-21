@@ -165,6 +165,7 @@ CODE_SAMPLE
             if (! $methodCall->var instanceof Variable || $methodCall->var->name !== 'this') {
                 return false;
             }
+
             $functionName = $this->getName($methodCall->name);
             if (! in_array($functionName, $methods, true)) {
                 return false;
@@ -186,21 +187,25 @@ CODE_SAMPLE
 
             return $classMethod;
         }
+
         if ($this->isResponseReturnMethod($classMethod, ['file'])) {
             $classMethod->returnType = new FullyQualified(ResponseClass::BINARY_FILE);
 
             return $classMethod;
         }
+
         if ($this->isResponseReturnMethod($classMethod, ['json'])) {
             $classMethod->returnType = new FullyQualified(ResponseClass::JSON);
 
             return $classMethod;
         }
+
         if ($this->isResponseReturnMethod($classMethod, ['stream'])) {
             $classMethod->returnType = new FullyQualified(name: ResponseClass::STREAMED);
 
             return $classMethod;
         }
+
         if ($this->isResponseReturnMethod($classMethod, ['render', 'forward', 'renderForm'])) {
             $classMethod->returnType = new FullyQualified(ResponseClass::BASIC);
 

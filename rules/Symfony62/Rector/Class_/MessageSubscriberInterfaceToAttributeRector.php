@@ -178,6 +178,7 @@ CODE_SAMPLE
             ) {
                 continue;
             }
+
             $classParts = $value->class->getParts();
             $this->newInvokeMethodName = 'handle' . end($classParts);
             $this->addAttribute($class, $method, $arguments);
@@ -193,12 +194,14 @@ CODE_SAMPLE
             if (! $item->value instanceof Expr) {
                 continue;
             }
+
             $key = (string) $this->valueResolver->getValue($item->key);
             $value = $this->valueResolver->getValue($item->value);
             if ($key === 'method') {
                 $method = $value;
                 continue;
             }
+
             $arguments[$key] = $value;
         }
 

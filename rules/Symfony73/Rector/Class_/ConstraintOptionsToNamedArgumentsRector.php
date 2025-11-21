@@ -80,7 +80,7 @@ CODE_SAMPLE
         }
 
         if (
-            count($node->args) === 0 ||
+            $node->args === [] ||
             ! $node->args[0] instanceof Arg ||
             ! $node->args[0]->value instanceof Array_
         ) {

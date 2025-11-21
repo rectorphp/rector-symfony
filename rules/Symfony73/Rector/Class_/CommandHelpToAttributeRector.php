@@ -161,6 +161,7 @@ CODE_SAMPLE
                 if ($node instanceof Class_ || $node instanceof Function_) {
                     return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
+
                 if (! $node instanceof MethodCall) {
                     return null;
                 }

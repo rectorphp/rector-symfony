@@ -36,9 +36,11 @@ final class ArrayUnionResponseTypeAnalyzer
 
             return false;
         }
+
         if (! $hasArrayType) {
             return false;
         }
+
         return $hasResponseType;
     }
 

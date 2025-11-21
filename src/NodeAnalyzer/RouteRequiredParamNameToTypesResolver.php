@@ -90,6 +90,7 @@ final readonly class RouteRequiredParamNameToTypesResolver
         if (! $requirementsArrayItemNode instanceof ArrayItemNode) {
             return [];
         }
+
         if (! $requirementsArrayItemNode->value instanceof CurlyListNode) {
             return [];
         }

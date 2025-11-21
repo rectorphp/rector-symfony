@@ -129,12 +129,14 @@ CODE_SAMPLE
                 if (! $this->isName($node->class, self::SWIFT_MESSAGE_FQN)) {
                     return null;
                 }
+
                 $args = $node->getArgs();
                 if ($args !== []) {
                     $node = new MethodCall(new New_(new FullyQualified(self::EMAIL_FQN)), 'subject', [$args[0]]);
                 } else {
                     $node->class = new FullyQualified(self::EMAIL_FQN);
                 }
+
                 $hasChanged = true;
             }
 
@@ -161,6 +163,7 @@ CODE_SAMPLE
                     if ($name === 'attach') {
                         $this->handleAttach($node);
                     }
+
                     if ($name === 'getId') {
                         $node = $this->handleId($node);
                     }
@@ -190,12 +193,15 @@ CODE_SAMPLE
             if ($this->addressesMapping[$name] !== null) {
                 $methodCall->name = new Identifier($this->addressesMapping[$name]);
             }
+
             if ($methodCall->getArgs() === []) {
                 return;
             }
+
             if (! ($firstArg = $methodCall->args[0]) instanceof Arg) {
                 return;
             }
+
             if (
                 $firstArg->value instanceof Array_ &&
                 $firstArg->value->items !== []
@@ -212,12 +218,14 @@ CODE_SAMPLE
                         );
                     }
                 }
+
                 $methodCall->args = $newArgs;
             } else {
                 $addressArguments = [new Arg($firstArg->value)];
                 if (isset($methodCall->args[1]) && ($secondArg = $methodCall->args[1]) instanceof Arg) {
                     $addressArguments[] = new Arg($secondArg->value);
                 }
+
                 $methodCall->args = [new Arg($this->createAddress($addressArguments))];
             }
         }
@@ -238,6 +246,7 @@ CODE_SAMPLE
         } else {
             $methodCall->name = new Identifier('text');
         }
+
         $methodCall->args = [$methodCall->args[0]];
     }
 
@@ -247,10 +256,12 @@ CODE_SAMPLE
             if ($node instanceof StaticCall && $this->isName($node->name, 'fromPath')) {
                 $methodCall->args[0] = $node->args[0];
             }
+
             if ($node instanceof MethodCall) {
                 if ($this->isName($node->name, 'setFilename')) {
                     $methodCall->args[1] = $node->args[0];
                 }
+
                 if ($this->isName($node->name, 'setContentType')) {
                     $methodCall->args[2] = $node->args[0];
                 }

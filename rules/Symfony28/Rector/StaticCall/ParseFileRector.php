@@ -128,6 +128,7 @@ CODE_SAMPLE
         if (! $nodeType instanceof ConstantStringType) {
             return false;
         }
+
         return (bool) Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
     }
 }

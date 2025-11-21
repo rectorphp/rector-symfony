@@ -52,6 +52,7 @@ final class MessengerHelper
             $options['fromTransport'] = $options['from_transport'];
             unset($options['from_transport']);
         }
+
         return $options;
     }
 
@@ -78,6 +79,7 @@ final class MessengerHelper
     {
         $args = $this->phpAttributeGroupFactory->createArgsFromItems($options, self::AS_MESSAGE_HANDLER_ATTRIBUTE);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
+
         $node->attrGroups = array_merge($node->attrGroups, [
             new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)]),
         ]);

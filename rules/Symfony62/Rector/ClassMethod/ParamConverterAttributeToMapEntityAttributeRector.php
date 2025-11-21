@@ -184,9 +184,11 @@ CODE_SAMPLE
                 ) {
                     continue;
                 }
+
                 if (in_array($item->key->value, ['mapping', 'entity_manager'], true)) {
                     $probablyEntity = true;
                 }
+
                 $newArguments[] = new Arg($item->value, name: new Identifier($item->key->value));
             }
 
@@ -244,6 +246,7 @@ CODE_SAMPLE
                 return $key;
             }
         }
+
         return null;
     }
 }

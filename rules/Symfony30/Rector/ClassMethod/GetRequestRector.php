@@ -130,6 +130,7 @@ CODE_SAMPLE
         if ($containsGetRequestMethod) {
             return true;
         }
+
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($classMethod, function (Node $node): bool {
             if (! $node instanceof MethodCall) {

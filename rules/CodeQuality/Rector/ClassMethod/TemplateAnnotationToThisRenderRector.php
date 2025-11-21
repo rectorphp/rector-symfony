@@ -394,6 +394,7 @@ CODE_SAMPLE
                 $hasChanged = true;
             }
         }
+
         return $hasChanged;
     }
 
