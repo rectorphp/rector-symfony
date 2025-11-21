@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
@@ -23,7 +24,7 @@ return RectorConfig::configure()
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
-        \Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
+        UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
 
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive

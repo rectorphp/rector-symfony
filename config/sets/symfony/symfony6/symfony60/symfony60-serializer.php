@@ -42,6 +42,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $privatesAccessor = new PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
+
     $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Serializer\Encoder\DecoderInterface',
