@@ -126,6 +126,7 @@ CODE_SAMPLE
             if ($this->isName($currentMethodCall->name, 'defaults')) {
                 return true;
             }
+
             $currentMethodCall = $currentMethodCall->var;
         }
 

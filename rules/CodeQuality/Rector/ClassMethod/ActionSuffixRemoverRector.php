@@ -93,6 +93,7 @@ CODE_SAMPLE
         if ($newName === $name) {
             return null;
         }
+
         $classMethod->name = new Identifier($newName);
         return $classMethod;
     }

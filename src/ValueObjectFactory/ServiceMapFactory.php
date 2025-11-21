@@ -148,6 +148,7 @@ final class ServiceMapFactory
                 []
             );
         }
+
         return $services;
     }
 

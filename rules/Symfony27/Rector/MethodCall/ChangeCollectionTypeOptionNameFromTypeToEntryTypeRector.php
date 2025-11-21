@@ -118,6 +118,7 @@ CODE_SAMPLE
         if (! $hasChanged) {
             return null;
         }
+
         return $node;
     }
 
@@ -142,6 +143,7 @@ CODE_SAMPLE
                 $hasChanged = true;
             }
         }
+
         return $hasChanged;
     }
 }

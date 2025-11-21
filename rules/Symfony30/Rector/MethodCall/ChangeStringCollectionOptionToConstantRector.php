@@ -122,9 +122,11 @@ CODE_SAMPLE
             if (! $optionsArrayItem instanceof ArrayItem) {
                 continue;
             }
+
             if (! $optionsArrayItem->key instanceof Expr) {
                 continue;
             }
+
             if (! $this->valueResolver->isValues($optionsArrayItem->key, ['type', 'entry_type'])) {
                 continue;
             }

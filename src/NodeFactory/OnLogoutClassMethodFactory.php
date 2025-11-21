@@ -64,6 +64,7 @@ final readonly class OnLogoutClassMethodFactory
 
             $usedParams[] = $oldParam;
         }
+
         return $usedParams;
     }
 

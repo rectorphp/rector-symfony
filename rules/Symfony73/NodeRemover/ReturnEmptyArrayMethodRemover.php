@@ -12,7 +12,7 @@ final class ReturnEmptyArrayMethodRemover
 {
     public function removeClassMethodIfArrayEmpty(Class_ $class, Array_ $returnArray, string $methodName): void
     {
-        if (count($returnArray->items) !== 0) {
+        if ($returnArray->items !== []) {
             return;
         }
 

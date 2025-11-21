@@ -131,9 +131,11 @@ CODE_SAMPLE
                 }
             }
         }
+
         if ($hasChanged) {
             return $class;
         }
+
         return null;
     }
 }

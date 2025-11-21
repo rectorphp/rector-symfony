@@ -168,6 +168,7 @@ CODE_SAMPLE
         if (! $if instanceof Expr) {
             $if = $ternary->cond;
         }
+
         /** @var Expr $else */
         $else = $ternary->else;
         $ifType = $this->getType($if);
