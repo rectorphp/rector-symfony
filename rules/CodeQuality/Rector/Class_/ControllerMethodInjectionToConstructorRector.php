@@ -12,11 +12,14 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeManipulator\ClassDependencyManipulator;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -33,6 +36,8 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
         private readonly ClassDependencyManipulator $classDependencyManipulator,
         private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly AttributeFinder $attributeFinder,
+        private readonly ValueResolver $valueResolver,
     ) {
     }
 
@@ -108,6 +113,8 @@ CODE_SAMPLE
                 continue;
             }
 
+            $entityClasses = $this->resolveParamConverterEntityClasses($classMethod);
+
             foreach ($classMethod->getParams() as $key => $param) {
                 // skip scalar and empty values, as not services
                 if ($param->type === null || $param->type instanceof Identifier) {
@@ -115,8 +122,14 @@ CODE_SAMPLE
                 }
 
                 // request is allowed
-                if ($param->type instanceof Name && $this->isName($param->type, SymfonyClass::REQUEST)) {
-                    continue;
+                if ($param->type instanceof Name) {
+                    if ($this->isName($param->type, SymfonyClass::REQUEST)) {
+                        continue;
+                    }
+
+                    if ($this->isNames($param->type, $entityClasses)) {
+                        continue;
+                    }
                 }
 
                 // @todo allow parameter converter
@@ -187,5 +200,32 @@ CODE_SAMPLE
         }
 
         return ! $this->controllerMethodAnalyzer->isAction($classMethod);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveParamConverterEntityClasses(ClassMethod $classMethod): array
+    {
+        $entityClasses = [];
+
+        $paramConverterAttributes = $this->attributeFinder->findManyByClass(
+            $classMethod,
+            SensioAttribute::PARAM_CONVERTER
+        );
+        foreach ($paramConverterAttributes as $paramConverterAttribute) {
+            foreach ($paramConverterAttribute->args as $arg) {
+                if ($arg->name instanceof Identifier && $this->isName($arg->name, 'class')) {
+                    $entityClass = $this->valueResolver->getValue($arg->value);
+                    if (! is_string($entityClass)) {
+                        continue;
+                    }
+
+                    $entityClasses[] = $entityClass;
+                }
+            }
+        }
+
+        return $entityClasses;
     }
 }
