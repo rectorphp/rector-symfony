@@ -149,7 +149,17 @@ CODE_SAMPLE
             // replace param use with property fetch
             $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
                 $paramNamesToReplace
-            ): ?PropertyFetch {
+            ) {
+                if ($node instanceof Node\Expr\Closure) {
+                    foreach ($node->uses as $key => $closureUse) {
+                        if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
+                            unset($node->uses[$key]);
+                        }
+                    }
+
+                    return $node;
+                }
+
                 if (! $node instanceof Variable) {
                     return null;
                 }
