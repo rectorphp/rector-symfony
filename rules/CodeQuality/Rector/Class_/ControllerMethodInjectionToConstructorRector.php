@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
@@ -117,19 +117,17 @@ CODE_SAMPLE
 
             foreach ($classMethod->getParams() as $key => $param) {
                 // skip scalar and empty values, as not services
-                if ($param->type === null || $param->type instanceof Identifier) {
+                if ($param->type === null || ! $param->type instanceof FullyQualified) {
                     continue;
                 }
 
                 // request is allowed
-                if ($param->type instanceof Name) {
-                    if ($this->isName($param->type, SymfonyClass::REQUEST)) {
-                        continue;
-                    }
+                if ($this->isName($param->type, SymfonyClass::REQUEST)) {
+                    continue;
+                }
 
-                    if ($this->isNames($param->type, $entityClasses)) {
-                        continue;
-                    }
+                if ($this->isNames($param->type, $entityClasses)) {
+                    continue;
                 }
 
                 // @todo allow parameter converter
