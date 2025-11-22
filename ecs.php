@@ -10,4 +10,12 @@ return ECSConfig::configure()
     )
     ->withRootFiles()
     ->withPreparedSets(psr12: true, symplify: true, common: true, strict: true)
-    ->withSkip(['*/Source/*', '*/Fixture/*', '*/Expected/*']);
+    ->withSkip([
+        '*/Source/*',
+        '*/Fixture/*',
+        '*/Expected/*',
+
+        \PhpCsFixer\Fixer\StringNotation\SingleQuoteFixer::class => [
+            __DIR__ . '/rules/CodeQuality/Rector/Class_/ControllerMethodInjectionToConstructorRector.php',
+        ],
+    ]);
