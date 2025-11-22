@@ -31,6 +31,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ControllerMethodInjectionToConstructorRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ['\\Entity\\', '\\Document\\', '\\Model\\'];
+
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
@@ -128,6 +133,12 @@ CODE_SAMPLE
 
                 if ($this->isNames($param->type, $entityClasses)) {
                     continue;
+                }
+
+                foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {
+                    if (str_contains($this->getName($param->type), $commonEntityContainsNamespace)) {
+                        continue 2;
+                    }
                 }
 
                 // @todo allow parameter converter
