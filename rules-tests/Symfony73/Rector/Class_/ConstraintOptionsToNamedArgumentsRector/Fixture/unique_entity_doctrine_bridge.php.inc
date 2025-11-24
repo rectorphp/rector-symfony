@@ -4,7 +4,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\ConstraintOptionsToNamedA
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-final class SomeClass
+final class UniqueEntityDoctrineBridge
 {
     public function __construct()
     {
@@ -19,7 +19,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\ConstraintOptionsToNamedA
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-final class SomeClass
+final class UniqueEntityDoctrineBridge
 {
     public function __construct()
     {
