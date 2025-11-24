@@ -190,7 +190,6 @@ CODE_SAMPLE
 
                 if (! $this->isNames($node, $paramNamesToReplace)) {
                     return null;
-
                 }
 
                 $propertyName = $this->getName($node);
