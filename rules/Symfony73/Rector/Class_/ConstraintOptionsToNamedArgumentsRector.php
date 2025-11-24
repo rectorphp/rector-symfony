@@ -75,7 +75,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! str_starts_with($className, 'Symfony\Component\Validator\Constraints\\')) {
+        if (
+            ! str_starts_with($className, 'Symfony\Component\Validator\Constraints\\')
+            && ! str_starts_with($className, 'Symfony\Bridge\Doctrine\Validator\Constraints\\')
+        ) {
             return null;
         }
 
