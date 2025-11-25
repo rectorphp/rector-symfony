@@ -19,7 +19,7 @@ final class WithInvokeMethod extends Controller
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector\Fixture;
