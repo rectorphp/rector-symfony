@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\FosAnnotation;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -47,7 +48,8 @@ final class InlineClassRoutePrefixRector extends AbstractRector
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly DocBlockUpdater $docBlockUpdater,
         private readonly ControllerAnalyzer $controllerAnalyzer,
-        private readonly AttrinationFinder $attrinationFinder
+        private readonly AttrinationFinder $attrinationFinder,
+        private readonly MagicClassMethodAnalyzer $magicClassMethodAnalyzer
     ) {
     }
 
@@ -134,7 +136,7 @@ CODE_SAMPLE
         $hasChanged = false;
 
         foreach ($node->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic() || $classMethod->isMagic()) {
+            if ($this->shouldSkipMethod($classMethod)) {
                 continue;
             }
 
@@ -255,6 +257,13 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkipMethod(Node\Stmt\ClassMethod $classMethod): bool
+    {
+        return
+            !$classMethod->isPublic()
+            || $this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod);
+    }
+
     private function shouldSkipClass(Class_ $class): bool
     {
         if (! $this->controllerAnalyzer->isController($class)) {
@@ -262,7 +271,7 @@ CODE_SAMPLE
         }
 
         foreach ($class->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic() || $classMethod->isMagic()) {
+            if ($this->shouldSkipMethod($classMethod)) {
                 continue;
             }
 
