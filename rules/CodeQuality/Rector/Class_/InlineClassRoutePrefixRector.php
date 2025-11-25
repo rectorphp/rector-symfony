@@ -134,7 +134,7 @@ CODE_SAMPLE
         $hasChanged = false;
 
         foreach ($node->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic() || $classMethod->isMagic()) {
+            if ($this->shouldSkipMethod($classMethod)) {
                 continue;
             }
 
@@ -255,6 +255,19 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function shouldSkipMethod(Node\Stmt\ClassMethod $classMethod): bool
+    {
+        if (!$classMethod->isPublic()) {
+            return true;
+        }
+
+        if ($classMethod->isMagic() && $classMethod->name->toLowerString() !== '__invoke') {
+            return true;
+        }
+
+        return false;
+    }
+
     private function shouldSkipClass(Class_ $class): bool
     {
         if (! $this->controllerAnalyzer->isController($class)) {
@@ -262,7 +275,7 @@ CODE_SAMPLE
         }
 
         foreach ($class->getMethods() as $classMethod) {
-            if (! $classMethod->isPublic() || $classMethod->isMagic()) {
+            if ($this->shouldSkipMethod($classMethod)) {
                 continue;
             }
 
