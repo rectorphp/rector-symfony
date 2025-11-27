@@ -1,2 +1,8 @@
 [default.extend-words]
 Symplify = "Symplify"
+
+Invokable = "Invokable"
+
+# yes, it rename fix in symfony71-serializer to rename Contructor to Constructor
+# via RenameMethodRector
+Contructor = "Contructor"
