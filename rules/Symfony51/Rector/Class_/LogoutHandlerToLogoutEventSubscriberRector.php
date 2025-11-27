@@ -125,7 +125,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createGetSubsribersClassMethod(): ClassMethod
+    private function createGetSubscribersClassMethod(): ClassMethod
     {
         $classConstFetch = $this->nodeFactory->createClassConstReference(SymfonyClass::LOGOUT_EVENT);
 
