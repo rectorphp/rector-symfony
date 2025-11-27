@@ -120,7 +120,7 @@ CODE_SAMPLE
         }
 
         // 3. add getSubscribedEvents() class method
-        $node->stmts[] = $this->createGetSubsribersClassMethod();
+        $node->stmts[] = $this->createGetSubscribersClassMethod();
 
         return $node;
     }
