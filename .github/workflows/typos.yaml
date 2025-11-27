@@ -1,0 +1,24 @@
+# see https://github.com/crate-ci/typos
+name: "Typos"
+
+on:
+    pull_request:
+    push:
+        branches:
+            - "main"
+
+jobs:
+    typos:
+        name: "Check for typos"
+        runs-on: "ubuntu-latest"
+
+        steps:
+            - uses: actions/checkout@v4
+
+
+
+            - name: "Check for typos"
+              uses: "crate-ci/typos@v1.40.0"
+              with:
+                  config: .github/typos.toml
+                  files: "README.md src config rules tests rules-tests"

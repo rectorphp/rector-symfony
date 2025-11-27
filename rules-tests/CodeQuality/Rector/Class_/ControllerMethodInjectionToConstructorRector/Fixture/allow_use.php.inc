@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class AllwoUse extends AbstractController
+final class AllowUse extends AbstractController
 {
     public function __construct()
     {
@@ -35,7 +35,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class AllwoUse extends AbstractController
+final class AllowUse extends AbstractController
 {
     public function __construct(private readonly \Psr\Log\LoggerInterface $logger)
     {

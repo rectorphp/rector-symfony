@@ -14,7 +14,7 @@ final class MultipleReturnCommand extends Command
             return null;
         }
 
-        if ($erroCondition) {
+        if ($errorCondition) {
             return 1;
         }
     }
@@ -38,7 +38,7 @@ final class MultipleReturnCommand extends Command
             return 0;
         }
 
-        if ($erroCondition) {
+        if ($errorCondition) {
             return 1;
         }
         return 0;

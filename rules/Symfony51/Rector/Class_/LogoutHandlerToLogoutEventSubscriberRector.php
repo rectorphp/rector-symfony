@@ -120,12 +120,12 @@ CODE_SAMPLE
         }
 
         // 3. add getSubscribedEvents() class method
-        $node->stmts[] = $this->createGetSubsribersClassMethod();
+        $node->stmts[] = $this->createGetSubscribersClassMethod();
 
         return $node;
     }
 
-    private function createGetSubsribersClassMethod(): ClassMethod
+    private function createGetSubscribersClassMethod(): ClassMethod
     {
         $classConstFetch = $this->nodeFactory->createClassConstReference(SymfonyClass::LOGOUT_EVENT);
 
