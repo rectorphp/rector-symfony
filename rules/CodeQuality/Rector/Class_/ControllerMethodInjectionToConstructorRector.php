@@ -128,6 +128,11 @@ CODE_SAMPLE
                     continue;
                 }
 
+                // most likely mapped by attribute or autowired with specific type
+                if ($param->attrGroups !== []) {
+                    continue;
+                }
+
                 // request is allowed
                 if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER])) {
                     continue;
