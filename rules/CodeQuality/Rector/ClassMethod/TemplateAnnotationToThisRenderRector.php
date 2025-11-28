@@ -199,7 +199,7 @@ CODE_SAMPLE
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
 
-            if (! $node instanceof StmtsAwareInterface) {
+            if (! property_exists($node, 'stmts')) {
                 return null;
             }
 
