@@ -9,7 +9,7 @@ parameters:
     typeAliases:
         StmtsAware: \PhpParser\Node\Expr\Closure | \PhpParser\Node\Stmt\Case_ | \PhpParser\Node\Stmt\Catch_ | \PhpParser\Node\Stmt\ClassMethod | \PhpParser\Node\Stmt\Do_ | \PhpParser\Node\Stmt\Else_ | \PhpParser\Node\Stmt\ElseIf_ | \PhpParser\Node\Stmt\Finally_ | \PhpParser\Node\Stmt\For_ | \PhpParser\Node\Stmt\Foreach_ | \PhpParser\Node\Stmt\Function_ | \PhpParser\Node\Stmt\If_ | \PhpParser\Node\Stmt\Namespace_ | \PhpParser\Node\Stmt\TryCatch | \PhpParser\Node\Stmt\While_
 
-    # reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     treatPhpDocTypesAsCertain: false
 
     paths:
@@ -64,4 +64,5 @@ parameters:
 
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
 
+        # local use php 8.3
         - identifier: typeCoverage.constantTypeCoverage
