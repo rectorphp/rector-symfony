@@ -115,6 +115,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isAbstract()) {
+            return null;
+        }
+
         $propertyMetadatas = [];
 
         foreach ($node->getMethods() as $classMethod) {
