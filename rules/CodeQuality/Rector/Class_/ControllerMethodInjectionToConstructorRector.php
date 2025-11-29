@@ -25,6 +25,7 @@ use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -45,6 +46,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly AttributeFinder $attributeFinder,
         private readonly ValueResolver $valueResolver,
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard
     ) {
     }
 
@@ -218,7 +220,13 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->controllerMethodAnalyzer->isAction($classMethod);
+        if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
+            return true;
+        }
+
+        return $this->parentClassMethodOverrideGuard->hasParentClassMethod(
+            $classMethod
+        );
     }
 
     /**
