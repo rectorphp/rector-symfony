@@ -10,4 +10,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony72/symfony72-serializer.php');
     $rectorConfig->import(__DIR__ . '/symfony72/symfony72-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony72/symfony72-mailer.php');
+    $rectorConfig->import(__DIR__ . '/symfony72/symfony72-translation.php');
 };

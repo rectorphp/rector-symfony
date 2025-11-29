@@ -79,6 +79,24 @@ final class Symfony7SetProvider implements SetProviderInterface
                 '7.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-serializer.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/translation',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-translation.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/mailer',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-mailer.php'
+            ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/http-foundation',
+                '7.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony7/symfony72/symfony72-http-foundation.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
