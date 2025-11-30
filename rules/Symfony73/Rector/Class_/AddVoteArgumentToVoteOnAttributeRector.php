@@ -13,6 +13,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,12 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddVoteArgumentToVoteOnAttributeRector extends AbstractRector
 {
-    private const VOTE_INTERFACE = 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface';
-
-    private const VOTER_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Voter';
-
-    private const VOTE_CLASS = 'Symfony\Component\Security\Core\Authorization\Voter\Vote';
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -89,13 +84,13 @@ final class AddVoteArgumentToVoteOnAttributeRector extends AbstractRector
     {
         $classMethod = null;
 
-        if ($node->extends !== null && $this->isName($node->extends, self::VOTER_CLASS)) {
+        if ($node->extends !== null && $this->isName($node->extends, SymfonyClass::VOTER_CLASS)) {
             $classMethod = $node->getMethod('voteOnAttribute');
         }
 
         if ($classMethod === null) {
             foreach ($node->implements as $implement) {
-                if ($this->isName($implement, self::VOTE_INTERFACE)) {
+                if ($this->isName($implement, SymfonyClass::VOTER_INTERFACE)) {
                     $classMethod = $node->getMethod('vote');
                     break;
                 }
@@ -113,7 +108,7 @@ final class AddVoteArgumentToVoteOnAttributeRector extends AbstractRector
         $classMethod->params[] = new Param(
             new Variable('vote'),
             new ConstFetch(new Name('null')),
-            new NullableType(new FullyQualified(self::VOTE_CLASS))
+            new NullableType(new FullyQualified(SymfonyClass::VOTE_CLASS))
         );
 
         return $node;
