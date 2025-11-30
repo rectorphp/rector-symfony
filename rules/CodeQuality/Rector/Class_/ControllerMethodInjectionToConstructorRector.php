@@ -46,7 +46,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly AttributeFinder $attributeFinder,
         private readonly ValueResolver $valueResolver,
-        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodOverrideGuard
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 
@@ -228,9 +228,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->parentClassMethodOverrideGuard->hasParentClassMethod(
-            $classMethod
-        );
+        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
 
     /**
