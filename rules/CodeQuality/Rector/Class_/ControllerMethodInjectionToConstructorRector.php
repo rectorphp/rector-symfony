@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -135,12 +136,8 @@ CODE_SAMPLE
                     continue;
                 }
 
-                // request is allowed
-                if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER])) {
-                    continue;
-                }
-
-                if ($this->isNames($param->type, $entityClasses)) {
+                // skip allowed known objectsallowed
+                if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, ...$entityClasses])) {
                     continue;
                 }
 
@@ -150,10 +147,15 @@ CODE_SAMPLE
                     }
                 }
 
-                // @todo allow parameter converter
-                unset($classMethod->params[$key]);
-
                 $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+                if ($paramType instanceof ObjectType) {
+                    if ($paramType->isEnum()->yes()) {
+                        continue;
+                    }
+                }
+
+                unset($classMethod->params[$key]);
                 $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
             }
         }
@@ -208,8 +210,6 @@ CODE_SAMPLE
                 return new PropertyFetch(new Variable('this'), $propertyName);
             });
         }
-
-        // 2. replace in method bodies
 
         return $node;
     }
