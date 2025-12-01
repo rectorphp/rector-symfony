@@ -137,7 +137,10 @@ CODE_SAMPLE
                 }
 
                 // skip allowed known objectsallowed
-                if ($this->isNames($param->type, [SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, ...$entityClasses])) {
+                if ($this->isNames(
+                    $param->type,
+                    [SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, ...$entityClasses]
+                )) {
                     continue;
                 }
 
@@ -180,35 +183,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            // replace param use with property fetch
-            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-                $paramNamesToReplace
-            ): Closure|null|PropertyFetch {
-                if ($node instanceof Closure) {
-                    foreach ($node->uses as $key => $closureUse) {
-                        if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
-                            unset($node->uses[$key]);
-                        }
-                    }
-
-                    return $node;
-                }
-
-                if (! $node instanceof Variable) {
-                    return null;
-                }
-
-                if (! $this->isNames($node, $paramNamesToReplace)) {
-                    return null;
-                }
-
-                if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === true) {
-                    return null;
-                }
-
-                $propertyName = $this->getName($node);
-                return new PropertyFetch(new Variable('this'), $propertyName);
-            });
+            $this->replaceParamUseWithPropertyFetch($classMethod, $paramNamesToReplace);
         }
 
         return $node;
@@ -225,5 +200,44 @@ CODE_SAMPLE
         }
 
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
+    }
+
+    /**
+     * @param string[] $paramNamesToReplace
+     */
+    private function replaceParamUseWithPropertyFetch(ClassMethod $classMethod, array $paramNamesToReplace): void
+    {
+        if ($classMethod->stmts === null) {
+            return;
+        }
+
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use (
+            $paramNamesToReplace
+        ): Closure|null|PropertyFetch {
+            if ($node instanceof Closure) {
+                foreach ($node->uses as $key => $closureUse) {
+                    if ($this->isNames($closureUse->var, $paramNamesToReplace)) {
+                        unset($node->uses[$key]);
+                    }
+                }
+
+                return $node;
+            }
+
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->isNames($node, $paramNamesToReplace)) {
+                return null;
+            }
+
+            if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === true) {
+                return null;
+            }
+
+            $propertyName = $this->getName($node);
+            return new PropertyFetch(new Variable('this'), $propertyName);
+        });
     }
 }
