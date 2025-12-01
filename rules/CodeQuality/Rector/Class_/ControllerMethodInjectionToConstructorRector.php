@@ -8,20 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\CodeQuality\NodeAnalyzer\ParamConverterClassesResolver;
 use Rector\Symfony\Enum\FosClass;
-use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -44,8 +41,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         private readonly ControllerMethodAnalyzer $controllerMethodAnalyzer,
         private readonly ClassDependencyManipulator $classDependencyManipulator,
         private readonly StaticTypeMapper $staticTypeMapper,
-        private readonly AttributeFinder $attributeFinder,
-        private readonly ValueResolver $valueResolver,
+        private readonly ParamConverterClassesResolver $paramConverterClassesResolver,
         private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
@@ -126,7 +122,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $entityClasses = $this->resolveParamConverterEntityClasses($classMethod);
+            $entityClasses = $this->paramConverterClassesResolver->resolveEntityClasses($classMethod);
 
             foreach ($classMethod->getParams() as $key => $param) {
                 // skip scalar and empty values, as not services
@@ -229,32 +225,5 @@ CODE_SAMPLE
         }
 
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveParamConverterEntityClasses(ClassMethod $classMethod): array
-    {
-        $entityClasses = [];
-
-        $paramConverterAttributes = $this->attributeFinder->findManyByClass(
-            $classMethod,
-            SensioAttribute::PARAM_CONVERTER
-        );
-        foreach ($paramConverterAttributes as $paramConverterAttribute) {
-            foreach ($paramConverterAttribute->args as $arg) {
-                if ($arg->name instanceof Identifier && $this->isName($arg->name, 'class')) {
-                    $entityClass = $this->valueResolver->getValue($arg->value);
-                    if (! is_string($entityClass)) {
-                        continue;
-                    }
-
-                    $entityClasses[] = $entityClass;
-                }
-            }
-        }
-
-        return $entityClasses;
     }
 }
