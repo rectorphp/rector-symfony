@@ -171,7 +171,8 @@ CODE_SAMPLE
                 }
 
                 if (
-                    in_array($this->getName($param->var), $constructParamVariables, true)
+                    $constructParamVariables !== []
+                    && in_array($this->getName($param->var), $constructParamVariables, true)
                     &&
                     ! in_array($this->getName($param->type), array_keys($constructParamVariables), true)
                 ) {
