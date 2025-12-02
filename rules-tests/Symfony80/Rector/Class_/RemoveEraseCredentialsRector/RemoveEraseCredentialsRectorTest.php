@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\RemoveEraseCredentialsRector;
+namespace Rector\Symfony\Tests\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;

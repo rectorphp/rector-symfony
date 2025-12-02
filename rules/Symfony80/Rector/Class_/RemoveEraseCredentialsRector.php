@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Symfony73\Rector\Class_;
+namespace Rector\Symfony\Symfony80\Rector\Class_;
 
 use PhpParser\Modifiers;
 use PhpParser\Node;
@@ -14,9 +14,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.3.md#security
+ * @see https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md#security
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\RemoveEraseCredentialsRector\RemoveEraseCredentialsRectorTest
+ * @see \Rector\Symfony\Tests\Symfony80\Rector\Class_\RemoveEraseCredentialsRector\RemoveEraseCredentialsRectorTest
  */
 final class RemoveEraseCredentialsRector extends AbstractRector
 {
