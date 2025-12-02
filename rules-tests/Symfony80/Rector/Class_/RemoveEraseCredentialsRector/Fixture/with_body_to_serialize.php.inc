@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\RemoveEraseCredentialsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony80\Rector\Class_\RemoveEraseCredentialsRector\Fixture;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,7 +26,7 @@ final class WithBodyToSerialize implements UserInterface
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\RemoveEraseCredentialsRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony80\Rector\Class_\RemoveEraseCredentialsRector\Fixture;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 

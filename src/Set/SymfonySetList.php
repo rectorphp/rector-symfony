@@ -175,6 +175,11 @@ final class SymfonySetList
     /**
      * @var string
      */
+    public const SYMFONY_80 = __DIR__ . '/../../config/sets/symfony/symfony8/symfony80.php';
+
+    /**
+     * @var string
+     */
     public const SYMFONY_CODE_QUALITY = __DIR__ . '/../../config/sets/symfony/symfony-code-quality.php';
 
     /**
