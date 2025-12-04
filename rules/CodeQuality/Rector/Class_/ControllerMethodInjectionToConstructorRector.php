@@ -146,10 +146,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                // skip allowed known objectsallowed
+                // skip allowed known objects
                 if ($this->isNames(
                     $param->type,
-                    [SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, ...$entityClasses]
+                    [SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, SymfonyClass::UUID, ...$entityClasses]
                 )) {
                     continue;
                 }
