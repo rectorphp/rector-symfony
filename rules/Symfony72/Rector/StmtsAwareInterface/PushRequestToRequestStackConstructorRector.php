@@ -108,6 +108,7 @@ CODE_SAMPLE
                     $array = new Array_([new ArrayItem($pushMethodCall->getArgs()[0]->value)]);
                     $requestStack->args[] = new Arg($array);
 
+                    $requestStack->setAttributes([]);
                     $hasChanged = true;
 
                     unset($node->stmts[$key]);
