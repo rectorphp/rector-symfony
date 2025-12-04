@@ -215,4 +215,9 @@ final class SymfonyClass
      * @var string
      */
     public const USER_INTERFACE = 'Symfony\Component\Security\Core\User\UserInterface';
+
+    /**
+     * @var string
+     */
+    public const UUID = 'Symfony\Component\Uid\Uuid';
 }
