@@ -154,6 +154,8 @@ CODE_SAMPLE
                         SymfonyClass::REQUEST,
                         FosClass::PARAM_FETCHER,
                         SymfonyClass::UUID,
+                        \Throwable::class,
+                        \Exception::class,
                         ...$entityClasses,
                     ]
                 )) {
