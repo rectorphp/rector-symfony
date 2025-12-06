@@ -154,11 +154,8 @@ CODE_SAMPLE
                         SymfonyClass::REQUEST,
                         FosClass::PARAM_FETCHER,
                         SymfonyClass::UUID,
-<<<<<<< HEAD
                         \Throwable::class,
                         \Exception::class,
-=======
->>>>>>> 50e7b0b7 (fixup! Fix PushRequestToRequestStackConstructorRector when RequestStack is created without parentheses (#897))
                         ...$entityClasses,
                     ]
                 )) {
