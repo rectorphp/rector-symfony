@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -167,7 +168,13 @@ CODE_SAMPLE
             $invokeParams = [];
         }
 
-        $executeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+        $executeClassMethodParams = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+
+        // Ensure that optional parameters are listed last in the argument list
+        $executeClassMethod->params = array_merge(
+            array_filter($executeClassMethodParams, fn(Param $param) => is_null($param->default)),
+            array_filter($executeClassMethodParams, fn(Param $param) => !is_null($param->default)),
+        );
 
         // 6. remove parent class
         $node->extends = null;
