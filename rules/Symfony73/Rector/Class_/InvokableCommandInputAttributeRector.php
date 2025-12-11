@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -288,8 +289,7 @@ CODE_SAMPLE
         }
 
         usort($invokeParams, function (Param $firstParam, Param $secondParam): int {
-            // make use of <=> operator
-            return $firstParam->default <=> $secondParam->default;
+            return $firstParam->default instanceof Expr <=> $secondParam->default instanceof Expr;
         });
 
         $outputParam = $classStmt->params[1];

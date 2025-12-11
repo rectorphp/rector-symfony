@@ -48,10 +48,10 @@ class MatchScalarType
     public function __invoke(
         #[\Symfony\Component\Console\Attribute\Argument(name: 'first')]
         ?int $first = 100,
-        #[\Symfony\Component\Console\Attribute\Option(name: 'third')]
-        int $third = 200,
         #[\Symfony\Component\Console\Attribute\Argument(name: 'second')]
         float $second = 200.5,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'third')]
+        int $third = 200,
         #[\Symfony\Component\Console\Attribute\Option(name: 'fourth')]
         float $fourth = 400.5
     ): int
