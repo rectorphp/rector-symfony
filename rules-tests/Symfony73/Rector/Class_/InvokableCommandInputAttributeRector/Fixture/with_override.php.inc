@@ -54,8 +54,8 @@ final class WithOverride
         bool $option = false
     ): int
     {
-        $someArgument = $argument;
-        $someOption = $option;
+        $someArgument = $input->getArgument('argument');
+        $someOption = $input->getOption('option');
         // ...
         return 1;
     }

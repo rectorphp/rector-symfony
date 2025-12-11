@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
+use Exception;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -26,6 +27,7 @@ use Rector\ValueObject\MethodName;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Throwable;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector\ControllerMethodInjectionToConstructorRectorTest
@@ -154,8 +156,8 @@ CODE_SAMPLE
                         SymfonyClass::REQUEST,
                         FosClass::PARAM_FETCHER,
                         SymfonyClass::UUID,
-                        \Throwable::class,
-                        \Exception::class,
+                        Throwable::class,
+                        Exception::class,
                         ...$entityClasses,
                     ]
                 )) {

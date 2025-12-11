@@ -45,15 +45,16 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class WithOptionalArgument
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
-    ?string $argument, #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
-    bool $option = false): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
+        ?string $argument,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
+        bool $option = false
+    ): int
     {
-        $someArgument = $argument;
-        $someOption = $option;
-
+        $someArgument = $input->getArgument('argument');
+        $someOption = $input->getOption('option');
         // ...
-
         return 1;
     }
 }

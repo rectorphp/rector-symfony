@@ -62,10 +62,10 @@ final class WithMultipleArgumentsOptionsFluent
         bool $option2 = false
     ): int
     {
-        $arg1 = $argument1;
-        $arg2 = $argument2;
-        $opt1 = $option1;
-        $opt2 = $option2;
+        $arg1 = $input->getArgument('argument1');
+        $arg2 = $input->getArgument('argument2');
+        $opt1 = $input->getOption('option1');
+        $opt2 = $input->getOption('option2');
         // ...
         return 1;
     }

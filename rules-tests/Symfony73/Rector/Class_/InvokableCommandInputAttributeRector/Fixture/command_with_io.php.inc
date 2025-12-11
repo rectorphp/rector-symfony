@@ -34,7 +34,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand('app:my-command')]
 final class MyCommand
 {
-    public function __invoke(\Symfony\Component\Console\Style\SymfonyStyle $io): int
+    public function __invoke(OutputInterface $output, \Symfony\Component\Console\Style\SymfonyStyle $io): int
     {
         $io->info('Great success!');
         return 1;

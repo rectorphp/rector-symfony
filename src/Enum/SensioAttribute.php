@@ -4,35 +4,42 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Enum;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 final class SensioAttribute
 {
     /**
      * @var string
      */
-    public const PARAM_CONVERTER = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter';
+    public const PARAM_CONVERTER = ParamConverter::class;
 
     /**
      * @var string
      */
-    public const ENTITY = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Entity';
+    public const ENTITY = Entity::class;
 
     /**
      * @var string
      */
-    public const METHOD = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Method';
+    public const METHOD = Method::class;
 
     /**
      * @var string
      */
-    public const TEMPLATE = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template';
+    public const TEMPLATE = Template::class;
 
     /**
      * @var string
      */
-    public const IS_GRANTED = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted';
+    public const IS_GRANTED = IsGranted::class;
 
     /**
      * @var string
      */
-    public const SECURITY = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Security';
+    public const SECURITY = Security::class;
 }

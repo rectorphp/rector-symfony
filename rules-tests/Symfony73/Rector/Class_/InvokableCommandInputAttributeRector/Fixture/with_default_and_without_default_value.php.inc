@@ -46,18 +46,21 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'some_name')]
 final class WithDefaultAndWithoutDefaultValue
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Option(name: 'another', shortcut: 'a', mode: InputOption::VALUE_REQUIRED, description: 'No default value')]
-    $another, OutputInterface $output, #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
-    bool $option = false): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Option(name: 'another', shortcut: 'a', mode: InputOption::VALUE_REQUIRED, description: 'No default value')]
+        $another,
+        OutputInterface $output,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
+        bool $option = false
+    ): int
     {
-        $someOption = $option;
-        $another = $another;
+        $someOption = $input->getOption('option');
+        $another = $input->getOption('another');
         $output->writeln('Using output too');
-
         // ...
-
         return 1;
     }
 }
 
 ?>
+    

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Enum;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 final class SymfonyAnnotation
 {
     /**
@@ -24,5 +26,5 @@ final class SymfonyAnnotation
     /**
      * @var string
      */
-    public const TEMPLATE = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template';
+    public const TEMPLATE = Template::class;
 }

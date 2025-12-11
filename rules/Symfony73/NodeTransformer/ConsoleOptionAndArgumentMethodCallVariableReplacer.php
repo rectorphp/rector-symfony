@@ -23,7 +23,6 @@ final readonly class ConsoleOptionAndArgumentMethodCallVariableReplacer
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private ValueResolver $valueResolver,
     ) {
-
     }
 
     public function replace(ClassMethod $executeClassMethod): void

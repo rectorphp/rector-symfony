@@ -43,12 +43,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class NameWithHyphen
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument-with-hyphen', description: 'Argument description')]
-    ?string $argumentWithHyphen, #[\Symfony\Component\Console\Attribute\Option(name: 'option-with-hyphen')]
-    $optionWithHyphen): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'argument-with-hyphen', description: 'Argument description')]
+        ?string $argumentWithHyphen,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'option-with-hyphen')]
+        $optionWithHyphen
+    ): int
     {
-        $argument = $argument_with_hyphen;
-        $option = $option_with_hyphen;
+        $argument = $input->getArgument('argument-with-hyphen');
+        $option = $input->getOption('option-with-hyphen');
         return Command::SUCCESS;
     }
 }

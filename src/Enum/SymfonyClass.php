@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Enum;
 
+use Psr\Log\LoggerInterface;
+
 final class SymfonyClass
 {
     /**
@@ -39,7 +41,7 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const LOGGER_INTERFACE = 'Psr\Log\LoggerInterface';
+    public const LOGGER_INTERFACE = LoggerInterface::class;
 
     /**
      * @var string
