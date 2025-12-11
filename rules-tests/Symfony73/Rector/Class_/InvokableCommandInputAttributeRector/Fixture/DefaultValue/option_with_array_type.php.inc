@@ -42,9 +42,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class OptionWithOptionalValue
 {
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Option(name: 'some-array', mode: InputOption::VALUE_IS_ARRAY)]
-    array $someArray = ['third value'], #[\Symfony\Component\Console\Attribute\Option(name: 'no-default-array', mode: InputOption::VALUE_IS_ARRAY)]
-    array $noDefaultArray): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Option(name: 'some-array', mode: InputOption::VALUE_IS_ARRAY)]
+        array $someArray = ['third value'],
+        #[\Symfony\Component\Console\Attribute\Option(name: 'no-default-array', mode: InputOption::VALUE_IS_ARRAY)]
+        array $noDefaultArray
+    ): int
     {
     }
 }

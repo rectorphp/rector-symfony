@@ -53,17 +53,16 @@ final class OptionNameConstant
     private const ARGUMENT_NAME = 'some-argument';
 
     private const OPTION_NAME = 'some-option';
-
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME)]
-    ?string $someArgument, #[\Symfony\Component\Console\Attribute\Option(name: self::OPTION_NAME)]
-    $someOption): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME)]
+        ?string $someArgument,
+        #[\Symfony\Component\Console\Attribute\Option(name: self::OPTION_NAME)]
+        $someOption
+    ): int
     {
         $someArgument = $some_argument;
-
         $someOption = $some_option;
-
         // ...
-
         return 1;
     }
 }

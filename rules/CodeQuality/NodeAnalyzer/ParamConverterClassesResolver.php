@@ -10,7 +10,7 @@ use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Symfony\Enum\SensioAttribute;
 
-final class ParamConverterClassesResolver
+final readonly class ParamConverterClassesResolver
 {
     public function __construct(
         private AttributeFinder $attributeFinder,
