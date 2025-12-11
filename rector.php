@@ -23,7 +23,7 @@ return RectorConfig::configure()
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+        StringClassNameToClassConstantRector::class => [__DIR__ . '/config', __DIR__ . '/src/Enum'],
         UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
 
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [

@@ -51,7 +51,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class NameFromConstant
 {
     private const string ARGUMENT_NAME = 'name';
-
     public function __invoke(
         #[\Symfony\Component\Console\Attribute\Argument(name: self::ARGUMENT_NAME, description: 'The name of the person to greet.')]
         ?string $name,

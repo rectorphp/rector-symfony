@@ -51,15 +51,16 @@ final class SomeCommandWithSetHelp
         $this->setHelp('argument');
     }
 
-    public function __invoke(#[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
-    string $argument, #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
-    bool $option = false): int
+    public function __invoke(
+        #[\Symfony\Component\Console\Attribute\Argument(name: 'argument', description: 'Argument description')]
+        string $argument,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'option', shortcut: 'o', mode: InputOption::VALUE_NONE, description: 'Option description')]
+        bool $option = false
+    ): int
     {
         $someArgument = $argument;
         $someOption = $option;
-
         // ...
-
         return 1;
     }
 }
