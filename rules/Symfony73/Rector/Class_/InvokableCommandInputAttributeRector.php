@@ -290,6 +290,17 @@ CODE_SAMPLE
 
         usort($invokeParams, function (Param $firstParam, Param $secondParam): int {
             return $firstParam->default instanceof Expr <=> $secondParam->default instanceof Expr;
+//            if ($defaultCompare !== 0) {
+//                return $defaultCompare;
+//            }
+//
+//            $firstAttribute = $firstParam->attrGroups[0]->attrs[0];
+//            $secondAttribute = $secondParam->attrGroups[0]->attrs[0];
+//
+//            $isFirstParamArgument = $this->isName($firstAttribute->name, SymfonyAttribute::COMMAND_ARGUMENT) ? 0 : 1;
+//            $isSecondParamArgument = $this->isName($secondAttribute->name, SymfonyAttribute::COMMAND_ARGUMENT) ? 0 : 1;
+//
+//            return $isFirstParamArgument <=> $isSecondParamArgument;
         });
 
         $outputParam = $classStmt->params[1];
