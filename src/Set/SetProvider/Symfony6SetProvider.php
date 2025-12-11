@@ -264,6 +264,12 @@ final class Symfony6SetProvider implements SetProviderInterface
                 '6.2',
                 __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-mail-pace-mailer.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/validator',
+                '6.2',
+                __DIR__ . '/../../../config/sets/symfony/symfony6/symfony62/symfony62-validator.php'
+            ),
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
