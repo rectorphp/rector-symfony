@@ -23,8 +23,4 @@ final class SkipNamespacedDocumentOrEntity extends AbstractController
     public function some3Action(Request $request, \App\Model\SomeEntity $document)
     {
     }
-
-    public function some3Action(Request $request, \App\Domain\SomeEntity $document)
-    {
-    }
 }
