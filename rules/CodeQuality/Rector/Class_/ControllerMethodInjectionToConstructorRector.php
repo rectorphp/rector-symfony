@@ -164,6 +164,10 @@ CODE_SAMPLE
                     continue;
                 }
 
+                if ($this->isObjectType($param->type, new ObjectType(SymfonyClass::USER_INTERFACE))) {
+                    continue;
+                }
+
                 foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {
                     if (str_contains($this->getName($param->type), $commonEntityContainsNamespace)) {
                         continue 2;
