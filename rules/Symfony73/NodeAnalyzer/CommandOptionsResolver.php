@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony73\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -32,34 +33,29 @@ final readonly class CommandOptionsResolver
         $commandOptions = [];
 
         foreach ($addOptionMethodCalls as $addOptionMethodCall) {
-            $addOptionArgs = $addOptionMethodCall->getArgs();
-
-            $optionName = $this->valueResolver->getValue($addOptionArgs[0]->value);
-
-            $isImplicitBoolean = $this->isImplicitBoolean($addOptionArgs);
+            $optionName = $this->valueResolver->getValue($addOptionMethodCall->getArg('name', 0)->value);
+            $isImplicitBoolean = $this->isImplicitBoolean($addOptionMethodCall);
 
             $commandOptions[] = new CommandOption(
                 $optionName,
-                $addOptionArgs[0]->value,
-                $addOptionArgs[1]->value ?? null,
-                $addOptionArgs[2]->value ?? null,
-                $addOptionArgs[3]->value ?? null,
-                $addOptionArgs[4]->value ?? null,
-                $this->isArrayMode($addOptionArgs),
+                $addOptionMethodCall->getArg('name', 0)
+                    ->value,
+                $addOptionMethodCall->getArg('shortcut', 1)?->value ?? null,
+                $addOptionMethodCall->getArg('mode', 2)?->value ?? null,
+                $addOptionMethodCall->getArg('description', 3)?->value ?? null,
+                $addOptionMethodCall->getArg('default', 4)?->value ?? null,
+                $this->isArrayMode($addOptionMethodCall),
                 $isImplicitBoolean,
-                $this->resolveDefaultType($addOptionArgs)
+                $this->resolveDefaultType($addOptionMethodCall)
             );
         }
 
         return $commandOptions;
     }
 
-    /**
-     * @param Arg[] $args
-     */
-    private function resolveDefaultType(array $args): ?Type
+    private function resolveDefaultType(MethodCall $methodCall): ?Type
     {
-        $defaultArg = $args[4] ?? null;
+        $defaultArg = $methodCall->getArg('default', 4) ?? null;
         if (! $defaultArg instanceof Arg) {
             return null;
         }
@@ -67,12 +63,9 @@ final readonly class CommandOptionsResolver
         return $this->nodeTypeResolver->getType($defaultArg->value);
     }
 
-    /**
-     * @param Arg[] $args
-     */
-    private function isArrayMode(array $args): bool
+    private function isArrayMode(MethodCall $methodCall): bool
     {
-        $modeExpr = $args[2]->value ?? null;
+        $modeExpr = $methodCall->getArg('mode', 2)?->value ?? null;
         if (! $modeExpr instanceof Expr) {
             return false;
         }
@@ -82,12 +75,9 @@ final readonly class CommandOptionsResolver
         return (bool) ($modeValue & 8);
     }
 
-    /**
-     * @param Arg[] $args
-     */
-    private function isImplicitBoolean(array $args): bool
+    private function isImplicitBoolean(MethodCall $methodCall): bool
     {
-        $modeExpr = $args[2]->value ?? null;
+        $modeExpr = $methodCall->getArg('mode', 2)?->value ?? null;
         if (! $modeExpr instanceof Expr) {
             return false;
         }
