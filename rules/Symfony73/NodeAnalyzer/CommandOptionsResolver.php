@@ -33,17 +33,16 @@ final readonly class CommandOptionsResolver
         $commandOptions = [];
 
         foreach ($addOptionMethodCalls as $addOptionMethodCall) {
-            $optionName = $this->valueResolver->getValue($addOptionMethodCall->getArg('name', 0)->value);
+            $optionName = $this->valueResolver->getValue($addOptionMethodCall->getArg('name', 0)?->value);
             $isImplicitBoolean = $this->isImplicitBoolean($addOptionMethodCall);
 
             $commandOptions[] = new CommandOption(
                 $optionName,
-                $addOptionMethodCall->getArg('name', 0)
-                    ->value,
-                $addOptionMethodCall->getArg('shortcut', 1)?->value ?? null,
-                $addOptionMethodCall->getArg('mode', 2)?->value ?? null,
-                $addOptionMethodCall->getArg('description', 3)?->value ?? null,
-                $addOptionMethodCall->getArg('default', 4)?->value ?? null,
+                $addOptionMethodCall->getArg('name', 0)?->value,
+                $addOptionMethodCall->getArg('shortcut', 1)?->value,
+                $addOptionMethodCall->getArg('mode', 2)?->value,
+                $addOptionMethodCall->getArg('description', 3)?->value,
+                $addOptionMethodCall->getArg('default', 4)?->value,
                 $this->isArrayMode($addOptionMethodCall),
                 $isImplicitBoolean,
                 $this->resolveDefaultType($addOptionMethodCall)
@@ -65,7 +64,7 @@ final readonly class CommandOptionsResolver
 
     private function isArrayMode(MethodCall $methodCall): bool
     {
-        $modeExpr = $methodCall->getArg('mode', 2)?->value ?? null;
+        $modeExpr = $methodCall->getArg('mode', 2)?->value;
         if (! $modeExpr instanceof Expr) {
             return false;
         }
@@ -77,7 +76,7 @@ final readonly class CommandOptionsResolver
 
     private function isImplicitBoolean(MethodCall $methodCall): bool
     {
-        $modeExpr = $methodCall->getArg('mode', 2)?->value ?? null;
+        $modeExpr = $methodCall->getArg('mode', 2)?->value;
         if (! $modeExpr instanceof Expr) {
             return false;
         }
