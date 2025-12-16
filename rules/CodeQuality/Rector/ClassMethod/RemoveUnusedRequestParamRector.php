@@ -17,6 +17,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Symplify\PHPStanRules\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -110,7 +111,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                if (! $this->isObjectType($param->type, new ObjectType('Symfony\Component\HttpFoundation\Request'))) {
+                if (! $this->isObjectType($param->type, new ObjectType(SymfonyClass::REQUEST))) {
                     continue;
                 }
 

@@ -41,19 +41,19 @@ use Twig\Extension\AbstractExtension;
 
 final class WithFirstClassCallableFilter
 {
-    #[\Twig\Attribute\AsTwigFilter('some_filter')]
+    #[\Twig\Attribute\AsTwigFilter(name: 'some_filter')]
     public function someFilter($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('another_filter')]
+    #[\Twig\Attribute\AsTwigFilter(name: 'another_filter')]
     public function anotherFilter($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('third_filter')]
+    #[\Twig\Attribute\AsTwigFilter(name: 'third_filter')]
     public function thirdFilter($value)
     {
         return $value;

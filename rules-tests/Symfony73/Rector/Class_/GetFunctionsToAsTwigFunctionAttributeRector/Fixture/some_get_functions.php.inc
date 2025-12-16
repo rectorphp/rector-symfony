@@ -41,19 +41,19 @@ use Twig\Extension\AbstractExtension;
 
 final class SomeGetFunctions
 {
-    #[\Twig\Attribute\AsTwigFunction('some_function')]
+    #[\Twig\Attribute\AsTwigFunction(name: 'some_function')]
     public function someFunction($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('another_function')]
+    #[\Twig\Attribute\AsTwigFunction(name: 'another_function')]
     public function anotherFunction($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('third_function')]
+    #[\Twig\Attribute\AsTwigFunction(name: 'third_function')]
     public function thirdFunction($value)
     {
         return $value;

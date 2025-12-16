@@ -7,6 +7,7 @@ namespace Rector\Symfony\Bridge\Symfony;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symfony\Component\DependencyInjection\Container;
 use Webmozart\Assert\Assert;
 
@@ -37,7 +38,7 @@ final class ContainerServiceProvider
             $container = require $symfonyContainerPhp;
 
             // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-            Assert::isInstanceOf($container, 'Symfony\Component\DependencyInjection\Container');
+            Assert::isInstanceOf($container, SymfonyClass::CONTAINER);
             $this->container = $container;
         }
 

@@ -82,49 +82,49 @@ use Twig\Extension\AbstractExtension;
 
 final class WithOptionsParameter
 {
-    #[\Twig\Attribute\AsTwigFilter('with_environment', needsEnvironment: true)]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_environment', needsEnvironment: true)]
     public function withEnvironment(Environment $env, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_context', needsContext: true)]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_context', needsContext: true)]
     public function withContext(array $context, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_charset', needsCharset: true)]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_charset', needsCharset: true)]
     public function withCharset(string $charset, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_pre_escape', preEscape: 'html')]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_pre_escape', preEscape: 'html')]
     public function withPreEscape($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_preserves_safety', preservesSafety: ['html'])]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_preserves_safety', preservesSafety: ['html'])]
     public function withPreservesSafety($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_safe_callback', isSafeCallback: [self::class, 'checkSafeCallback'])]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_safe_callback', isSafeCallback: [self::class, 'checkSafeCallback'])]
     public function withSafeCallback($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_deprecation_info', deprecationInfo: new DeprecatedCallableInfo('package', 'version'))]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_deprecation_info', deprecationInfo: new DeprecatedCallableInfo('package', 'version'))]
     public function withDeprecationInfo($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFilter('with_everything', isSafe: ['html'], needsContext: true, needsCharset: true, needsEnvironment: true, preEscape: 'html', preservesSafety: ['html'])]
+    #[\Twig\Attribute\AsTwigFilter(name: 'with_everything', isSafe: ['html'], needsContext: true, needsCharset: true, needsEnvironment: true, preEscape: 'html', preservesSafety: ['html'])]
     public function withEverything(string $charset, Environment $env, array $context, $value)
     {
         return $value;

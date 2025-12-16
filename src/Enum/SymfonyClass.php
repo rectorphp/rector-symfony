@@ -226,4 +226,6 @@ final class SymfonyClass
     public const ROUTING_CONFIGURATOR = 'Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator';
 
     public const KERNEL = 'Symfony\Component\HttpKernel\Kernel';
+
+    public const CONTAINER = 'Symfony\Component\DependencyInjection\Container';
 }

@@ -23,7 +23,10 @@ return RectorConfig::configure()
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        StringClassNameToClassConstantRector::class => [__DIR__ . '/config', __DIR__ . '/src/Enum'],
+        StringClassNameToClassConstantRector::class => [
+            __DIR__ . '/config', __DIR__ . '/src/Enum',
+            __DIR__ . '/rules/CodeQuality/Enum/',
+        ],
         UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
 
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
@@ -34,19 +37,8 @@ return RectorConfig::configure()
         // marked as skipped
         ReturnNeverTypeRector::class => ['*/tests/*'],
     ])
-    ->withConfiguredRule(StringClassNameToClassConstantRector::class, [
-        'Error',
-        'Exception',
-        'Symfony\*',
-        'Twig_*',
-        'Twig*',
-        'Swift_*',
-        'Doctrine\*',
-        // loaded from project itself
-        'Psr\Container\ContainerInterface',
-        'Symfony\Component\Routing\RouterInterface',
-        'Symfony\Component\DependencyInjection\Container',
-    ])
+    // @todo cleanup rest and move to enum classes ass single place for class names
+    ->withConfiguredRule(StringClassNameToClassConstantRector::class, ['Symfony\*', 'Twig_*', 'Twig*'])
     ->withPhpSets()
     ->withPreparedSets(
         deadCode: true,

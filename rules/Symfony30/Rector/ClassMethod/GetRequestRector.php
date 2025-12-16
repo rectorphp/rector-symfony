@@ -16,6 +16,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,11 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class GetRequestRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const REQUEST_CLASS = 'Symfony\Component\HttpFoundation\Request';
-
     private ?string $requestVariableAndParamName = null;
 
     public function __construct(
@@ -230,7 +226,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $fullyQualified = new FullyQualified(self::REQUEST_CLASS);
+        $fullyQualified = new FullyQualified(SymfonyClass::REQUEST);
         $classMethod->params[] = new Param(new Variable(
             $this->getRequestVariableAndParamName()
         ), null, $fullyQualified);
