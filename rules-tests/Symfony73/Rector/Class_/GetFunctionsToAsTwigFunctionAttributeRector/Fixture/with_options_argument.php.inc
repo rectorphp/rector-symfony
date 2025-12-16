@@ -70,37 +70,37 @@ use Twig\Extension\AbstractExtension;
 
 final class WithOptionsParameter
 {
-    #[\Twig\Attribute\AsTwigFunction('with_environment', needsEnvironment: true)]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_environment', needsEnvironment: true)]
     public function withEnvironment(Environment $env, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('with_context', needsContext: true)]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_context', needsContext: true)]
     public function withContext(array $context, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('with_charset', needsCharset: true)]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_charset', needsCharset: true)]
     public function withCharset(string $charset, $value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('with_safe_callback', isSafeCallback: [self::class, 'checkSafeCallback'])]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_safe_callback', isSafeCallback: [self::class, 'checkSafeCallback'])]
     public function withSafeCallback($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('with_deprecation_info', deprecationInfo: new DeprecatedCallableInfo('package', 'version'))]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_deprecation_info', deprecationInfo: new DeprecatedCallableInfo('package', 'version'))]
     public function withDeprecationInfo($value)
     {
         return $value;
     }
 
-    #[\Twig\Attribute\AsTwigFunction('with_everything', isSafe: ['html'], needsContext: true, needsCharset: true, needsEnvironment: true)]
+    #[\Twig\Attribute\AsTwigFunction(name: 'with_everything', isSafe: ['html'], needsContext: true, needsCharset: true, needsEnvironment: true)]
     public function withEverything(string $charset, Environment $env, array $context, $value)
     {
         return $value;
