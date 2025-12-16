@@ -45,4 +45,8 @@ final class SymfonyAttribute
      * @var string
      */
     public const REQUIRED = 'Symfony\Contracts\Service\Attribute\Required';
+    /**
+     * @var string
+     */
+    public const AS_CONTROLLER = 'Symfony\Component\HttpKernel\Attribute\AsController';
 }

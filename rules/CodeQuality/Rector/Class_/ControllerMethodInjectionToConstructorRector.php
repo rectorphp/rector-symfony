@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -32,12 +33,17 @@ use Throwable;
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector\ControllerMethodInjectionToConstructorRectorTest
  */
-final class ControllerMethodInjectionToConstructorRector extends AbstractRector
+final class ControllerMethodInjectionToConstructorRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string[]
      */
     private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
+
+    /**
+     * @var string[]
+     */
+    private array $skipAllowedKnownObjects = [];
 
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
@@ -159,6 +165,7 @@ CODE_SAMPLE
                         Throwable::class,
                         Exception::class,
                         ...$entityClasses,
+                        ...$this->skipAllowedKnownObjects,
                     ]
                 )) {
                     continue;
@@ -274,5 +281,10 @@ CODE_SAMPLE
             $propertyName = $this->getName($node);
             return new PropertyFetch(new Variable('this'), $propertyName);
         });
+    }
+
+    public function configure(array $configuration): void
+    {
+        $this->skipAllowedKnownObjects = $configuration;
     }
 }
