@@ -33,12 +33,17 @@ final readonly class CommandOptionsResolver
         $commandOptions = [];
 
         foreach ($addOptionMethodCalls as $addOptionMethodCall) {
-            $optionName = $this->valueResolver->getValue($addOptionMethodCall->getArg('name', 0)?->value);
+            $nameArg = $addOptionMethodCall->getArg('name', 0);
+            if (! $nameArg instanceof Arg) {
+                continue;
+            }
+
+            $optionName = $this->valueResolver->getValue($nameArg->value);
             $isImplicitBoolean = $this->isImplicitBoolean($addOptionMethodCall);
 
             $commandOptions[] = new CommandOption(
                 $optionName,
-                $addOptionMethodCall->getArg('name', 0)?->value,
+                $nameArg->value,
                 $addOptionMethodCall->getArg('shortcut', 1)?->value,
                 $addOptionMethodCall->getArg('mode', 2)?->value,
                 $addOptionMethodCall->getArg('description', 3)?->value,
