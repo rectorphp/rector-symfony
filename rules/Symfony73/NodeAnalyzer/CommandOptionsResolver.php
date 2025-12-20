@@ -59,12 +59,12 @@ final readonly class CommandOptionsResolver
 
     private function resolveDefaultType(MethodCall $methodCall): ?Type
     {
-        $defaultArg = $methodCall->getArg('default', 4) ?? null;
-        if (! $defaultArg instanceof Arg) {
+        $defaultExpr = $methodCall->getArg('default', 4)?->value;
+        if (! $defaultExpr instanceof Expr) {
             return null;
         }
 
-        return $this->nodeTypeResolver->getType($defaultArg->value);
+        return $this->nodeTypeResolver->getType($defaultExpr);
     }
 
     private function isArrayMode(MethodCall $methodCall): bool
