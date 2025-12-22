@@ -101,13 +101,11 @@ CODE_SAMPLE
                 }
             }
 
-            if ($setDataPosition === null) {
-                if ($jsonResponseVariable instanceof Variable) {
-                    $setDataExpr = $this->matchSetDataMethodCallExpr($stmt, $jsonResponseVariable);
-                    if ($setDataExpr instanceof Expr) {
-                        $setDataPosition = $key;
-                        continue;
-                    }
+            if ($setDataPosition === null && $jsonResponseVariable instanceof Variable) {
+                $setDataExpr = $this->matchSetDataMethodCallExpr($stmt, $jsonResponseVariable);
+                if ($setDataExpr instanceof Expr) {
+                    $setDataPosition = $key;
+                    continue;
                 }
             }
 
