@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\TypeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -13,10 +12,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Reflection\ReflectionResolver;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 
-final readonly class ControllerAnalyzer
+final class ControllerAnalyzer
 {
     public function __construct(
         private ReflectionResolver $reflectionResolver,
@@ -73,6 +74,12 @@ final readonly class ControllerAnalyzer
             return true;
         }
 
+        foreach ($classReflection->getAttributes() as $attribute) {
+            if ($attribute->getName() === SymfonyAttribute::AS_CONTROLLER) {
+                return true;
+            }
+        }
+
         return $classReflection->is(SymfonyClass::ABSTRACT_CONTROLLER);
     }
 
@@ -82,7 +89,6 @@ final readonly class ControllerAnalyzer
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
-
         return $this->isControllerClassReflection($classReflection);
     }
 }
