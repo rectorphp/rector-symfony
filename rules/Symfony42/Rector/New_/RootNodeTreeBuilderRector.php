@@ -12,7 +12,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -123,7 +122,10 @@ CODE_SAMPLE
         return null;
     }
 
-    private function getRootMethodCallNode(StmtsAwareInterface $stmtsAware): ?Node
+    /**
+     * @param StmtsAware $stmtsAware
+     */
+    private function getRootMethodCallNode(Node $stmtsAware): ?Node
     {
         $methodCalls = $this->betterNodeFinder->findInstanceOf($stmtsAware, MethodCall::class);
 
