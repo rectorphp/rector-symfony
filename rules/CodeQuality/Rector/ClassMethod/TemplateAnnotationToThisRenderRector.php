@@ -27,7 +27,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -363,8 +362,11 @@ CODE_SAMPLE
         }
     }
 
+    /**
+     * @param StmtsAware $stmtsAware
+     */
     private function refactorStmtsAwareNode(
-        StmtsAwareInterface $stmtsAware,
+        Node $stmtsAware,
         DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
