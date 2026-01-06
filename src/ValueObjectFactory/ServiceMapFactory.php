@@ -188,7 +188,7 @@ final class ServiceMapFactory
      */
     private function convertXmlToArray(SimpleXMLElement $simpleXMLElement): array
     {
-        $data = Json::decode(Json::encode((array) $simpleXMLElement), Json::FORCE_ARRAY);
+        $data = Json::decode(Json::encode((array) $simpleXMLElement), true);
 
         $data = $this->unWrapAttributes($data);
 

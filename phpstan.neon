@@ -71,3 +71,9 @@ parameters:
 
         # local use php 8.3
         - identifier: typeCoverage.constantTypeCoverage
+
+        # in tests
+        -
+            message: '#Fetching deprecated class constant SYMFONY_\d+ of class Rector\\Symfony\\Set\\SymfonySetList#'
+            path: tests
+
