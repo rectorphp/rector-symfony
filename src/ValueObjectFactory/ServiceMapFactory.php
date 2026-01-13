@@ -113,6 +113,10 @@ final class ServiceMapFactory
                 $attrs,
                 'synthetic'
             ) && $attrs->synthetic instanceof SimpleXMLElement && (string) $attrs->synthetic === 'true',
+            ! (property_exists(
+                $attrs,
+                'shared'
+            ) && $attrs->shared instanceof SimpleXMLElement) || (string) $attrs->shared !== 'false',
             property_exists(
                 $attrs,
                 'alias'
@@ -144,6 +148,7 @@ final class ServiceMapFactory
                 $services[$alias]->getClass(),
                 $service->isPublic(),
                 $service->isSynthetic(),
+                $service->isShared(),
                 $alias,
                 []
             );
