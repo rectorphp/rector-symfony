@@ -16,6 +16,7 @@ final readonly class ServiceDefinition
         private ?string $class,
         private bool $isPublic,
         private bool $isSynthetic,
+        private bool $isShared,
         private ?string $alias,
         private array $tags
     ) {
@@ -39,6 +40,11 @@ final readonly class ServiceDefinition
     public function isSynthetic(): bool
     {
         return $this->isSynthetic;
+    }
+
+    public function isShared(): bool
+    {
+        return $this->isShared;
     }
 
     public function getAlias(): ?string
