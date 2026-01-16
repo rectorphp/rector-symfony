@@ -120,7 +120,13 @@ CODE_SAMPLE
                     return null;
                 }
 
-                $this->replaceStringWIthFormTypeClassConstIfFound($node->expr->value, $node, $hasChanged);
+                $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($node->expr->value);
+                if ($formClass === null) {
+                    return null;
+                }
+
+                $node->expr = $this->nodeFactory->createClassConstReference($formClass);
+                $hasChanged = true;
 
                 return $node;
             });
@@ -136,7 +142,7 @@ CODE_SAMPLE
     private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod): bool
     {
         if ($this->isName($classMethod->name, 'getParent')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'));
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE));
         }
 
         if ($this->isName($classMethod->name, 'getExtendedType')) {
@@ -144,19 +150,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    private function replaceStringWIthFormTypeClassConstIfFound(
-        string $stringValue,
-        Return_ $return,
-        bool &$hasChanged
-    ): void {
-        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
-        if ($formClass === null) {
-            return;
-        }
-
-        $return->expr = $this->nodeFactory->createClassConstReference($formClass);
-        $hasChanged = true;
     }
 }
