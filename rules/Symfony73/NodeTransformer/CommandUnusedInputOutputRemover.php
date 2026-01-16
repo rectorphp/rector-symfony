@@ -14,7 +14,7 @@ final readonly class CommandUnusedInputOutputRemover
     /**
      * @var string[]
      */
-    private const VARIABLE_NAMES = ['input', 'output'];
+    private const array VARIABLE_NAMES = ['input', 'output'];
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,

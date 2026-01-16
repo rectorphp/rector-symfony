@@ -2,6 +2,6 @@
 
 namespace Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\Source;
 
-class SmsNotification
+final class SmsNotification
 {
 }

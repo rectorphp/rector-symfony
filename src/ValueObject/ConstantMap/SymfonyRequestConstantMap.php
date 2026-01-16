@@ -11,7 +11,7 @@ final class SymfonyRequestConstantMap
      *
      * @var array<string, string>
      */
-    public const METHOD_TO_CONST = [
+    public const array METHOD_TO_CONST = [
         'GET' => 'METHOD_GET',
         'POST' => 'METHOD_POST',
         'HEAD' => 'METHOD_HEAD',

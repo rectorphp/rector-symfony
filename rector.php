@@ -37,7 +37,6 @@ return RectorConfig::configure()
         // marked as skipped
         ReturnNeverTypeRector::class => ['*/tests/*'],
     ])
-    // @todo cleanup rest and move to enum classes ass single place for class names
     ->withConfiguredRule(StringClassNameToClassConstantRector::class, ['Symfony\*', 'Twig_*', 'Twig*'])
     ->withPhpSets()
     ->withPreparedSets(
@@ -45,6 +44,7 @@ return RectorConfig::configure()
         codeQuality: true,
         codingStyle: true,
         typeDeclarations: true,
+        typeDeclarationDocblocks: true,
         privatization: true,
         naming: true,
         rectorPreset: true,

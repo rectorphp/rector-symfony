@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony62\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Yield_;
@@ -131,16 +130,16 @@ CODE_SAMPLE
                 continue;
             }
 
-            $getHandledMessagesClassMethod = $classStmt;
-
-            $stmts = (array) $getHandledMessagesClassMethod->stmts;
+            $stmts = (array) $classStmt->stmts;
             if ($stmts === []) {
                 return null;
             }
 
-            $this->handleYields($node, $getHandledMessagesClassMethod);
+            $this->handleYields($node, $classStmt);
 
             $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
+
+            // remove method
             unset($node->stmts[$key]);
 
             return $node;
@@ -152,13 +151,9 @@ CODE_SAMPLE
     private function handleYields(Class_ $class, ClassMethod $getHandledMessagesClassMethod): void
     {
         foreach ((array) $getHandledMessagesClassMethod->stmts as $stmt) {
-            if (! $stmt instanceof Expression || ! $stmt->expr instanceof Yield_
-            ) {
+            if (! $stmt instanceof Expression || ! $stmt->expr instanceof Yield_) {
                 continue;
             }
-
-            $method = MethodName::INVOKE;
-            $arguments = [];
 
             if ($stmt->expr->key instanceof ClassConstFetch) {
                 $array = $stmt->expr->value;
@@ -166,8 +161,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $arguments = $this->parseArguments($array, $method);
-                $this->addAttribute($class, $method, $arguments);
+                $arguments = $this->parseArguments($array);
+                $methodName = $this->resolveMethodName($array);
+
+                $this->addAttribute($class, $methodName, $arguments);
                 continue;
             }
 
@@ -181,24 +178,33 @@ CODE_SAMPLE
 
             $classParts = $value->class->getParts();
             $this->newInvokeMethodName = 'handle' . end($classParts);
-            $this->addAttribute($class, $method, $arguments);
+
+            $this->addAttribute($class, MethodName::INVOKE, []);
         }
+    }
+
+    private function resolveMethodName(Array_ $array): string
+    {
+        foreach ($array->items as $arrayItem) {
+            $key = (string) $this->valueResolver->getValue($arrayItem->key);
+            $value = $this->valueResolver->getValue($arrayItem->value);
+            if ($key === 'method') {
+                return $value;
+            }
+        }
+
+        return MethodName::INVOKE;
     }
 
     /**
      * @return array<string, mixed>
      */
-    private function parseArguments(Array_ $array, string &$method): array
+    private function parseArguments(Array_ $array): array
     {
-        foreach ($array->items as $item) {
-            if (! $item->value instanceof Expr) {
-                continue;
-            }
-
-            $key = (string) $this->valueResolver->getValue($item->key);
-            $value = $this->valueResolver->getValue($item->value);
+        foreach ($array->items as $arrayItem) {
+            $key = (string) $this->valueResolver->getValue($arrayItem->key);
+            $value = $this->valueResolver->getValue($arrayItem->value);
             if ($key === 'method') {
-                $method = $value;
                 continue;
             }
 

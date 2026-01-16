@@ -9,8 +9,5 @@ namespace Rector\Symfony\Set;
  */
 final class SwiftMailerSetList
 {
-    /**
-     * @var string
-     */
-    public const SWIFT_TO_SYMFONY = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php';
+    public const string SWIFT_TO_SYMFONY = __DIR__ . '/../../config/sets/swiftmailer/swiftmailer-to-symfony-mailer.php';
 }

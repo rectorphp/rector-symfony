@@ -28,10 +28,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EventListenerToEventSubscriberRector extends AbstractRector
 {
     /**
-     * @var string
      * @changelog https://regex101.com/r/qiHZ4T/1
      */
-    private const LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
+    private const string LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
 
     /**
      * @var EventNameToClassAndConstant[]

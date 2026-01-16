@@ -37,7 +37,7 @@ final class CommandConfigureToAttributeRector extends AbstractRector implements 
     /**
      * @var array<string, string>
      */
-    private const METHODS_TO_ATTRIBUTE_NAMES = [
+    private const array METHODS_TO_ATTRIBUTE_NAMES = [
         'setName' => 'name',
         'setDescription' => 'description',
         'setAliases' => 'aliases',

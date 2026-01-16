@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\Source;
 
-class CustomObject
+final class CustomObject
 {
 
 }

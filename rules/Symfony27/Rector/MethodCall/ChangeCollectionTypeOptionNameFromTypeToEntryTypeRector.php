@@ -28,7 +28,7 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
     /**
      * @var array<string, string>
      */
-    private const OLD_TO_NEW_OPTION_NAME = [
+    private const array OLD_TO_NEW_OPTION_NAME = [
         'type' => 'entry_type',
         'options' => 'entry_options',
     ];

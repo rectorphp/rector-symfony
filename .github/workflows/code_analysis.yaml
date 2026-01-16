@@ -20,9 +20,23 @@ jobs:
                         name: 'Active Classes'
                         run: vendor/bin/class-leak check config src rules --ansi --skip-suffix "Rector" --skip-type "\Rector\Set\Contract\SetProviderInterface"
 
+                    -
+                        name: "Finalize Classes"
+                        run: vendor/bin/swiss-knife finalize config src tests rules rules-tests --ansi
+
+                    -
+                        name: 'Composer Validate'
+                        run: composer validate
+
+                    -
+                        name: 'PHPStan'
+                        run: vendor/bin/phpstan
+
         name: ${{ matrix.actions.name }}
+
         runs-on: ubuntu-latest
-        timeout-minutes: 10
+
+        timeout-minutes: 5
 
         steps:
             -   uses: actions/checkout@v4
@@ -30,7 +44,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.2
+                    php-version: 8.3
                     coverage: none
 
             -   uses: "ramsey/composer-install@v2"

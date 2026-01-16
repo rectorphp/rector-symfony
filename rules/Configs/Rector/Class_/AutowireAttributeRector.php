@@ -35,10 +35,7 @@ use Webmozart\Assert\Assert;
  */
 final class AutowireAttributeRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @var string
-     */
-    public const CONFIGS_DIRECTORY = 'configs_directory';
+    public const string CONFIGS_DIRECTORY = 'configs_directory';
 
     private ?string $configsDirectory = null;
 

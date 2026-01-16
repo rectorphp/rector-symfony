@@ -32,10 +32,7 @@ use Rector\ValueObject\PhpVersionFeature;
 
 final readonly class GetSubscribedEventsClassMethodFactory
 {
-    /**
-     * @var string
-     */
-    private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
+    private const string GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
 
     public function __construct(
         private NodeFactory $nodeFactory,

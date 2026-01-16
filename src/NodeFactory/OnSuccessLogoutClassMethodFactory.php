@@ -21,10 +21,7 @@ use Rector\PhpParser\Node\NodeFactory;
 
 final readonly class OnSuccessLogoutClassMethodFactory
 {
-    /**
-     * @var string
-     */
-    private const LOGOUT_EVENT = 'logoutEvent';
+    private const string LOGOUT_EVENT = 'logoutEvent';
 
     public function __construct(
         private NodeFactory $nodeFactory,

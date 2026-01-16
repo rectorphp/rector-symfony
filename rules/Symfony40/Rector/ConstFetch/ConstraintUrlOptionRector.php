@@ -22,10 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConstraintUrlOptionRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
+    private const string URL_CONSTRAINT_CLASS = 'Symfony\Component\Validator\Constraints\Url';
 
     public function __construct(
         private readonly ValueResolver $valueResolver

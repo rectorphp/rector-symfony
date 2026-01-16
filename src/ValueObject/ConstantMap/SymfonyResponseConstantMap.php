@@ -11,7 +11,7 @@ final class SymfonyResponseConstantMap
      *
      * @var array<int, string>
      */
-    public const CODE_TO_CONST = [
+    public const array CODE_TO_CONST = [
         100 => 'HTTP_CONTINUE',
         101 => 'HTTP_SWITCHING_PROTOCOLS',
         102 => 'HTTP_PROCESSING',

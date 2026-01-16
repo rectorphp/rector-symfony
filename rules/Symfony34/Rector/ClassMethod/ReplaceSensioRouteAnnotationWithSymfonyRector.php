@@ -28,10 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const SENSIO_ROUTE_NAME = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route';
+    private const string SENSIO_ROUTE_NAME = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route';
 
     public function __construct(
         private readonly SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory,
@@ -137,7 +134,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $values
+     * @param ArrayItemNode[] $values
      */
     private function isEmptySensioRoute(array $values): bool
     {

@@ -11,7 +11,7 @@ final class SymfonyCommandConstantMap
      *
      * @var array<int, string>
      */
-    public const RETURN_TO_CONST = [
+    public const array RETURN_TO_CONST = [
         0 => 'SUCCESS',
         1 => 'FAILURE',
         2 => 'INVALID',

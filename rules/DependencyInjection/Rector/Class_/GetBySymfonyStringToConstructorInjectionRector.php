@@ -27,7 +27,7 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
     /**
      * @var array<string, string>
      */
-    private const SYMFONY_NAME_TO_TYPE_MAP = [
+    private const array SYMFONY_NAME_TO_TYPE_MAP = [
         'validator' => SymfonyClass::VALIDATOR_INTERFACE,
         'event_dispatcher' => SymfonyClass::EVENT_DISPATCHER_INTERFACE,
         'logger' => SymfonyClass::LOGGER_INTERFACE,

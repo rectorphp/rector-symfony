@@ -6,28 +6,13 @@ namespace Rector\Symfony\CodeQuality\Enum;
 
 final class ResponseClass
 {
-    /**
-     * @var string
-     */
-    public const REDIRECT = 'Symfony\Component\HttpFoundation\RedirectResponse';
+    public const string REDIRECT = 'Symfony\Component\HttpFoundation\RedirectResponse';
 
-    /**
-     * @var string
-     */
-    public const BINARY_FILE = 'Symfony\Component\HttpFoundation\BinaryFileResponse';
+    public const string BINARY_FILE = 'Symfony\Component\HttpFoundation\BinaryFileResponse';
 
-    /**
-     * @var string
-     */
-    public const JSON = 'Symfony\Component\HttpFoundation\JsonResponse';
+    public const string JSON = 'Symfony\Component\HttpFoundation\JsonResponse';
 
-    /**
-     * @var string
-     */
-    public const STREAMED = 'Symfony\Component\HttpFoundation\StreamedResponse';
+    public const string STREAMED = 'Symfony\Component\HttpFoundation\StreamedResponse';
 
-    /**
-     * @var string
-     */
-    public const BASIC = 'Symfony\Component\HttpFoundation\Response';
+    public const string BASIC = 'Symfony\Component\HttpFoundation\Response';
 }

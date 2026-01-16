@@ -6,8 +6,5 @@ namespace Rector\Symfony\Enum;
 
 final class FosClass
 {
-    /**
-     * @var string
-     */
-    public const PARAM_FETCHER = 'FOS\RestBundle\Request\ParamFetcher';
+    public const string PARAM_FETCHER = 'FOS\RestBundle\Request\ParamFetcher';
 }

@@ -23,20 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const OLD_OPTION_NAME = 'enable_magic_call_extraction';
+    private const string OLD_OPTION_NAME = 'enable_magic_call_extraction';
 
-    /**
-     * @var string
-     */
-    private const NEW_OPTION_NAME = 'enable_magic_methods_extraction';
+    private const string NEW_OPTION_NAME = 'enable_magic_methods_extraction';
 
     /**
      * @var string[]
      */
-    private const METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
+    private const array METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
 
     public function __construct(
         private readonly ValueResolver $valueResolver

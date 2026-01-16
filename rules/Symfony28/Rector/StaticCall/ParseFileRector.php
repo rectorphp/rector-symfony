@@ -24,22 +24,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParseFileRector extends AbstractRector
 {
     /**
-     * @var string
      * @changelog https://regex101.com/r/ZaY42i/1
      */
-    private const YAML_SUFFIX_IN_QUOTE_REGEX = '#\.(yml|yaml)(\'|\")$#';
+    private const string YAML_SUFFIX_IN_QUOTE_REGEX = '#\.(yml|yaml)(\'|\")$#';
 
     /**
-     * @var string
      * @changelog https://regex101.com/r/YHA05g/1
      */
-    private const FILE_SUFFIX_REGEX = '#File$#';
+    private const string FILE_SUFFIX_REGEX = '#File$#';
 
     /**
-     * @var string
      * @changelog https://regex101.com/r/JmNhZj/1
      */
-    private const YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
+    private const string YAML_SUFFIX_REGEX = '#\.(yml|yaml)$#';
 
     public function __construct(
         private readonly BetterStandardPrinter $betterStandardPrinter

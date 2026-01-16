@@ -1,7 +1,6 @@
-# @todo enable
-#includes:
-#    - vendor/symplify/phpstan-rules/config/symplify-rules.neon
-#    - vendor/symplify/phpstan-rules/config/rector-rules.neon
+includes:
+    - vendor/symplify/phpstan-rules/config/symplify-rules.neon
+    - vendor/symplify/phpstan-rules/config/rector-rules.neon
 
 rules:
     - Symplify\PHPStanRules\Rules\StringFileAbsolutePathExistsRule
@@ -14,7 +13,7 @@ parameters:
     typeAliases:
         StmtsAware: \PhpParser\Node\Stmt\Block | \PhpParser\Node\Expr\Closure | \PhpParser\Node\Stmt\Case_ | \PhpParser\Node\Stmt\Catch_ | \PhpParser\Node\Stmt\ClassMethod | \PhpParser\Node\Stmt\Do_ | \PhpParser\Node\Stmt\Else_ | \PhpParser\Node\Stmt\ElseIf_ | \PhpParser\Node\Stmt\Finally_ | \PhpParser\Node\Stmt\For_ | \PhpParser\Node\Stmt\Foreach_ | \PhpParser\Node\Stmt\Function_ | \PhpParser\Node\Stmt\If_ | \PhpParser\Node\Stmt\Namespace_ | \PhpParser\Node\Stmt\TryCatch | \PhpParser\Node\Stmt\While_ | \Rector\PhpParser\Node\FileNode
 
-    reportUnmatchedIgnoredErrors: false
+    # reportUnmatchedIgnoredErrors: false
     treatPhpDocTypesAsCertain: false
 
     paths:
@@ -50,7 +49,6 @@ parameters:
 
         # false positive
         - '#but class PhpParser\\Node\\Stmt\\Expression is not generic#'
-        - '#Access to an undefined property Rector\\Contract\\PhpParser\\Node\\StmtsAwareInterface\:\:\$stmts#'
 
         # more advanced usage, but not always working
         # see https://github.com/rectorphp/rector-src/actions/runs/11798721617/job/32865546672?pr=6422#step:5:110
@@ -69,13 +67,21 @@ parameters:
 
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
 
-        # local use php 8.3
-        - identifier: typeCoverage.constantTypeCoverage
-
         # in tests
         -
             message: '#Fetching deprecated class constant SYMFONY_(.*?) of class Rector\\Symfony\\Set\\SymfonySetList#'
             paths:
                 - tests
                 - config/sets/symfony/annotations-to-attributes.php
+
+        # using XML to load symfony config
+        -
+            path: src/ValueObjectFactory/ServiceMapFactory.php
+            identifier: rector.noInstanceOfStaticReflection
+
+        -
+            path: src/ValueObjectFactory/ServiceMapFactory.php
+            message: '#"@simplexml_load_string\(\$fileContents\)" is forbidden to use#'
+
+
 

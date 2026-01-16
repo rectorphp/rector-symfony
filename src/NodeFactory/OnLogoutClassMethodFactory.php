@@ -19,7 +19,7 @@ final readonly class OnLogoutClassMethodFactory
     /**
      * @var array<string, string>
      */
-    private const PARAMETER_TO_GETTER_NAMES = [
+    private const array PARAMETER_TO_GETTER_NAMES = [
         'request' => 'getRequest',
         'response' => 'getResponse',
         'token' => 'getToken',
