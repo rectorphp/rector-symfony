@@ -23,7 +23,7 @@ final class OptionNameRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const OLD_TO_NEW_OPTION = [
+    private const array OLD_TO_NEW_OPTION = [
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];

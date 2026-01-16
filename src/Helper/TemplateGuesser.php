@@ -19,34 +19,29 @@ use Rector\Symfony\BundleClassResolver;
 final readonly class TemplateGuesser
 {
     /**
-     * @var string
      * @see https://regex101.com/r/yZAUAC/1
      */
-    private const BUNDLE_SUFFIX_REGEX = '#Bundle$#';
+    private const string BUNDLE_SUFFIX_REGEX = '#Bundle$#';
 
     /**
-     * @var string
      * @see https://regex101.com/r/T6ItFG/1
      */
-    private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
+    private const string BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
 
     /**
-     * @var string
      * @see https://regex101.com/r/5dNkCC/2
      */
-    private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
+    private const string SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
 
     /**
-     * @var string
      * @see https://regex101.com/r/YUrmAD/1
      */
-    private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(?<class_name_without_suffix>.+)Controller$#';
+    private const string CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\(?<class_name_without_suffix>.+)Controller$#';
 
     /**
-     * @var string
      * @see https://regex101.com/r/nj8Ojf/1
      */
-    private const ACTION_MATCH_REGEX = '#Action$#';
+    private const string ACTION_MATCH_REGEX = '#Action$#';
 
     public function __construct(
         private BundleClassResolver $bundleClassResolver,

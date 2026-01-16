@@ -67,9 +67,6 @@ parameters:
 
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
 
-        # local use php 8.3
-        - identifier: typeCoverage.constantTypeCoverage
-
         # in tests
         -
             message: '#Fetching deprecated class constant SYMFONY_(.*?) of class Rector\\Symfony\\Set\\SymfonySetList#'

@@ -37,7 +37,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
+    private const array COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity", "\\Document", "\\Model"];
 
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,

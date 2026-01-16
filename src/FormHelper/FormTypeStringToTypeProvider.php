@@ -13,7 +13,7 @@ final class FormTypeStringToTypeProvider
     /**
      * @var array<string, string>
      */
-    private const SYMFONY_CORE_NAME_TO_TYPE_MAP = [
+    private const array SYMFONY_CORE_NAME_TO_TYPE_MAP = [
         'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
         'birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
         'checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',

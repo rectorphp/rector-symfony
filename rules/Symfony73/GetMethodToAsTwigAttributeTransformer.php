@@ -29,7 +29,7 @@ use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
  */
 final readonly class GetMethodToAsTwigAttributeTransformer
 {
-    private const OPTION_TO_NAMED_ARG = [
+    private const array OPTION_TO_NAMED_ARG = [
         'is_safe' => 'isSafe',
         'needs_environment' => 'needsEnvironment',
         'needs_context' => 'needsContext',

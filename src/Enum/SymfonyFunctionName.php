@@ -6,13 +6,7 @@ namespace Rector\Symfony\Enum;
 
 final class SymfonyFunctionName
 {
-    /**
-     * @var string
-     */
-    public const REF = 'Symfony\Component\DependencyInjection\Loader\Configurator\ref';
+    public const string REF = 'Symfony\Component\DependencyInjection\Loader\Configurator\ref';
 
-    /**
-     * @var string
-     */
-    public const SERVICE = 'Symfony\Component\DependencyInjection\Loader\Configurator\service';
+    public const string SERVICE = 'Symfony\Component\DependencyInjection\Loader\Configurator\service';
 }

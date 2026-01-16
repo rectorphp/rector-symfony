@@ -16,10 +16,7 @@ use SimpleXMLElement;
 
 final class ServiceMapFactory
 {
-    /**
-     * @var string
-     */
-    private const TAG = 'tag';
+    private const string TAG = 'tag';
 
     public function createFromFileContent(string $configFilePath): ServiceMap
     {
@@ -70,7 +67,7 @@ final class ServiceMapFactory
     }
 
     /**
-     * @param mixed[] $def
+     * @param array<string, mixed> $def
      * @return mixed[]
      */
     private function createTagFromXmlElement(array $def): array

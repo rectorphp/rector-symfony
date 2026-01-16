@@ -23,7 +23,7 @@ final class ServiceTagsToDefaultsAutoconfigureRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const AUTOCONFIGUREABLE_TAGS = [
+    private const array AUTOCONFIGUREABLE_TAGS = [
         // @todo fill
         'twig.extension',
         'console.command',

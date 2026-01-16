@@ -6,11 +6,11 @@ namespace Rector\Symfony\Enum;
 
 final class CommandMethodName
 {
-    public const CONFIGURE = 'configure';
+    public const string CONFIGURE = 'configure';
 
-    public const EXECUTE = 'execute';
+    public const string EXECUTE = 'execute';
 
-    public const INTERACT = 'interact';
+    public const string INTERACT = 'interact';
 
-    public const INITIALIZE = 'initialize';
+    public const string INITIALIZE = 'initialize';
 }

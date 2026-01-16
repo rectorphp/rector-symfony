@@ -27,15 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SwiftMessageToEmailRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const EMAIL_FQN = 'Symfony\Component\Mime\Email';
+    private const string EMAIL_FQN = 'Symfony\Component\Mime\Email';
 
-    /**
-     * @var string
-     */
-    private const SWIFT_MESSAGE_FQN = 'Swift_Message';
+    private const string SWIFT_MESSAGE_FQN = 'Swift_Message';
 
     /**
      * @var array<string, string>

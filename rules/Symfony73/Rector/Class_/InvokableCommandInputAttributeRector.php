@@ -39,7 +39,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class InvokableCommandInputAttributeRector extends AbstractRector
 {
-    private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
+    private const array MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
 
     public function __construct(
         private readonly AttributeFinder $attributeFinder,

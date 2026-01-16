@@ -33,7 +33,7 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     /**
      * @var array<string, class-string>
      */
-    private const OLD_TO_NEW_CLASSES = [
+    private const array OLD_TO_NEW_CLASSES = [
         'Twig_Function_Method' => 'Twig_SimpleFunction',
         'Twig_Filter_Method' => 'Twig_SimpleFilter',
     ];

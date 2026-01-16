@@ -33,16 +33,13 @@ final class InlineClassRoutePrefixRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const FOS_REST_ANNOTATIONS = [
+    private const array FOS_REST_ANNOTATIONS = [
         FosAnnotation::REST_POST,
         FosAnnotation::REST_GET,
         FosAnnotation::REST_ROUTE,
     ];
 
-    /**
-     * @var string
-     */
-    private const PATH = 'path';
+    private const string PATH = 'path';
 
     public function __construct(
         private readonly PhpDocInfoFactory $phpDocInfoFactory,

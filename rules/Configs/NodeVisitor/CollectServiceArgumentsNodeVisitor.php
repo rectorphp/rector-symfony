@@ -22,15 +22,9 @@ use Rector\Symfony\Configs\ValueObject\ServiceArguments;
 
 final class CollectServiceArgumentsNodeVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string
-     */
-    private const ENVS = 'envs';
+    private const string ENVS = 'envs';
 
-    /**
-     * @var string
-     */
-    private const PARAMETERS = 'parameters';
+    private const string PARAMETERS = 'parameters';
 
     /**
      * @var array<string, array<self::ENVS|self::PARAMETERS, array<string|Expr>>>

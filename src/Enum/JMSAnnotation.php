@@ -6,7 +6,7 @@ namespace Rector\Symfony\Enum;
 
 final class JMSAnnotation
 {
-    public const ACCESS_TYPE = 'JMS\Serializer\Annotation\AccessType';
+    public const string ACCESS_TYPE = 'JMS\Serializer\Annotation\AccessType';
 
-    public const ACCESSOR = 'JMS\Serializer\Annotation\Accessor';
+    public const string ACCESSOR = 'JMS\Serializer\Annotation\Accessor';
 }
