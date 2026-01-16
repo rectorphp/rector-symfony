@@ -22,12 +22,21 @@ jobs:
 
                     -
                         name: "Finalize Classes"
-                        run: vendor/bin/finalizer finalize config src rules --ansi
+                        run: vendor/bin/swiss-knife finalize config src tests rules rules-tests --ansi
 
+                    -
+                        name: 'Composer Validate'
+                        run: composer validate
+
+                    -
+                        name: 'PHPStan'
+                        run: vendor/bin/phpstan
 
         name: ${{ matrix.actions.name }}
+
         runs-on: ubuntu-latest
-        timeout-minutes: 10
+
+        timeout-minutes: 5
 
         steps:
             -   uses: actions/checkout@v4
