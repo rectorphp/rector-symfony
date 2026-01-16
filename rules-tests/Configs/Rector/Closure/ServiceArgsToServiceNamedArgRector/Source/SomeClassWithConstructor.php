@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Configs\Rector\Closure\ServiceArgsToServiceNamedArgRector\Source;
 
-class SomeClassWithConstructor
+final class SomeClassWithConstructor
 {
     public function __construct($someCtorParameter, $anotherCtorParameter)
     {

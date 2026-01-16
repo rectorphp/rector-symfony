@@ -141,6 +141,8 @@ CODE_SAMPLE
             $this->handleYields($node, $getHandledMessagesClassMethod);
 
             $this->classManipulator->removeImplements($node, [MessengerHelper::MESSAGE_SUBSCRIBER_INTERFACE]);
+
+            // remove method
             unset($node->stmts[$key]);
 
             return $node;
@@ -152,8 +154,7 @@ CODE_SAMPLE
     private function handleYields(Class_ $class, ClassMethod $getHandledMessagesClassMethod): void
     {
         foreach ((array) $getHandledMessagesClassMethod->stmts as $stmt) {
-            if (! $stmt instanceof Expression || ! $stmt->expr instanceof Yield_
-            ) {
+            if (! $stmt instanceof Expression || ! $stmt->expr instanceof Yield_) {
                 continue;
             }
 

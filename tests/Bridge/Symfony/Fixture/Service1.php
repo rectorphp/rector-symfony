@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Tests\Bridge\Symfony\Fixture;
 
-class Service1
+final class Service1
 {
 
 }

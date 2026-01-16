@@ -6,6 +6,6 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjecti
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SomeUser implements UserInterface
+final class SomeUser implements UserInterface
 {
 }

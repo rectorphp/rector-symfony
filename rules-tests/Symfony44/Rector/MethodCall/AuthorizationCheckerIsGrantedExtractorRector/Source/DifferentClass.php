@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector\Source;
 
-class DifferentClass
+final class DifferentClass
 {
     public function isGranted($args)
     {

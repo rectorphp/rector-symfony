@@ -6,7 +6,7 @@ namespace Rector\Symfony\Tests\Symfony40\Rector\MethodCall\VarDumperTestTraitMet
 
 use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 
-class ClassWithVarDumperTrait
+final class ClassWithVarDumperTrait
 {
     use VarDumperTestTrait;
 

@@ -6,7 +6,7 @@ namespace Rector\Symfony\Tests\Symfony30\Rector\MethodCall\FormTypeInstanceToCla
 
 use Symfony\Component\Form\FormTypeInterface;
 
-class AnotherFormTypeClass implements FormTypeInterface
+final class AnotherFormTypeClass implements FormTypeInterface
 {
 
 }

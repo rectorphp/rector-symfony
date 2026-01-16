@@ -20,6 +20,11 @@ jobs:
                         name: 'Active Classes'
                         run: vendor/bin/class-leak check config src rules --ansi --skip-suffix "Rector" --skip-type "\Rector\Set\Contract\SetProviderInterface"
 
+                    -
+                        name: "Finalize Classes"
+                        run: vendor/bin/finalizer finalize config src rules --ansi
+
+
         name: ${{ matrix.actions.name }}
         runs-on: ubuntu-latest
         timeout-minutes: 10

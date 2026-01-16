@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IntermediateController extends AbstractController
+final class IntermediateController extends AbstractController
 {
     #[Route('/some-action', name: 'some_action')]
     public function someAction(LoggerInterface $logger)

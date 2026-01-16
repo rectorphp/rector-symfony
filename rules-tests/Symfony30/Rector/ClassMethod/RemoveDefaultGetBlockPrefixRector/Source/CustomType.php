@@ -5,7 +5,7 @@ namespace Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\RemoveDefaultGetBloc
 
 use Symfony\Component\Form\AbstractType;
 
-class CustomType extends AbstractType
+final class CustomType extends AbstractType
 {
     public function getBlockPrefix()
     {

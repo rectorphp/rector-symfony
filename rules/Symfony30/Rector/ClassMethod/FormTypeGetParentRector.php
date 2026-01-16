@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -139,7 +140,7 @@ CODE_SAMPLE
         }
 
         if ($this->isName($classMethod->name, 'getExtendedType')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'));
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE_EXTENSION));
         }
 
         return false;
