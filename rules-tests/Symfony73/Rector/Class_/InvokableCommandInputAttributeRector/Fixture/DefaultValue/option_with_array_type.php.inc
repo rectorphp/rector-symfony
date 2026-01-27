@@ -16,8 +16,8 @@ class OptionWithOptionalValue extends Command
 {
     protected function configure(): void
     {
-        $this->addOption('some-array', null, InputOption::VALUE_IS_ARRAY, '', ['third value']);
         $this->addOption('no-default-array', null, InputOption::VALUE_IS_ARRAY);
+        $this->addOption('some-array', null, InputOption::VALUE_IS_ARRAY, '', ['third value']);
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -43,10 +43,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class OptionWithOptionalValue
 {
     public function __invoke(
-        #[\Symfony\Component\Console\Attribute\Option(name: 'some-array', mode: InputOption::VALUE_IS_ARRAY)]
-        array $someArray = ['third value'],
         #[\Symfony\Component\Console\Attribute\Option(name: 'no-default-array', mode: InputOption::VALUE_IS_ARRAY)]
-        array $noDefaultArray
+        array $noDefaultArray,
+        #[\Symfony\Component\Console\Attribute\Option(name: 'some-array', mode: InputOption::VALUE_IS_ARRAY)]
+        array $someArray = ['third value']
     ): int
     {
     }

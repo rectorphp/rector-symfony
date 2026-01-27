@@ -160,7 +160,13 @@ CODE_SAMPLE
 
             $invokeParams = $this->createInvokeParams($node);
 
-            $invokeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+            $executeClassMethodParams = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+
+            // Ensure that optional parameters are listed last in the argument list
+            $invokeClassMethod->params = array_merge(
+                array_filter($executeClassMethodParams, fn(Param $param) => is_null($param->default)),
+                array_filter($executeClassMethodParams, fn(Param $param) => !is_null($param->default)),
+            );
 
             // 6. remove parent class
             $node->extends = null;
