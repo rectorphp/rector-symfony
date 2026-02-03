@@ -29,6 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AuthorizationCheckerToAccessDecisionManagerInVoterRector extends AbstractRector
 {
     private const string AUTHORIZATION_CHECKER_PROPERTY = 'authorizationChecker';
+
     private const string ACCESS_DECISION_MANAGER_PROPERTY = 'accessDecisionManager';
 
     public function getRuleDefinition(): RuleDefinition
@@ -97,9 +98,7 @@ CODE_SAMPLE
         $hasChanged = false;
         $renamedProperties = [];
 
-        $authorizationCheckerType = new ObjectType(
-            SymfonyClass::AUTHORIZATION_CHECKER
-        );
+        $authorizationCheckerType = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
 
         // 1) Regular properties
         foreach ($node->getProperties() as $property) {
@@ -107,9 +106,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $property->type = new FullyQualified(
-                SymfonyClass::ACCESS_DECISION_MANAGER_INTERFACE
-            );
+            $property->type = new FullyQualified(SymfonyClass::ACCESS_DECISION_MANAGER_INTERFACE);
 
             foreach ($property->props as $prop) {
                 if ($this->getName($prop) === self::AUTHORIZATION_CHECKER_PROPERTY) {
@@ -133,9 +130,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $param->type = new FullyQualified(
-                    SymfonyClass::ACCESS_DECISION_MANAGER_INTERFACE
-                );
+                $param->type = new FullyQualified(SymfonyClass::ACCESS_DECISION_MANAGER_INTERFACE);
 
                 if (
                     $param->var instanceof Variable
@@ -164,10 +159,7 @@ CODE_SAMPLE
                         return null;
                     }
 
-                    if (! $this->isObjectType(
-                        $node->var,
-                        new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER)
-                    )) {
+                    if (! $this->isObjectType($node->var, new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER))) {
                         return null;
                     }
 
@@ -199,12 +191,7 @@ CODE_SAMPLE
 
                     $attributeExpr = $attributeArg->value;
 
-                    $node->args = [
-                        new Arg($tokenVariable),
-                        new Arg(new Array_([
-                            new ArrayItem($attributeExpr),
-                        ])),
-                    ];
+                    $node->args = [new Arg($tokenVariable), new Arg(new Array_([new ArrayItem($attributeExpr)]))];
 
                     $hasChanged = true;
                     return $node;

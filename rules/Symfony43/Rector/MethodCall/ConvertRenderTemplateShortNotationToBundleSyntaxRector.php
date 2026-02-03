@@ -111,6 +111,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! isset($matches[0])) {
+            return null;
+        }
+
         $newValue = '@' .
             Strings::replace(substr((string) $tplName, 0, $matches[0][1]), '/Bundle/', '') .
             Strings::replace(substr((string) $tplName, $matches[0][1]), '/:/', '/');

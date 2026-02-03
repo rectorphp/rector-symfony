@@ -6,6 +6,4 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony73\Rector\Class_\AuthorizationCheckerToAccessDecisionManagerInVoterRector;
 
 return RectorConfig::configure()
-    ->withRules([
-        AuthorizationCheckerToAccessDecisionManagerInVoterRector::class,
-    ]);
+    ->withRules([AuthorizationCheckerToAccessDecisionManagerInVoterRector::class]);
