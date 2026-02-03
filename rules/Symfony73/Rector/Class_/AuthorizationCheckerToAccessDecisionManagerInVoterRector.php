@@ -98,11 +98,11 @@ CODE_SAMPLE
         $hasChanged = false;
         $renamedProperties = [];
 
-        $authorizationCheckerType = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
+        $objectType = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
 
         // 1) Regular properties
         foreach ($node->getProperties() as $property) {
-            if (! $this->isObjectType($property, $authorizationCheckerType)) {
+            if (! $this->isObjectType($property, $objectType)) {
                 continue;
             }
 
@@ -150,7 +150,7 @@ CODE_SAMPLE
         if ($voteMethod instanceof ClassMethod) {
             $this->traverseNodesWithCallable(
                 $voteMethod,
-                function (Node $node) use (&$hasChanged, $voteMethod, $renamedProperties) {
+                function (Node $node) use (&$hasChanged, $voteMethod, $renamedProperties): int|null|MethodCall {
                     if ($node instanceof Class_ || $node instanceof Function_) {
                         return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                     }
