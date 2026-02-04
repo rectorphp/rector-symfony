@@ -36,7 +36,7 @@ return RectorConfig::configure()
     ]);
 ```
 
-See [documentation](https://getrector.com/documentation) for more.
+See [documentation](https://getrector.com/documentation/config-configuration#content-symfony-integration) for more.
 
 ## Configuration
 
