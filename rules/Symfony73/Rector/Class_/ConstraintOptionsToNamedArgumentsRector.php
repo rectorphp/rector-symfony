@@ -110,6 +110,7 @@ CODE_SAMPLE
 
         $array = $node->args[0]->value;
         $namedArgs = [];
+        $oldTokens = $this->file->getOldTokens();
 
         foreach ($array->items as $item) {
             if (! $item instanceof ArrayItem) {
@@ -128,6 +129,22 @@ CODE_SAMPLE
             $keyValue = $this->valueResolver->getValue($item->key);
             if (! is_string($keyValue)) {
                 continue;
+            }
+
+            $lastTokenKey = $item->key->getEndTokenPos();
+            $startTokenValue = $item->value->getStartTokenPos();
+
+            while ($lastTokenKey < $startTokenValue) {
+                ++$lastTokenKey;
+
+                if (! isset($oldTokens[$lastTokenKey])) {
+                    break;
+                }
+
+                $token = $oldTokens[$lastTokenKey];
+                if ($token->is([T_DOC_COMMENT, T_COMMENT])) {
+                    return null;
+                }
             }
 
             $arg = new Arg($item->value);
