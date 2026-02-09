@@ -142,7 +142,7 @@ CODE_SAMPLE
                 }
 
                 $token = $oldTokens[$lastTokenKey];
-                if ($token->is(T_DOC_COMMENT)) {
+                if ($token->is([T_DOC_COMMENT, T_COMMENT])) {
                     return null;
                 }
             }
