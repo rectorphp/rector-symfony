@@ -131,21 +131,19 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($item->key instanceof Expr) {
-                $lastTokenKey = $item->key->getEndTokenPos();
-                $startTokenValue = $item->value->getStartTokenPos();
+            $lastTokenKey = $item->key->getEndTokenPos();
+            $startTokenValue = $item->value->getStartTokenPos();
 
-                while ($lastTokenKey < $startTokenValue) {
-                    ++$lastTokenKey;
+            while ($lastTokenKey < $startTokenValue) {
+                ++$lastTokenKey;
 
-                    if (! isset($oldTokens[$lastTokenKey])) {
-                        break;
-                    }
+                if (! isset($oldTokens[$lastTokenKey])) {
+                    break;
+                }
 
-                    $token = $oldTokens[$lastTokenKey];
-                    if ($token->is(T_DOC_COMMENT)) {
-                        return null;
-                    }
+                $token = $oldTokens[$lastTokenKey];
+                if ($token->is(T_DOC_COMMENT)) {
+                    return null;
                 }
             }
 
