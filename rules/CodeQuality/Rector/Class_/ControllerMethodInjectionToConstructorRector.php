@@ -164,7 +164,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                if ($this->isObjectType($param->type, new ObjectType(SymfonyClass::USER_INTERFACE))) {
+                if ($this->nodeTypeResolver->isObjectTypes(
+                    $param->type,
+                    [new ObjectType(SymfonyClass::USER_INTERFACE), new ObjectType('DateTimeInterface')]
+                )) {
                     continue;
                 }
 
