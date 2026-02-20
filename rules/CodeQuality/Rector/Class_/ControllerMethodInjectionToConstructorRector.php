@@ -155,7 +155,6 @@ CODE_SAMPLE
                         SymfonyClass::USER_INTERFACE,
                         SymfonyClass::REQUEST,
                         FosClass::PARAM_FETCHER,
-                        SymfonyClass::UUID,
                         Throwable::class,
                         Exception::class,
                         ...$entityClasses,
@@ -166,7 +165,11 @@ CODE_SAMPLE
 
                 if ($this->nodeTypeResolver->isObjectTypes(
                     $param->type,
-                    [new ObjectType(SymfonyClass::USER_INTERFACE), new ObjectType('DateTimeInterface')]
+                    [
+                        new ObjectType(SymfonyClass::USER_INTERFACE),
+                        new ObjectType('DateTimeInterface'),
+                        new ObjectType(SymfonyClass::UUID),
+                    ]
                 )) {
                     continue;
                 }
