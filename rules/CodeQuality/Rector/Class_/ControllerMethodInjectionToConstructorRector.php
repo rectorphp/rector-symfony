@@ -165,7 +165,11 @@ CODE_SAMPLE
 
                 if ($this->nodeTypeResolver->isObjectTypes(
                     $param->type,
-                    [new ObjectType(SymfonyClass::USER_INTERFACE), new ObjectType('DateTimeInterface'), new ObjectType(SymfonyClass::UUID)]
+                    [
+                        new ObjectType(SymfonyClass::USER_INTERFACE),
+                        new ObjectType('DateTimeInterface'),
+                        new ObjectType(SymfonyClass::UUID),
+                    ]
                 )) {
                     continue;
                 }
