@@ -92,7 +92,7 @@ final class SymfonyClass
 
     public const string ACCESS_DECISION_MANAGER_INTERFACE = 'Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface';
 
-    public const string UUID = 'Symfony\Component\Uid\Uuid';
+    public const string UUID = 'Symfony\Component\Uid\AbstractUid';
 
     public const string ROUTE_COLLECTION_BUILDER = 'Symfony\Component\Routing\RouteCollectionBuilder';
 
