@@ -168,11 +168,26 @@ CODE_SAMPLE
 
     /**
      * @see https://symfony.com/doc/current/event_dispatcher.html#event-dispatcher_event-listener-attributes
+     * @see https://symfony.com/doc/current/workflow.html
      */
     private function hasAsListenerAttribute(Class_ $class): bool
     {
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAttribute::AS_EVENT_LISTENER)) {
-            return true;
+        $listenerAttributes = [
+            SymfonyAttribute::AS_EVENT_LISTENER,
+            // Symfony Workflow attributes (Symfony 7.1+)
+            SymfonyAttribute::AS_ANNOUNCE_LISTENER,
+            SymfonyAttribute::AS_COMPLETED_LISTENER,
+            SymfonyAttribute::AS_ENTER_LISTENER,
+            SymfonyAttribute::AS_ENTERED_LISTENER,
+            SymfonyAttribute::AS_GUARD_LISTENER,
+            SymfonyAttribute::AS_LEAVE_LISTENER,
+            SymfonyAttribute::AS_TRANSITION_LISTENER,
+        ];
+
+        foreach ($listenerAttributes as $attribute) {
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, $attribute)) {
+                return true;
+            }
         }
 
         foreach ($class->getMethods() as $classMethod) {
@@ -180,8 +195,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, SymfonyAttribute::AS_EVENT_LISTENER)) {
-                return true;
+            foreach ($listenerAttributes as $attribute) {
+                if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, $attribute)) {
+                    return true;
+                }
             }
         }
 
