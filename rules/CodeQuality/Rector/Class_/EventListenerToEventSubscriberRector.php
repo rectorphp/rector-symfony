@@ -198,7 +198,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            foreach ($listenerAttributes as $attribute) {
+            foreach (self::LISTENER_ATTRIBUTES as $attribute) {
                 if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, $attribute)) {
                     return true;
                 }
