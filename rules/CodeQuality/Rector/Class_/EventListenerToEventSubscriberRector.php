@@ -33,6 +33,21 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const string LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
 
     /**
+     * @var string[]
+     */
+    private const array LISTENER_ATTRIBUTES = [
+        SymfonyAttribute::AS_EVENT_LISTENER,
+        // Symfony Workflow attributes (Symfony 7.1+)
+        SymfonyAttribute::AS_ANNOUNCE_LISTENER,
+        SymfonyAttribute::AS_COMPLETED_LISTENER,
+        SymfonyAttribute::AS_ENTER_LISTENER,
+        SymfonyAttribute::AS_ENTERED_LISTENER,
+        SymfonyAttribute::AS_GUARD_LISTENER,
+        SymfonyAttribute::AS_LEAVE_LISTENER,
+        SymfonyAttribute::AS_TRANSITION_LISTENER,
+    ];
+
+    /**
      * @var EventNameToClassAndConstant[]
      */
     private array $eventNamesToClassConstants = [];
@@ -172,19 +187,7 @@ CODE_SAMPLE
      */
     private function hasAsListenerAttribute(Class_ $class): bool
     {
-        $listenerAttributes = [
-            SymfonyAttribute::AS_EVENT_LISTENER,
-            // Symfony Workflow attributes (Symfony 7.1+)
-            SymfonyAttribute::AS_ANNOUNCE_LISTENER,
-            SymfonyAttribute::AS_COMPLETED_LISTENER,
-            SymfonyAttribute::AS_ENTER_LISTENER,
-            SymfonyAttribute::AS_ENTERED_LISTENER,
-            SymfonyAttribute::AS_GUARD_LISTENER,
-            SymfonyAttribute::AS_LEAVE_LISTENER,
-            SymfonyAttribute::AS_TRANSITION_LISTENER,
-        ];
-
-        foreach ($listenerAttributes as $attribute) {
+        foreach (self::LISTENER_ATTRIBUTES as $attribute) {
             if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, $attribute)) {
                 return true;
             }
