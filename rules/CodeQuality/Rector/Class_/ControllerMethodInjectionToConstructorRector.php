@@ -263,10 +263,6 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
-                continue;
-            }
-
             foreach ($classMethod->getParams() as $param) {
                 if (! $param->var instanceof Variable) {
                     continue;
