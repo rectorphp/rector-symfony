@@ -199,6 +199,15 @@ CODE_SAMPLE
                     continue;
                 }
 
+                if ($this->hasConflictedParamName(
+                    $node,
+                    $classMethod->name->toString(),
+                    $this->getName($param->var),
+                    $this->getName($param->type)
+                )) {
+                    continue;
+                }
+
                 unset($classMethod->params[$key]);
                 $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
             }
@@ -241,6 +250,33 @@ CODE_SAMPLE
         }
 
         return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
+    }
+
+    private function hasConflictedParamName(
+        Class_ $class,
+        string $currentClassMethodName,
+        string $paramName,
+        string $paramType
+    ): bool {
+        foreach ($class->getMethods() as $classMethod) {
+            if ($this->isName($classMethod, $currentClassMethodName)) {
+                continue;
+            }
+
+            foreach ($classMethod->getParams() as $param) {
+                if (! $param->var instanceof Variable) {
+                    continue;
+                }
+
+                if (! $this->isName($param->var, $paramName)) {
+                    continue;
+                }
+
+                return $param->type instanceof FullyQualified && ! $this->isName($param->type, $paramType);
+            }
+        }
+
+        return false;
     }
 
     /**
