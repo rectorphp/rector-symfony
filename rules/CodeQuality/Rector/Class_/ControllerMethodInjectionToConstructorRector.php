@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -208,6 +209,10 @@ CODE_SAMPLE
                     continue;
                 }
 
+                if ($this->isUsedInStaticClosureUse($classMethod, $this->getName($param->var))) {
+                    continue;
+                }
+
                 unset($classMethod->params[$key]);
                 $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
             }
@@ -277,6 +282,35 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isUsedInStaticClosureUse(ClassMethod $classMethod, string $paramName): bool
+    {
+        if ($classMethod->stmts === null) {
+            return false;
+        }
+
+        $found = false;
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($paramName, &$found): ?int {
+            if (! $node instanceof Closure) {
+                return null;
+            }
+
+            if (! $node->static) {
+                return null;
+            }
+
+            foreach ($node->uses as $closureUse) {
+                if ($this->isName($closureUse->var, $paramName)) {
+                    $found = true;
+                    return NodeVisitor::STOP_TRAVERSAL;
+                }
+            }
+
+            return null;
+        });
+
+        return $found;
     }
 
     /**
