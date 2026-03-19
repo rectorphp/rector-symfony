@@ -6,11 +6,13 @@ namespace Rector\Symfony\Symfony61\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -31,6 +33,7 @@ final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRecto
 {
     public function __construct(
         private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -147,6 +150,10 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($this->isNonStaticExternalClassCallable($arrayCallable, $scope)) {
+                return null;
+            }
+
             $hasChanged = true;
 
             return new MethodCall($arrayCallable->getCallerExpr(), $arrayCallable->getMethod(), [
@@ -155,5 +162,26 @@ CODE_SAMPLE
         });
 
         return $hasChanged;
+    }
+
+    private function isNonStaticExternalClassCallable(ArrayCallable $arrayCallable, Scope $scope): bool
+    {
+        if (! $arrayCallable->getCallerExpr() instanceof ClassConstFetch) {
+            return false;
+        }
+
+        $className = $arrayCallable->getClass();
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $methodName = $arrayCallable->getMethod();
+
+        if (! $classReflection->hasMethod($methodName)) {
+            return false;
+        }
+
+        return ! $classReflection->getMethod($methodName, $scope)->isStatic();
     }
 }
