@@ -131,6 +131,12 @@ CODE_SAMPLE
             }
         }
 
+        /** @var array<array{ClassMethod, int}> $paramsToRemove */
+        $paramsToRemove = [];
+
+        /** @var array<string, string[]> $methodParamNamesToReplace */
+        $methodParamNamesToReplace = [];
+
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
@@ -213,8 +219,10 @@ CODE_SAMPLE
                     continue;
                 }
 
-                unset($classMethod->params[$key]);
-                $propertyMetadatas[] = new PropertyMetadata($this->getName($param->var), $paramType);
+                $paramName = $this->getName($param->var);
+                $paramsToRemove[] = [$classMethod, $key];
+                $propertyMetadatas[$paramName] = new PropertyMetadata($paramName, $paramType);
+                $methodParamNamesToReplace[$classMethod->name->toString()][] = $paramName;
             }
         }
 
@@ -223,9 +231,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $paramNamesToReplace = [];
-        foreach ($propertyMetadatas as $propertyMetadata) {
-            $paramNamesToReplace[] = $propertyMetadata->getName();
+        // defer param removal to after collection to avoid mutation during iteration
+        foreach ($paramsToRemove as [$methodToModify, $paramKey]) {
+            unset($methodToModify->params[$paramKey]);
         }
 
         // 1. update constructor
@@ -238,7 +246,12 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->replaceParamUseWithPropertyFetch($classMethod, $paramNamesToReplace);
+            $methodName = $classMethod->name->toString();
+            if (! isset($methodParamNamesToReplace[$methodName])) {
+                continue;
+            }
+
+            $this->replaceParamUseWithPropertyFetch($classMethod, $methodParamNamesToReplace[$methodName]);
         }
 
         return $node;
