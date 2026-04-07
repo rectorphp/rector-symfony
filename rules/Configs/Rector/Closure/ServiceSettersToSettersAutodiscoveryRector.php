@@ -218,7 +218,7 @@ CODE_SAMPLE
     {
         $relativeDirectoryPath = $this->filesystem->makePathRelative(
             dirname($classFilePath),
-            dirname($this->getFile()->getFilePath())
+            dirname((string) $this->getFile()->getFilePath())
         );
 
         $distConstFetch = new ConstFetch(new Name('__DIR__'));
