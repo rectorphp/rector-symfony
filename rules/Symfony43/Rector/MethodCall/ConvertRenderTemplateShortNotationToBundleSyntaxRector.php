@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
 
         if (! isset($matches[0])) {
-            return null;
+            return null;t
         }
 
         $newValue = '@' .
