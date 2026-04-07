@@ -73,7 +73,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var String_ $stringNode */
         $stringNode = $firstArg->value;
 
         // not a form type string
