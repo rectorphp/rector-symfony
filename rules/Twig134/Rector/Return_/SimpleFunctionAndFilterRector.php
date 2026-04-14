@@ -168,7 +168,7 @@ CODE_SAMPLE
 
         foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
-            if (! $oldClassObjectType->equals($newNodeType)) {
+            if (! $newNodeType->equals($oldClassObjectType)) {
                 continue;
             }
 
