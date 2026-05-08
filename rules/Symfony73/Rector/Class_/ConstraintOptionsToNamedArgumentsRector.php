@@ -125,7 +125,8 @@ CODE_SAMPLE
 
         $array = $node->args[0]->value;
         $namedArgs = [];
-        $oldTokens = $this->getFile()->getOldTokens();
+        $oldTokens = $this->getFile()
+            ->getOldTokens();
 
         foreach ($array->items as $item) {
             if (! $item instanceof ArrayItem) {

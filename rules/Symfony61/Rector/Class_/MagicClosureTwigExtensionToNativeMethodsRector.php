@@ -182,6 +182,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return ! $classReflection->getMethod($methodName, $scope)->isStatic();
+        return ! $classReflection->getMethod($methodName, $scope)
+            ->isStatic();
     }
 }

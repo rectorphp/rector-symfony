@@ -1,14 +1,13 @@
-<?php declare (strict_types=1);
+<?php
 
 namespace Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\GetRequestRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithNamedService extends Controller
+final class WithFqnRoute extends Controller
 {
     /**
-     * @Route("/some-action", name="some_action")
+     * @\Symfony\Component\Routing\Annotation\Route("/some-action", name="some_action")
      */
     public function someAction()
     {
@@ -18,17 +17,16 @@ class ClassWithNamedService extends Controller
 
 ?>
 -----
-<?php declare (strict_types=1);
+<?php
 
 namespace Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\GetRequestRector\Fixture;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Annotation\Route;
 
-class ClassWithNamedService extends Controller
+final class WithFqnRoute extends Controller
 {
     /**
-     * @Route("/some-action", name="some_action")
+     * @\Symfony\Component\Routing\Annotation\Route("/some-action", name="some_action")
      */
     public function someAction(\Symfony\Component\HttpFoundation\Request $request)
     {
