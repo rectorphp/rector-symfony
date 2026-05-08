@@ -176,7 +176,8 @@ CODE_SAMPLE
                     return null;
                 }
 
-                $argExpr = $node->getArgs()[0]->value;
+                $argExpr = $node->getArgs()[0]
+                    ->value;
                 $resolvedValue = $this->resolveStringExpr($argExpr);
                 if ($resolvedValue === null) {
                     return null;

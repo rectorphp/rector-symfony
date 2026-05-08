@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony30\Rector\ClassMethod;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -16,6 +17,8 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\Enum\SensioAnnotation;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -118,6 +121,10 @@ CODE_SAMPLE
 
     private function isActionWithGetRequestInBody(ClassMethod $classMethod): bool
     {
+        if (! $this->hasRouteDocblock($classMethod)) {
+            return false;
+        }
+
         if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
             return false;
         }
@@ -246,5 +253,24 @@ CODE_SAMPLE
         });
 
         return $classMethod;
+    }
+
+    private function hasRouteDocblock(ClassMethod $classMethod): bool
+    {
+        // need a @Route docblock
+        $doc = $classMethod->getDocComment();
+        if (! $doc instanceof Doc) {
+            return false;
+        }
+
+        if (str_contains($doc->getText(), '@Route')) {
+            return true;
+        }
+
+        if (str_contains($doc->getText(), SymfonyAnnotation::ROUTE)) {
+            return true;
+        }
+
+        return str_contains($doc->getText(), SensioAnnotation::ROUTE);
     }
 }
