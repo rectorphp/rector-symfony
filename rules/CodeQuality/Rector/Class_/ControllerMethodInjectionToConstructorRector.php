@@ -267,13 +267,13 @@ CODE_SAMPLE
     /**
      * @param array<string, int[]> $removedArgPositionsByMethod
      */
-    private function updateCallSitesForRemovedParams(Class_ $node, array $removedArgPositionsByMethod): void
+    private function updateCallSitesForRemovedParams(Class_ $class, array $removedArgPositionsByMethod): void
     {
         if ($removedArgPositionsByMethod === []) {
             return;
         }
 
-        foreach ($node->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             if ($classMethod->stmts === null) {
                 continue;
             }
@@ -300,8 +300,8 @@ CODE_SAMPLE
 
                 $removedPositions = $removedArgPositionsByMethod[$methodName];
                 rsort($removedPositions);
-                foreach ($removedPositions as $position) {
-                    unset($node->args[$position]);
+                foreach ($removedPositions as $removedPosition) {
+                    unset($node->args[$removedPosition]);
                 }
 
                 $node->args = array_values($node->args);
