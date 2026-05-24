@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;

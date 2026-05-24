@@ -9,3 +9,4 @@ stubs export-ignore
 tests export-ignore
 rules-tests export-ignore
 rector.php export-ignore
+structarmed.php export-ignore
