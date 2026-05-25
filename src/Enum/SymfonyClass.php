@@ -105,4 +105,6 @@ final class SymfonyClass
     public const string ABSTRACT_TYPE_EXTENSION = 'Symfony\Component\Form\AbstractTypeExtension';
 
     public const string ABSTRACT_TYPE = 'Symfony\Component\Form\AbstractType';
+
+    public const string ULID_CLASS = 'Symfony\Component\Uid\Ulid';
 }

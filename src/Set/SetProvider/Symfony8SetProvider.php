@@ -29,6 +29,12 @@ final class Symfony8SetProvider implements SetProviderInterface
                 '8.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-dependency-injection.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/uid',
+                '8.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-uid.php'
+            ),
         ];
     }
 }

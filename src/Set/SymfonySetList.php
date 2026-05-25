@@ -171,6 +171,11 @@ final class SymfonySetList
      */
     public const string SYMFONY_80 = __DIR__ . '/../../config/sets/symfony/symfony8/symfony80.php';
 
+    /**
+     * @deprecated Set list are too generic and do not handle package differences. Use ->withComposerBased(symfony: true) instead
+     */
+    public const string SYMFONY_81 = __DIR__ . '/../../config/sets/symfony/symfony8/symfony81.php';
+
     public const string SYMFONY_CODE_QUALITY = __DIR__ . '/../../config/sets/symfony/symfony-code-quality.php';
 
     public const string SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/sets/symfony/symfony-constructor-injection.php';
