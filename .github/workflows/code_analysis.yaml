@@ -22,7 +22,7 @@ jobs:
 
                     -
                         name: "Finalize Classes"
-                        run: vendor/bin/swiss-knife finalize config src tests rules rules-tests --ansi
+                        run: vendor/bin/swiss-knife finalize config src tests rules rules-tests
 
                     -
                         name: 'Composer Validate'
