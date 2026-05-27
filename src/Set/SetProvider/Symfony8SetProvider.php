@@ -41,6 +41,12 @@ final class Symfony8SetProvider implements SetProviderInterface
                 '8.1',
                 __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-serializer.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::SYMFONY,
+                'symfony/filesystem',
+                '8.1',
+                __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-filesystem.php'
+            ),
         ];
     }
 }
