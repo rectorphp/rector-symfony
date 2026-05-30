@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -160,7 +161,10 @@ CODE_SAMPLE
 
             $invokeParams = $this->createInvokeParams($node);
 
-            $invokeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+            $allParams = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+
+            // optional parameters (with a default value) must be listed last, to keep a valid signature
+            $invokeClassMethod->params = $this->sortRequiredParamsFirst($allParams);
 
             // 6. remove parent class
             $node->extends = null;
@@ -248,6 +252,26 @@ CODE_SAMPLE
 
         // the left-most var must be $this
         return $current instanceof Variable && $this->isName($current, 'this');
+    }
+
+    /**
+     * @param Param[] $params
+     * @return Param[]
+     */
+    private function sortRequiredParamsFirst(array $params): array
+    {
+        $requiredParams = [];
+        $optionalParams = [];
+
+        foreach ($params as $param) {
+            if ($param->default instanceof Expr) {
+                $optionalParams[] = $param;
+            } else {
+                $requiredParams[] = $param;
+            }
+        }
+
+        return array_merge($requiredParams, $optionalParams);
     }
 
     /**
