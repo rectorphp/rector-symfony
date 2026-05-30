@@ -78,7 +78,7 @@ final class AddFormatArgumentToIsValidRector extends AbstractRector
             return null;
         }
 
-        if (\count($node->args) !==1) {
+        if (\count($node->args) !== 1) {
             return null;
         }
 

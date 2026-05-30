@@ -4,6 +4,7 @@ includes:
 
 rules:
     - Symplify\PHPStanRules\Rules\StringFileAbsolutePathExistsRule
+    - Rector\Symfony\Utils\PHPStan\RequireParentSetConfigImportRule
 
 parameters:
     level: 8
@@ -22,6 +23,7 @@ parameters:
         - tests
         - rules
         - rules-tests
+        - utils
 
     # https://github.com/rectorphp/type-perfect/
     type_perfect:

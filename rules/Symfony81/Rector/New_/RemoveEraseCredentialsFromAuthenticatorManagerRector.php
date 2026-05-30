@@ -7,6 +7,7 @@ namespace Rector\Symfony\Symfony81\Rector\New_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -95,7 +96,7 @@ final class RemoveEraseCredentialsFromAuthenticatorManagerRector extends Abstrac
             }
 
             if (
-                $arg->name !== null
+                $arg->name instanceof Identifier
                 && ($this->isName($arg->name, 'exposeSecurityErrors') || $this->isName($arg->name, 'eraseCredentials'))
                 && $this->valueResolver->isTrueOrFalse($arg->value)
             ) {
