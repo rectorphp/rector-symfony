@@ -9,6 +9,7 @@
         <testsuite name="main">
             <directory>tests</directory>
             <directory>rules-tests</directory>
+            <directory>utils/phpstan/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
