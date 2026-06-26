@@ -140,17 +140,9 @@ CODE_SAMPLE
         return $node;
     }
 
-    /**
-     * @param Arg $firstArg
-     * @param Arg $secondArg
-     */
     private function createThisValidateMethodCall(Arg $firstArg, Arg $secondArg): MethodCall
     {
-        return new MethodCall(
-            new Variable('this'),
-            new Identifier('validate'),
-            [$firstArg, $secondArg],
-        );
+        return new MethodCall(new Variable('this'), new Identifier('validate'), [$firstArg, $secondArg]);
     }
 
     private function isThisValidatorPropertyFetch(Expr $node): bool
