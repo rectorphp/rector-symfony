@@ -157,13 +157,7 @@ CODE_SAMPLE
 
     private function hasParameterBagInterfaceDependency(ClassMethod $classMethod): bool
     {
-        foreach ($classMethod->getParams() as $param) {
-            if ($this->isParameterBagParam($param)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($classMethod->getParams(), fn (Param $param): bool => $this->isParameterBagParam($param));
     }
 
     /**

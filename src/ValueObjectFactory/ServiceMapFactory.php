@@ -37,7 +37,7 @@ final class ServiceMapFactory
         foreach ($xml->services->service as $def) {
             /** @var SimpleXMLElement $attrs */
             $attrs = $def->attributes();
-            if (! (property_exists($attrs, 'id') && $attrs->id instanceof SimpleXMLElement)) {
+            if (! property_exists($attrs, 'id') || ! $attrs->id instanceof SimpleXMLElement) {
                 continue;
             }
 
@@ -102,18 +102,18 @@ final class ServiceMapFactory
                 $attrs,
                 'class'
             ) && $attrs->class instanceof SimpleXMLElement ? (string) $attrs->class : null,
-            ! (property_exists(
+            ! property_exists(
                 $attrs,
                 'public'
-            ) && $attrs->public instanceof SimpleXMLElement) || (string) $attrs->public !== 'false',
+            ) || ! $attrs->public instanceof SimpleXMLElement || (string) $attrs->public !== 'false',
             property_exists(
                 $attrs,
                 'synthetic'
             ) && $attrs->synthetic instanceof SimpleXMLElement && (string) $attrs->synthetic === 'true',
-            ! (property_exists(
+            ! property_exists(
                 $attrs,
                 'shared'
-            ) && $attrs->shared instanceof SimpleXMLElement) || (string) $attrs->shared !== 'false',
+            ) || ! $attrs->shared instanceof SimpleXMLElement || (string) $attrs->shared !== 'false',
             property_exists(
                 $attrs,
                 'alias'

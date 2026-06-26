@@ -11,6 +11,9 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Symfony\Component\DependencyInjection\Container;
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Rector\Symfony\Tests\Bridge\Symfony\ContainerServiceProviderTest
+ */
 final class ContainerServiceProvider
 {
     private ?object $container = null;

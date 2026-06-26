@@ -6,6 +6,7 @@ namespace Rector\Symfony\Symfony80\Rector\Class_;
 
 use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -107,13 +108,10 @@ CODE_SAMPLE
 
     private function doesImplementUserInterface(Class_ $class): bool
     {
-        foreach ($class->implements as $implementedInterface) {
-            if ($this->isName($implementedInterface, SymfonyClass::USER_INTERFACE)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(
+            $class->implements,
+            fn (Name $name): bool => $this->isName($name, SymfonyClass::USER_INTERFACE)
+        );
     }
 
     private function createSserializeClassMethod(mixed $classMethodStmts): ClassMethod
