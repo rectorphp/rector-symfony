@@ -21,6 +21,7 @@ final readonly class AnnotationAnalyzer
         if ($this->attrinationFinder->hasByOne($class, SymfonyAnnotation::TEMPLATE)) {
             return true;
         }
+
         return array_any(
             $class->getMethods(),
             fn (ClassMethod $classMethod): bool => $this->attrinationFinder->hasByOne(
