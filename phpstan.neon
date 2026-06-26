@@ -13,6 +13,7 @@ parameters:
     # https://github.com/symplify/phpstan-rules#symfonylaravel-container--get--make-return-type-extensions
     symplify:
         symfonyReturnType: true
+        pathStrings: true
 
     # see https://phpstan.org/writing-php-code/phpdoc-types#global-type-aliases
     typeAliases:
