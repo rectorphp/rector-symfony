@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Symfony\Annotation;
 
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 
@@ -20,13 +21,12 @@ final readonly class AnnotationAnalyzer
         if ($this->attrinationFinder->hasByOne($class, SymfonyAnnotation::TEMPLATE)) {
             return true;
         }
-
-        foreach ($class->getMethods() as $classMethod) {
-            if ($this->attrinationFinder->hasByOne($classMethod, SymfonyAnnotation::TEMPLATE)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(
+            $class->getMethods(),
+            fn (ClassMethod $classMethod): bool => $this->attrinationFinder->hasByOne(
+                $classMethod,
+                SymfonyAnnotation::TEMPLATE
+            )
+        );
     }
 }
