@@ -81,6 +81,11 @@ parameters:
                 - tests
                 - config/sets/symfony/annotations-to-attributes.php
 
+        # deprecated rule still has to be tested until removed
+        -
+            identifier: classConstant.deprecatedClass
+            path: rules-tests/Configs/Rector/ClassMethod/AddRouteAnnotationRector/config/configured_rule.php
+
         # using XML to load symfony config
         -
             path: src/ValueObjectFactory/ServiceMapFactory.php
