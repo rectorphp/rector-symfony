@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Configs\NodeFactory\AutowiredParamFactory;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -28,8 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
  *
  * @see \Rector\Symfony\Tests\Configs\Rector\Class_\ParameterBagToAutowireAttributeRector\ParameterBagToAutowireAttributeRectorTest
+ *
+ * @deprecated Too specific and opinionated to maintain as a generic rule. Write a custom rule for your own ParameterBag-to-#[Autowire] convention instead.
  */
-final class ParameterBagToAutowireAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class ParameterBagToAutowireAttributeRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
     public function __construct(
         private readonly AutowiredParamFactory $autowiredParamFactory,
