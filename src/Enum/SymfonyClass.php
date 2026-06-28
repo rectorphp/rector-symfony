@@ -100,8 +100,6 @@ final class SymfonyClass
 
     public const string KERNEL = 'Symfony\Component\HttpKernel\Kernel';
 
-    public const string CONTAINER = 'Symfony\Component\DependencyInjection\Container';
-
     public const string ABSTRACT_TYPE_EXTENSION = 'Symfony\Component\Form\AbstractTypeExtension';
 
     public const string ABSTRACT_TYPE = 'Symfony\Component\Form\AbstractType';

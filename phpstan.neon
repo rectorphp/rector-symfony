@@ -80,7 +80,6 @@ parameters:
             paths:
                 - tests
                 - config/sets/symfony/annotations-to-attributes.php
-
         # using XML to load symfony config
         -
             path: src/ValueObjectFactory/ServiceMapFactory.php
