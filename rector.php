@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
@@ -32,9 +33,10 @@ return RectorConfig::configure()
         // marked as skipped
         ReturnNeverTypeRector::class => ['*/tests/*'],
 
-        // keep @deprecated docblocks on set list constants; native #[\Deprecated]
-        // attribute triggers PHP runtime deprecation notices on internal access
-        // @see https://github.com/rectorphp/rector/issues/9788
+        // keep @deprecated docblocks on set list constants; the native
+        // #[\Deprecated] attribute triggers PHP runtime deprecation notices
+        // on internal access, see https://github.com/rectorphp/rector/issues/9788
+        DeprecatedAnnotationToDeprecatedAttributeRector::class,
         ConstAndTraitDeprecatedAttributeRector::class,
     ])
     ->withConfiguredRule(StringClassNameToClassConstantRector::class, ['Symfony\*', 'Twig_*', 'Twig*'])
