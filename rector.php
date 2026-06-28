@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
-use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return RectorConfig::configure()
@@ -29,13 +29,13 @@ return RectorConfig::configure()
         ],
         UseClassKeywordForClassNameResolutionRector::class => [__DIR__ . '/config'],
 
-        RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
-            // "data" => "datum" false positive
-            __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
-        ],
-
         // marked as skipped
         ReturnNeverTypeRector::class => ['*/tests/*'],
+
+        // keep @deprecated docblocks on set list constants; native #[\Deprecated]
+        // attribute triggers PHP runtime deprecation notices on internal access
+        // @see https://github.com/rectorphp/rector/issues/9788
+        ConstAndTraitDeprecatedAttributeRector::class,
     ])
     ->withConfiguredRule(StringClassNameToClassConstantRector::class, ['Symfony\*', 'Twig_*', 'Twig*'])
     ->withPhpSets()
