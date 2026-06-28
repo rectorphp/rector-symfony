@@ -62,8 +62,6 @@ final class SymfonyClass
 
     public const string PARAMETER_BAG = 'Symfony\Component\HttpFoundation\ParameterBag';
 
-    public const string PARAMETER_BAG_INTERFACE = 'Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface';
-
     public const string SYMFONY_STYLE = 'Symfony\Component\Console\Style\SymfonyStyle';
 
     public const string LOGOUT_EVENT = 'Symfony\Component\Security\Http\Event\LogoutEvent';
