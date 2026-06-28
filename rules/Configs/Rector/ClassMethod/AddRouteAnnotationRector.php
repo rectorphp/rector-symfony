@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -25,8 +26,10 @@ use TypeError;
 
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
+ *
+ * @deprecated Too complex and tightly coupled to a project-specific Symfony route setup. Write a local custom rule for this one-time job instead.
  */
-final class AddRouteAnnotationRector extends AbstractRector
+final class AddRouteAnnotationRector extends AbstractRector implements DeprecatedInterface
 {
     public function __construct(
         private readonly SymfonyRoutesProviderInterface $symfonyRoutesProvider,
