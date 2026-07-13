@@ -19,6 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
         new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'),
     ]);
 
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-console.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-security-bundle.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-security-http.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-mime.php');
