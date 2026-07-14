@@ -53,6 +53,12 @@ final class TwigSetProvider implements SetProviderInterface
                 '2.4',
                 __DIR__ . '/../../../config/sets/twig/twig24.php'
             ),
+            new ComposerTriggeredSet(
+                SetGroup::TWIG,
+                'twig/twig',
+                '3.0',
+                __DIR__ . '/../../../config/sets/twig/twig30.php'
+            ),
         ];
     }
 }
