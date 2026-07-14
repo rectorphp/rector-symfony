@@ -21,5 +21,7 @@ final class TwigSetList
 
     public const string TWIG_24 = __DIR__ . '/../../config/sets/twig/twig24.php';
 
+    public const string TWIG_30 = __DIR__ . '/../../config/sets/twig/twig30.php';
+
     public const string TWIG_UNDERSCORE_TO_NAMESPACE = __DIR__ . '/../../config/sets/twig/twig-underscore-to-namespace.php';
 }
