@@ -1,0 +1,43 @@
+# github action that rebuilds https://github.com/rectorphp/rector
+# with the freshly merged rector-symfony main
+name: Dispatch Build Scoped Rector
+
+on:
+    pull_request:
+        types:
+            - closed
+
+jobs:
+    dispatch_build_scoped_rector:
+        # only for merged pull requests in this repository, not forks
+        if: github.event.pull_request.merged == true && github.repository == 'rectorphp/rector-symfony'
+
+        runs-on: ubuntu-latest
+
+        steps:
+            # a tagged main is already being published by the tag build of rector-src,
+            # dispatching a second build would race it for the push to rectorphp/rector
+            -
+                name: "Check whether rector-src main is a release tag commit"
+                id: release_tag
+                run: |
+                    RECTOR_SRC="https://github.com/rectorphp/rector-src.git"
+
+                    MAIN_SHA=$(git ls-remote $RECTOR_SRC refs/heads/main | cut -f1)
+                    if [ -z "$MAIN_SHA" ]; then
+                        echo "Could not resolve rector-src main"
+                        exit 1
+                    fi
+
+                    # lightweight tags are listed with the commit itself, annotated ones with a "^{}" line
+                    if git ls-remote --tags $RECTOR_SRC | grep -q "^${MAIN_SHA}"; then
+                        echo "rector-src main $MAIN_SHA is tagged, leaving the build to the tag itself"
+                        echo "tagged=true" >> $GITHUB_OUTPUT
+                    fi
+
+            -
+                name: "Trigger build_scoped_rector.yaml in rectorphp/rector-src"
+                if: steps.release_tag.outputs.tagged != 'true'
+                env:
+                    GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                run: gh workflow run build_scoped_rector.yaml --repo rectorphp/rector-src --ref main
