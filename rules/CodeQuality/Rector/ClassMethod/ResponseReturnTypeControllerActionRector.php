@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::ROUTE)) {
+        if (! $this->isActionClassMethod($node)) {
             return null;
         }
 
@@ -175,6 +175,15 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function isActionClassMethod(ClassMethod $classMethod): bool
+    {
+        if ($this->attrinationFinder->hasByOne($classMethod, SymfonyAnnotation::ROUTE)) {
+            return true;
+        }
+
+        return str_ends_with($this->getName($classMethod), 'Action');
     }
 
     private function hasReturn(ClassMethod $classMethod): bool
