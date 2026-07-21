@@ -2,10 +2,10 @@
 
 namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\FixtureTypeGuarded;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\Source\AbstractCustomController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SkipTypeGuardedController extends AbstractController
+class SkipTypeGuardedController extends AbstractCustomController
 {
     #[Route]
     public function detail()

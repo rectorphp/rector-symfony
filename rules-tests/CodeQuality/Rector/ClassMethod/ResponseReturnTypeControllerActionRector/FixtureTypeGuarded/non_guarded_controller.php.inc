@@ -2,10 +2,10 @@
 
 namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\FixtureTypeGuarded;
 
-use Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\Source\AbstractCustomController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class FinalController extends AbstractCustomController
+class NonGuardedController extends AbstractController
 {
     #[Route]
     public function detail()
@@ -20,10 +20,10 @@ final class FinalController extends AbstractCustomController
 
 namespace Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\FixtureTypeGuarded;
 
-use Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector\Source\AbstractCustomController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class FinalController extends AbstractCustomController
+class NonGuardedController extends AbstractController
 {
     #[Route]
     public function detail(): \Symfony\Component\HttpFoundation\Response
