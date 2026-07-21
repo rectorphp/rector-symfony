@@ -30,6 +30,7 @@ use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,7 +46,8 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly ReturnAnalyzer $returnAnalyzer,
         private readonly StaticTypeMapper $staticTypeMapper,
-        private readonly ReturnTypeInferer $returnTypeInferer
+        private readonly ReturnTypeInferer $returnTypeInferer,
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 
@@ -109,6 +111,11 @@ CODE_SAMPLE
         }
 
         if (! $this->controllerAnalyzer->isInsideController($node)) {
+            return null;
+        }
+
+        // adding a return type would break child classes of user-guarded classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
             return null;
         }
 
@@ -188,7 +195,7 @@ CODE_SAMPLE
 
     private function hasReturn(ClassMethod $classMethod): bool
     {
-        return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
+        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
     }
 
     private function refactorResponse(ClassMethod $classMethod): ?ClassMethod
