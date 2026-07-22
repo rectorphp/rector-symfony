@@ -21,9 +21,6 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttribu
 #[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine', aliases: ['first', 'second'], hidden: true)]
 final class NameAndHidden extends \Symfony\Component\Console\Command\Command
 {
-    public function configure()
-    {
-    }
 }
 
 ?>

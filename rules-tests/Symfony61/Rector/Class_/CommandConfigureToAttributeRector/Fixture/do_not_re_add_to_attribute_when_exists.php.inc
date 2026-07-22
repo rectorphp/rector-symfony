@@ -37,11 +37,6 @@ use Symfony\Component\Console\Command\Command;
 )]
 class DoNotReAddToAttributeWhenExists extends Command
 {
-
-    protected function configure(): void
-    {
-        parent::configure();
-    }
 }
 
 ?>

@@ -22,9 +22,6 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttribu
 #[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine', description: 'rising above', aliases: ['first', 'second'], hidden: true)]
 final class Hybrid extends \Symfony\Component\Console\Command\Command
 {
-    public function configure()
-    {
-    }
 }
 
 ?>
