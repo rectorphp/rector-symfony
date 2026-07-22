@@ -20,9 +20,6 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttribu
 #[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine', description: 'rising above')]
 final class NameAndDescriptionFluent extends \Symfony\Component\Console\Command\Command
 {
-    public function configure()
-    {
-    }
 }
 
 ?>

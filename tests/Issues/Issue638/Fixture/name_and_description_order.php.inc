@@ -38,10 +38,6 @@ final class NameAndDescriptionOrder extends Command
 {
     private const COMMAND = 'command';
 
-    protected function configure(): void
-    {
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //...

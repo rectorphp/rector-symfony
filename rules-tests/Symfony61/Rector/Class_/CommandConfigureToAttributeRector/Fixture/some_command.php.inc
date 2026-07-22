@@ -19,9 +19,6 @@ namespace Rector\Symfony\Tests\Symfony61\Rector\Class_\CommandConfigureToAttribu
 #[\Symfony\Component\Console\Attribute\AsCommand(name: 'sunshine')]
 final class SomeCommand extends \Symfony\Component\Console\Command\Command
 {
-    public function configure()
-    {
-    }
 }
 
 ?>
