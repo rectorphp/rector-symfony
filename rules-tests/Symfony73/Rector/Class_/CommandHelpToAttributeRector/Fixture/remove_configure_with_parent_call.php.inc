@@ -6,10 +6,12 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
 #[AsCommand(name: 'some_name')]
-final class AddHelpToAttributeCommand extends Command
+final class RemoveConfigureWithParentCall extends Command
 {
     public function configure()
     {
+        parent::configure();
+
         $this->setHelp('Some help text');
     }
 }
@@ -26,7 +28,7 @@ use Symfony\Component\Console\Command\Command;
 #[AsCommand(name: 'some_name', help: <<<'TXT'
 Some help text
 TXT)]
-final class AddHelpToAttributeCommand extends Command
+final class RemoveConfigureWithParentCall extends Command
 {
 }
 
