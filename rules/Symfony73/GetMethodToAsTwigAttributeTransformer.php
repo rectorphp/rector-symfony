@@ -57,6 +57,75 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         'getGlobals',
     ];
 
+    /**
+     * Built-in Twig function names. Overriding one only works while the class stays a classic
+     * "extends AbstractExtension", so such an item must remain in the array and not become an attribute.
+     *
+     * @var string[]
+     */
+    private const array CORE_TWIG_FUNCTION_NAMES = [
+        'attribute',
+        'block',
+        'constant',
+        'cycle',
+        'date',
+        'dump',
+        'enum_cases',
+        'include',
+        'max',
+        'min',
+        'parent',
+        'random',
+        'range',
+        'source',
+        'template_from_string',
+    ];
+
+    /**
+     * Built-in Twig filter names, see self::CORE_TWIG_FUNCTION_NAMES for the reasoning.
+     *
+     * @var string[]
+     */
+    private const array CORE_TWIG_FILTER_NAMES = [
+        'abs',
+        'batch',
+        'capitalize',
+        'column',
+        'convert_encoding',
+        'date',
+        'date_modify',
+        'default',
+        'e',
+        'escape',
+        'filter',
+        'first',
+        'format',
+        'join',
+        'json_encode',
+        'keys',
+        'last',
+        'length',
+        'lower',
+        'map',
+        'merge',
+        'nl2br',
+        'number_format',
+        'raw',
+        'reduce',
+        'replace',
+        'reverse',
+        'round',
+        'slice',
+        'sort',
+        'spaceless',
+        'split',
+        'striptags',
+        'title',
+        'trim',
+        'upper',
+        'url_encode',
+    ];
+
     public function __construct(
         private LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher,
         private ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover,
@@ -104,6 +173,12 @@ final readonly class GetMethodToAsTwigAttributeTransformer
                 return false;
             }
 
+            // items that override a built-in Twig function/filter must stay registered the classic way,
+            // so keep them in the array and let the class keep "extends AbstractExtension"
+            if ($this->isBuiltinTwigNameOverride($arrayItem, $methodName)) {
+                continue;
+            }
+
             $conversion = $this->matchArrayItemConversion(
                 $key,
                 $arrayItem,
@@ -116,6 +191,11 @@ final readonly class GetMethodToAsTwigAttributeTransformer
             }
 
             $conversions[] = $conversion;
+        }
+
+        // only built-in overrides (or none) left to convert, nothing to do
+        if ($conversions === []) {
+            return false;
         }
 
         // attribute-based extensions and "extends AbstractExtension" are incompatible, so the class
@@ -141,7 +221,10 @@ final readonly class GetMethodToAsTwigAttributeTransformer
 
         $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
 
-        if ($class->extends instanceof FullyQualified && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
+        // a kept built-in override leaves the array non-empty, so the class still needs the parent extension
+        if ($returnArray->items === []
+            && $class->extends instanceof FullyQualified
+            && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
             $class->extends = null;
         }
 
@@ -225,6 +308,24 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         }
 
         return new AsTwigAttributeConversion($key, $localMethod, $nameArg, $optionArguments);
+    }
+
+    private function isBuiltinTwigNameOverride(ArrayItem $arrayItem, string $methodName): bool
+    {
+        if (! $arrayItem->value instanceof New_) {
+            return false;
+        }
+
+        $firstArg = $arrayItem->value->getArgs()[0] ?? null;
+        if (! $firstArg?->value instanceof String_) {
+            return false;
+        }
+
+        $builtinNames = $methodName === 'getFilters'
+            ? self::CORE_TWIG_FILTER_NAMES
+            : self::CORE_TWIG_FUNCTION_NAMES;
+
+        return in_array($firstArg->value->value, $builtinNames, true);
     }
 
     private function stillRequiresAbstractExtension(Class_ $class, string $convertedMethodName): bool
