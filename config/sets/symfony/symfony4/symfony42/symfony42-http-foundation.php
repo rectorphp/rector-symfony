@@ -10,14 +10,6 @@ use Rector\Transform\ValueObject\NewToStaticCall;
 use Rector\ValueObject\MethodName;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NewToStaticCallRector::class, [
-        new NewToStaticCall(
-            'Symfony\Component\HttpFoundation\Cookie',
-            'Symfony\Component\HttpFoundation\Cookie',
-            'create'
-        ),
-    ]);
-
     // https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
     $rectorConfig->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
         new ReplaceArgumentDefaultValue(
