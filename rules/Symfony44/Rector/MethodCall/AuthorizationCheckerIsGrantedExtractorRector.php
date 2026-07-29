@@ -10,6 +10,7 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -96,8 +97,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): MethodCall|BooleanOr|null
     {
-        if ($this->controllerAnalyzer->isInsideController($node)) {
-            return $this->processControllerMethods($node);
+        // native AbstractController::isGranted() call, any other object must be resolved by its type
+        if ($node->var instanceof Variable && $this->isName($node->var, 'this')) {
+            if ($this->controllerAnalyzer->isInsideController($node)) {
+                return $this->processControllerMethods($node);
+            }
+
+            return null;
         }
 
         $objectType = $this->nodeTypeResolver->getType($node->var);
