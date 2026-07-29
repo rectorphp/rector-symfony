@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 final readonly class AnnotationOrAttributeValueResolver
 {
     public function resolve(
-        DoctrineAnnotationTagValueNode | Attribute $tagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $tagValueNodeOrAttribute,
         string $desiredKey
     ): mixed {
         if ($tagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {

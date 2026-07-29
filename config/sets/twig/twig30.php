@@ -16,4 +16,3 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getFunctions', new ArrayType(new MixedType(), new MixedType())),
     ]);
 };
-

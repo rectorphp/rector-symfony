@@ -10,16 +10,16 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class FormAddMethodCallAnalyzer
+final readonly class FormAddMethodCallAnalyzer
 {
     /**
      * @var ObjectType[]
      */
-    private array $formObjectTypes = [];
+    private array $formObjectTypes;
 
     public function __construct(
-        private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly NodeNameResolver $nodeNameResolver
+        private NodeTypeResolver $nodeTypeResolver,
+        private NodeNameResolver $nodeNameResolver
     ) {
         $this->formObjectTypes = [
             new ObjectType('Symfony\Component\Form\FormBuilderInterface'),
