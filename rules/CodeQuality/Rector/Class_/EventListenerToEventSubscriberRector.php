@@ -50,7 +50,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     /**
      * @var EventNameToClassAndConstant[]
      */
-    private array $eventNamesToClassConstants = [];
+    private readonly array $eventNamesToClassConstants;
 
     public function __construct(
         private readonly ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider,

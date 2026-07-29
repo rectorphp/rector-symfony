@@ -157,7 +157,7 @@ CODE_SAMPLE
 
     private function replaceTemplateAnnotation(
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode | Attribute | null $classTagValueNodeOrAttribute
+        DoctrineAnnotationTagValueNode|Attribute|null $classTagValueNodeOrAttribute
     ): bool {
         if (! $classMethod->isPublic()) {
             return false;
@@ -182,7 +182,7 @@ CODE_SAMPLE
 
     private function refactorClassMethod(
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute,
     ): bool {
         $hasThisRenderOrReturnsResponse = $this->hasLastReturnResponse($classMethod);
 
@@ -257,7 +257,7 @@ CODE_SAMPLE
 
     private function refactorReturn(
         Return_ $return,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): bool {
@@ -298,7 +298,7 @@ CODE_SAMPLE
         bool $hasThisRenderOrReturnsResponse,
         MethodCall $thisRenderMethodCall,
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode | Attribute $doctrineTagValueNodeOrAttribute
+        DoctrineAnnotationTagValueNode|Attribute $doctrineTagValueNodeOrAttribute
     ): bool {
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
@@ -339,7 +339,7 @@ CODE_SAMPLE
 
     private function removeDoctrineAnnotationTagValueNode(
         Class_|ClassMethod $node,
-        DoctrineAnnotationTagValueNode | Attribute $doctrineTagValueNodeOrAttribute
+        DoctrineAnnotationTagValueNode|Attribute $doctrineTagValueNodeOrAttribute
     ): void {
         if ($doctrineTagValueNodeOrAttribute instanceof DoctrineAnnotationTagValueNode) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -369,7 +369,7 @@ CODE_SAMPLE
      */
     private function refactorStmtsAwareNode(
         Node $stmtsAware,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute,
         bool $hasThisRenderOrReturnsResponse,
         ClassMethod $classMethod
     ): bool {

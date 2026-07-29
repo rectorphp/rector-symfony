@@ -9,15 +9,15 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Symfony\Enum\SymfonyClass;
 
-final class ContainerAwareAnalyzer
+final readonly class ContainerAwareAnalyzer
 {
     /**
      * @var ObjectType[]
      */
-    private array $getMethodAwareObjectTypes = [];
+    private array $getMethodAwareObjectTypes;
 
     public function __construct(
-        private readonly NodeTypeResolver $nodeTypeResolver,
+        private NodeTypeResolver $nodeTypeResolver,
     ) {
         $this->getMethodAwareObjectTypes = [
             new ObjectType(SymfonyClass::ABSTRACT_CONTROLLER),

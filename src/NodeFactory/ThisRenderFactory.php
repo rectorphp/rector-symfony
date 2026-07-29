@@ -40,7 +40,7 @@ final readonly class ThisRenderFactory
 
     public function create(
         ?Return_ $return,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute,
         ClassMethod $classMethod
     ): MethodCall {
         $renderArguments = $this->resolveRenderArguments($return, $templateTagValueNodeOrAttribute, $classMethod);
@@ -53,7 +53,7 @@ final readonly class ThisRenderFactory
      */
     private function resolveRenderArguments(
         ?Return_ $return,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute,
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute,
         ClassMethod $classMethod
     ): array {
         $templateNameString = $this->resolveTemplateName($classMethod, $templateTagValueNodeOrAttribute);
@@ -70,7 +70,7 @@ final readonly class ThisRenderFactory
 
     private function resolveTemplateName(
         ClassMethod $classMethod,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute
     ): string {
         $template = $this->annotationOrAttributeValueResolver->resolve($templateTagValueNodeOrAttribute, 'template');
         if (is_string($template)) {
@@ -82,7 +82,7 @@ final readonly class ThisRenderFactory
 
     private function resolveParametersExpr(
         ?Return_ $return,
-        DoctrineAnnotationTagValueNode | Attribute $templateTagValueNodeOrAttribute
+        DoctrineAnnotationTagValueNode|Attribute $templateTagValueNodeOrAttribute
     ): ?Expr {
         $vars = [];
 
