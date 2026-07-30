@@ -6,10 +6,10 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjecti
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-#[RunClassInSeparateProcess]
+#[RunTestsInSeparateProcesses]
 final class PrePromotedTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
