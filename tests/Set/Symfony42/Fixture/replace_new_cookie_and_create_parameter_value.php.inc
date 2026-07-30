@@ -29,7 +29,7 @@ class ReplaceNewCookieAndCreateParameterValue
     {
         $cookie = Cookie::create('name', 'value', 0, '/', null, false, true, false, \Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE);
 
-        return \Symfony\Component\HttpFoundation\Cookie::create('name', 'value', 0, '/', null, false, true, false, \Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE);
+        return new Cookie('name', 'value', 0, '/', null, null, true, false, \Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE);
     }
 }
 
