@@ -5,26 +5,19 @@ declare(strict_types=1);
 namespace Rector\Symfony\Symfony62\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @see \Rector\Symfony\Tests\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector\SimplifyFormRenderingRectorTest
+ * @deprecated Passing the form instead of `->createView()` is ambiguous and breaks dynamic forms, e.g. AJAX submits of forms modified in event listeners end up with a 422 response. Keep the explicit `->createView()` call.
+ * @see https://github.com/symfony/symfony/issues/50542
  */
-final class SimplifyFormRenderingRector extends AbstractRector
+final class SimplifyFormRenderingRector extends AbstractRector implements DeprecatedInterface
 {
-    public function __construct(
-        private readonly ControllerAnalyzer $controllerAnalyzer
-    ) {
-    }
-
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -76,68 +69,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->controllerAnalyzer->isController($node->var)) {
-            return null;
-        }
-
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'render')) {
-            return null;
-        }
-
-        if (! isset($node->args[1])) {
-            return null;
-        }
-
-        /** @var Arg $arg */
-        $arg = $node->args[1];
-        if (! $arg->value instanceof Array_) {
-            return null;
-        }
-
-        $methodCallOrNull = $this->processRemoveCreateView($arg->value->items);
-
-        if ($methodCallOrNull === null) {
-            return null;
-        }
-
-        $arg->value->items = $methodCallOrNull;
-
-        return $node;
-    }
-
-    /**
-     * @param ArrayItem[]$arrayItems
-     *
-     * @return array<(ArrayItem)>|null
-     */
-    private function processRemoveCreateView(array $arrayItems): ?array
-    {
-        $replaced = false;
-        foreach ($arrayItems as $arrayItem) {
-            if (! $arrayItem->value instanceof MethodCall) {
-                continue;
-            }
-
-            if (! $this->isName($arrayItem->value->name, 'createView')) {
-                continue;
-            }
-
-            if (! $this->isObjectType($arrayItem->value->var, new ObjectType('Symfony\Component\Form\FormInterface'))) {
-                continue;
-            }
-
-            $replaced = true;
-            $arrayItem->value = $arrayItem->value->var;
-        }
-
-        if (! $replaced) {
-            return null;
-        }
-
-        return $arrayItems;
+        throw new ShouldNotHappenException(sprintf(
+            '"%s" is deprecated, as passing the form instead of "->createView()" is ambiguous and breaks dynamic forms. Keep the explicit "->createView()" call. See https://github.com/symfony/symfony/issues/50542',
+            self::class
+        ));
     }
 }
