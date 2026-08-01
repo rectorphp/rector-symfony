@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\ValueObject\MethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
  */
-final class ParamAndEnvAttributeRector extends AbstractRector
+final class ParamAndEnvAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @see https://regex101.com/r/7vwGbH/1
@@ -33,6 +35,11 @@ final class ParamAndEnvAttributeRector extends AbstractRector
      * @see https://regex101.com/r/7xpVRP/1
      */
     private const string ENV_REGEX = '#%env\((?<env>\w+)\)%$#';
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/dependency-injection', '>=6.3');
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

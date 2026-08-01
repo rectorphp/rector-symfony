@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\DependencyInjection\Rector\Class_;
 
+use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
@@ -42,7 +43,7 @@ final class GetBySymfonyStringToConstructorInjectionRector extends AbstractRecto
         'security.authorization_checker' => 'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface',
         'templating' => 'Symfony\Component\Templating\EngineInterface',
         'twig' => 'Twig\Environment',
-        'doctrine' => 'Doctrine\Persistence\ManagerRegistry',
+        'doctrine' => ManagerRegistry::class,
         'form.factory' => 'Symfony\Component\Form\FormFactoryInterface',
         'security.csrf.token_manager' => 'Symfony\Component\Security\Core\Authorization\CsrfTokenManagerInterface',
         'parameter_bag' => 'Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface',

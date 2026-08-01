@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony60\Rector\MethodCall;
 
+use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -149,10 +150,10 @@ CODE_SAMPLE
 
     private function createManagerRegistryPropertyMetadata(): PropertyMetadata
     {
-        $propertyName = $this->propertyNaming->fqnToVariableName('Doctrine\Persistence\ManagerRegistry');
+        $propertyName = $this->propertyNaming->fqnToVariableName(ManagerRegistry::class);
 
         // add dependency
-        $propertyObjectType = new ObjectType('Doctrine\Persistence\ManagerRegistry');
+        $propertyObjectType = new ObjectType(ManagerRegistry::class);
         return new PropertyMetadata($propertyName, $propertyObjectType);
     }
 }
