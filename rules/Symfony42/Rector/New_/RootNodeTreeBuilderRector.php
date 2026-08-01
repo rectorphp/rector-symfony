@@ -15,6 +15,8 @@ use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,11 +25,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony42\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
-final class RootNodeTreeBuilderRector extends AbstractRector
+final class RootNodeTreeBuilderRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/config', '>=4.2');
     }
 
     public function getRuleDefinition(): RuleDefinition

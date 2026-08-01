@@ -18,13 +18,15 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony62\Rector\ClassMethod\ArgumentValueResolverToValueResolverRector\ArgumentValueResolverToValueResolverRectorTest
  */
-final class ArgumentValueResolverToValueResolverRector extends AbstractRector
+final class ArgumentValueResolverToValueResolverRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function getNodeTypes(): array
     {
@@ -58,6 +60,11 @@ final class ArgumentValueResolverToValueResolverRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/http-kernel', '>=6.2');
     }
 
     public function getRuleDefinition(): RuleDefinition

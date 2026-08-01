@@ -14,17 +14,24 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector\EventDispatcherParentConstructRectorTest
  */
-final class EventDispatcherParentConstructRector extends AbstractRector
+final class EventDispatcherParentConstructRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly BetterNodeFinder $betterNodeFinder
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/event-dispatcher', '>=4.3');
     }
 
     public function getRuleDefinition(): RuleDefinition
