@@ -20,9 +20,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,16 +29,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector\ParamConverterAttributeToMapEntityAttributeRectorTest
  */
-final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
+final class ParamConverterAttributeToMapEntityAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
-    }
-
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
-    {
-        return new ComposerPackageConstraint('symfony/doctrine-bridge', '>=6.2');
     }
 
     public function getRuleDefinition(): RuleDefinition

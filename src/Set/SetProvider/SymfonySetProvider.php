@@ -30,10 +30,7 @@ final class SymfonySetProvider implements SetProviderInterface
         'symfony/property-access' => '>=5.2',
         'symfony/property-info' => '>=5.2',
         'symfony/validator' => '>=5.2',
-        'symfony/twig-bridge' => '>=6.1',
-        'symfony/doctrine-bridge' => '>=6.2',
         'symfony/http-kernel' => '>=6.2',
-        'symfony/messenger' => '>=6.2',
     ];
 
     /**

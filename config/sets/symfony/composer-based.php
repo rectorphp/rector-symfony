@@ -18,13 +18,9 @@ use Rector\Symfony\Symfony52\Rector\MethodCall\ReflectionExtractorEnableMagicCal
 use Rector\Symfony\Symfony52\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
 use Rector\Symfony\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
 use Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
-use Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
 use Rector\Symfony\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
-use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
-use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector;
-use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 use Rector\Symfony\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector;
 
@@ -64,17 +60,13 @@ return static function (RectorConfig $rectorConfig): void {
         PropertyAccessorCreationBooleanToFlagsRector::class,
         BinaryFileResponseCreateToNewInstanceRector::class,
 
-        // symfony/twig-bridge and symfony/validator 6.1
-        MagicClosureTwigExtensionToNativeMethodsRector::class,
+        // symfony/validator 6.1
         ErrorNamesPropertyToConstantRector::class,
 
         // attributes added in Symfony 6.2
-        MessageHandlerInterfaceToAttributeRector::class,
-        MessageSubscriberInterfaceToAttributeRector::class,
         SecurityAttributeToIsGrantedAttributeRector::class,
         SingleConditionSecurityAttributeToIsGrantedRector::class,
         SplitAndSecurityAttributeToIsGrantedRector::class,
-        ParamConverterAttributeToMapEntityAttributeRector::class,
         ArgumentValueResolverToValueResolverRector::class,
 
         // symfony/dependency-injection and symfony/console 6.3
