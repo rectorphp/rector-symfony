@@ -43,6 +43,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
+use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
 use Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector;
@@ -94,6 +95,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         // symfony/validator 2.5
         AddViolationToBuildViolationRector::class,
+
+        // symfony/framework-bundle 2.6
+        RedirectToRouteRector::class,
 
         // symfony/config 4.2
         RootNodeTreeBuilderRector::class,

@@ -10,17 +10,26 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @changelog https://github.com/symfony/symfony/blob/2.6/src/Symfony/Bundle/FrameworkBundle/CHANGELOG.md
+ *
  * @see \Rector\Symfony\Tests\Symfony26\Rector\MethodCall\RedirectToRouteRector\RedirectToRouteRectorTest
  */
-final class RedirectToRouteRector extends AbstractRector
+final class RedirectToRouteRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=2.6');
     }
 
     public function getRuleDefinition(): RuleDefinition
