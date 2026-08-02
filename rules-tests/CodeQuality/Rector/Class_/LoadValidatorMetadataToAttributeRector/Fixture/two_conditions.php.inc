@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -41,7 +41,7 @@ final class TwoConditions
 -----
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -50,10 +50,8 @@ final class TwoConditions
 {
     private $email;
 
-    /**
-     * @Assert\NotBlank(message="Email can't be blank.", groups={"basic"})
-     * @Assert\Email(message="The email {{ value }} is not a valid email.", checkMX=true, strict=true)
-     */
+    #[\Symfony\Component\Validator\Constraints\NotBlank(message: 'Email can\'t be blank.', groups: ['basic'])]
+    #[\Symfony\Component\Validator\Constraints\Email(message: 'The email {{ value }} is not a valid email.', checkMX: true, strict: true)]
     public function getEmail()
     {
         return $this->email;
