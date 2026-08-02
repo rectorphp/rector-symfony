@@ -12,6 +12,11 @@ final class SymfonySetList
     public const string CONFIGS = __DIR__ . '/../../config/sets/symfony/configs.php';
 
     /**
+     * Rules bound to the exact Symfony package version they are available from
+     */
+    public const string COMPOSER_BASED = __DIR__ . '/../../config/sets/symfony/composer-based.php';
+
+    /**
      * @deprecated Set list are too generic and do not handle package differences. Use ->withComposerBased(symfony: true) instead
      */
     public const string SYMFONY_25 = __DIR__ . '/../../config/sets/symfony/symfony25.php';
