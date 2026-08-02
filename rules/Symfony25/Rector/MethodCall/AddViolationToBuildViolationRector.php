@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,8 +23,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector\AddViolationToBuildViolationRectorTest
  */
-final class AddViolationToBuildViolationRector extends AbstractRector
+final class AddViolationToBuildViolationRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/validator', '>=2.5');
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
