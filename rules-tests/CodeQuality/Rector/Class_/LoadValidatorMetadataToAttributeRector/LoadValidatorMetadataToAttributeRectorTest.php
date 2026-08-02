@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class LoadValidatorMetadataToAnnotationRectorTest extends AbstractRectorTestCase
+final class LoadValidatorMetadataToAttributeRectorTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $filePath): void

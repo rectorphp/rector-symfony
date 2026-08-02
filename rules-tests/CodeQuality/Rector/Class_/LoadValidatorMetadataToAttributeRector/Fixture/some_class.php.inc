@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -31,7 +31,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -45,9 +45,7 @@ final class SomeClass
         $this->city = $city;
     }
 
-    /**
-     * @Assert\NotBlank(message="City can't be blank.")
-     */
+    #[\Symfony\Component\Validator\Constraints\NotBlank(message: 'City can\'t be blank.')]
     public function getCity()
     {
         return $this->city;

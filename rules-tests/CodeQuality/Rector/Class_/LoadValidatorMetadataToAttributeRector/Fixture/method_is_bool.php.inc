@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -28,16 +28,14 @@ final class MethodIsBool
 -----
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
 final class MethodIsBool
 {
-    /**
-     * @IsTrue(message="Must be something")
-     */
+    #[\Symfony\Component\Validator\Constraints\IsTrue(message: 'Must be something')]
     public function isEnabled()
     {
     }

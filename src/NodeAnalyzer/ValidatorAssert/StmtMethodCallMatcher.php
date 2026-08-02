@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\NodeAnalyzer\Annotations;
+namespace Rector\Symfony\NodeAnalyzer\ValidatorAssert;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;

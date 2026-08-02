@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -28,16 +28,14 @@ final class NestedArrayStrings
 -----
 <?php
 
-namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\Fixture;
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 final class NestedArrayStrings
 {
-    /**
-     * @Assert\CardScheme(schemes={"VISA", 100})
-     */
+    #[\Symfony\Component\Validator\Constraints\CardScheme(schemes: ['VISA', 100])]
     public function getCardNumber()
     {
     }
