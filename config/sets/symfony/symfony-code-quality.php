@@ -45,9 +45,6 @@ return static function (RectorConfig $rectorConfig): void {
         RequestIsMainRector::class,
         ParameterBagTypedGetMethodCallRector::class,
 
-        // enable once tested
-        // ReturnDirectJsonResponseRector::class,
-
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
         StringCastDebugResponseRector::class,
