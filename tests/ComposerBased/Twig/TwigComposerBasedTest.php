@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Tests\Twig134\Rector\Return_\SimpleFunctionAndFilterRector;
+namespace Rector\Symfony\Tests\ComposerBased\Twig;
 
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
+final class TwigComposerBasedTest extends AbstractRectorTestCase
 {
     #[DataProvider('provideData')]
     public function test(string $filePath): void
@@ -23,7 +23,7 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/configured_rule.php';
+        return __DIR__ . '/config/composer_based.php';
     }
 
     protected function provideComposerJsonFilePath(): string

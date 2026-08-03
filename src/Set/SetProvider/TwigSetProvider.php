@@ -17,6 +17,13 @@ final class TwigSetProvider implements SetProviderInterface
     public function provide(): array
     {
         return [
+            // the composer-based set holds rules bound to the exact Twig package version they are available from
+            new ComposerTriggeredSet(
+                SetGroup::TWIG,
+                'twig/twig',
+                '>=1.12',
+                __DIR__ . '/../../../config/sets/twig/composer-based.php'
+            ),
             new ComposerTriggeredSet(
                 SetGroup::TWIG,
                 'twig/twig',
