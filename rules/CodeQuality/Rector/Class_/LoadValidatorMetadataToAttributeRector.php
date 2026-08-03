@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
+use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintConstructorAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\MetadataConstraintResolver;
 use Rector\Symfony\NodeFactory\ValidatorAssert\ConstraintAttributeGroupFactory;
 use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndConstraint;
@@ -37,6 +38,7 @@ final class LoadValidatorMetadataToAttributeRector extends AbstractRector implem
         private readonly ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer,
         private readonly ConstraintAttributeGroupFactory $constraintAttributeGroupFactory,
         private readonly ConstantExpressionAnalyzer $constantExpressionAnalyzer,
+        private readonly ConstraintConstructorAnalyzer $constraintConstructorAnalyzer,
     ) {
     }
 
@@ -244,6 +246,11 @@ CODE_SAMPLE
 
         $constraintClass = $this->getName($new->class);
         if (! is_string($constraintClass)) {
+            return null;
+        }
+
+        // e.g. new UniqueUserAlias(['field' => 'alias']) - the options have no matching constructor arguments
+        if ($new->args !== [] && ! $this->constraintConstructorAnalyzer->hasOwnConstructor($constraintClass)) {
             return null;
         }
 
