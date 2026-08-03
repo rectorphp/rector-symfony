@@ -161,7 +161,7 @@ CODE_SAMPLE
 
         if ($expr instanceof Expr) {
             $returnedType = $this->getType($expr);
-            if ($returnedType instanceof IntegerType) {
+            if ($returnedType->isInteger()->yes()) {
                 return true;
             }
         }
@@ -237,7 +237,7 @@ CODE_SAMPLE
         }
 
         $staticType = $this->getType($return->expr);
-        if (! $staticType instanceof IntegerType) {
+        if (! $staticType->isInteger()->yes()) {
             $return->expr = new Int_($return->expr);
         }
     }
