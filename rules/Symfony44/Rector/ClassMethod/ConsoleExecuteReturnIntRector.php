@@ -13,6 +13,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\IntegerType;
@@ -184,14 +185,21 @@ CODE_SAMPLE
 
     private function processReturn0ToMethod(ClassMethod $classMethod): void
     {
-        $lastKey = array_key_last((array) $classMethod->stmts);
+        $stmts = (array) $classMethod->stmts;
+
+        // trailing comments are parsed as Nop stmts, skip them to get the real last stmt
+        while ($stmts !== [] && end($stmts) instanceof Nop) {
+            array_pop($stmts);
+        }
+
+        $lastKey = array_key_last($stmts);
 
         $return = new Return_(new \PhpParser\Node\Scalar\Int_(0));
-        if ($lastKey !== null && (isset($classMethod->stmts[$lastKey]) && $this->terminatedNodeAnalyzer->isAlwaysTerminated(
+        if ($lastKey !== null && $this->terminatedNodeAnalyzer->isAlwaysTerminated(
             $classMethod,
-            $classMethod->stmts[$lastKey],
+            $stmts[$lastKey],
             $return
-        ))) {
+        )) {
             return;
         }
 
