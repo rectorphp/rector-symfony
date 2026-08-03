@@ -30,6 +30,7 @@ use PhpParser\Node\VariadicPlaceholder;
  * a variable - makes the attribute a parse error.
  *
  * @see https://www.php.net/manual/en/language.attributes.syntax.php
+ * @see \Rector\Symfony\Tests\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzerTest
  */
 final class ConstantExpressionAnalyzer
 {
