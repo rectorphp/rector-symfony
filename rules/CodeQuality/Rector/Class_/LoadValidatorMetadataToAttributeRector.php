@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\MetadataConstraintResolver;
 use Rector\Symfony\NodeFactory\ValidatorAssert\ConstraintAttributeGroupFactory;
@@ -38,7 +36,7 @@ final class LoadValidatorMetadataToAttributeRector extends AbstractRector implem
         private readonly MetadataConstraintResolver $metadataConstraintResolver,
         private readonly ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer,
         private readonly ConstraintAttributeGroupFactory $constraintAttributeGroupFactory,
-        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ConstantExpressionAnalyzer $constantExpressionAnalyzer,
     ) {
     }
 
@@ -239,9 +237,8 @@ CODE_SAMPLE
 
     private function resolveConstraintClass(New_ $new): ?string
     {
-        // an attribute argument must be a constant expression, a closure like new Assert\Callback(function () {...})
-        // would make the class unparsable
-        if ($this->betterNodeFinder->hasInstancesOf($new->getArgs(), [Closure::class, ArrowFunction::class])) {
+        // e.g. new Assert\Callback(function () {...}) has no constant expression form, the attribute would not parse
+        if (! $this->constantExpressionAnalyzer->areArgsConstant($new->args)) {
             return null;
         }
 
