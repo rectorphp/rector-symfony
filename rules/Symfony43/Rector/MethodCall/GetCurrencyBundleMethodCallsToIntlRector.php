@@ -11,6 +11,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\IntlBundleClassToNewClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector\GetCurrencyBundleMethodCallsToIntlRectorTest
  */
-final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
+final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @var IntlBundleClassToNewClass[]
@@ -57,6 +59,11 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
                 'getFractionDigits' => 'getFractionDigits',
             ]
         );
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/intl', '>=4.3');
     }
 
     public function getRuleDefinition(): RuleDefinition

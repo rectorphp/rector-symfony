@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/twig-bridge": "^6.1"
+    }
+}

@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symfony\Component\Console\ConsoleEvents;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,13 +22,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony33\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
  */
-final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
+final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     private readonly ObjectType $consoleEventsObjectType;
 
     public function __construct()
     {
         $this->consoleEventsObjectType = new ObjectType('Symfony\Component\Console\ConsoleEvents');
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=3.3');
     }
 
     public function getRuleDefinition(): RuleDefinition

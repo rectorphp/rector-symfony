@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/security-core": "^7.3"
+    }
+}

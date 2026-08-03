@@ -20,17 +20,24 @@ use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\AuthorizationCheckerToAccessDecisionManagerInVoterRector\AuthorizationCheckerToAccessDecisionManagerInVoterRectorTest
  */
-final class AuthorizationCheckerToAccessDecisionManagerInVoterRector extends AbstractRector
+final class AuthorizationCheckerToAccessDecisionManagerInVoterRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     private const string AUTHORIZATION_CHECKER_PROPERTY = 'authorizationChecker';
 
     private const string ACCESS_DECISION_MANAGER_PROPERTY = 'accessDecisionManager';
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-core', '>=7.3');
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

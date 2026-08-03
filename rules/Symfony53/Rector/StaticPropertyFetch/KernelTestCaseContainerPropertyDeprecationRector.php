@@ -9,17 +9,24 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector\KernelTestCaseContainerPropertyDeprecationRectorTest
  */
-final class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector
+final class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer,
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=5.3');
     }
 
     public function getRuleDefinition(): RuleDefinition

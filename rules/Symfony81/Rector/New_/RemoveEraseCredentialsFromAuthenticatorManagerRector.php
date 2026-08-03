@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,11 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticatorManagerRector\RemoveEraseCredentialsFromAuthenticatorManagerRectorTest
  */
-final class RemoveEraseCredentialsFromAuthenticatorManagerRector extends AbstractRector
+final class RemoveEraseCredentialsFromAuthenticatorManagerRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ValueResolver $valueResolver
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-http', '>=8.1');
     }
 
     public function getRuleDefinition(): RuleDefinition

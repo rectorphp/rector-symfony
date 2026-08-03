@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
  * @see \Rector\Symfony\Tests\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector\FormBuilderSetDataMapperRectorTest
  */
-final class FormBuilderSetDataMapperRector extends AbstractRector
+final class FormBuilderSetDataMapperRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     private const string DATAMAPPER_INTERFACE = 'Symfony\Component\Form\DataMapperInterface';
 
@@ -32,6 +34,11 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
     {
         $this->objectType = new ObjectType(self::DATAMAPPER_INTERFACE);
         $this->dataMapperObjectType = new ObjectType(self::DATAMAPPER_CLASS);
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=5.2');
     }
 
     public function getRuleDefinition(): RuleDefinition

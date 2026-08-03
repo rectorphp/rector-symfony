@@ -21,13 +21,15 @@ use Rector\Symfony\Enum\SensioAnnotation;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\GetRequestRector\GetRequestRectorTest
  */
-final class GetRequestRector extends AbstractRector
+final class GetRequestRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     private ?string $requestVariableAndParamName = null;
 
@@ -36,6 +38,11 @@ final class GetRequestRector extends AbstractRector
         private readonly ControllerAnalyzer $controllerAnalyzer,
         private readonly BetterNodeFinder $betterNodeFinder,
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=3.0');
     }
 
     public function getRuleDefinition(): RuleDefinition

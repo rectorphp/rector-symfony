@@ -15,13 +15,15 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\Util\StringUtils;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony28\Rector\StaticCall\ParseFileRector\ParseFileRectorTest
  */
-final class ParseFileRector extends AbstractRector
+final class ParseFileRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @changelog https://regex101.com/r/ZaY42i/1
@@ -41,6 +43,11 @@ final class ParseFileRector extends AbstractRector
     public function __construct(
         private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/yaml', '>=2.8');
     }
 
     public function getRuleDefinition(): RuleDefinition

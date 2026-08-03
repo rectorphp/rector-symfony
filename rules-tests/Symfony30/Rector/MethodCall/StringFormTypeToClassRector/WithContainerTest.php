@@ -25,4 +25,9 @@ final class WithContainerTest extends AbstractRectorTestCase
     {
         return __DIR__ . '/config/xml_path_config.php';
     }
+
+    protected function provideComposerJsonFilePath(): string
+    {
+        return __DIR__ . '/config/composer.json';
+    }
 }

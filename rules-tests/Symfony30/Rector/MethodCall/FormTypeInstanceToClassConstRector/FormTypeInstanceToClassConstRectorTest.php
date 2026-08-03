@@ -25,4 +25,9 @@ final class FormTypeInstanceToClassConstRectorTest extends AbstractRectorTestCas
     {
         return __DIR__ . '/config/configured_rule.php';
     }
+
+    protected function provideComposerJsonFilePath(): string
+    {
+        return __DIR__ . '/config/composer.json';
+    }
 }
