@@ -14,11 +14,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitor;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Symfony\CodeQuality\NodeAnalyzer\ParamConverterClassesResolver;
@@ -47,7 +49,8 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
         private readonly ClassDependencyManipulator $classDependencyManipulator,
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly ParamConverterClassesResolver $paramConverterClassesResolver,
-        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -225,14 +228,20 @@ CODE_SAMPLE
 
                 $paramName = $this->getName($param->var);
                 $paramsToRemove[] = [$classMethod, $key];
-                $propertyMetadatas[$paramName] = new PropertyMetadata($paramName, $paramType);
                 $methodParamNamesToReplace[$classMethod->name->toString()][] = $paramName;
                 $removedMethodArgPositions[$classMethod->name->toString()][] = $key;
+
+                // the parent class already provides the very same service, re-use it instead of adding own one
+                if ($this->hasAccessibleParentProperty($node, $paramName, $paramType)) {
+                    continue;
+                }
+
+                $propertyMetadatas[$paramName] = new PropertyMetadata($paramName, $paramType);
             }
         }
 
         // nothing to move
-        if ($propertyMetadatas === []) {
+        if ($paramsToRemove === []) {
             return null;
         }
 
@@ -345,6 +354,33 @@ CODE_SAMPLE
 
                 return $param->type instanceof FullyQualified && ! $this->isName($param->type, $paramType);
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Is there a protected/public property of the same name and compatible type in a parent class?
+     */
+    private function hasAccessibleParentProperty(Class_ $class, string $propertyName, ObjectType $objectType): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (! $parentClassReflection->hasNativeProperty($propertyName)) {
+                continue;
+            }
+
+            $nativePropertyReflection = $parentClassReflection->getNativeProperty($propertyName);
+            if ($nativePropertyReflection->isPrivate()) {
+                continue;
+            }
+
+            return $objectType->isSuperTypeOf($nativePropertyReflection->getReadableType())
+                ->yes();
         }
 
         return false;
