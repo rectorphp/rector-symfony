@@ -13,19 +13,26 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\Symfony\NodeManipulator\ArrayManipulator;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\Symfony30\Rector\MethodCall\ReadOnlyOptionToAttributeRector\ReadOnlyOptionToAttributeRectorTest
  */
-final class ReadOnlyOptionToAttributeRector extends AbstractRector
+final class ReadOnlyOptionToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ArrayManipulator $arrayManipulator,
         private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer,
         private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
     }
 
     public function getRuleDefinition(): RuleDefinition

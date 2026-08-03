@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/routing": "^3.4"
+    }
+}

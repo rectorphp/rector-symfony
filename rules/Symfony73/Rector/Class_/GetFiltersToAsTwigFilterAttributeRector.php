@@ -10,6 +10,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\TwigClass;
 use Rector\Symfony\Symfony73\GetMethodToAsTwigAttributeTransformer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,11 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector\GetFiltersToAsTwigFilterAttributeRectorTest
  */
-final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector
+final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('twig/twig', '>=3.21');
     }
 
     public function getRuleDefinition(): RuleDefinition

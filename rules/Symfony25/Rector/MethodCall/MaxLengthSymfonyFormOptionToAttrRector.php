@@ -14,6 +14,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -24,11 +26,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony25\Rector\Array_\MaxLengthSymfonyFormOptionToAttrRector\MaxLengthSymfonyFormOptionToAttrRectorTest
  */
-final class MaxLengthSymfonyFormOptionToAttrRector extends AbstractRector
+final class MaxLengthSymfonyFormOptionToAttrRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ValueResolver $valueResolver
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=2.5');
     }
 
     public function getRuleDefinition(): RuleDefinition

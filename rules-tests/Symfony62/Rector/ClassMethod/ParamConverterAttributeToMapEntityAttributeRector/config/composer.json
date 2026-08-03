@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/doctrine-bridge": "^6.2"
+    }
+}

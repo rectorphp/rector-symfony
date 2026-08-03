@@ -15,6 +15,8 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony27\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRectorTest
  */
-final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractRector
+final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @var array<string, string>
@@ -39,6 +41,11 @@ final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends Abst
         private readonly FormCollectionAnalyzer $formCollectionAnalyzer,
         private readonly ValueResolver $valueResolver
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=2.7');
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/form": "^4.0"
+    }
+}
