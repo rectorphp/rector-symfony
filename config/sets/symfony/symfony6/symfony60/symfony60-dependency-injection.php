@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -15,19 +14,12 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
-use Rector\Symfony\ValueObject\ReplaceServiceArgument;
+use Rector\Symfony\Symfony60\Rector\FuncCall\ContainerInterfaceServiceToServiceContainerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
-        new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')),
-        new ReplaceServiceArgument(
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            new String_('service_container')
-        ),
-    ]);
+    $rectorConfig->rule(ContainerInterfaceServiceToServiceContainerRector::class);
 
     $configurationType = new ObjectType('Symfony\Component\Config\Definition\ConfigurationInterface');
 

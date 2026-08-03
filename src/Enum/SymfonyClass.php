@@ -14,6 +14,10 @@ final class SymfonyClass
 
     public const string CONTAINER_AWARE_COMMAND = 'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand';
 
+    public const string PSR_CONTAINER_INTERFACE = 'Psr\Container\ContainerInterface';
+
+    public const string DEPENDENCY_INJECTION_CONTAINER_INTERFACE = 'Symfony\Component\DependencyInjection\ContainerInterface';
+
     public const string EVENT_DISPATCHER_INTERFACE = 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface';
 
     public const string VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
