@@ -9,6 +9,8 @@ namespace Rector\Symfony\Set;
  */
 final class TwigSetList
 {
+    public const string COMPOSER_BASED = __DIR__ . '/../../config/sets/twig/composer-based.php';
+
     public const string TWIG_112 = __DIR__ . '/../../config/sets/twig/twig112.php';
 
     public const string TWIG_127 = __DIR__ . '/../../config/sets/twig/twig127.php';
