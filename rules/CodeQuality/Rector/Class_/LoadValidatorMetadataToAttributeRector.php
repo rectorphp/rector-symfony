@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\MetadataConstraintResolver;
 use Rector\Symfony\NodeFactory\ValidatorAssert\ConstraintAttributeGroupFactory;
@@ -35,6 +36,7 @@ final class LoadValidatorMetadataToAttributeRector extends AbstractRector implem
         private readonly MetadataConstraintResolver $metadataConstraintResolver,
         private readonly ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer,
         private readonly ConstraintAttributeGroupFactory $constraintAttributeGroupFactory,
+        private readonly ConstantExpressionAnalyzer $constantExpressionAnalyzer,
     ) {
     }
 
@@ -235,6 +237,11 @@ CODE_SAMPLE
 
     private function resolveConstraintClass(New_ $new): ?string
     {
+        // e.g. new Assert\Callback(function () {...}) has no constant expression form, the attribute would not parse
+        if (! $this->constantExpressionAnalyzer->areArgsConstant($new->args)) {
+            return null;
+        }
+
         $constraintClass = $this->getName($new->class);
         if (! is_string($constraintClass)) {
             return null;
