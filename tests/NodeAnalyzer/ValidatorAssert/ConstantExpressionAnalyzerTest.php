@@ -53,7 +53,8 @@ final class ConstantExpressionAnalyzerTest extends TestCase
 
     private function parseNew(string $newExpression): New_
     {
-        $parser = new ParserFactory()->createForNewestSupportedVersion();
+        $parser = new ParserFactory()
+            ->createForNewestSupportedVersion();
 
         $stmts = $parser->parse('<?php ' . $newExpression . ';');
         $this->assertIsArray($stmts);
