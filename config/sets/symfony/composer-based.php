@@ -41,6 +41,7 @@ use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
+use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
@@ -246,6 +247,7 @@ return static function (RectorConfig $rectorConfig): void {
         ReflectionExtractorEnableMagicCallExtractorRector::class,
 
         // symfony/validator 5.2
+        LoadValidatorMetadataToAttributeRector::class,
         ValidatorBuilderEnableAnnotationMappingRector::class,
 
         // symfony/framework-bundle 5.3
