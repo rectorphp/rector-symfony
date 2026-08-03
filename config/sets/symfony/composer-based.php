@@ -90,6 +90,7 @@ use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
+use Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
 use Rector\Symfony\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
@@ -256,6 +257,9 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/console 6.1
         CommandConfigureToAttributeRector::class,
         CommandPropertyToAttributeRector::class,
+
+        // symfony/twig-bridge 6.1
+        MagicClosureTwigExtensionToNativeMethodsRector::class,
 
         // symfony/validator 6.1
         ErrorNamesPropertyToConstantRector::class,
