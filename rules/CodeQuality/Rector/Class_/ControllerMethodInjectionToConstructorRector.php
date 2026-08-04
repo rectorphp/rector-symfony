@@ -517,6 +517,7 @@ CODE_SAMPLE
         if (! $classReflection instanceof ClassReflection) {
             return false;
         }
+
         return array_any($classReflection->getParents(), fn (ClassReflection $parentClassReflection): bool => $parentClassReflection->hasNativeMethod(MethodName::CONSTRUCT));
     }
 
