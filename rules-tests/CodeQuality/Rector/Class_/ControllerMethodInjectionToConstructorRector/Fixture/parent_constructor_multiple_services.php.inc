@@ -7,13 +7,14 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjecti
 use Psr\Log\LoggerInterface;
 use Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector\Source\ParentControllerWithPrivatePromotedProperty;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ChildOfParentWithPrivatePromotedProperty extends ParentControllerWithPrivatePromotedProperty
+final class ParentConstructorMultipleServices extends ParentControllerWithPrivatePromotedProperty
 {
     #[Route('/example', name: 'example')]
-    public function example(LoggerInterface $logger)
+    public function example(LoggerInterface $logger, TranslatorInterface $translator)
     {
-        $logger->log('level', 'value');
+        $logger->log('level', $translator->trans('value'));
     }
 }
 
@@ -28,19 +29,22 @@ namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjecti
 use Psr\Log\LoggerInterface;
 use Rector\Symfony\Tests\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector\Source\ParentControllerWithPrivatePromotedProperty;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ChildOfParentWithPrivatePromotedProperty extends ParentControllerWithPrivatePromotedProperty
+final class ParentConstructorMultipleServices extends ParentControllerWithPrivatePromotedProperty
 {
     private \Psr\Log\LoggerInterface $logger;
+    private \Symfony\Contracts\Translation\TranslatorInterface $translator;
     #[Route('/example', name: 'example')]
     public function example()
     {
-        $this->logger->log('level', 'value');
+        $this->logger->log('level', $this->translator->trans('value'));
     }
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function autowire(\Psr\Log\LoggerInterface $logger): void
+    public function autowire(\Psr\Log\LoggerInterface $logger, \Symfony\Contracts\Translation\TranslatorInterface $translator): void
     {
         $this->logger = $logger;
+        $this->translator = $translator;
     }
 }
 
