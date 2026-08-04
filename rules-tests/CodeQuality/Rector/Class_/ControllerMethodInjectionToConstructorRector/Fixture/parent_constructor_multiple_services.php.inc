@@ -41,7 +41,7 @@ final class ParentConstructorMultipleServices extends ParentControllerWithPrivat
         $this->logger->log('level', $this->translator->trans('value'));
     }
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function autowire(\Psr\Log\LoggerInterface $logger, \Symfony\Contracts\Translation\TranslatorInterface $translator): void
+    public function autowireParentConstructorMultipleServices(\Psr\Log\LoggerInterface $logger, \Symfony\Contracts\Translation\TranslatorInterface $translator): void
     {
         $this->logger = $logger;
         $this->translator = $translator;

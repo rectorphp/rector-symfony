@@ -53,12 +53,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
      */
     private const array COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity\\", "\\Document\\", "\\Model\\"];
 
-    private const string AUTOWIRE_METHOD_NAME = 'autowire';
-
-    /**
-     * Used when a parent class already defines autowire(), to avoid overriding it
-     */
-    private const string FALLBACK_AUTOWIRE_METHOD_NAME = 'autowireServices';
+    private const string AUTOWIRE_METHOD_NAME_PREFIX = 'autowire';
 
     public function __construct(
         private readonly ControllerAnalyzer $controllerAnalyzer,
@@ -75,7 +70,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change Symfony controller method injection to direct constructor dependency, to separate params and services clearly. If a parent class has a constructor, use #[Required] autowire() method instead, to avoid repeating all parent params',
+            'Change Symfony controller method injection to direct constructor dependency, to separate params and services clearly. If a parent class has a constructor, use #[Required] autowire<ShortClassName>() method instead, to avoid repeating all parent params',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -145,7 +140,7 @@ final class SomeController extends SomeParentControllerWithConstructor
     }
 
     #[Required]
-    public function autowire(SomeService $someService): void
+    public function autowireSomeController(SomeService $someService): void
     {
         $this->someService = $someService;
     }
@@ -500,20 +495,14 @@ CODE_SAMPLE
         }
     }
 
+    /**
+     * Suffix with the short class name, to keep the method unique in case of inheritance
+     */
     private function resolveAutowireMethodName(Class_ $class): string
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
-        if (! $classReflection instanceof ClassReflection) {
-            return self::AUTOWIRE_METHOD_NAME;
-        }
+        $shortClassName = $class->name instanceof Identifier ? $class->name->toString() : '';
 
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            if ($parentClassReflection->hasNativeMethod(self::AUTOWIRE_METHOD_NAME)) {
-                return self::FALLBACK_AUTOWIRE_METHOD_NAME;
-            }
-        }
-
-        return self::AUTOWIRE_METHOD_NAME;
+        return self::AUTOWIRE_METHOD_NAME_PREFIX . ucfirst($shortClassName);
     }
 
     private function hasParentConstructor(Class_ $class): bool

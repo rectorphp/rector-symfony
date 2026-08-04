@@ -38,7 +38,7 @@ final class ChildOfParentWithPrivatePromotedProperty extends ParentControllerWit
         $this->logger->log('level', 'value');
     }
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function autowire(\Psr\Log\LoggerInterface $logger): void
+    public function autowireChildOfParentWithPrivatePromotedProperty(\Psr\Log\LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
