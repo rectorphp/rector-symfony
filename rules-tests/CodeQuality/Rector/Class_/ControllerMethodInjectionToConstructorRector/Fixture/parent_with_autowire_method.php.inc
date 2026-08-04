@@ -38,7 +38,7 @@ final class ParentWithAutowireMethod extends ParentControllerWithAutowireMethod
         $this->logger->log('level', 'value');
     }
     #[\Symfony\Contracts\Service\Attribute\Required]
-    public function autowireServices(\Psr\Log\LoggerInterface $logger): void
+    public function autowireParentWithAutowireMethod(\Psr\Log\LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
