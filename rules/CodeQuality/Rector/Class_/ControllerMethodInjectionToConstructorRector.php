@@ -177,6 +177,11 @@ CODE_SAMPLE
             return null;
         }
 
+        // removing action params would break child classes of user-guarded classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
+            return null;
+        }
+
         $propertyMetadatas = [];
 
         $constructParamVariables = [];
