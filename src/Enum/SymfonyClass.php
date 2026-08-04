@@ -20,6 +20,8 @@ final class SymfonyClass
 
     public const string EVENT_DISPATCHER_INTERFACE = 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface';
 
+    public const string EVENT = 'Symfony\Contracts\EventDispatcher\Event';
+
     public const string VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
 
     public const string LOGGER_INTERFACE = 'Psr\Log\LoggerInterface';

@@ -183,6 +183,10 @@ CODE_SAMPLE
                         new ObjectType(SymfonyClass::USER_INTERFACE),
                         new ObjectType('DateTimeInterface'),
                         new ObjectType(SymfonyClass::UUID),
+                        // event listener method, not a controller action
+                        new ObjectType(SymfonyClass::EVENT),
+                        // request-scoped, must stay in the action method
+                        new ObjectType(SymfonyClass::SESSION_INTERFACRE),
                     ]
                 )) {
                     continue;
