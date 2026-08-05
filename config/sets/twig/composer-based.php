@@ -8,6 +8,8 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector;
 use Rector\Symfony\Twig134\Rector\Return_\SimpleFunctionAndFilterRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -26,6 +28,10 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         // twig/twig 1.34
         SimpleFunctionAndFilterRector::class,
+
+        // twig/twig 3.21
+        GetFiltersToAsTwigFilterAttributeRector::class,
+        GetFunctionsToAsTwigFunctionAttributeRector::class,
     ]);
 
     $arrayType = new ArrayType(new MixedType(), new MixedType());
