@@ -54,13 +54,6 @@ final class Symfony3SetProvider implements SetProviderInterface
 
             new ComposerTriggeredSet(
                 SetGroup::SYMFONY,
-                'symfony/http-foundation',
-                '3.0',
-                __DIR__ . '/../../../config/sets/symfony/symfony3/symfony30/symfony30-http-foundation.php'
-            ),
-
-            new ComposerTriggeredSet(
-                SetGroup::SYMFONY,
                 'symfony/http-kernel',
                 '3.0',
                 __DIR__ . '/../../../config/sets/symfony/symfony3/symfony30/symfony30-http-kernel.php'

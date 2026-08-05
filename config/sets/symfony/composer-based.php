@@ -146,6 +146,9 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/validator 2.5
         AddViolationToBuildViolationRector::class,
 
+        // symfony/framework-bundle 2.5
+        GetRequestRector::class,
+
         // symfony/framework-bundle 2.6
         RedirectToRouteRector::class,
 
@@ -168,7 +171,6 @@ return static function (RectorConfig $rectorConfig): void {
 
         // symfony/framework-bundle 3.0
         FormTypeInstanceToClassConstRector::class,
-        GetRequestRector::class,
 
         // symfony/console 3.3
         ConsoleExceptionToErrorEventConstantRector::class,
