@@ -89,5 +89,11 @@ parameters:
             path: src/ValueObjectFactory/ServiceMapFactory.php
             message: '#"@simplexml_load_string\(\$fileContents\)" is forbidden to use#'
 
-
-
+        # the set objects are deprecated in favor of the ComposerPackageConstraintInterface, but Twig is still
+        # resolved through a composer-triggered set
+        # @see https://github.com/rectorphp/rector-src/pull/8296
+        -
+            message: '#deprecated (class|interface) Rector\\Set\\#'
+            path: src/Set/SetProvider/TwigSetProvider.php
+            # the deprecation is not released yet, so the errors are not reported here yet either
+            reportUnmatched: false
