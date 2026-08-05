@@ -13,7 +13,7 @@ final class ClassWithParameterPresent extends Controller
      */
     public function someAction(Request $request)
     {
-        $this->getRequest()->getSomething();
+        return $this->getRequest()->getSomething();
     }
 }
 
@@ -34,7 +34,7 @@ final class ClassWithParameterPresent extends Controller
      */
     public function someAction(Request $request, \Symfony\Component\HttpFoundation\Request $mainRequest)
     {
-        $mainRequest->getSomething();
+        return $mainRequest->getSomething();
     }
 }
 

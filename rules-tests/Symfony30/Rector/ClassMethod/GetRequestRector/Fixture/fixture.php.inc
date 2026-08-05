@@ -12,7 +12,7 @@ class ClassWithNamedService extends Controller
      */
     public function someAction()
     {
-        $this->getRequest()->getSomething();
+        return $this->getRequest()->getSomething();
     }
 }
 
@@ -32,7 +32,7 @@ class ClassWithNamedService extends Controller
      */
     public function someAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        $request->getSomething();
+        return $request->getSomething();
     }
 }
 

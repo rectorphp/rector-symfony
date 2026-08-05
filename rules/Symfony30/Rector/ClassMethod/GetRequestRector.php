@@ -56,7 +56,7 @@ class SomeController
 {
     public function someAction()
     {
-        $this->getRequest()->...();
+        return $this->getRequest()->getContent();
     }
 }
 CODE_SAMPLE
@@ -68,7 +68,7 @@ class SomeController
 {
     public function someAction(Request $request)
     {
-        $request->...();
+        return $request->getContent();
     }
 }
 CODE_SAMPLE
@@ -133,6 +133,11 @@ CODE_SAMPLE
         }
 
         if (! $this->controllerMethodAnalyzer->isAction($classMethod)) {
+            return false;
+        }
+
+        // an action always returns a response; without any return, this is a setter/hook method
+        if ($this->betterNodeFinder->findReturnsScoped($classMethod) === []) {
             return false;
         }
 
