@@ -50,7 +50,6 @@ use Rector\Symfony\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector;
 use Rector\Symfony\Symfony28\Rector\StaticCall\ParseFileRector;
 use Rector\Symfony\Symfony30\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Symfony30\Rector\ClassMethod\GetRequestRector;
-use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\OptionNameRector;
@@ -166,7 +165,6 @@ return static function (RectorConfig $rectorConfig): void {
         FormTypeGetParentRector::class,
         OptionNameRector::class,
         ReadOnlyOptionToAttributeRector::class,
-        RemoveDefaultGetBlockPrefixRector::class,
         StringFormTypeToClassRector::class,
 
         // symfony/framework-bundle 3.0
