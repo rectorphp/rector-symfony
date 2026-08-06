@@ -9,7 +9,6 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Symfony30\Rector\ClassMethod\FormTypeGetParentRector;
-use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Symfony30\Rector\MethodCall\OptionNameRector;
@@ -20,7 +19,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         FormTypeInstanceToClassConstRector::class,
         StringFormTypeToClassRector::class,
-        RemoveDefaultGetBlockPrefixRector::class,
         FormTypeGetParentRector::class,
         OptionNameRector::class,
         ReadOnlyOptionToAttributeRector::class,
