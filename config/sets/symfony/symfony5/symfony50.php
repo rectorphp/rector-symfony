@@ -8,6 +8,4 @@ use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony50/symfony50-types.php');
-    $rectorConfig->import(__DIR__ . '/symfony50/symfony50-console.php');
-    $rectorConfig->import(__DIR__ . '/symfony50/symfony50-debug.php');
 };
