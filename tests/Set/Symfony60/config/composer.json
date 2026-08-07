@@ -1,6 +1,0 @@
-{
-    "require": {
-        "symfony/config": "^6.0",
-        "symfony/routing": "^6.0"
-    }
-}

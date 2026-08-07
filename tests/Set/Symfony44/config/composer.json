@@ -1,6 +1,0 @@
-{
-    "require": {
-        "symfony/http-kernel": "^4.4",
-        "symfony/web-link": "^4.4"
-    }
-}
