@@ -20,8 +20,6 @@ final class SymfonyClass
 
     public const string EVENT_DISPATCHER_INTERFACE = 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface';
 
-    public const string EVENT = 'Symfony\Contracts\EventDispatcher\Event';
-
     public const string VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
 
     public const string LOGGER_INTERFACE = 'Psr\Log\LoggerInterface';
@@ -95,8 +93,6 @@ final class SymfonyClass
     public const string USER_INTERFACE = 'Symfony\Component\Security\Core\User\UserInterface';
 
     public const string ACCESS_DECISION_MANAGER_INTERFACE = 'Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface';
-
-    public const string UUID = 'Symfony\Component\Uid\AbstractUid';
 
     public const string ROUTE_COLLECTION_BUILDER = 'Symfony\Component\Routing\RouteCollectionBuilder';
 
