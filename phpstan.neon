@@ -74,12 +74,6 @@ parameters:
 
         - '#Parameter 1 should use "PHPStan\\BetterReflection\\Reflection\\Adapter\\ReflectionMethod" type as the only type passed to this method#'
 
-        # in tests
-        -
-            message: '#Fetching deprecated class constant SYMFONY_(.*?) of class Rector\\Symfony\\Set\\SymfonySetList#'
-            paths:
-                - tests
-                - config/sets/symfony/annotations-to-attributes.php
         # using XML to load symfony config
         -
             path: src/ValueObjectFactory/ServiceMapFactory.php
