@@ -11,7 +11,6 @@ use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRect
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
-use Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
@@ -36,7 +35,6 @@ return static function (RectorConfig $rectorConfig): void {
         ParamTypeFromRouteRequiredRegexRector::class,
 
         // controller
-        ActionSuffixRemoverRector::class,
         LoadValidatorMetadataToAttributeRector::class,
 
         // request method
