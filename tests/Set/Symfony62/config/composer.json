@@ -1,0 +1,9 @@
+{
+    "require": {
+        "symfony/http-kernel": "^6.2",
+        "symfony/security-http": "^6.2",
+        "symfony/symfony": "^6.2",
+        "symfony/twig-bridge": "^6.2",
+        "symfony/validator": "^6.2"
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/web-link": "^6.3"
+    }
+}

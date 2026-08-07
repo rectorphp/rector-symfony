@@ -25,4 +25,9 @@ final class Symfony32Test extends AbstractRectorTestCase
     {
         return __DIR__ . '/config/symfony32.php';
     }
+
+    protected function provideComposerJsonFilePath(): string
+    {
+        return __DIR__ . '/config/composer.json';
+    }
 }
