@@ -104,8 +104,6 @@ use Rector\Symfony\Symfony73\Rector\Class_\AuthorizationCheckerToAccessDecisionM
 use Rector\Symfony\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsCommandAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector;
-use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector;
-use Rector\Symfony\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector;
 use Rector\Symfony\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
@@ -316,10 +314,6 @@ return static function (RectorConfig $rectorConfig): void {
 
         // symfony/validator 8.1
         ConstraintValidatorValidateToValidateInContextRector::class,
-
-        // twig/twig 3.21
-        GetFiltersToAsTwigFilterAttributeRector::class,
-        GetFunctionsToAsTwigFunctionAttributeRector::class,
     ]);
 
     // shared types used by the configuration below
