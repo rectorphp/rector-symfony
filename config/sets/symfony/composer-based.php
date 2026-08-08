@@ -331,6 +331,7 @@ return static function (RectorConfig $rectorConfig): void {
     $iterableType = new IterableType(new MixedType(), new MixedType());
     $nullableArrayType = new UnionType([new NullType(), $arrayType]);
     $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
+    $nullableIntegerType = new UnionType([new NullType(), new IntegerType()]);
     $nullableStringType = new UnionType([new NullType(), new StringType()]);
     $nullableValueGuessType = new UnionType([new NullType(), new ObjectType('Symfony\Component\Form\Guess\ValueGuess')]);
     $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
@@ -1441,7 +1442,7 @@ return static function (RectorConfig $rectorConfig): void {
         new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'has', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'findNamespace', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'find', 0, new StringType()),
-        new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'all', 0, new StringType()),
+        new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'all', 0, $nullableStringType),
         new AddParamTypeDeclaration('Symfony\Component\Console\Application', 'getAbbreviations', 0, $arrayType),
         new AddParamTypeDeclaration(
             'Symfony\Component\Console\Application',
@@ -1453,7 +1454,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Console\Application',
             'extractNamespace',
             1,
-            new IntegerType()
+            $nullableIntegerType
         ),
         new AddParamTypeDeclaration(
             'Symfony\Component\Console\Application',
@@ -1483,7 +1484,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Console\Command\Command',
             'addArgument',
             1,
-            new IntegerType()
+            $nullableIntegerType
         ),
         new AddParamTypeDeclaration(
             'Symfony\Component\Console\Command\Command',
@@ -1492,7 +1493,7 @@ return static function (RectorConfig $rectorConfig): void {
             new StringType()
         ),
         new AddParamTypeDeclaration('Symfony\Component\Console\Command\Command', 'addOption', 0, new StringType()),
-        new AddParamTypeDeclaration('Symfony\Component\Console\Command\Command', 'addOption', 2, new IntegerType()),
+        new AddParamTypeDeclaration('Symfony\Component\Console\Command\Command', 'addOption', 2, $nullableIntegerType),
         new AddParamTypeDeclaration('Symfony\Component\Console\Command\Command', 'addOption', 3, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Console\Command\Command', 'setName', 0, new StringType()),
         new AddParamTypeDeclaration(
@@ -1644,7 +1645,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\EventDispatcher\EventDispatcherInterface',
             'getListeners',
             0,
-            new StringType()
+            $nullableStringType
         ),
         new AddParamTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventDispatcherInterface',
@@ -1656,7 +1657,7 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\EventDispatcher\EventDispatcherInterface',
             'hasListeners',
             0,
-            new StringType()
+            $nullableStringType
         ),
         new AddParamTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventDispatcher',
@@ -1694,13 +1695,13 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             $iterableType
         ),
-        new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'add', 1, new StringType()),
+        new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'add', 1, $nullableStringType),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'remove', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'has', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'get', 0, new StringType()),
-        new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'add', 1, new StringType()),
+        new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'add', 1, $nullableStringType),
         new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'create', 0, new StringType()),
-        new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'create', 1, new StringType()),
+        new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'create', 1, $nullableStringType),
         new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'get', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'remove', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\FormBuilderInterface', 'has', 0, new StringType()),
@@ -1752,7 +1753,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'signal', 0, new IntegerType()),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'stop', 0, new FloatType()),
-        new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'stop', 1, new IntegerType()),
+        new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'stop', 1, $nullableIntegerType),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'setTty', 0, new BooleanType()),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'setPty', 0, new BooleanType()),
         new AddParamTypeDeclaration(
