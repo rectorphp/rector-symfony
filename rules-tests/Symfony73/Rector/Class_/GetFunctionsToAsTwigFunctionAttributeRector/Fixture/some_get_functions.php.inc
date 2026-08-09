@@ -39,7 +39,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunct
 
 use Twig\Extension\AbstractExtension;
 
-final class SomeGetFunctions
+final class SomeGetFunctions extends AbstractExtension
 {
     #[\Twig\Attribute\AsTwigFunction(name: 'some_function')]
     public function someFunction($value)
