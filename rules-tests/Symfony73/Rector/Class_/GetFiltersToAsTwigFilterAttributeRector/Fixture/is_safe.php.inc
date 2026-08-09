@@ -29,7 +29,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterA
 
 use Twig\Extension\AbstractExtension;
 
-final class IsSafe
+final class IsSafe extends AbstractExtension
 {
     #[\Twig\Attribute\AsTwigFilter(name: 'some_filter', isSafe: ['html'])]
     public function someFilter($value)

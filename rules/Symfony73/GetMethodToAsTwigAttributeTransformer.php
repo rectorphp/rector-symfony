@@ -221,13 +221,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
 
         $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
 
-        // a kept built-in override leaves the array non-empty, so the class still needs the parent extension
-        if ($returnArray->items === []
-            && $class->extends instanceof FullyQualified
-            && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
-            $class->extends = null;
-        }
-
+        // "extends AbstractExtension" is kept on purpose, as it can be required by tests or other code
         return true;
     }
 
