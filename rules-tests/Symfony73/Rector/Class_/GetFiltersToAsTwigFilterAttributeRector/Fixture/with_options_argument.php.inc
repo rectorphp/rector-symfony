@@ -80,7 +80,7 @@ use Twig\Environment;
 use Twig\Node\Node;
 use Twig\Extension\AbstractExtension;
 
-final class WithOptionsParameter extends AbstractExtension
+final class WithOptionsParameter
 {
     #[\Twig\Attribute\AsTwigFilter(name: 'with_environment', needsEnvironment: true)]
     public function withEnvironment(Environment $env, $value)

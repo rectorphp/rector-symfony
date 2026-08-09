@@ -27,7 +27,7 @@ namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterA
 
 use Twig\Extension\AbstractExtension;
 
-final class SomeGetFilter extends AbstractExtension
+final class SomeGetFilter
 {
     #[\Twig\Attribute\AsTwigFilter(name: 'some_filter')]
     public function someFilter($value)
