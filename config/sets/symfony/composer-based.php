@@ -42,6 +42,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
+use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
+use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
@@ -318,6 +320,10 @@ return static function (RectorConfig $rectorConfig): void {
 
         // twig/twig 3.21
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
+
+        // jms/serializer 3.14
+        AccessTypeAnnotationToAttributeRector::class,
+        AccessorAnnotationToAttributeRector::class,
     ]);
 
     // shared types used by the configuration below
