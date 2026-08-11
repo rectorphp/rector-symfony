@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\TwigClass;
-use Rector\Symfony\Symfony73\GetMethodToAsTwigAttributeTransformer;
+use Rector\Symfony\Symfony73\GetMethodsToAsTwigAttributeTransformer;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,12 +18,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-7-3-twig-extension-attributes
  *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\GetFunctionsToAsTwigFunctionAttributeRectorTest
+ * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\GetFiltersAndFunctionsToAsTwigAttributeRectorTest
  */
-final class GetFunctionsToAsTwigFunctionAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
+final class GetFiltersAndFunctionsToAsTwigAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
-        private readonly GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer,
+        private readonly GetMethodsToAsTwigAttributeTransformer $getMethodsToAsTwigAttributeTransformer
     ) {
     }
 
@@ -35,7 +35,7 @@ final class GetFunctionsToAsTwigFunctionAttributeRector extends AbstractRector i
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Changes getFunctions() in TwigExtension to #[AsTwigFunction] marker attribute above local class method',
+            'Changes getFilters(), getFunctions() and getTests() in TwigExtension to #[AsTwigFilter], #[AsTwigFunction] and #[AsTwigTest] marker attributes above local class methods',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -44,10 +44,17 @@ use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
+    public function getFilters()
+    {
+        return [
+            new \Twig\TwigFilter('filter_name', [$this, 'localMethod'], ['needs_environment' => true]),
+        ];
+    }
+
     public function getFunctions()
     {
         return [
-            new \Twig\TwigFunction('function_name', [$this, 'localMethod', 'needs_environment' => true]),
+            new \Twig\TwigFunction('function_name', [$this, 'localMethod'], ['needs_environment' => true]),
         ];
     }
 
@@ -59,11 +66,13 @@ class SomeClass extends AbstractExtension
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
 
 class SomeClass
 {
+    #[AsTwigFilter(name: 'filter_name', needsEnvironment: true)]
     #[AsTwigFunction(name: 'function_name', needsEnvironment: true)]
     public function localMethod(Environment $env, $value)
     {
@@ -94,10 +103,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker(
+        $hasChanged = $this->getMethodsToAsTwigAttributeTransformer->transformClassGetMethodsToAttributeMarkers(
             $node,
-            'getFunctions',
-            TwigClass::AS_TWIG_FUNCTION_ATTRIBUTE,
             $twigExtensionObjectType
         );
 

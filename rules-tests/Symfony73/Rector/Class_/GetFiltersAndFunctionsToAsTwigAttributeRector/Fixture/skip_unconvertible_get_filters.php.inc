@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\Extension\AbstractExtension;
 
-final class SkipRemainingGetFilters extends AbstractExtension
+final class SkipUnconvertibleGetFilters extends AbstractExtension
 {
     public function getFunctions(): array
     {
@@ -16,16 +16,11 @@ final class SkipRemainingGetFilters extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new \Twig\TwigFilter('some_filter', [$this, 'someFilter']),
+            new \Twig\TwigFilter('some_filter', fn ($value) => $value),
         ];
     }
 
     public function someFunction($value)
-    {
-        return $value;
-    }
-
-    public function someFilter($value)
     {
         return $value;
     }

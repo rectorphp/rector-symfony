@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\DeprecatedCallableInfo;
 use Twig\Environment;
@@ -61,7 +61,7 @@ final class WithOptionsParameter extends AbstractExtension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\DeprecatedCallableInfo;
 use Twig\Environment;

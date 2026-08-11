@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\Extension\AbstractExtension;
 
@@ -23,7 +23,7 @@ final class SomeGetFilter extends AbstractExtension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\Extension\AbstractExtension;
 
