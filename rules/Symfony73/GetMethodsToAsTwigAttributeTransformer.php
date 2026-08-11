@@ -26,19 +26,51 @@ use Rector\Symfony\Enum\TwigClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
 use Rector\Symfony\Symfony73\ValueObject\AsTwigAttributeConversion;
+use Rector\Symfony\Symfony73\ValueObject\GetMethodConversions;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-7-3-twig-extension-attributes
  */
-final readonly class GetMethodToAsTwigAttributeTransformer
+final readonly class GetMethodsToAsTwigAttributeTransformer
 {
-    private const array OPTION_TO_NAMED_ARG = [
-        'is_safe' => 'isSafe',
+    /**
+     * @var array<string, string>
+     */
+    private const array METHOD_NAME_TO_ATTRIBUTE_CLASS = [
+        'getFilters' => TwigClass::AS_TWIG_FILTER_ATTRIBUTE,
+        'getFunctions' => TwigClass::AS_TWIG_FUNCTION_ATTRIBUTE,
+        'getTests' => TwigClass::AS_TWIG_TEST_ATTRIBUTE,
+    ];
+
+    /**
+     * Options shared by every Twig callable attribute
+     *
+     * @var array<string, string>
+     */
+    private const array COMMON_OPTION_TO_NAMED_ARG = [
         'needs_environment' => 'needsEnvironment',
         'needs_context' => 'needsContext',
         'needs_charset' => 'needsCharset',
-        'is_safe_callback' => 'isSafeCallback',
         'deprecation_info' => 'deprecationInfo',
+    ];
+
+    /**
+     * Options exclusive to a single attribute, e.g. #[AsTwigTest] has no escaping options at all
+     *
+     * @var array<string, array<string, string>>
+     */
+    private const array METHOD_NAME_TO_EXTRA_OPTION_TO_NAMED_ARG = [
+        'getFilters' => [
+            'is_safe' => 'isSafe',
+            'is_safe_callback' => 'isSafeCallback',
+            'preserves_safety' => 'preservesSafety',
+            'pre_escape' => 'preEscape',
+        ],
+        'getFunctions' => [
+            'is_safe' => 'isSafe',
+            'is_safe_callback' => 'isSafeCallback',
+        ],
+        'getTests' => [],
     ];
 
     /**
@@ -61,69 +93,80 @@ final readonly class GetMethodToAsTwigAttributeTransformer
      * Built-in Twig function names. Overriding one only works while the class stays a classic
      * "extends AbstractExtension", so such an item must remain in the array and not become an attribute.
      *
-     * @var string[]
+     * @var array<string, string[]>
      */
-    private const array CORE_TWIG_FUNCTION_NAMES = [
-        'attribute',
-        'block',
-        'constant',
-        'cycle',
-        'date',
-        'dump',
-        'enum_cases',
-        'include',
-        'max',
-        'min',
-        'parent',
-        'random',
-        'range',
-        'source',
-        'template_from_string',
-    ];
-
-    /**
-     * Built-in Twig filter names, see self::CORE_TWIG_FUNCTION_NAMES for the reasoning.
-     *
-     * @var string[]
-     */
-    private const array CORE_TWIG_FILTER_NAMES = [
-        'abs',
-        'batch',
-        'capitalize',
-        'column',
-        'convert_encoding',
-        'date',
-        'date_modify',
-        'default',
-        'e',
-        'escape',
-        'filter',
-        'first',
-        'format',
-        'join',
-        'json_encode',
-        'keys',
-        'last',
-        'length',
-        'lower',
-        'map',
-        'merge',
-        'nl2br',
-        'number_format',
-        'raw',
-        'reduce',
-        'replace',
-        'reverse',
-        'round',
-        'slice',
-        'sort',
-        'spaceless',
-        'split',
-        'striptags',
-        'title',
-        'trim',
-        'upper',
-        'url_encode',
+    private const array METHOD_NAME_TO_CORE_TWIG_NAMES = [
+        'getFunctions' => [
+            'attribute',
+            'block',
+            'constant',
+            'cycle',
+            'date',
+            'dump',
+            'enum_cases',
+            'include',
+            'max',
+            'min',
+            'parent',
+            'random',
+            'range',
+            'source',
+            'template_from_string',
+        ],
+        'getFilters' => [
+            'abs',
+            'batch',
+            'capitalize',
+            'column',
+            'convert_encoding',
+            'date',
+            'date_modify',
+            'default',
+            'e',
+            'escape',
+            'filter',
+            'first',
+            'format',
+            'join',
+            'json_encode',
+            'keys',
+            'last',
+            'length',
+            'lower',
+            'map',
+            'merge',
+            'nl2br',
+            'number_format',
+            'raw',
+            'reduce',
+            'replace',
+            'reverse',
+            'round',
+            'slice',
+            'sort',
+            'spaceless',
+            'split',
+            'striptags',
+            'title',
+            'trim',
+            'upper',
+            'url_encode',
+        ],
+        'getTests' => [
+            'constant',
+            'defined',
+            'divisible by',
+            'empty',
+            'even',
+            'iterable',
+            'mapping',
+            'none',
+            'null',
+            'odd',
+            'same as',
+            'sequence',
+            'true',
+        ],
     ];
 
     public function __construct(
@@ -135,100 +178,162 @@ final readonly class GetMethodToAsTwigAttributeTransformer
     ) {
     }
 
-    /**
-     * @param array<string, string> $additionalOptionMapping
-     */
-    public function transformClassGetMethodToAttributeMarker(
+    public function transformClassGetMethodsToAttributeMarkers(Class_ $class, ObjectType $objectType): bool
+    {
+        $getMethodConversions = [];
+
+        foreach (self::METHOD_NAME_TO_ATTRIBUTE_CLASS as $methodName => $attributeClass) {
+            $getMethod = $class->getMethod($methodName);
+            if (! $getMethod instanceof ClassMethod) {
+                continue;
+            }
+
+            $singleGetMethodConversions = $this->matchGetMethodConversions(
+                $class,
+                $getMethod,
+                $methodName,
+                $attributeClass,
+                $objectType
+            );
+
+            // the method is there, but cannot be converted; the class must keep relying on the parent
+            // extension, so none of the other methods can be converted either
+            if (! $singleGetMethodConversions instanceof GetMethodConversions) {
+                return false;
+            }
+
+            $getMethodConversions[] = $singleGetMethodConversions;
+        }
+
+        if ($getMethodConversions === []) {
+            return false;
+        }
+
+        $convertedMethodNames = array_map(
+            static fn (GetMethodConversions $getMethodConversions): string => $getMethodConversions->getMethodName(),
+            $getMethodConversions
+        );
+
+        // attribute-based extensions and "extends AbstractExtension" are incompatible, so the class
+        // must not keep relying on the parent class for other registrations (e.g. token parsers, globals)
+        if ($this->stillRequiresAbstractExtension($class, $convertedMethodNames)) {
+            return false;
+        }
+
+        foreach ($getMethodConversions as $getMethodConversion) {
+            $this->applyGetMethodConversions($class, $getMethodConversion);
+        }
+
+        $this->removeAbstractExtensionIfEmptied($class, $getMethodConversions);
+
+        return true;
+    }
+
+    private function matchGetMethodConversions(
         Class_ $class,
+        ClassMethod $classMethod,
         string $methodName,
         string $attributeClass,
-        ObjectType $objectType,
-        array $additionalOptionMapping = []
-    ): bool {
+        ObjectType $objectType
+    ): ?GetMethodConversions {
         // check if attribute even exists
         if (! $this->reflectionProvider->hasClass($attributeClass)) {
-            return false;
+            return null;
         }
 
-        $getMethod = $class->getMethod($methodName);
-        if (! $getMethod instanceof ClassMethod) {
-            return false;
-        }
-
-        $returnArray = $this->matchReturnArray($getMethod);
+        $returnArray = $this->matchReturnArray($classMethod);
         if (! $returnArray instanceof Array_) {
-            return false;
+            return null;
         }
 
         // nothing to convert
         if ($returnArray->items === []) {
-            return false;
+            return null;
         }
 
         // validate every registration before changing anything: a partial conversion would
-        // leave some filters/functions unregistered once "extends AbstractExtension" is removed
-        $conversions = [];
+        // leave some filters/functions/tests unregistered once "extends AbstractExtension" is removed
+        $asTwigAttributeConversions = [];
         foreach ($returnArray->items as $key => $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
-                return false;
+                return null;
             }
 
-            // items that override a built-in Twig function/filter must stay registered the classic way,
+            // items that override a built-in Twig filter/function/test must stay registered the classic way,
             // so keep them in the array and let the class keep "extends AbstractExtension"
             if ($this->isBuiltinTwigNameOverride($arrayItem, $methodName)) {
                 continue;
             }
 
-            $conversion = $this->matchArrayItemConversion(
+            $asTwigAttributeConversion = $this->matchArrayItemConversion(
                 $key,
                 $arrayItem,
                 $class,
                 $objectType,
-                $additionalOptionMapping
+                $methodName
             );
-            if (! $conversion instanceof AsTwigAttributeConversion) {
-                return false;
+            if (! $asTwigAttributeConversion instanceof AsTwigAttributeConversion) {
+                return null;
             }
 
-            $conversions[] = $conversion;
+            $asTwigAttributeConversions[] = $asTwigAttributeConversion;
         }
 
         // only built-in overrides (or none) left to convert, nothing to do
-        if ($conversions === []) {
-            return false;
+        if ($asTwigAttributeConversions === []) {
+            return null;
         }
 
-        // attribute-based extensions and "extends AbstractExtension" are incompatible, so the class
-        // must not keep relying on the parent class for other registrations (e.g. getTests(), globals)
-        if ($this->stillRequiresAbstractExtension($class, $methodName)) {
-            return false;
-        }
+        return new GetMethodConversions($methodName, $attributeClass, $returnArray, $asTwigAttributeConversions);
+    }
 
-        foreach ($conversions as $conversion) {
-            $nameArg = $conversion->getNameArg();
+    private function applyGetMethodConversions(Class_ $class, GetMethodConversions $getMethodConversions): void
+    {
+        $returnArray = $getMethodConversions->getReturnArray();
+
+        foreach ($getMethodConversions->getAsTwigAttributeConversions() as $asTwigAttributeConversion) {
+            $nameArg = $asTwigAttributeConversion->getNameArg();
             $nameArg->name = new Identifier('name');
 
             $this->decorateMethodWithAttribute(
-                $conversion->getClassMethod(),
-                $attributeClass,
-                [$nameArg, ...$conversion->getOptionArgs()]
+                $asTwigAttributeConversion->getClassMethod(),
+                $getMethodConversions->getAttributeClass(),
+                [$nameArg, ...$asTwigAttributeConversion->getOptionArgs()]
             );
-            $this->visibilityManipulator->makePublic($conversion->getClassMethod());
+            $this->visibilityManipulator->makePublic($asTwigAttributeConversion->getClassMethod());
 
-            // remove old new function/filter instance
-            unset($returnArray->items[$conversion->getItemKey()]);
+            // remove old new filter/function/test instance
+            unset($returnArray->items[$asTwigAttributeConversion->getItemKey()]);
         }
 
-        $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
+        $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty(
+            $class,
+            $returnArray,
+            $getMethodConversions->getMethodName()
+        );
+    }
 
+    /**
+     * @param GetMethodConversions[] $getMethodConversions
+     */
+    private function removeAbstractExtensionIfEmptied(Class_ $class, array $getMethodConversions): void
+    {
         // a kept built-in override leaves the array non-empty, so the class still needs the parent extension
-        if ($returnArray->items === []
-            && $class->extends instanceof FullyQualified
-            && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
-            $class->extends = null;
+        foreach ($getMethodConversions as $getMethodConversion) {
+            if ($getMethodConversion->getReturnArray()->items !== []) {
+                return;
+            }
         }
 
-        return true;
+        if (! $class->extends instanceof FullyQualified) {
+            return;
+        }
+
+        if ($class->extends->toString() !== TwigClass::TWIG_EXTENSION) {
+            return;
+        }
+
+        $class->extends = null;
     }
 
     private function matchReturnArray(ClassMethod $classMethod): ?Array_
@@ -254,15 +359,12 @@ final readonly class GetMethodToAsTwigAttributeTransformer
         return $returnArray;
     }
 
-    /**
-     * @param array<string, string> $additionalOptionMapping
-     */
     private function matchArrayItemConversion(
         int $key,
         ArrayItem $arrayItem,
         Class_ $class,
         ObjectType $objectType,
-        array $additionalOptionMapping
+        string $methodName
     ): ?AsTwigAttributeConversion {
         if (! $arrayItem->value instanceof New_) {
             return null;
@@ -302,7 +404,7 @@ final readonly class GetMethodToAsTwigAttributeTransformer
             return null;
         }
 
-        $optionArguments = $this->getArgumentsFromOptionArray($thirdArg, $additionalOptionMapping);
+        $optionArguments = $this->getArgumentsFromOptionArray($thirdArg, $methodName);
         if ($optionArguments === null) {
             return null;
         }
@@ -321,18 +423,17 @@ final readonly class GetMethodToAsTwigAttributeTransformer
             return false;
         }
 
-        $builtinNames = $methodName === 'getFilters'
-            ? self::CORE_TWIG_FILTER_NAMES
-            : self::CORE_TWIG_FUNCTION_NAMES;
-
-        return in_array($firstArg->value->value, $builtinNames, true);
+        return in_array($firstArg->value->value, self::METHOD_NAME_TO_CORE_TWIG_NAMES[$methodName], true);
     }
 
-    private function stillRequiresAbstractExtension(Class_ $class, string $convertedMethodName): bool
+    /**
+     * @param string[] $convertedMethodNames
+     */
+    private function stillRequiresAbstractExtension(Class_ $class, array $convertedMethodNames): bool
     {
         foreach ($class->getMethods() as $classMethod) {
             $currentMethodName = $classMethod->name->toString();
-            if ($currentMethodName === $convertedMethodName) {
+            if (in_array($currentMethodName, $convertedMethodNames, true)) {
                 continue;
             }
 
@@ -372,17 +473,18 @@ final readonly class GetMethodToAsTwigAttributeTransformer
     }
 
     /**
-     * @param array<string, string> $additionalOptionMapping
-     *
      * @return Arg[]|null
      */
-    private function getArgumentsFromOptionArray(?Arg $optionArgument, array $additionalOptionMapping): ?array
+    private function getArgumentsFromOptionArray(?Arg $optionArgument, string $methodName): ?array
     {
         if (! $optionArgument?->value instanceof Array_) {
             return [];
         }
 
-        $allOptionMappings = [...self::OPTION_TO_NAMED_ARG, ...$additionalOptionMapping];
+        $allOptionMappings = [
+            ...self::COMMON_OPTION_TO_NAMED_ARG,
+            ...self::METHOD_NAME_TO_EXTRA_OPTION_TO_NAMED_ARG[$methodName],
+        ];
 
         $args = [];
         foreach ($optionArgument->value->items as $item) {

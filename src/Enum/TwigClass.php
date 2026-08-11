@@ -12,6 +12,8 @@ final class TwigClass
 
     public const string AS_TWIG_FUNCTION_ATTRIBUTE = 'Twig\Attribute\AsTwigFunction';
 
+    public const string AS_TWIG_TEST_ATTRIBUTE = 'Twig\Attribute\AsTwigTest';
+
     public const string EXTENSION_INTERFACE = 'Twig\Extension\ExtensionInterface';
 
     public const string GLOBALS_INTERFACE = 'Twig\Extension\GlobalsInterface';

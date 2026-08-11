@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -31,7 +31,7 @@ final class KeepBuiltinConvertCustom extends AbstractExtension
 -----
 <?php
 
-namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector\Fixture;
+namespace Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector\Fixture;
 
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
