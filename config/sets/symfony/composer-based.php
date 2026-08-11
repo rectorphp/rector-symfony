@@ -397,6 +397,13 @@ return static function (RectorConfig $rectorConfig): void {
         ),
     ], 'symfony/routing', '>=2.8');
 
+    // symfony/symfony 2.8
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+        // @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#security
+        'Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface',
+        'Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimpleFormAuthenticatorInterface',
+    ], 'symfony/symfony', '>=2.8');
+
     // symfony/bridge-swift-mailer 3.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // swift mailer
