@@ -107,7 +107,6 @@ use Rector\Symfony\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsC
 use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector;
 use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector;
-use Rector\Symfony\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector;
 use Rector\Symfony\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
@@ -296,7 +295,6 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/console 7.3
         CommandDefaultNameAndDescriptionToAsCommandAttributeRector::class,
         CommandHelpToAttributeRector::class,
-        InvokableCommandInputAttributeRector::class,
 
         // symfony/security-core 7.3
         AddVoteArgumentToVoteOnAttributeRector::class,
