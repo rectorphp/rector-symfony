@@ -42,6 +42,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
+use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
+use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
@@ -105,6 +107,7 @@ use Rector\Symfony\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsC
 use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector;
 use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector;
 use Rector\Symfony\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
@@ -293,6 +296,7 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/console 7.3
         CommandDefaultNameAndDescriptionToAsCommandAttributeRector::class,
         CommandHelpToAttributeRector::class,
+        InvokableCommandInputAttributeRector::class,
 
         // symfony/security-core 7.3
         AddVoteArgumentToVoteOnAttributeRector::class,
@@ -318,6 +322,10 @@ return static function (RectorConfig $rectorConfig): void {
 
         // twig/twig 3.21
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
+
+        // jms/serializer 3.14
+        AccessTypeAnnotationToAttributeRector::class,
+        AccessorAnnotationToAttributeRector::class,
     ]);
 
     // shared types used by the configuration below
