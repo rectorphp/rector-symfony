@@ -3,14 +3,15 @@
 name: Dispatch Build Scoped Rector
 
 on:
-    pull_request:
-        types:
-            - closed
+    push:
+        branches:
+            - main
+    workflow_dispatch: null
 
 jobs:
     dispatch_build_scoped_rector:
-        # only for merged pull requests in this repository, not forks
-        if: github.event.pull_request.merged == true && github.repository == 'rectorphp/rector-symfony'
+        # only for this repository, not forks
+        if: github.repository == 'rectorphp/rector-symfony'
 
         runs-on: ubuntu-latest
 
