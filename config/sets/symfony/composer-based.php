@@ -3949,7 +3949,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // symfony/translation 7.2
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
-        'Symfony\Component\Translation\Test\ProviderFactoryTestCase;' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase',
+        'Symfony\Component\Translation\Test\ProviderFactoryTestCase' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase',
     ], 'symfony/translation', '>=7.2');
 
     // symfony/console 7.4
