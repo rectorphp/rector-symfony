@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Symfony61\Rector\Attribute;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -26,10 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RouteRequirementStringToConstantRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
-    /**
-     * @var string
-     */
-    private const REQUIREMENT_CLASS = 'Symfony\Component\Routing\Requirement\Requirement';
+    private const string REQUIREMENT_CLASS = 'Symfony\Component\Routing\Requirement\Requirement';
 
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
@@ -137,7 +135,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $arg->name instanceof Node\Identifier) {
+            if (! $arg->name instanceof Identifier) {
                 continue;
             }
 
