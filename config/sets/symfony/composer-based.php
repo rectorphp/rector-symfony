@@ -115,8 +115,10 @@ use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
+use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Rector\Transform\ValueObject\StaticCallToNew;
+use Rector\Transform\ValueObject\StringToClassConstant;
 use Rector\Transform\ValueObject\WrapReturn;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -2947,6 +2949,86 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Validator\Constraints\ExpressionLanguageSyntaxValidator' => 'Symfony\Component\Validator\Constraints\ExpressionSyntaxValidator',
     ], 'symfony/validator', '>=6.1');
 
+    // symfony/routing 6.1
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(
+        StringToClassConstantRector::class,
+        [
+            new StringToClassConstant(
+                '[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'ASCII_SLUG'
+            ),
+            new StringToClassConstant(
+                '[0-9]{4}-(?:0[1-9]|1[012])-(?:0[1-9]|[12][0-9]|(?<!02-)3[01])',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'DATE_YMD'
+            ),
+            new StringToClassConstant(
+                '[0-9A-HJKMNP-TV-Z]{26}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UID_BASE32'
+            ),
+            new StringToClassConstant(
+                '[1-9A-HJ-NP-Za-km-z]{22}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UID_BASE58'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UID_RFC4122'
+            ),
+            new StringToClassConstant(
+                '[0-7][0-9A-HJKMNP-TV-Z]{25}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'ULID'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-[13-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-1[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V1'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-3[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V3'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V4'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V5'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-6[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V6'
+            ),
+
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V7'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-8[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V8'
+            ),
+        ],
+        'symfony/routing',
+        '>=6.1',
+    );
+
     // symfony/console 6.2
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/pull/49347
@@ -3089,6 +3171,25 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Messenger\Transport\InMemoryTransport' => 'Symfony\Component\Messenger\Transport\InMemory\InMemoryTransport',
         'Symfony\Component\Messenger\Transport\InMemoryTransportFactory' => 'Symfony\Component\Messenger\Transport\InMemory\InMemoryTransportFactory',
     ], 'symfony/messenger', '>=6.3');
+
+    // symfony/routing 6.2
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(
+        StringToClassConstantRector::class,
+        [
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V7'
+            ),
+            new StringToClassConstant(
+                '[0-9a-f]{8}-[0-9a-f]{4}-8[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'UUID_V8'
+            ),
+        ],
+        'symfony/routing',
+        '>=6.2',
+    );
 
     // symfony/web-link 6.3
     $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [
@@ -3951,6 +4052,20 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         'Symfony\Component\Translation\Test\ProviderFactoryTestCase' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase',
     ], 'symfony/translation', '>=7.2');
+
+    // symfony/routing 7.3
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(
+        StringToClassConstantRector::class,
+        [
+            new StringToClassConstant(
+                '[0-9a-f]{24}',
+                'Symfony\Component\Routing\Requirement\Requirement',
+                'MONGODB_ID'
+            ),
+        ],
+        'symfony/routing',
+        '>=7.3',
+    );
 
     // symfony/console 7.4
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
