@@ -21,11 +21,11 @@ jobs:
                 name: "Wait 20 seconds after push"
                 run: sleep 20
 
-            # a tagged main is already being published by the tag build of rector-src,
-            # dispatching a second build would race it for the push to rectorphp/rector
             -
                 name: "Check whether rector-src main is a release tag commit"
-                id: release_tag
+                env:
+                    ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+                    GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
                 run: |
                     RECTOR_SRC="https://github.com/rectorphp/rector-src.git"
 
@@ -37,13 +37,13 @@ jobs:
 
                     # lightweight tags are listed with the commit itself, annotated ones with a "^{}" line
                     if git ls-remote --tags $RECTOR_SRC | grep -q "^${MAIN_SHA}"; then
-                        echo "rector-src main $MAIN_SHA is tagged, leaving the build to the tag itself"
-                        echo "tagged=true" >> $GITHUB_OUTPUT
+                        echo "rector-src main $MAIN_SHA is tagged, creating a rebuild commit"
+                        git clone --depth 1 --branch main "https://x-access-token:${ACCESS_TOKEN}@github.com/rectorphp/rector-src.git" rector-src
+                        cd rector-src
+                        git config user.name "TomasVotruba"
+                        git config user.email "tomas.vot@gmail.com"
+                        git commit --allow-empty -m 'Rebuild' -a
+                        git push origin main
+                    else
+                        gh workflow run build_scoped_rector.yaml --repo rectorphp/rector-src --ref main
                     fi
-
-            -
-                name: "Trigger build_scoped_rector.yaml in rectorphp/rector-src"
-                if: steps.release_tag.outputs.tagged != 'true'
-                env:
-                    GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-                run: gh workflow run build_scoped_rector.yaml --repo rectorphp/rector-src --ref main
