@@ -18,8 +18,8 @@ jobs:
 
         steps:
             -
-                name: "Wait 5 minutes after push"
-                run: sleep 300
+                name: "Wait 20 seconds after push"
+                run: sleep 20
 
             # a tagged main is already being published by the tag build of rector-src,
             # dispatching a second build would race it for the push to rectorphp/rector
