@@ -132,6 +132,7 @@ CODE_SAMPLE
 
         // 2. inline prefix to all method routes
         $hasChanged = false;
+        $classRouteNameInlined = false;
 
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipMethod($classMethod)) {
@@ -197,6 +198,10 @@ CODE_SAMPLE
                                 continue;
                             }
 
+                            if (! is_string($classRouteName)) {
+                                continue;
+                            }
+
                             $methodRouteString = $methodRouteArg->value;
                             $methodRouteArg->value = new String_(sprintf(
                                 '%s%s',
@@ -204,6 +209,7 @@ CODE_SAMPLE
                                 $methodRouteString->value
                             ));
 
+                            $classRouteNameInlined = true;
                             $hasChanged = true;
                         }
                     }
@@ -233,6 +239,12 @@ CODE_SAMPLE
                         foreach ($attribute->args as $attributeArgKey => $attributeArg) {
                             // silent or "path"
                             if ($attributeArg->name === null || $attributeArg->name->toString() === self::PATH) {
+                                unset($attribute->args[$attributeArgKey]);
+                                continue;
+                            }
+
+                            // "name" was already inlined into method routes, drop it to avoid a doubled prefix
+                            if ($classRouteNameInlined && $attributeArg->name->toString() === 'name') {
                                 unset($attribute->args[$attributeArgKey]);
                             }
                         }
