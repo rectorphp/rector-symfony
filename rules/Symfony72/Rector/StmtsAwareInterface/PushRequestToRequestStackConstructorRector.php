@@ -101,6 +101,7 @@ CODE_SAMPLE
         }
 
         // keep every "new RequestStack()" per variable name, to append the request pushed on that very variable
+        // stored as [statement key, New_], so the assignment can be moved down to the push() position
         $requestStackNewsByVariableName = [];
         $hasChanged = false;
 
@@ -117,7 +118,7 @@ CODE_SAMPLE
 
                 $emptyRequestStackNew = $this->matchEmptyRequestStackNew($assign->expr);
                 if ($emptyRequestStackNew instanceof New_) {
-                    $requestStackNewsByVariableName[$assign->var->name] = $emptyRequestStackNew;
+                    $requestStackNewsByVariableName[$assign->var->name] = [$key, $emptyRequestStackNew];
                 }
 
                 continue;
@@ -141,17 +142,24 @@ CODE_SAMPLE
             }
 
             $variableName = $pushMethodCall->var->name;
-            $requestStackNew = $requestStackNewsByVariableName[$variableName] ?? null;
-            if (! $requestStackNew instanceof New_) {
+            $requestStackNewData = $requestStackNewsByVariableName[$variableName] ?? null;
+            if ($requestStackNewData === null) {
                 continue;
             }
+
+            [$assignKey, $requestStackNew] = $requestStackNewData;
 
             $array = new Array_([new ArrayItem($pushMethodCall->getArgs()[0]->value)]);
             $requestStackNew->args[] = new Arg($array);
             $requestStackNew->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
+            // move the "new RequestStack([...])" assignment down to the push() position, so any statements
+            // between them - including the ones defining the pushed request - stay before it
+            $node->stmts[$key] = $node->stmts[$assignKey];
+            unset($node->stmts[$assignKey]);
+
             // the constructor takes a single array of requests, so no further push can be merged
-            unset($requestStackNewsByVariableName[$variableName], $node->stmts[$key]);
+            unset($requestStackNewsByVariableName[$variableName]);
 
             $hasChanged = true;
         }
