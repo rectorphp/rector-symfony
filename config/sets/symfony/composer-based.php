@@ -1698,18 +1698,6 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new StringType()
         ),
-        new AddParamTypeDeclaration(
-            'Symfony\Component\Form\DataMapperInterface',
-            'mapFormsToData',
-            0,
-            $iterableType
-        ),
-        new AddParamTypeDeclaration(
-            'Symfony\Component\Form\DataMapperInterface',
-            'mapDataToForms',
-            1,
-            $iterableType
-        ),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'add', 1, $nullableStringType),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'remove', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\Form', 'has', 0, new StringType()),
@@ -1763,6 +1751,22 @@ return static function (RectorConfig $rectorConfig): void {
             new StringType()
         ),
     ], 'symfony/form', '>=5.0');
+
+    // symfony/form 5.0, changed back in 5.3
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Form\DataMapperInterface',
+            'mapFormsToData',
+            0,
+            $iterableType
+        ),
+        new AddParamTypeDeclaration(
+            'Symfony\Component\Form\DataMapperInterface',
+            'mapDataToForms',
+            1,
+            $iterableType
+        ),
+    ], 'symfony/form', '>=5.0 <5.3');
 
     // symfony/process 5.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
