@@ -54,14 +54,6 @@ final class SymfonyClass
 
     public const string REQUEST_STACK = 'Symfony\Component\HttpFoundation\RequestStack';
 
-    public const string ABSTRACT_BROWSER = 'Symfony\Component\BrowserKit\AbstractBrowser';
-
-    public const string HTTP_CLIENT = 'Symfony\Component\HttpKernel\Client';
-
-    public const string KERNEL_BROWSER = 'Symfony\Bundle\FrameworkBundle\KernelBrowser';
-
-    public const string FORM_BUILDER = 'Symfony\Component\Form\FormBuilderInterface';
-
     public const string CONTAINER_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator';
 
     public const string PARAMETER_BAG = 'Symfony\Component\HttpFoundation\ParameterBag';
