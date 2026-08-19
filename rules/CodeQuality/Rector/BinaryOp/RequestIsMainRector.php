@@ -13,17 +13,25 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\BinaryOp\RequestIsMainRector\RequestIsMainRectorTest
  */
-final class RequestIsMainRector extends AbstractRector
+final class RequestIsMainRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        // isMainRequest()/MAIN_REQUEST added in Symfony 5.3
+        return new ComposerPackageConstraint('symfony/http-kernel', '>=5.3');
     }
 
     public function getRuleDefinition(): RuleDefinition
