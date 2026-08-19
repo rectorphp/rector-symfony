@@ -3,27 +3,22 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
-use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
-use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\StringCastDebugResponseRector;
 use Rector\Symfony\CodeQuality\Rector\Trait_\AddTraitGetterReturnTypeBasedOnSetterRequiredRector;
-use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
-        RedirectToRouteRector::class,
         EventListenerToEventSubscriberRector::class,
         ResponseReturnTypeControllerActionRector::class,
         EventSubscriberMethodReturnVoidRector::class,
@@ -39,7 +34,6 @@ return static function (RectorConfig $rectorConfig): void {
 
         // request method
         RequestIsMainRector::class,
-        ParameterBagTypedGetMethodCallRector::class,
 
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
@@ -48,9 +42,6 @@ return static function (RectorConfig $rectorConfig): void {
         // routing
         InlineClassRoutePrefixRector::class,
 
-        // narrow attributes
-        SingleConditionSecurityAttributeToIsGrantedRector::class,
-        SplitAndSecurityAttributeToIsGrantedRector::class,
         AddTraitGetterReturnTypeBasedOnSetterRequiredRector::class,
     ]);
 };

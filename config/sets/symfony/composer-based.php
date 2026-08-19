@@ -42,6 +42,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
+use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
 use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
 use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
@@ -229,6 +230,9 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/security-http 5.1
         LogoutHandlerToLogoutEventSubscriberRector::class,
         LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
+
+        // symfony/http-foundation 5.1
+        ParameterBagTypedGetMethodCallRector::class,
 
         // symfony/dependency-injection 5.2
         DefinitionAliasSetPrivateToSetPublicRector::class,

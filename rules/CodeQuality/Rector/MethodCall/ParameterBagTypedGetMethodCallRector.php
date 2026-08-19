@@ -13,17 +13,24 @@ use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector\ParameterBagTypedGetMethodCallRectorTest
  */
-final class ParameterBagTypedGetMethodCallRector extends AbstractRector
+final class ParameterBagTypedGetMethodCallRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     public function __construct(
         private readonly ValueResolver $valueResolver
     ) {
+    }
+
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/http-foundation', '>=5.1');
     }
 
     public function getRuleDefinition(): RuleDefinition
