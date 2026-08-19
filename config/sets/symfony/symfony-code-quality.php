@@ -14,7 +14,6 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
-use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\StringCastDebugResponseRector;
 use Rector\Symfony\CodeQuality\Rector\Trait_\AddTraitGetterReturnTypeBasedOnSetterRequiredRector;
 
@@ -35,7 +34,6 @@ return static function (RectorConfig $rectorConfig): void {
 
         // request method
         RequestIsMainRector::class,
-        ParameterBagTypedGetMethodCallRector::class,
 
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
