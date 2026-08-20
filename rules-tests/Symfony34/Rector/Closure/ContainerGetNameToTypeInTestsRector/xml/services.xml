@@ -3,5 +3,11 @@
     <services>
         <!-- ->register(id, class) -->
         <service id="some_name" class="App\Some\Type"></service>
+        <!-- explicit FQCN service, so the named service maps to an existing type service -->
+        <service id="App\Some\Type" alias="some_name" public="true"></service>
+
+        <!-- two named services share one class, no FQCN service registered for it -->
+        <service id="rule.engine.payment.options" class="App\RuleEngine\Rules\MoleculeRule"></service>
+        <service id="rule.engine.delivery.options" class="App\RuleEngine\Rules\MoleculeRule"></service>
     </services>
 </container>
