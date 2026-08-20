@@ -27,9 +27,14 @@ final class GetFiltersAndFunctionsToAsTwigAttributeRector extends AbstractRector
     ) {
     }
 
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    public function provideComposerPackageConstraint(): array
     {
-        return new ComposerPackageConstraint('twig/twig', '>=3.21');
+        // the #[AsTwig*] attributes exist in twig/twig 3.21, but Symfony only autoregisters extension-less
+        // classes from them in symfony/twig-bridge 7.3; without both, the stripped TwigExtension is silently lost
+        return [
+            new ComposerPackageConstraint('twig/twig', '>=3.21'),
+            new ComposerPackageConstraint('symfony/twig-bridge', '>=7.3'),
+        ];
     }
 
     public function getRuleDefinition(): RuleDefinition
