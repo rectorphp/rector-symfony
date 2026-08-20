@@ -330,7 +330,7 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/validator 8.1
         ConstraintValidatorValidateToValidateInContextRector::class,
 
-        // twig/twig 3.21
+        // twig/twig 3.21 + symfony/twig-bridge 7.3
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
 
         // jms/serializer 3.14
