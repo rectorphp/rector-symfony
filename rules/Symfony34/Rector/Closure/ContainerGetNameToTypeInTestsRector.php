@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
@@ -27,6 +28,7 @@ final class ContainerGetNameToTypeInTestsRector extends AbstractRector implement
     public function __construct(
         private readonly TestsNodeAnalyzer $testsNodeAnalyzer,
         private readonly ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver,
+        private readonly ServiceMapProvider $serviceMapProvider,
     ) {
     }
 
@@ -112,7 +114,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType->getClassName()), 'class');
+        // only replace when the resolved class is itself a registered service id (real service or alias),
+        // otherwise the named service maps to a class that has no matching FQCN service and the call breaks
+        $className = $serviceType->getClassName();
+        if (! $this->serviceMapProvider->provide()->hasService($className)) {
+            return null;
+        }
+
+        $classConstFetch = new ClassConstFetch(new FullyQualified($className), 'class');
         $node->args[0] = new Arg($classConstFetch);
 
         return $node;
