@@ -27,6 +27,9 @@ final class GetFiltersAndFunctionsToAsTwigAttributeRector extends AbstractRector
     ) {
     }
 
+    /**
+     * @return ComposerPackageConstraint[]
+     */
     public function provideComposerPackageConstraint(): array
     {
         // the #[AsTwig*] attributes exist in twig/twig 3.21, but Symfony only autoregisters extension-less
