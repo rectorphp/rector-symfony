@@ -8,11 +8,16 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -185,10 +190,13 @@ CODE_SAMPLE),
             $asCommandAttribute->args = $attributeArgs;
         }
 
+        $hasChanged = $attributeArgs !== [];
+
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
             if ($this->isExpressionVariableThis($stmt)) {
                 unset($configureClassMethod->stmts[$key]);
+                $hasChanged = true;
             }
         }
 
@@ -197,9 +205,15 @@ CODE_SAMPLE),
             foreach ($node->stmts as $key => $classStmt) {
                 if ($classStmt === $configureClassMethod) {
                     unset($node->stmts[$key]);
+                    $hasChanged = true;
                     break;
                 }
             }
+        }
+
+        // nothing could be extracted (e.g. only non-constant values), leave the class untouched
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;
@@ -262,12 +276,47 @@ CODE_SAMPLE),
                 return null;
             }
 
-            $expr = $node->getArgs()[0]
+            $argValue = $node->getArgs()[0]
                 ->value;
+
+            // attribute arguments must be constant expressions;
+            // a runtime value (e.g. $this->description) cannot be inlined, so leave the call in place
+            if (! $this->isPermittedAttributeValue($argValue)) {
+                return null;
+            }
+
+            $expr = $argValue;
             return $node->var;
         });
 
         return $expr;
+    }
+
+    private function isPermittedAttributeValue(Expr $expr): bool
+    {
+        if ($expr instanceof Scalar) {
+            return ! $expr instanceof InterpolatedString;
+        }
+
+        if ($expr instanceof ConstFetch || $expr instanceof ClassConstFetch) {
+            return true;
+        }
+
+        if ($expr instanceof Array_) {
+            foreach ($expr->items as $item) {
+                if ($item->key instanceof Expr && ! $this->isPermittedAttributeValue($item->key)) {
+                    return false;
+                }
+
+                if (! $this->isPermittedAttributeValue($item->value)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private function isExpressionVariableThis(Stmt $stmt): bool
