@@ -3957,6 +3957,12 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Mailer\Test\TransportFactoryTestCase' => 'Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase',
     ], 'symfony/mailer', '>=7.2');
 
+    // symfony/notifier 7.2
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+        // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#notifier
+        'Symfony\Component\Mailer\Test\TransportFactoryTestCase' => 'Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase',
+    ], 'symfony/notifier', '>=7.2');
+
     // symfony/serializer 7.2
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.2/UPGRADE-7.2.md#serializer
@@ -3967,6 +3973,22 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         'Symfony\Component\Translation\Test\ProviderFactoryTestCase' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase',
     ], 'symfony/translation', '>=7.2');
+
+    // symfony/type-info 7.2
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+        // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#typeinfo
+        new MethodCallRename(
+            'Symfony\Component\TypeInfo\Type',
+            'isA',
+            'isIdentifiedBy',
+        ),
+        // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#typeinfo
+        new MethodCallRename(
+            'Symfony\Component\TypeInfo\Type',
+            'is',
+            'isSatisfiedBy',
+        ),
+    ], 'symfony/type-info', '>=7.2');
 
     // symfony/console 7.4
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
