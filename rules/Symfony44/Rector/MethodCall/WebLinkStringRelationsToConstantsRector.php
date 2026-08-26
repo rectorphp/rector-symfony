@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class WebLinkStringRelationsToConstantsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
-    private const EXACT_MAP = [
+    private const array EXACT_MAP = [
         'openid2.local_id' => 'REL_OPENID_2_LOCAL_ID',
         'openid2.provider' => 'REL_OPENID_2_PROVIDER',
         'p3pv1' => 'REL_P_3_PV_1',
@@ -73,6 +73,7 @@ CODE_SAMPLE
             if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\WebLink\Link'))) {
                 return null;
             }
+
             if (! $this->isNames($node->name, ['withRel', 'withoutRel'])) {
                 return null;
             }

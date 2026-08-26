@@ -2,24 +2,26 @@
 # with the freshly merged rector-symfony main
 name: Dispatch Build Scoped Rector
 
+# pull_request_target fires on merge even for fork PRs and, unlike "push",
+# is not suppressed when the merge commit is pushed with GITHUB_TOKEN
 on:
-    push:
-        branches:
-            - main
+    pull_request_target:
+        types:
+            - closed
     workflow_dispatch: null
 
 jobs:
     dispatch_build_scoped_rector:
-        # only for this repository, not forks
-        if: github.repository == 'rectorphp/rector-symfony'
+        # only for this repository, not forks; and only on a merged PR (not a plain close)
+        if: github.repository == 'rectorphp/rector-symfony' && (github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true)
 
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
         steps:
             -
-                name: "Wait 20 seconds after push"
-                run: sleep 20
+                name: "Wait 10 seconds after merge"
+                run: sleep 10
 
             -
                 name: "Check whether rector-src main is a release tag commit"
