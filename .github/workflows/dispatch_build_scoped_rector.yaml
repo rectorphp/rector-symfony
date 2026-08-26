@@ -20,8 +20,8 @@ jobs:
 
         steps:
             -
-                name: "Wait 20 seconds after merge"
-                run: sleep 20
+                name: "Wait 10 seconds after merge"
+                run: sleep 10
 
             -
                 name: "Check whether rector-src main is a release tag commit"
