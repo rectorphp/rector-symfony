@@ -66,6 +66,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?MethodCall
     {
+        if (! $this->isName($node->name, 'addViolationAt')) {
+            return null;
+        }
+
         $objectType = $this->nodeTypeResolver->getType($node->var);
         if (! $objectType instanceof ObjectType) {
             return null;
@@ -73,10 +77,6 @@ CODE_SAMPLE
 
         $executionContext = new ObjectType('Symfony\Component\Validator\Context\ExecutionContextInterface');
         if (! $executionContext->isSuperTypeOf($objectType)->yes()) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'addViolationAt')) {
             return null;
         }
 

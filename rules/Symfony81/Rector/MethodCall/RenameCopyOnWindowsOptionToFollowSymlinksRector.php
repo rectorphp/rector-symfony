@@ -83,11 +83,11 @@ final class RenameCopyOnWindowsOptionToFollowSymlinksRector extends AbstractRect
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Filesystem\Filesystem'))) {
+        if (! $this->isName($node->name, 'mirror')) {
             return null;
         }
 
-        if (! $this->isName($node->name, 'mirror')) {
+        if (! $this->isObjectType($node->var, new ObjectType('Symfony\Component\Filesystem\Filesystem'))) {
             return null;
         }
 

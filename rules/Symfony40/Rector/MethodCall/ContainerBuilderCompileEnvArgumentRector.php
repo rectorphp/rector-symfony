@@ -64,14 +64,14 @@ CODE_SAMPLE
             return null;
         }
 
+        if (count($node->args) === 1) {
+            return null;
+        }
+
         if (! $this->isObjectType(
             $node->var,
             new ObjectType('Symfony\Component\DependencyInjection\ContainerBuilder')
         )) {
-            return null;
-        }
-
-        if (count($node->args) === 1) {
             return null;
         }
 

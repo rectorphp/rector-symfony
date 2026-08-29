@@ -129,17 +129,17 @@ CODE_SAMPLE
             return null;
         }
 
+        // must be status method call
+        if (! $this->isName($expr->name, 'getStatusCode')) {
+            return null;
+        }
+
         $varType = $this->nodeTypeResolver->getType($expr->var);
         if (! $varType instanceof ObjectType) {
             return null;
         }
 
         if (! $varType->isInstanceof(ResponseClass::BASIC)->yes()) {
-            return null;
-        }
-
-        // must be status method call
-        if (! $this->isName($expr->name, 'getStatusCode')) {
             return null;
         }
 
