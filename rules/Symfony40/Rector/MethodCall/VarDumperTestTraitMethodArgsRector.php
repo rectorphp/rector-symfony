@@ -60,14 +60,14 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector implements
             return null;
         }
 
+        if (count($node->args) <= 2) {
+            return null;
+        }
+
         if (! $this->isObjectType(
             $node->var,
             new ObjectType('Symfony\Component\VarDumper\Test\VarDumperTestTrait')
         )) {
-            return null;
-        }
-
-        if (count($node->args) <= 2) {
             return null;
         }
 
