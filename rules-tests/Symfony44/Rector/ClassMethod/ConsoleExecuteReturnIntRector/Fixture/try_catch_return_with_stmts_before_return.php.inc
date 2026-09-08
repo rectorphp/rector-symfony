@@ -13,7 +13,7 @@ final class TryCatchReturnWithStmtsBeforeReturnCommand extends Command
         try {
             $output->writeln('working');
             return 0;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $output->writeln($exception->getMessage());
             return 1;
         }
@@ -37,7 +37,7 @@ final class TryCatchReturnWithStmtsBeforeReturnCommand extends Command
         try {
             $output->writeln('working');
             return 0;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $output->writeln($exception->getMessage());
             return 1;
         }

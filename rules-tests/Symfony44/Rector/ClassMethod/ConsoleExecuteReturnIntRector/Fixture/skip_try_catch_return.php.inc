@@ -12,7 +12,7 @@ final class SkipTryCatchReturn extends Command
     {
         try {
             return 0;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return 1;
         }
     }
