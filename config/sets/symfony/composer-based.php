@@ -44,6 +44,7 @@ use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
+use Rector\Symfony\Configs\Rector\MethodCall\EnableValidationAttributesRector;
 use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
 use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
@@ -304,6 +305,9 @@ return static function (RectorConfig $rectorConfig): void {
 
         // symfony/dependency-injection 6.3
         ParamAndEnvAttributeRector::class,
+
+        // symfony/framework-bundle 6.4
+        EnableValidationAttributesRector::class,
 
         // symfony/http-foundation 7.2
         PushRequestToRequestStackConstructorRector::class,
