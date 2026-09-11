@@ -94,7 +94,7 @@ CODE_SAMPLE
         }
 
         $constFetch = $this->createConstantFetch($valueNode->value);
-        if (! $constFetch) {
+        if (!$constFetch instanceof Node) {
             return null;
         }
 

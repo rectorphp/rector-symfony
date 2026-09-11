@@ -10,7 +10,6 @@ use Rector\Symfony\Configs\Rector\Closure\ServiceArgsToServiceNamedArgRector;
 use Rector\Symfony\Configs\Rector\Closure\ServiceSetStringNameToClassNameRector;
 use Rector\Symfony\Configs\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector;
 use Rector\Symfony\Configs\Rector\Closure\ServiceTagsToDefaultsAutoconfigureRector;
-use Rector\Symfony\Configs\Rector\MethodCall\EnableValidationAttributesRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
@@ -21,6 +20,5 @@ return static function (RectorConfig $rectorConfig): void {
         ServiceTagsToDefaultsAutoconfigureRector::class,
         RemoveConstructorAutowireServiceRector::class,
         FromServicePublicToDefaultsPublicRector::class,
-        EnableValidationAttributesRector::class,
     ]);
 };
