@@ -145,7 +145,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($this->setReturnTo0InsteadOfNull($node)) {
+            if ($this->isSuccessfulRefactorReturn($node)) {
                 $this->hasChanged = true;
             }
 
@@ -209,11 +209,7 @@ CODE_SAMPLE
         $this->hasChanged = true;
     }
 
-    /**
-     * @return bool True when the return was rewritten, so the caller can report
-     *              the rule as applied for it.
-     */
-    private function setReturnTo0InsteadOfNull(Return_ $return): bool
+    private function isSuccessfulRefactorReturn(Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
             $return->expr = new \PhpParser\Node\Scalar\Int_(0);
