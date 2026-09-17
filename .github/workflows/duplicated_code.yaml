@@ -1,0 +1,29 @@
+name: Duplicated Code
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - main
+
+env:
+    COMPOSER_ROOT_VERSION: "dev-main"
+
+jobs:
+    duplicated_code:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.4
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v2"
+
+            # fails when a large copy-pasted block (>= 150 tokens) is added
+            -   run: composer duplicated-code
