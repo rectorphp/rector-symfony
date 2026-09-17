@@ -5,16 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\DependencyInjection\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPStan\ScopeFetcher;
-use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\Symfony\DependencyInjection\ThisGetTypeMatcher;
+use Rector\Symfony\DependencyInjection\ContainerGetToConstructorInjectionReplacer;
 use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,9 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ControllerGetByTypeToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
-        private readonly ClassDependencyManipulator $classDependencyManipulator,
-        private readonly PropertyNaming $propertyNaming,
-        private readonly ThisGetTypeMatcher $thisGetTypeMatcher
+        private readonly ContainerGetToConstructorInjectionReplacer $containerGetToConstructorInjectionReplacer
     ) {
     }
 
@@ -86,31 +79,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyMetadatas = [];
-
-        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas): ?Node {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            $className = $this->thisGetTypeMatcher->match($node);
-            if (! is_string($className)) {
-                return null;
-            }
-
-            $propertyName = $this->propertyNaming->fqnToVariableName($className);
-            $propertyMetadata = new PropertyMetadata($propertyName, new FullyQualifiedObjectType($className));
-
-            $propertyMetadatas[] = $propertyMetadata;
-            return $this->nodeFactory->createPropertyFetch('this', $propertyMetadata->getName());
-        });
-
-        if ($propertyMetadatas === []) {
+        if (! $this->containerGetToConstructorInjectionReplacer->replace($node)) {
             return null;
-        }
-
-        foreach ($propertyMetadatas as $propertyMetadata) {
-            $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
         }
 
         return $node;
