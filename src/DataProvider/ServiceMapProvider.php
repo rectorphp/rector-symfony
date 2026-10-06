@@ -14,9 +14,10 @@ use Rector\Symfony\ValueObjectFactory\ServiceMapFactory;
  */
 final class ServiceMapProvider
 {
+    private ?ServiceMap $serviceMap = null;
+
     public function __construct(
-        private readonly ServiceMapFactory $serviceMapFactory,
-        private ?ServiceMap $serviceMap = null
+        private readonly ServiceMapFactory $serviceMapFactory
     ) {
     }
 
