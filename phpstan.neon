@@ -1,5 +1,6 @@
 includes:
     - vendor/symplify/phpstan-rules/config/rector-rules.neon
+    - phpstan-baseline.neon
 
 rules:
     - Symplify\PHPStanRules\Rules\StringFileAbsolutePathExistsRule
@@ -35,11 +36,6 @@ parameters:
         null_over_false: true
         narrow_param: true
         narrow_return: true
-
-    unused_public:
-        constants: true
-        methods: true
-        properties: true
 
     scanDirectories:
         - stubs

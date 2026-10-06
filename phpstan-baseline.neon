@@ -1,0 +1,757 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\NodeAnalyzer\\AttributePresenceDetector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/NodeAnalyzer/AttributePresenceDetector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\AttributeGroup\\SingleConditionSecurityAttributeToIsGrantedRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/AttributeGroup/SingleConditionSecurityAttributeToIsGrantedRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\BinaryOp\\RequestIsMainRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/BinaryOp/RequestIsMainRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\BinaryOp\\ResponseStatusCodeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/BinaryOp/ResponseStatusCodeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ParamTypeFromRouteRequiredRegexRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\RemoveUnusedRequestParamRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/ClassMethod/RemoveUnusedRequestParamRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ResponseReturnTypeControllerActionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventSubscriberMethodReturnVoidRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/Class_/EventSubscriberMethodReturnVoidRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\AssertSameResponseCodeWithDebugContentsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/MethodCall/AssertSameResponseCodeWithDebugContentsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\ParameterBagTypedGetMethodCallRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/MethodCall/ParameterBagTypedGetMethodCallRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\StringCastDebugResponseRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/CodeQuality/Rector/MethodCall/StringCastDebugResponseRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\FromServicePublicToDefaultsPublicRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/FromServicePublicToDefaultsPublicRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\MergeServiceNameTypeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/MergeServiceNameTypeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\RemoveConstructorAutowireServiceRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/RemoveConstructorAutowireServiceRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/ServiceArgsToServiceNamedArgRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSetStringNameToClassNameRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/ServiceSetStringNameToClassNameRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\MethodCall\\EnableValidationAttributesRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/MethodCall/EnableValidationAttributesRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Configs\\Rector\\Reflection\\ConstructorReflectionTypesResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Configs/Rector/Reflection/ConstructorReflectionTypesResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\ContainerGetToConstructorInjectionReplacer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/ContainerGetToConstructorInjectionReplacer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\NodeDecorator\\CommandConstructorDecorator\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/NodeDecorator/CommandConstructorDecorator.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\CommandGetByTypeToConstructorInjectionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/Rector/Class_/CommandGetByTypeToConstructorInjectionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\ControllerGetByTypeToConstructorInjectionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/Rector/Class_/ControllerGetByTypeToConstructorInjectionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\GetBySymfonyStringToConstructorInjectionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/Rector/Class_/GetBySymfonyStringToConstructorInjectionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DependencyInjection\\ThisGetTypeMatcher\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DependencyInjection/ThisGetTypeMatcher.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\JMS\\Rector\\Class_\\AccessTypeAnnotationToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/JMS/Rector/Class_/AccessTypeAnnotationToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\JMS\\Rector\\Property\\AccessorAnnotationToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/JMS/Rector/Property/AccessorAnnotationToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony25\\Rector\\MethodCall\\MaxLengthSymfonyFormOptionToAttrRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony25/Rector/MethodCall/MaxLengthSymfonyFormOptionToAttrRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony26\\Rector\\MethodCall\\RedirectToRouteRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony26/Rector/MethodCall/RedirectToRouteRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony27\\Rector\\MethodCall\\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony27/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony28\\Rector\\MethodCall\\GetToConstructorInjectionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony28/Rector/MethodCall/GetToConstructorInjectionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony28\\Rector\\StaticCall\\ParseFileRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony28/Rector/StaticCall/ParseFileRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\FormTypeGetParentRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/ClassMethod/FormTypeGetParentRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\GetRequestRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/ClassMethod/GetRequestRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\FormTypeInstanceToClassConstRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/MethodCall/FormTypeInstanceToClassConstRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\OptionNameRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/MethodCall/OptionNameRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\ReadOnlyOptionToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/MethodCall/ReadOnlyOptionToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\StringFormTypeToClassRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony30/Rector/MethodCall/StringFormTypeToClassRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony33\\Rector\\ClassConstFetch\\ConsoleExceptionToErrorEventConstantRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony33/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony34\\Rector\\ClassMethod\\MergeMethodAnnotationToRouteAnnotationRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony34/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony34\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony34/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony34\\Rector\\ClassMethod\\ReplaceSensioRouteAnnotationWithSymfonyRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony34/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony34\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony34/Rector/Closure/ContainerGetNameToTypeInTestsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony40\\Rector\\ConstFetch\\ConstraintUrlOptionRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony40/Rector/ConstFetch/ConstraintUrlOptionRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony42\\Rector\\New_\\RootNodeTreeBuilderRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony42/Rector/New_/RootNodeTreeBuilderRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony42\\Rector\\New_\\StringToArrayArgumentProcessRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony42/Rector/New_/StringToArrayArgumentProcessRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony43\\Rector\\ClassMethod\\EventDispatcherParentConstructRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony43/Rector/ClassMethod/EventDispatcherParentConstructRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony43\\Rector\\MethodCall\\ConvertRenderTemplateShortNotationToBundleSyntaxRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony43/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony43\\Rector\\MethodCall\\GetCurrencyBundleMethodCallsToIntlRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony43/Rector/MethodCall/GetCurrencyBundleMethodCallsToIntlRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony43\\Rector\\MethodCall\\MakeDispatchFirstArgumentEventRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony43/Rector/MethodCall/MakeDispatchFirstArgumentEventRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony44\\Rector\\ClassMethod\\ConsoleExecuteReturnIntRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony44/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony44\\Rector\\MethodCall\\AuthorizationCheckerIsGrantedExtractorRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony44/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony44\\Rector\\MethodCall\\WebLinkStringRelationsToConstantsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony44/Rector/MethodCall/WebLinkStringRelationsToConstantsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony51\\Rector\\ClassMethod\\CommandConstantReturnCodeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony51/Rector/ClassMethod/CommandConstantReturnCodeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony51/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony51/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\DefinitionAliasSetPrivateToSetPublicRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony52/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\FormBuilderSetDataMapperRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony52/Rector/MethodCall/FormBuilderSetDataMapperRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\ReflectionExtractorEnableMagicCallExtractorRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony52/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\ValidatorBuilderEnableAnnotationMappingRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony52/Rector/MethodCall/ValidatorBuilderEnableAnnotationMappingRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony52\\Rector\\New_\\PropertyAccessorCreationBooleanToFlagsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony52/Rector/New_/PropertyAccessorCreationBooleanToFlagsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony53\\Rector\\StaticPropertyFetch\\KernelTestCaseContainerPropertyDeprecationRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony53/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony60\\Rector\\FuncCall\\ContainerInterfaceServiceToServiceContainerRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony60/Rector/FuncCall/ContainerInterfaceServiceToServiceContainerRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony60\\Rector\\MethodCall\\GetHelperControllerToServiceRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony60/Rector/MethodCall/GetHelperControllerToServiceRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony61\\Rector\\Attribute\\RouteRequirementStringToConstantRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony61/Rector/Attribute/RouteRequirementStringToConstantRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandConfigureToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony61/Rector/Class_/CommandConfigureToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandPropertyToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony61/Rector/Class_/CommandPropertyToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony61\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony61/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony61\\Rector\\StaticPropertyFetch\\ErrorNamesPropertyToConstantRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony61/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony62\\Rector\\Class_\\SecurityAttributeToIsGrantedAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony62/Rector/Class_/SecurityAttributeToIsGrantedAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony72\\Rector\\StmtsAwareInterface\\PushRequestToRequestStackConstructorRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony72/Rector/StmtsAwareInterface/PushRequestToRequestStackConstructorRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\GetMethodsToAsTwigAttributeTransformer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/GetMethodsToAsTwigAttributeTransformer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeAnalyzer\\CommandArgumentsResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeAnalyzer/CommandArgumentsResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeAnalyzer\\CommandOptionsResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeAnalyzer/CommandOptionsResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeAnalyzer\\LocalArrayMethodCallableMatcher\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeAnalyzer/LocalArrayMethodCallableMatcher.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeFactory\\CommandInvokeParamsFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeFactory/CommandInvokeParamsFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeFinder\\MethodCallFinder\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeFinder/MethodCallFinder.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeTransformer\\CommandUnusedInputOutputRemover\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeTransformer/CommandUnusedInputOutputRemover.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeTransformer\\ConsoleOptionAndArgumentMethodCallVariableReplacer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeTransformer/ConsoleOptionAndArgumentMethodCallVariableReplacer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\NodeTransformer\\OutputInputSymfonyStyleReplacer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/NodeTransformer/OutputInputSymfonyStyleReplacer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\Rector\\Class_\\ConstraintOptionsToNamedArgumentsRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/Rector/Class_/ConstraintOptionsToNamedArgumentsRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFiltersAndFunctionsToAsTwigAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/Rector/Class_/GetFiltersAndFunctionsToAsTwigAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandInputAttributeRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony73/Rector/Class_/InvokableCommandInputAttributeRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\ConstraintValidatorValidateToValidateInContextRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony81/Rector/MethodCall/ConstraintValidatorValidateToValidateInContextRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Symfony81\\Rector\\New_\\RemoveEraseCredentialsFromAuthenticatorManagerRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Symfony81/Rector/New_/RemoveEraseCredentialsFromAuthenticatorManagerRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/ApplicationMetadata/ListenerServiceDefinitionProvider.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DataProvider\\ServiceMapProvider\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/DataProvider/ServiceMapProvider.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/DataProvider/ServiceNameToTypeUniqueProvider.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/FormHelper/FormTypeStringToTypeProvider.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\Helper\\MessengerHelper\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/Helper/MessengerHelper.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ClassAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ClassAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/FormAddMethodCallAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/FormCollectionAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\FormInstanceToFormClassConstFetchConverter\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/FormInstanceToFormClassConstFetchConverter.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\FormType\\CreateFormTypeOptionsArgMover\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/FormType/CreateFormTypeOptionsArgMover.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\FormType\\FormTypeClassResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/FormType/FormTypeClassResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\RouteRequiredParamNameToTypesResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/RouteRequiredParamNameToTypesResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ServiceTypeMethodCallResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/SymfonyPhpClosureDetector.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintAttributeTargetAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ValidatorAssert/ConstraintAttributeTargetAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintConstructorAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ValidatorAssert/ConstraintConstructorAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\MetadataConstraintResolver\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ValidatorAssert/MetadataConstraintResolver.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\StmtMethodCallMatcher\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeAnalyzer/ValidatorAssert/StmtMethodCallMatcher.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/BareLogoutClassMethodFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\EventReferenceFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/EventReferenceFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/GetSubscribedEventsClassMethodFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/OnLogoutClassMethodFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/OnSuccessLogoutClassMethodFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeFactory\\ValidatorAssert\\ConstraintAttributeGroupFactory\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeFactory/ValidatorAssert/ConstraintAttributeGroupFactory.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\NodeManipulator\\ClassManipulator\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/NodeManipulator/ClassManipulator.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/TypeAnalyzer/ContainerAwareAnalyzer.php
+
+		-
+			message: '#^Unused Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer\:\:__construct$#'
+			identifier: shipmonk.deadMethod
+			count: 1
+			path: src/TypeAnalyzer/ControllerAnalyzer.php
