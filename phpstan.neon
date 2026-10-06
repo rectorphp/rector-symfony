@@ -1,6 +1,5 @@
 includes:
     - vendor/symplify/phpstan-rules/config/rector-rules.neon
-    - phpstan-baseline.neon
 
 rules:
     - Symplify\PHPStanRules\Rules\StringFileAbsolutePathExistsRule
@@ -46,6 +45,11 @@ parameters:
         - */Fixture*/*
 
     ignoreErrors:
+        # DI container constructors are not called directly
+        -
+            identifier: shipmonk.deadMethod
+            message: '#^Unused .*?::__construct$#'
+
         # pointless check
         - '#expects class-string, string given#'
 
