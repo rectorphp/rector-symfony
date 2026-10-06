@@ -36,11 +36,6 @@ parameters:
         narrow_param: true
         narrow_return: true
 
-    unused_public:
-        constants: true
-        methods: true
-        properties: true
-
     scanDirectories:
         - stubs
 
@@ -50,6 +45,11 @@ parameters:
         - */Fixture*/*
 
     ignoreErrors:
+        # DI container constructors are not called directly
+        -
+            identifier: shipmonk.deadMethod
+            message: '#^Unused .*?::__construct$#'
+
         # pointless check
         - '#expects class-string, string given#'
 
