@@ -7,10 +7,10 @@ namespace Rector\Symfony\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Doc\CodeSample\CodeSample;
+use Rector\Doc\RuleDefinition;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\RuleDoc\ValueObject\CodeSample\CodeSample;
-use Rector\RuleDoc\ValueObject\RuleDefinition;
 
 /**
  * @deprecated Since Symfony 5.2 the validator loads constraints from PHP attributes, and Doctrine annotations are deprecated since Symfony 6.4. Use LoadValidatorMetadataToAttributeRector instead.

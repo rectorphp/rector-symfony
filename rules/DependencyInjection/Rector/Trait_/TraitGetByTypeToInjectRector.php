@@ -7,10 +7,10 @@ namespace Rector\Symfony\DependencyInjection\Rector\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Doc\CodeSample\CodeSample;
+use Rector\Doc\RuleDefinition;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\RuleDoc\ValueObject\CodeSample\CodeSample;
-use Rector\RuleDoc\ValueObject\RuleDefinition;
 
 /**
  * @deprecated A trait has no context about the class it is used in, so the `$this->get()` call cannot be safely resolved. This rule was made for a single custom project and does not generalize.
