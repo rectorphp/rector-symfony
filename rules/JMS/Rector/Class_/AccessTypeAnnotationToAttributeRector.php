@@ -13,11 +13,11 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\ValueObject\CodeSample\CodeSample;
+use Rector\RuleDoc\ValueObject\RuleDefinition;
 use Rector\Symfony\Enum\JMSAnnotation;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see https://github.com/schmittjoh/serializer/issues/1531

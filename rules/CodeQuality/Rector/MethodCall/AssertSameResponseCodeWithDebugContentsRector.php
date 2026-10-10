@@ -13,9 +13,9 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ObjectType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\ValueObject\CodeSample\CodeSample;
+use Rector\RuleDoc\ValueObject\RuleDefinition;
 use Rector\Symfony\CodeQuality\Enum\ResponseClass;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector\AssertSameResponseCodeWithDebugContentsRectorTest

@@ -17,12 +17,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\ValueObject\CodeSample\CodeSample;
+use Rector\RuleDoc\ValueObject\RuleDefinition;
 use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symfony\Component\Console\Input\StringInput;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @changelog https://github.com/symfony/symfony/pull/27821/files
