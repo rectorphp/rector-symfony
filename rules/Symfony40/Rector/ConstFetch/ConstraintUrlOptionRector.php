@@ -33,7 +33,7 @@ final class ConstraintUrlOptionRector extends AbstractRector implements Composer
 
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/validator', '>=4.0');
+        return new ComposerPackageConstraint('symfony/validator', '>=4.0 <7.0');
     }
 
     public function getRuleDefinition(): RuleDefinition
