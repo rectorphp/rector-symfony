@@ -1,0 +1,5 @@
+{
+    "require": {
+        "symfony/process": "^6.4"
+    }
+}
