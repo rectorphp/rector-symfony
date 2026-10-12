@@ -73,7 +73,10 @@ final class MessengerHelper
     }
 
     /**
+     * @template TNode of Class_|ClassMethod
+     * @param TNode $node
      * @param array<string, mixed> $options
+     * @return TNode
      */
     public function addAttribute(Class_|ClassMethod $node, array $options = []): Class_|ClassMethod
     {
