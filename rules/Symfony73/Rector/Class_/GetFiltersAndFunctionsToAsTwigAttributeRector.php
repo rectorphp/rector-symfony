@@ -28,7 +28,7 @@ final class GetFiltersAndFunctionsToAsTwigAttributeRector extends AbstractRector
     }
 
     /**
-     * @return ComposerPackageConstraint[]
+     * @return array{ComposerPackageConstraint, ComposerPackageConstraint}
      */
     public function provideComposerPackageConstraint(): array
     {
