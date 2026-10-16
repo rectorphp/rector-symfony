@@ -97,7 +97,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processArgumentPosition(New_|MethodCall $node, int $argumentPosition): ?Node
+    /**
+     * @template TNode of New_|MethodCall
+     * @param TNode $node
+     * @return TNode|null
+     */
+    private function processArgumentPosition(New_|MethodCall $node, int $argumentPosition): MethodCall|New_|null
     {
         if (! isset($node->args[$argumentPosition])) {
             return null;
