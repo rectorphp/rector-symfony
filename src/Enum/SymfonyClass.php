@@ -10,6 +10,12 @@ final class SymfonyClass
 
     public const string RESPONSE = 'Symfony\Component\HttpFoundation\Response';
 
+    public const string COOKIE = 'Symfony\Component\HttpFoundation\Cookie';
+
+    public const string URL_GENERATOR_INTERFACE = 'Symfony\Component\Routing\Generator\UrlGeneratorInterface';
+
+    public const string YAML = 'Symfony\Component\Yaml\Yaml';
+
     public const string COMMAND = 'Symfony\Component\Console\Command\Command';
 
     public const string CONTAINER_AWARE_COMMAND = 'Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand';
