@@ -29,6 +29,11 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector impl
      */
     private array $intlBundleClassesToNewClasses = [];
 
+    /**
+     * @var string[]
+     */
+    private array $oldMethodNames = [];
+
     public function __construct()
     {
         $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass(
@@ -59,6 +64,12 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector impl
                 'getFractionDigits' => 'getFractionDigits',
             ]
         );
+
+        foreach ($this->intlBundleClassesToNewClasses as $intlBundleClassToNewClass) {
+            foreach (array_keys($intlBundleClassToNewClass->getOldToNewMethods()) as $oldMethodName) {
+                $this->oldMethodNames[] = $oldMethodName;
+            }
+        }
     }
 
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
@@ -96,6 +107,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?StaticCall
     {
+        // cheap name check first - a non-matching call bails before any type inference
+        if (! $this->isNames($node->name, $this->oldMethodNames)) {
+            return null;
+        }
+
         foreach ($this->intlBundleClassesToNewClasses as $intlBundleClassToNewClass) {
             if (! $this->isObjectType($node->var, new ObjectType($intlBundleClassToNewClass->getOldClass()))) {
                 continue;
