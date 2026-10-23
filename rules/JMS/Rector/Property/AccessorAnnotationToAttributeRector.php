@@ -9,6 +9,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -20,9 +21,11 @@ use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 
 /**
+ * @deprecated This rule is deprecated, as JMS @Accessor annotation to attribute is a niche and rarely used case.
+ *
  * @see \Rector\Symfony\Tests\JMS\Rector\Property\AccessorAnnotationToAttributeRector\AccessorAnnotationToAttributeRectorTest
  */
-final class AccessorAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
+final class AccessorAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface, DeprecatedInterface
 {
     public function __construct(
         private readonly DocBlockUpdater $docBlockUpdater,

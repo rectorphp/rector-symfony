@@ -1,5 +1,0 @@
-{
-    "require": {
-        "jms/serializer": "^3.14"
-    }
-}

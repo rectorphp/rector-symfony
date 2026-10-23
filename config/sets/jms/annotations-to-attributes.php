@@ -5,8 +5,6 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
-use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 
 /**
  * @see https://github.com/schmittjoh/serializer/pull/1320
@@ -44,10 +42,5 @@ return static function (RectorConfig $rectorConfig): void {
         new AnnotationToAttribute('JMS\Serializer\Annotation\XmlNamespace'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\XmlRoot'),
         new AnnotationToAttribute('JMS\Serializer\Annotation\XmlValue'),
-    ]);
-
-    $rectorConfig->rules([
-        AccessTypeAnnotationToAttributeRector::class,
-        AccessorAnnotationToAttributeRector::class,
     ]);
 };
