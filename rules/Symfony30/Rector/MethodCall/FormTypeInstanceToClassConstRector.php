@@ -107,19 +107,28 @@ CODE_SAMPLE
         }
 
         // special case for collections
+        $hasChangedCollection = false;
         if ($this->formCollectionAnalyzer->isCollectionType($node)) {
-            $this->refactorCollectionOptions($node);
+            $hasChangedCollection = $this->refactorCollectionOptions($node);
         }
 
-        return $this->formInstanceToFormClassConstFetchConverter->processNewInstance($node, 1, 2);
+        $newMethodCall = $this->formInstanceToFormClassConstFetchConverter->processNewInstance($node, 1, 2);
+        if ($newMethodCall instanceof MethodCall) {
+            return $newMethodCall;
+        }
+
+        // collection options were mutated in place, report the change via the return value
+        return $hasChangedCollection ? $node : null;
     }
 
-    private function refactorCollectionOptions(MethodCall $methodCall): void
+    private function refactorCollectionOptions(MethodCall $methodCall): bool
     {
         $optionsArray = $this->formOptionsArrayMatcher->match($methodCall);
         if (! $optionsArray instanceof Array_) {
-            return;
+            return false;
         }
+
+        $hasChanged = false;
 
         foreach ($optionsArray->items as $arrayItem) {
             if (! $arrayItem instanceof ArrayItem) {
@@ -145,6 +154,9 @@ CODE_SAMPLE
             }
 
             $arrayItem->value = $this->nodeFactory->createClassConstReference($newClass->toString());
+            $hasChanged = true;
         }
+
+        return $hasChanged;
     }
 }
