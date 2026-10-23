@@ -56,6 +56,9 @@ CODE_SAMPLE
         return [Class_::class, Property::class];
     }
 
+    /**
+     * @param Class_|Property $node
+     */
     public function refactor(Node $node): ?Node
     {
         throw new ShouldNotHappenException(sprintf(
