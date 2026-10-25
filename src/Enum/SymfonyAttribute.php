@@ -36,4 +36,6 @@ final class SymfonyAttribute
     public const string IS_GRANTED = 'Symfony\Component\Security\Http\Attribute\IsGranted';
 
     public const string REQUIRED = 'Symfony\Contracts\Service\Attribute\Required';
+
+    public const string MAP_QUERY_PARAMETER = 'Symfony\Component\HttpKernel\Attribute\MapQueryParameter';
 }
