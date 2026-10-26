@@ -131,7 +131,7 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
-use Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector;
+use Rector\Visibility\Rector\Class_\ChangeMethodVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 
 /**
