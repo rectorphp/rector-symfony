@@ -39,6 +39,7 @@ use Rector\Renaming\ValueObject\RenameProperty;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
+use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
@@ -276,6 +277,9 @@ return static function (RectorConfig $rectorConfig): void {
 
         // symfony/http-kernel 5.3
         RequestIsMainRector::class,
+
+        // symfony/event-dispatcher 5.4
+        EventSubscriberToAttributeRector::class,
 
         // symfony/dependency-injection 6.0
         ContainerInterfaceServiceToServiceContainerRector::class,

@@ -25,12 +25,20 @@ use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventSubscriberToAttributeRector\EventSubscriberToAttributeRectorTest
  */
-final class EventSubscriberToAttributeRector extends AbstractRector
+final class EventSubscriberToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        // #[AsEventListener] attribute allowed on methods since Symfony 5.4
+        return new ComposerPackageConstraint('symfony/event-dispatcher', '>=5.4');
+    }
+
     public function __construct(
         private readonly ClassAnalyzer $classAnalyzer,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
