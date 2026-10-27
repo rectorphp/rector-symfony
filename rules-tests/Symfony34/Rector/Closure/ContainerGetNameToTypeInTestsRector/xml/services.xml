@@ -9,5 +9,10 @@
         <!-- two named services share one class, no FQCN service registered for it -->
         <service id="rule.engine.payment.options" class="App\RuleEngine\Rules\MoleculeRule"></service>
         <service id="rule.engine.delivery.options" class="App\RuleEngine\Rules\MoleculeRule"></service>
+
+        <!-- the class is registered as its own FQCN service and under further names with different configuration -->
+        <service id="App\Revenue\OrderRevenueExtractor" class="App\Revenue\OrderRevenueExtractor"></service>
+        <service id="app.revenue.kenshoo_extractor" class="App\Revenue\OrderRevenueExtractor"></service>
+        <service id="app.revenue.awin_extractor" class="App\Revenue\OrderRevenueExtractor"></service>
     </services>
 </container>
