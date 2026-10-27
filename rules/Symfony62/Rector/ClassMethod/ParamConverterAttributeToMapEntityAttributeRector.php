@@ -205,7 +205,7 @@ CODE_SAMPLE
         }
 
         if ($exprValue instanceof String_) {
-            $newArguments[] = new Arg($exprValue, \false, \false, [], new Identifier('expr'));
+            $newArguments[] = new Arg($exprValue, false, false, [], new Identifier('expr'));
         }
 
         return $newArguments;
