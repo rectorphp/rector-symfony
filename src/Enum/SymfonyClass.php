@@ -102,5 +102,7 @@ final class SymfonyClass
 
     public const string ABSTRACT_TYPE = 'Symfony\Component\Form\AbstractType';
 
+    public const string FORM_EVENTS = 'Symfony\Component\Form\FormEvents';
+
     public const string ULID_CLASS = 'Symfony\Component\Uid\Ulid';
 }

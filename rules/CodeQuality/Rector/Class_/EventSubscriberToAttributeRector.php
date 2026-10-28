@@ -11,6 +11,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -132,6 +133,22 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isFormEvent(Expr $eventExpr): bool
+    {
+        if ($eventExpr instanceof ClassConstFetch) {
+            if ($this->isName($eventExpr->class, SymfonyClass::FORM_EVENTS)) {
+                return true;
+            }
+
+            // event classes keyed via FormEvents::ALIASES, e.g. PreSubmitEvent::class
+            $className = $this->getName($eventExpr->class);
+            return $className !== null && str_starts_with($className, 'Symfony\Component\Form\Event\\');
+        }
+
+        // FormEvents::* constants all resolve to "form.*" string values
+        return $eventExpr instanceof String_ && str_starts_with($eventExpr->value, 'form.');
+    }
+
     private function getReturnArray(ClassMethod $classMethod): ?Array_
     {
         $stmts = (array) $classMethod->stmts;
@@ -156,6 +173,11 @@ CODE_SAMPLE
 
         foreach ($eventsArray->items as $item) {
             if ($item->key === null) {
+                return null;
+            }
+
+            // form events are usually registered manually, keep them as is
+            if ($this->isFormEvent($item->key)) {
                 return null;
             }
 
