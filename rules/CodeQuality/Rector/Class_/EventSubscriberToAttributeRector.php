@@ -133,6 +133,22 @@ CODE_SAMPLE
         return $node;
     }
 
+    private function isFormEvent(Expr $eventExpr): bool
+    {
+        if ($eventExpr instanceof ClassConstFetch) {
+            if ($this->isName($eventExpr->class, SymfonyClass::FORM_EVENTS)) {
+                return true;
+            }
+
+            // event classes keyed via FormEvents::ALIASES, e.g. PreSubmitEvent::class
+            $className = $this->getName($eventExpr->class);
+            return $className !== null && str_starts_with($className, 'Symfony\Component\Form\Event\\');
+        }
+
+        // FormEvents::* constants all resolve to "form.*" string values
+        return $eventExpr instanceof String_ && str_starts_with($eventExpr->value, 'form.');
+    }
+
     private function getReturnArray(ClassMethod $classMethod): ?Array_
     {
         $stmts = (array) $classMethod->stmts;
@@ -161,7 +177,7 @@ CODE_SAMPLE
             }
 
             // form events are usually registered manually, keep them as is
-            if ($item->key instanceof ClassConstFetch && $this->isName($item->key->class, SymfonyClass::FORM_EVENTS)) {
+            if ($this->isFormEvent($item->key)) {
                 return null;
             }
 
