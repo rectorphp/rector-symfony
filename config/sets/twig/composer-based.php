@@ -19,40 +19,39 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
  * Thanks to the composer package constraint, these rules can be registered once here, instead of being
  * repeated in every Twig version set to cover a direct upgrade from an older version.
  */
+$arrayType = new ArrayType(new MixedType(), new MixedType());
 
-return static function (RectorConfig $rectorConfig): void {
+return RectorConfig::configure()
     // each of these rules declares the exact Twig package and the version its target API was added in,
     // @see ComposerPackageConstraintInterface
-    $rectorConfig->rules([
+    ->withRules([
         // twig/twig 1.34
         SimpleFunctionAndFilterRector::class,
-    ]);
-
-    $arrayType = new ArrayType(new MixedType(), new MixedType());
+    ])
 
     // twig/twig 1.12
     // upper bound, as Twig 1.40 renames these classes to the namespaced ones directly, @see below
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # @see https://stackoverflow.com/a/43495506/1348344
         'Twig_Function_Node' => 'Twig_SimpleFunction',
         'Twig_Function' => 'Twig_SimpleFunction',
         'Twig_Filter' => 'Twig_SimpleFilter',
         'Twig_Test' => 'Twig_SimpleTest',
-    ], 'twig/twig', '>=1.12 <1.40');
+    ], 'twig/twig', '>=1.12 <1.40')
 
     // twig/twig 1.27
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Twig_Node', 'getLine', 'getTemplateLine'),
         new MethodCallRename('Twig_Node', 'getFilename', 'getTemplateName'),
         new MethodCallRename('Twig_Template', 'getSource', 'getSourceContext'),
         new MethodCallRename('Twig_Error', 'getTemplateFile', 'getTemplateName'),
         new MethodCallRename('Twig_Error', 'getTemplateName', 'setTemplateName'),
-    ], 'twig/twig', '>=1.27');
+    ], 'twig/twig', '>=1.27')
 
     // twig/twig 1.40, where the namespaced classes were added;
     // it covers the Twig 2.0 renames as well, e.g. "Twig_SimpleFilter" to "Twig_Filter",
     // as both underscore names lead to the very same namespaced class
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/twigphp/Twig/pull/2862/files
         'Twig_LoaderInterface' => 'Twig\Loader\LoaderInterface',
         'Twig_Extension_StringLoader' => 'Twig\Extension\StringLoaderExtension',
@@ -240,12 +239,11 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_Util_DeprecationCollector' => 'Twig\Util\DeprecationCollector',
         'Twig_Util_TemplateDirIterator' => 'Twig\Util\TemplateDirIterator',
         'Twig_Tests_EnvironmentTest_Extension' => 'Twig\Tests\EnvironmentTest\Extension',
-    ], 'twig/twig', '>=1.40');
+    ], 'twig/twig', '>=1.40')
 
     // twig/twig 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getFilters', $arrayType),
         new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getTests', $arrayType),
         new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getFunctions', $arrayType),
     ], 'twig/twig', '>=3.0');
-};

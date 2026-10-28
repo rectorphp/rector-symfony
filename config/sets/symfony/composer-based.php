@@ -143,10 +143,37 @@ use Rector\Visibility\ValueObject\ChangeMethodVisibility;
  * repeated in every Symfony version set to cover a direct upgrade from an older version.
  */
 
-return static function (RectorConfig $rectorConfig): void {
+// shared types used by the configuration below
+$arrayType = new ArrayType(new MixedType(), new MixedType());
+$browserKitResponseType = new ObjectType('Symfony\Component\BrowserKit\Response');
+$commandType = new ObjectType('Symfony\Component\Console\Command\Command');
+$configurationType = new ObjectType('Symfony\Component\Config\Definition\ConfigurationInterface');
+$httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
+$iterableType = new IterableType(new MixedType(), new MixedType());
+$nullableArrayType = new UnionType([new NullType(), $arrayType]);
+$nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
+$nullableIntegerType = new UnionType([new NullType(), new IntegerType()]);
+$nullableStringType = new UnionType([new NullType(), new StringType()]);
+$nullableValueGuessType = new UnionType([new NullType(), new ObjectType('Symfony\Component\Form\Guess\ValueGuess')]);
+$routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
+$scalarTypes = [$arrayType, new BooleanType(), new StringType(), new IntegerType(), new FloatType(), new NullType()];
+$typeGuessType = new ObjectType('Symfony\Component\Form\Guess\TypeGuess');
+
+$scalarArrayObjectUnionedTypes = [...$scalarTypes, new ObjectType('ArrayObject')];
+
+// cannot be crated with \PHPStan\Type\UnionTypeHelper::sortTypes() as ObjectType requires a class reflection we do not have here
+$unionTypeReflectionClass = new ReflectionClass(UnionType::class);
+
+/** @var UnionType $scalarArrayObjectUnionType */
+$scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
+
+$privatesAccessor = new PrivatesAccessor();
+$privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
+
+return RectorConfig::configure()
     // each of these rules declares the exact Symfony package and the version its target API was added in,
     // @see ComposerPackageConstraintInterface
-    $rectorConfig->rules([
+    ->withRules([
         // symfony/form 2.5
         MaxLengthSymfonyFormOptionToAttrRector::class,
 
@@ -358,64 +385,37 @@ return static function (RectorConfig $rectorConfig): void {
 
         // twig/twig 3.21 + symfony/twig-bridge 7.3
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
-    ]);
-
-    // shared types used by the configuration below
-    $arrayType = new ArrayType(new MixedType(), new MixedType());
-    $browserKitResponseType = new ObjectType('Symfony\Component\BrowserKit\Response');
-    $commandType = new ObjectType('Symfony\Component\Console\Command\Command');
-    $configurationType = new ObjectType('Symfony\Component\Config\Definition\ConfigurationInterface');
-    $httpFoundationResponseType = new ObjectType('Symfony\Component\HttpFoundation\Response');
-    $iterableType = new IterableType(new MixedType(), new MixedType());
-    $nullableArrayType = new UnionType([new NullType(), $arrayType]);
-    $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
-    $nullableIntegerType = new UnionType([new NullType(), new IntegerType()]);
-    $nullableStringType = new UnionType([new NullType(), new StringType()]);
-    $nullableValueGuessType = new UnionType([new NullType(), new ObjectType('Symfony\Component\Form\Guess\ValueGuess')]);
-    $routeCollectionType = new ObjectType('Symfony\Component\Routing\RouteCollection');
-    $scalarTypes = [$arrayType, new BooleanType(), new StringType(), new IntegerType(), new FloatType(), new NullType()];
-    $typeGuessType = new ObjectType('Symfony\Component\Form\Guess\TypeGuess');
-
-    $scalarArrayObjectUnionedTypes = [...$scalarTypes, new ObjectType('ArrayObject')];
-
-    // cannot be crated with \PHPStan\Type\UnionTypeHelper::sortTypes() as ObjectType requires a class reflection we do not have here
-    $unionTypeReflectionClass = new ReflectionClass(UnionType::class);
-
-    /** @var UnionType $scalarArrayObjectUnionType */
-    $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
-
-    $privatesAccessor = new PrivatesAccessor();
-    $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
+    ])
 
     // symfony/form 2.7
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://symfony.com/blog/new-in-symfony-2-7-form-and-validator-updates#deprecated-setdefaultoptions-in-favor-of-configureoptions
         new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions'),
-    ], 'symfony/form', '>=2.7');
+    ], 'symfony/form', '>=2.7')
 
     // symfony/options-resolver 2.7
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\OptionsResolver\OptionsResolverInterface' => 'Symfony\Component\OptionsResolver\OptionsResolver',
-    ], 'symfony/options-resolver', '>=2.7');
+    ], 'symfony/options-resolver', '>=2.7')
 
     // symfony/symfony 2.8
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#security
         'Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface',
         'Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimpleFormAuthenticatorInterface',
-    ], 'symfony/symfony', '>=2.8');
+    ], 'symfony/symfony', '>=2.8')
 
     // symfony/bridge-swift-mailer 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // swift mailer
         'Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector' => 'Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector',
-    ], 'symfony/bridge-swift-mailer', '>=3.0');
+    ], 'symfony/bridge-swift-mailer', '>=3.0')
 
     // symfony/class-loader 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader' => 'Symfony\Component\ClassLoader\ClassLoader',
-    ], 'symfony/class-loader', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/class-loader', '>=3.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader',
             'registerNamespaces',
@@ -451,16 +451,16 @@ return static function (RectorConfig $rectorConfig): void {
             'getPrefixFallbacks',
             'getFallbackDirs'
         ),
-    ], 'symfony/class-loader', '>=3.0');
+    ], 'symfony/class-loader', '>=3.0')
 
     // symfony/console 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // console
         'Symfony\Component\Console\Helper\ProgressHelper' => 'Symfony\Component\Console\Helper\ProgressBar',
-    ], 'symfony/console', '>=3.0');
+    ], 'symfony/console', '>=3.0')
 
     // symfony/form 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'),
         new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'BIND', 'SUBMIT'),
         new RenameClassConstFetch('Symfony\Component\Form\FormEvents', 'POST_BIND', 'POST_SUBMIT'),
@@ -479,8 +479,8 @@ return static function (RectorConfig $rectorConfig): void {
             'ROUND_HALFDOWN',
             'ROUND_HALF_DOWN'
         ),
-    ], 'symfony/form', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ], 'symfony/form', '>=3.0')
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Form\Util\VirtualFormAwareIterator' => 'Symfony\Component\Form\Util\InheritDataAwareIterator',
         'Symfony\Component\Form\Tests\Extension\Core\Type\TypeTestCase' => 'Symfony\Component\Form\Test\TypeTestCase',
         'Symfony\Component\Form\Tests\FormIntegrationTestCase' => 'Symfony\Component\Form\Test\FormIntegrationTestCase',
@@ -493,8 +493,8 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList' => 'Symfony\Component\Form\ChoiceList\ArrayChoiceList',
         'Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList' => 'Symfony\Component\Form\ChoiceList\ArrayChoiceList',
         'Symfony\Component\Form\ChoiceList\ArrayKeyChoiceList' => 'Symfony\Component\Form\ChoiceList\ArrayChoiceList',
-    ], 'symfony/form', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/form', '>=3.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Form\AbstractType', 'getName', 'getBlockPrefix'),
         new MethodCallRename('Symfony\Component\Form\FormTypeInterface', 'getName', 'getBlockPrefix'),
 
@@ -507,10 +507,10 @@ return static function (RectorConfig $rectorConfig): void {
         ),
         new MethodCallRename('Symfony\Component\Form\Form', 'bind', 'submit'),
         new MethodCallRename('Symfony\Component\Form\Form', 'isBound', 'isSubmitted'),
-    ], 'symfony/form', '>=3.0');
+    ], 'symfony/form', '>=3.0')
 
     // symfony/http-kernel 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\HttpKernel\Debug\ErrorHandler' => 'Symfony\Component\Debug\ErrorHandler',
         'Symfony\Component\HttpKernel\Debug\ExceptionHandler' => 'Symfony\Component\Debug\ExceptionHandler',
         'Symfony\Component\HttpKernel\Exception\FatalErrorException' => 'Symfony\Component\Debug\Exception\FatalErrorException',
@@ -518,8 +518,8 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\HttpKernel\Log\LoggerInterface' => 'Psr\Log\LoggerInterface',
         'Symfony\Component\HttpKernel\DependencyInjection\RegisterListenersPass' => 'Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass',
         'Symfony\Component\HttpKernel\Log\NullLogger' => 'Psr\Log\LoggerInterface',
-    ], 'symfony/http-kernel', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/http-kernel', '>=3.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'emerg', 'emergency'),
         new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'crit', 'critical'),
         new MethodCallRename('Symfony\Component\HttpKernel\Log\LoggerInterface', 'err', 'error'),
@@ -528,52 +528,52 @@ return static function (RectorConfig $rectorConfig): void {
         new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'crit', 'critical'),
         new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'err', 'error'),
         new MethodCallRename('Symfony\Component\HttpKernel\Log\NullLogger', 'warn', 'warning'),
-    ], 'symfony/http-kernel', '>=3.0');
+    ], 'symfony/http-kernel', '>=3.0')
 
     // symfony/monolog-bridge 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Bridge\Monolog\Logger' => 'Psr\Log\LoggerInterface',
-    ], 'symfony/monolog-bridge', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/monolog-bridge', '>=3.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'emerg', 'emergency'),
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'crit', 'critical'),
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'err', 'error'),
         new MethodCallRename('Symfony\Bridge\Monolog\Logger', 'warn', 'warning'),
-    ], 'symfony/monolog-bridge', '>=3.0');
+    ], 'symfony/monolog-bridge', '>=3.0')
 
     // symfony/process 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Process\Process', 'setStdin', 'setInput'),
         new MethodCallRename('Symfony\Component\Process\Process', 'getStdin', 'getInput'),
-    ], 'symfony/process', '>=3.0');
+    ], 'symfony/process', '>=3.0')
 
     // symfony/property-access 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\PropertyAccess\PropertyAccess',
             'getPropertyAccessor',
             'createPropertyAccessor'
         ),
-    ], 'symfony/property-access', '>=3.0');
+    ], 'symfony/property-access', '>=3.0')
 
     // symfony/security 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter' => 'Symfony\Component\Security\Core\Authorization\Voter\Voter',
-    ], 'symfony/security', '>=3.0');
+    ], 'symfony/security', '>=3.0')
 
     // symfony/translation 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Translation\Dumper\FileDumper', 'format', 'formatCatalogue'),
         new MethodCallRename('Symfony\Component\Translation\Translator', 'getMessages', 'getCatalogue'),
-    ], 'symfony/translation', '>=3.0');
+    ], 'symfony/translation', '>=3.0')
 
     // symfony/twig-bundle 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Bundle\TwigBundle\TwigDefaultEscapingStrategy' => 'Twig_FileExtensionEscapingStrategy',
-    ], 'symfony/twig-bundle', '>=3.0');
+    ], 'symfony/twig-bundle', '>=3.0')
 
     // symfony/validator 3.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Validator\Constraints\Collection\Optional' => 'Symfony\Component\Validator\Constraints\Optional',
         'Symfony\Component\Validator\Constraints\Collection\Required' => 'Symfony\Component\Validator\Constraints\Required',
         'Symfony\Component\Validator\MetadataInterface' => 'Symfony\Component\Validator\Mapping\MetadataInterface',
@@ -584,8 +584,8 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Validator\ExecutionContextInterface' => 'Symfony\Component\Validator\Context\ExecutionContextInterface',
         'Symfony\Component\Validator\Mapping\ClassMetadataFactory' => 'Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory',
         'Symfony\Component\Validator\Mapping\MetadataFactoryInterface' => 'Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface',
-    ], 'symfony/validator', '>=3.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/validator', '>=3.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Validator\ConstraintViolationInterface',
             'getMessageParameters',
@@ -606,10 +606,10 @@ return static function (RectorConfig $rectorConfig): void {
             'getMessagePluralization',
             'getPlural'
         ),
-    ], 'symfony/validator', '>=3.0');
+    ], 'symfony/validator', '>=3.0')
 
     // symfony/dependency-injection 3.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'addCompilerPass',
@@ -617,22 +617,22 @@ return static function (RectorConfig $rectorConfig): void {
             'priority',
             0
         ),
-    ], 'symfony/dependency-injection', '>=3.2');
+    ], 'symfony/dependency-injection', '>=3.2')
 
     // symfony/console 3.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // console
         'Symfony\Component\Console\Event\ConsoleExceptionEvent' => 'Symfony\Component\Console\Event\ConsoleErrorEvent',
-    ], 'symfony/console', '>=3.3');
+    ], 'symfony/console', '>=3.3')
 
     // symfony/debug 3.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // debug
         'Symfony\Component\Debug\Exception\ContextErrorException' => 'ErrorException',
-    ], 'symfony/debug', '>=3.3');
+    ], 'symfony/debug', '>=3.3')
 
     // symfony/dependency-injection 3.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'compile',
@@ -654,16 +654,16 @@ return static function (RectorConfig $rectorConfig): void {
             'weak',
             false
         ),
-    ], 'symfony/dependency-injection', '>=3.3');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ], 'symfony/dependency-injection', '>=3.3')
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\DependencyInjection\DefinitionDecorator' => 'Symfony\Component\DependencyInjection\ChildDefinition',
-    ], 'symfony/dependency-injection', '>=3.3');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/dependency-injection', '>=3.3')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\DependencyInjection\Container', 'isFrozen', 'isCompiled'),
-    ], 'symfony/dependency-injection', '>=3.3');
+    ], 'symfony/dependency-injection', '>=3.3')
 
     // symfony/framework-bundle 3.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # framework bundle
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\AddConsoleCommandPass' => 'Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass',
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\SerializerPass' => 'Symfony\Component\Serializer\DependencyInjection\SerializerPass',
@@ -672,30 +672,30 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Bundle\FrameworkBundle\EventListener\TestSessionListener' => 'Symfony\Component\HttpKernel\EventListener\TestSessionListener',
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass' => 'Symfony\Component\Config\DependencyInjection\ConfigCachePass',
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass' => 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass',
-    ], 'symfony/framework-bundle', '>=3.3');
+    ], 'symfony/framework-bundle', '>=3.3')
 
     // symfony/yaml 3.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentRemoverRector::class, [
+    ->withComposerBasedRule(ArgumentRemoverRector::class, [
         new ArgumentRemover(
             'Symfony\Component\Yaml\Yaml',
             'parse',
             2,
             ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS']
         ),
-    ], 'symfony/yaml', '>=3.4');
+    ], 'symfony/yaml', '>=3.4')
 
     // symfony/process 4.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Process\ProcessBuilder' => 'Symfony\Component\Process\Process',
-    ], 'symfony/process', '>=4.0');
+    ], 'symfony/process', '>=4.0')
 
     // symfony/validator 4.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest' => 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase',
-    ], 'symfony/validator', '>=4.0');
+    ], 'symfony/validator', '>=4.0')
 
     // symfony/console 4.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         # https://github.com/symfony/symfony/commit/463f986c28a497571967e37c1314e9911f1ef6ba
         new MethodCallRename(
             'Symfony\Component\Console\Helper\TableStyle',
@@ -730,36 +730,36 @@ return static function (RectorConfig $rectorConfig): void {
             'getBorderChars',
             2
         ),
-    ], 'symfony/console', '>=4.1');
+    ], 'symfony/console', '>=4.1')
 
     // symfony/framework-bundle 4.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
         'Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector' => 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector',
-    ], 'symfony/framework-bundle', '>=4.1');
+    ], 'symfony/framework-bundle', '>=4.1')
 
     // symfony/http-foundation 4.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\HttpFoundation\File\UploadedFile', 'getClientSize', 'getSize'),
-    ], 'symfony/http-foundation', '>=4.1');
+    ], 'symfony/http-foundation', '>=4.1')
 
     // symfony/workflow 4.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface' => 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface',
         'Symfony\Component\Workflow\SupportStrategy\ClassInstanceSupportStrategy' => 'Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy',
-    ], 'symfony/workflow', '>=4.1');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/workflow', '>=4.1')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Workflow\DefinitionBuilder', 'reset', 'clear'),
         new MethodCallRename('Symfony\Component\Workflow\DefinitionBuilder', 'add', 'addWorkflow'),
-    ], 'symfony/workflow', '>=4.1');
+    ], 'symfony/workflow', '>=4.1')
 
     // symfony/cache 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Cache\CacheItem', 'getPreviousTags', 'getMetadata'),
-    ], 'symfony/cache', '>=4.2');
+    ], 'symfony/cache', '>=4.2')
 
     // symfony/dom-crawler 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\DomCrawler\Crawler',
             'children',
@@ -769,10 +769,10 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             ArgumentAddingScope::SCOPE_METHOD_CALL
         ),
-    ], 'symfony/dom-crawler', '>=4.2');
+    ], 'symfony/dom-crawler', '>=4.2')
 
     // symfony/finder 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\Finder\Finder',
             'sortByName',
@@ -782,39 +782,39 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             ArgumentAddingScope::SCOPE_METHOD_CALL
         ),
-    ], 'symfony/finder', '>=4.2');
+    ], 'symfony/finder', '>=4.2')
 
     // symfony/form 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\AbstractTypeExtension',
             'getExtendedTypes',
             $iterableType
         ),
-    ], 'symfony/form', '>=4.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ChangeMethodVisibilityRector::class, [
+    ], 'symfony/form', '>=4.2')
+    ->withComposerBasedRule(ChangeMethodVisibilityRector::class, [
         new ChangeMethodVisibility(
             'Symfony\Component\Form\AbstractTypeExtension',
             'getExtendedTypes',
             Visibility::STATIC
         ),
-    ], 'symfony/form', '>=4.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/form', '>=4.2')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType', 'getExtendedTypes'),
-    ], 'symfony/form', '>=4.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(WrapReturnRector::class, [
+    ], 'symfony/form', '>=4.2')
+    ->withComposerBasedRule(WrapReturnRector::class, [
         new WrapReturn('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
-    ], 'symfony/form', '>=4.2');
+    ], 'symfony/form', '>=4.2')
 
     // symfony/framework-bundle 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
         'Symfony\Bundle\FrameworkBundle\Controller\Controller' => 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
         # https://github.com/symfony/symfony/commit/744bf0e7ac3ecf240d0bf055cc58f881bb0b3ec0
-    ], 'symfony/framework-bundle', '>=4.2');
+    ], 'symfony/framework-bundle', '>=4.2')
 
     // symfony/http-kernel 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentRemoverRector::class, [
+    ->withComposerBasedRule(ArgumentRemoverRector::class, [
         new ArgumentRemover(
             'Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector',
             MethodName::CONSTRUCT,
@@ -827,10 +827,10 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             null
         ),
-    ], 'symfony/http-kernel', '>=4.2');
+    ], 'symfony/http-kernel', '>=4.2')
 
     // symfony/monolog-bridge 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Bridge\Monolog\Processor\DebugProcessor',
             'getLogs',
@@ -867,10 +867,10 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             ArgumentAddingScope::SCOPE_METHOD_CALL
         ),
-    ], 'symfony/monolog-bridge', '>=4.2');
+    ], 'symfony/monolog-bridge', '>=4.2')
 
     // symfony/serializer 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\Serializer\Normalizer',
             'handleCircularReference',
@@ -889,23 +889,23 @@ return static function (RectorConfig $rectorConfig): void {
             null,
             ArgumentAddingScope::SCOPE_METHOD_CALL
         ),
-    ], 'symfony/serializer', '>=4.2');
+    ], 'symfony/serializer', '>=4.2')
 
     // symfony/translation 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Translation\TranslatorInterface' => 'Symfony\Contracts\Translation\TranslatorInterface',
-    ], 'symfony/translation', '>=4.2');
+    ], 'symfony/translation', '>=4.2')
 
     // symfony/browser-kit 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\BrowserKit\Client' => 'Symfony\Component\BrowserKit\AbstractBrowser',
-    ], 'symfony/browser-kit', '>=4.3');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/browser-kit', '>=4.3')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\BrowserKit\Response', 'getStatus', 'getStatusCode'),
-    ], 'symfony/browser-kit', '>=4.3');
+    ], 'symfony/browser-kit', '>=4.3')
 
     // symfony/cache 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # https://github.com/symfony/symfony/pull/29236
         'Symfony\Component\Cache\Traits\ApcuTrait\ApcuCache' => 'Symfony\Component\Cache\Traits\ApcuTrait\ApcuAdapter',
         'Symfony\Component\Cache\Adapter\SimpleCacheAdapter' => 'Symfony\Component\Cache\Adapter\Psr16Adapter',
@@ -921,35 +921,35 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Cache\Simple\RedisCache' => 'Symfony\Component\Cache\Adapter\RedisAdapter',
         'Symfony\Component\Cache\Simple\TraceableCache' => 'Symfony\Component\Cache\Adapter\TraceableAdapterCache',
         'Symfony\Component\Cache\Simple\Psr6Cache' => 'Symfony\Component\Cache\Psr16Cache',
-    ], 'symfony/cache', '>=4.3');
+    ], 'symfony/cache', '>=4.3')
 
     // symfony/event-dispatcher 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // has lowest priority, have to be last
         'Symfony\Component\EventDispatcher\Event' => 'Symfony\Contracts\EventDispatcher\Event',
-    ], 'symfony/event-dispatcher', '>=4.3');
+    ], 'symfony/event-dispatcher', '>=4.3')
 
     // symfony/framework-bundle 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // assets deprecation
         'Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper' => 'Symfony\Component\Asset\Packages',
 
         // templating
         'Symfony\Bundle\FrameworkBundle\Templating\EngineInterface' => 'Symfony\Component\Templating\EngineInterface',
-    ], 'symfony/framework-bundle', '>=4.3');
+    ], 'symfony/framework-bundle', '>=4.3')
 
     // symfony/http-foundation 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // MimeType
         'Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface' => 'Symfony\Component\Mime\MimeTypesInterface',
         'Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface' => 'Symfony\Component\Mime\MimeTypesInterface',
         'Symfony\Component\HttpFoundation\File\MimeType\MimeTypeExtensionGuesser' => 'Symfony\Component\Mime\MimeTypes',
         'Symfony\Component\HttpFoundation\File\MimeType\FileBinaryMimeTypeGuesser' => 'Symfony\Component\Mime\FileBinaryMimeTypeGuesser',
         'Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser' => 'Symfony\Component\Mime\FileinfoMimeTypeGuesser',
-    ], 'symfony/http-foundation', '>=4.3');
+    ], 'symfony/http-foundation', '>=4.3')
 
     // symfony/http-kernel 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // EventDispatcher
         'Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent' => 'Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent',
         'Symfony\Component\HttpKernel\Event\FilterControllerEvent' => 'Symfony\Component\HttpKernel\Event\ControllerEvent',
@@ -961,22 +961,22 @@ return static function (RectorConfig $rectorConfig): void {
 
         // @todo unpack after YAML to PHP migration, Symfony\Component\HttpKernel\Client: Symfony\Component\HttpKernel\HttpKernelBrowser
         'Symfony\Component\HttpKernel\EventListener\TranslatorListener' => 'Symfony\Component\HttpKernel\EventListener\LocaleAwareListener',
-    ], 'symfony/http-kernel', '>=4.3');
+    ], 'symfony/http-kernel', '>=4.3')
 
     // symfony/security-core 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         # Security
         'Symfony\Component\Security\Core\Encoder\Argon2iPasswordEncoder' => 'Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder',
         'Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder' => 'Symfony\Component\Security\Core\Encoder\NativePasswordEncoder',
-    ], 'symfony/security-core', '>=4.3');
+    ], 'symfony/security-core', '>=4.3')
 
     // symfony/security-http 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Security\Http\Firewall', 'handleRequest', 'callListeners'),
-    ], 'symfony/security-http', '>=4.3');
+    ], 'symfony/security-http', '>=4.3')
 
     // symfony/workflow 4.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [
+    ->withComposerBasedRule(ArgumentAdderRector::class, [
         new ArgumentAdder(
             'Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface',
             'setMarking',
@@ -984,15 +984,15 @@ return static function (RectorConfig $rectorConfig): void {
             'context',
             []
         ),
-    ], 'symfony/workflow', '>=4.3');
+    ], 'symfony/workflow', '>=4.3')
 
     // symfony/dependency-injection 4.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameFunctionRector::class, [
+    ->withComposerBasedRule(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configurator\tagged' => 'Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator',
-    ], 'symfony/dependency-injection', '>=4.4');
+    ], 'symfony/dependency-injection', '>=4.4')
 
     // symfony/http-kernel 4.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L55
         new MethodCallRename(
             'Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent',
@@ -1006,21 +1006,21 @@ return static function (RectorConfig $rectorConfig): void {
             'setException',
             'setThrowable'
         ),
-    ], 'symfony/http-kernel', '>=4.4');
+    ], 'symfony/http-kernel', '>=4.4')
 
     // symfony/templating 4.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Templating\EngineInterface' => 'Twig\Environment',
-    ], 'symfony/templating', '>=4.4');
+    ], 'symfony/templating', '>=4.4')
 
     // symfony/console 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Console\Application', 'renderException', 'renderThrowable'),
         new MethodCallRename('Symfony\Component\Console\Application', 'doRenderException', 'doRenderThrowable'),
-    ], 'symfony/console', '>=5.0');
+    ], 'symfony/console', '>=5.0')
 
     // symfony/console 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Component\Console\Application',
             'setCatchExceptions',
@@ -1190,15 +1190,15 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new BooleanType()
         ),
-    ], 'symfony/console', '>=5.0');
+    ], 'symfony/console', '>=5.0')
 
     // symfony/debug 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Debug\Debug' => 'Symfony\Component\ErrorHandler\Debug',
-    ], 'symfony/debug', '>=5.0');
+    ], 'symfony/debug', '>=5.0')
 
     // symfony/doctrine-bridge 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Bridge\Doctrine\Security\User\EntityUserProvider',
             'loadUserByUsername',
@@ -1211,10 +1211,10 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new StringType(),
         ),
-    ], 'symfony/doctrine-bridge', '>=5.0');
+    ], 'symfony/doctrine-bridge', '>=5.0')
 
     // symfony/event-dispatcher 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/issues/32179
         new AddParamTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventDispatcherInterface',
@@ -1258,10 +1258,10 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new ObjectWithoutClassType()
         ),
-    ], 'symfony/event-dispatcher', '>=5.0');
+    ], 'symfony/event-dispatcher', '>=5.0')
 
     // symfony/form 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'getType', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'hasType', 0, new StringType()),
         new AddParamTypeDeclaration(
@@ -1328,10 +1328,10 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             new StringType()
         ),
-    ], 'symfony/form', '>=5.0');
+    ], 'symfony/form', '>=5.0')
 
     // symfony/form 5.0, changed back in 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
             'mapFormsToData',
@@ -1344,10 +1344,10 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             $iterableType
         ),
-    ], 'symfony/form', '>=5.0 <5.3');
+    ], 'symfony/form', '>=5.0 <5.3')
 
     // symfony/process 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'signal', 0, new IntegerType()),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'stop', 0, new FloatType()),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'stop', 1, $nullableIntegerType),
@@ -1366,10 +1366,10 @@ return static function (RectorConfig $rectorConfig): void {
             new BooleanType()
         ),
         new AddParamTypeDeclaration('Symfony\Component\Process\Process', 'updateStatus', 0, new BooleanType()),
-    ], 'symfony/process', '>=5.0');
+    ], 'symfony/process', '>=5.0')
 
     // symfony/security-core 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Component\Security\Core\User\UserProviderInterface',
             'loadUserByUsername',
@@ -1382,10 +1382,10 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new StringType(),
         ),
-    ], 'symfony/security-core', '>=5.0');
+    ], 'symfony/security-core', '>=5.0')
 
     // symfony/translation-contracts 5.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Contracts\Translation\TranslatorInterface',
             'setLocale',
@@ -1410,23 +1410,23 @@ return static function (RectorConfig $rectorConfig): void {
             3,
             new UnionType([new NullType(), new StringType()])
         ),
-    ], 'symfony/translation-contracts', '>=5.0');
+    ], 'symfony/translation-contracts', '>=5.0')
 
     // symfony/config 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Config\Definition\BaseNode',
             'getDeprecationMessage',
             'getDeprecation'
         ),
-    ], 'symfony/config', '>=5.1');
+    ], 'symfony/config', '>=5.1')
 
     // symfony/dependency-injection 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameFunctionRector::class, [
+    ->withComposerBasedRule(RenameFunctionRector::class, [
         'Symfony\Component\DependencyInjection\Loader\Configurator\inline' => 'Symfony\Component\DependencyInjection\Loader\Configurator\inline_service',
         'Symfony\Component\DependencyInjection\Loader\Configurator\ref' => 'Symfony\Component\DependencyInjection\Loader\Configurator\service',
-    ], 'symfony/dependency-injection', '>=5.1');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/dependency-injection', '>=5.1')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\DependencyInjection\Definition',
             'getDeprecationMessage',
@@ -1437,15 +1437,15 @@ return static function (RectorConfig $rectorConfig): void {
             'getDeprecationMessage',
             'getDeprecation'
         ),
-    ], 'symfony/dependency-injection', '>=5.1');
+    ], 'symfony/dependency-injection', '>=5.1')
 
     // symfony/event-dispatcher 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy' => 'Symfony\Component\EventDispatcher\EventDispatcherInterface',
-    ], 'symfony/event-dispatcher', '>=5.1');
+    ], 'symfony/event-dispatcher', '>=5.1')
 
     // symfony/form 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
             'Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer',
             'ROUND_FLOOR',
@@ -1488,55 +1488,55 @@ return static function (RectorConfig $rectorConfig): void {
             'NumberFormatter',
             'ROUND_CEILING'
         ),
-    ], 'symfony/form', '>=5.1');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ], 'symfony/form', '>=5.1')
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Form\Extension\Validator\Util\ServerParams' => 'Symfony\Component\Form\Util\ServerParams',
-    ], 'symfony/form', '>=5.1');
+    ], 'symfony/form', '>=5.1')
 
     // symfony/framework-bundle 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
             'configureRoutes',
             0,
             new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator')
         ),
-    ], 'symfony/framework-bundle', '>=5.1');
+    ], 'symfony/framework-bundle', '>=5.1')
 
     // symfony/http-foundation 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(StaticCallToNewRector::class, [
+    ->withComposerBasedRule(StaticCallToNewRector::class, [
         new StaticCallToNew('Symfony\Component\HttpFoundation\Response', 'create'),
         new StaticCallToNew('Symfony\Component\HttpFoundation\JsonResponse', 'create'),
         new StaticCallToNew('Symfony\Component\HttpFoundation\RedirectResponse', 'create'),
         new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create'),
-    ], 'symfony/http-foundation', '>=5.1');
+    ], 'symfony/http-foundation', '>=5.1')
 
     // symfony/inflector 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/35092
         'Symfony\Component\Inflector' => 'Symfony\Component\String\Inflector\InflectorInterface',
-    ], 'symfony/inflector', '>=5.1');
+    ], 'symfony/inflector', '>=5.1')
 
     // symfony/notifier 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/35828
         new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
-    ], 'symfony/notifier', '>=5.1');
+    ], 'symfony/notifier', '>=5.1')
 
     // symfony/security-core 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameStringRector::class, [
+    ->withComposerBasedRule(RenameStringRector::class, [
         // @see https://github.com/symfony/symfony/pull/35858
         'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-    ], 'symfony/security-core', '>=5.1');
+    ], 'symfony/security-core', '>=5.1')
 
     // symfony/mime 5.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
         new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create'),
-    ], 'symfony/mime', '>=5.2');
+    ], 'symfony/mime', '>=5.2')
 
     // symfony/notifier 5.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Component\Notifier\NotifierInterface',
             'send',
@@ -1579,10 +1579,10 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new ObjectType('Symfony\Component\Notifier\Recipient\SmsRecipientInterface')
         ),
-    ], 'symfony/notifier', '>=5.2');
+    ], 'symfony/notifier', '>=5.2')
 
     // symfony/security-core 5.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken',
             'setProviderKey',
@@ -1623,18 +1623,18 @@ return static function (RectorConfig $rectorConfig): void {
             'getProviderKey',
             'getFirewallName'
         ),
-    ], 'symfony/security-core', '>=5.2');
+    ], 'symfony/security-core', '>=5.2')
 
     // symfony/security-http 5.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Http\Firewall\AccessListener',
             'PUBLIC_ACCESS',
             'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter',
             'PUBLIC_ACCESS'
         ),
-    ], 'symfony/security-http', '>=5.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/security-http', '>=5.2')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler',
             'setProviderKey',
@@ -1645,17 +1645,17 @@ return static function (RectorConfig $rectorConfig): void {
             'getProviderKey',
             'getFirewallName'
         ),
-    ], 'symfony/security-http', '>=5.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenamePropertyRector::class, [
+    ], 'symfony/security-http', '>=5.2')
+    ->withComposerBasedRule(RenamePropertyRector::class, [
         new RenameProperty(
             'Symfony\Component\Security\Http\RememberMe\AbstractRememberMeServices',
             'providerKey',
             'firewallName'
         ),
-    ], 'symfony/security-http', '>=5.2');
+    ], 'symfony/security-http', '>=5.2')
 
     // symfony/validator 5.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AttributeKeyToClassConstFetchRector::class, [
+    ->withComposerBasedRule(AttributeKeyToClassConstFetchRector::class, [
         new AttributeKeyToClassConstFetch(
             'Symfony\\Component\\Validator\\Constraints\\Email',
             'mode',
@@ -1666,20 +1666,20 @@ return static function (RectorConfig $rectorConfig): void {
                 'html5' => 'VALIDATION_MODE_HTML5',
             ]
         ),
-    ], 'symfony/validator', '>=5.2');
+    ], 'symfony/validator', '>=5.2')
 
     // symfony/console 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'),
         new MethodCallRename(
             'Symfony\Component\Console\Helper\Helper',
             'strlenWithoutDecoration',
             'removeDecoration',
         ),
-    ], 'symfony/console', '>=5.3');
+    ], 'symfony/console', '>=5.3')
 
     // symfony/form 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/commit/ce77be2507631cd12e4ca37510dab37f4c2b759a
         new AddParamTypeDeclaration(
             'Symfony\Component\Form\DataMapperInterface',
@@ -1694,33 +1694,33 @@ return static function (RectorConfig $rectorConfig): void {
             1,
             new ObjectType(Traversable::class)
         ),
-    ], 'symfony/form', '>=5.3');
+    ], 'symfony/form', '>=5.3')
 
     // symfony/http-foundation 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40536
         new MethodCallRename(
             'Symfony\Component\HttpFoundation\RequestStack',
             'getMasterRequest',
             'getMainRequest',
         ),
-    ], 'symfony/http-foundation', '>=5.3');
+    ], 'symfony/http-foundation', '>=5.3')
 
     // symfony/http-kernel 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         // @see https://github.com/symfony/symfony/pull/40536
         new RenameClassConstFetch(
             'Symfony\Component\HttpKernel\HttpKernelInterface',
             'MASTER_REQUEST',
             'MAIN_REQUEST'
         ),
-    ], 'symfony/http-kernel', '>=5.3');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/http-kernel', '>=5.3')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\HttpKernel\Event\KernelEvent', 'isMasterRequest', 'isMainRequest'),
-    ], 'symfony/http-kernel', '>=5.3');
+    ], 'symfony/http-kernel', '>=5.3')
 
     // symfony/security-core 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Security\Core\Exception\UsernameNotFoundException' => 'Symfony\Component\Security\Core\Exception\UserNotFoundException',
         // @see https://github.com/symfony/symfony/pull/39802
         'Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface' => 'Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface',
@@ -1734,8 +1734,8 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder' => 'Symfony\Component\PasswordHasher\Hasher\SodiumPasswordHasher',
         'Symfony\Component\Security\Core\Encoder\UserPasswordEncoder' => 'Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher',
         'Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface' => 'Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface',
-    ], 'symfony/security-core', '>=5.3');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/security-core', '>=5.3')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Security\Core\Authentication\Token\TokenInterface',
             'getUsername',
@@ -1756,39 +1756,39 @@ return static function (RectorConfig $rectorConfig): void {
             'getUsername',
             'getUserIdentifier'
         ),
-    ], 'symfony/security-core', '>=5.3');
+    ], 'symfony/security-core', '>=5.3')
 
     // symfony/security-mailer 5.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Mailer\Transport\AbstractTransportFactory',
             'getEndpoint',
             new StringType(),
         ),
-    ], 'symfony/security-mailer', '>=5.3');
+    ], 'symfony/security-mailer', '>=5.3')
 
     // symfony/cache 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/42965
         'Symfony\Component\Cache\Adapter\DoctrineAdapter' => 'Doctrine\Common\Cache\Psr6\CacheAdapter',
-    ], 'symfony/cache', '>=5.4');
+    ], 'symfony/cache', '>=5.4')
 
     // symfony/http-kernel 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/45615
         'Symfony\Component\HttpKernel\EventListener\AbstractTestSessionListener' => 'Symfony\Component\HttpKernel\EventListener\AbstractSessionListener',
         'Symfony\Component\HttpKernel\EventListener\TestSessionListener' => 'Symfony\Component\HttpKernel\EventListener\SessionListener',
-    ], 'symfony/http-kernel', '>=5.4');
+    ], 'symfony/http-kernel', '>=5.4')
 
     // symfony/notifier 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/44271
         'Symfony\Component\Notifier\Bridge\Nexmo\NexmoTransportFactory' => 'Symfony\Component\Notifier\Bridge\Vonage\VonageTransportFactory',
         'Symfony\Component\Notifier\Bridge\Nexmo\NexmoTransport' => 'Symfony\Component\Notifier\Bridge\Vonage\VonageTransport',
-    ], 'symfony/notifier', '>=5.4');
+    ], 'symfony/notifier', '>=5.4')
 
     // symfony/security-bundle 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/42582
         new MethodCallRename(
             'Symfony\Bundle\SecurityBundle\Security\FirewallConfig',
@@ -1801,10 +1801,10 @@ return static function (RectorConfig $rectorConfig): void {
             'addSecurityListenerFactory',
             'addAuthenticatorFactory'
         ),
-    ], 'symfony/security-bundle', '>=5.4');
+    ], 'symfony/security-bundle', '>=5.4')
 
     // symfony/security-core 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Core\AuthenticationEvents',
             'AUTHENTICATION_SUCCESS',
@@ -1828,24 +1828,24 @@ return static function (RectorConfig $rectorConfig): void {
             'IS_AUTHENTICATED_ANONYMOUSLY',
             'PUBLIC_ACCESS'
         ),
-    ], 'symfony/security-core', '>=5.4');
+    ], 'symfony/security-core', '>=5.4')
 
     // symfony/security-http 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/42050
         'Symfony\Component\Security\Http\Event\DeauthenticatedEvent' => 'Symfony\Component\Security\Http\Event\TokenDeauthenticatedEvent',
-    ], 'symfony/security-http', '>=5.4');
+    ], 'symfony/security-http', '>=5.4')
 
     // symfony/validator 5.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [
+    ->withComposerBasedRule(AnnotationToAttributeRector::class, [
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Collection'),
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\AtLeastOneOf'),
         new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Sequentially'),
-    ], 'symfony/validator', '>=5.4');
+    ], 'symfony/validator', '>=5.4')
 
     // symfony/browser-kit 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\BrowserKit\AbstractBrowser',
             'doRequestInProcess',
@@ -1866,10 +1866,10 @@ return static function (RectorConfig $rectorConfig): void {
             'filterResponse',
             $browserKitResponseType
         ),
-    ], 'symfony/browser-kit', '>=6.0');
+    ], 'symfony/browser-kit', '>=6.0')
 
     // symfony/config 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Component\Config\Loader\LoaderInterface',
             'load',
@@ -1882,8 +1882,8 @@ return static function (RectorConfig $rectorConfig): void {
             0,
             new MixedType(true)
         ),
-    ], 'symfony/config', '>=6.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ], 'symfony/config', '>=6.0')
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\LoaderInterface', 'load', new MixedType()),
         new AddReturnTypeDeclaration('Symfony\Component\Config\Loader\Loader', 'import', new MixedType()),
         new AddReturnTypeDeclaration(
@@ -1922,10 +1922,10 @@ return static function (RectorConfig $rectorConfig): void {
             'isFresh',
             new BooleanType()
         ),
-    ], 'symfony/config', '>=6.0');
+    ], 'symfony/config', '>=6.0')
 
     // symfony/console 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/pull/43028/files
         new AddReturnTypeDeclaration(
             'Symfony\Component\Console\Helper\HelperInterface',
@@ -1965,16 +1965,16 @@ return static function (RectorConfig $rectorConfig): void {
             'getOption',
             new MixedType()
         ),
-    ], 'symfony/console', '>=6.0');
+    ], 'symfony/console', '>=6.0')
 
     // symfony/contracts 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/39484
         'Symfony\Contracts\HttpClient\HttpClientInterface\RemoteJsonManifestVersionStrategy' => 'Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy',
-    ], 'symfony/contracts', '>=6.0');
+    ], 'symfony/contracts', '>=6.0')
 
     // symfony/dependency-injection 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass',
             'processValue',
@@ -2030,38 +2030,38 @@ return static function (RectorConfig $rectorConfig): void {
             'getParameter',
             new UnionType($scalarTypes)
         ),
-    ], 'symfony/dependency-injection', '>=6.0');
+    ], 'symfony/dependency-injection', '>=6.0')
 
     // symfony/doctrine-bridge 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40403
         new MethodCallRename(
             'Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface',
             'loadUserByUsername',
             'loadUserByIdentifier'
         ),
-    ], 'symfony/doctrine-bridge', '>=6.0');
+    ], 'symfony/doctrine-bridge', '>=6.0')
 
     // symfony/event-dispatcher 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\EventDispatcher\EventSubscriberInterface',
             'getSubscribedEvents',
             $arrayType
         ),
-    ], 'symfony/event-dispatcher', '>=6.0');
+    ], 'symfony/event-dispatcher', '>=6.0')
 
     // symfony/expression-language 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface',
             'getFunctions',
             $arrayType
         ),
-    ], 'symfony/expression-language', '>=6.0');
+    ], 'symfony/expression-language', '>=6.0')
 
     // symfony/form 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration('Symfony\Component\Form\AbstractExtension', 'loadTypes', $arrayType),
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\AbstractExtension',
@@ -2118,20 +2118,20 @@ return static function (RectorConfig $rectorConfig): void {
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'getParent', $nullableStringType),
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'buildForm', new VoidType()),
         new AddReturnTypeDeclaration('Symfony\Component\Form\FormTypeInterface', 'configureOptions', new VoidType()),
-    ], 'symfony/form', '>=6.0');
+    ], 'symfony/form', '>=6.0')
 
     // symfony/framework-bundle 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddParamTypeDeclarationRector::class, [
         new AddParamTypeDeclaration(
             'Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait',
             'configureRoutes',
             0,
             new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator'),
         ),
-    ], 'symfony/framework-bundle', '>=6.0');
+    ], 'symfony/framework-bundle', '>=6.0')
 
     // symfony/http-kernel 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\HttpKernel\KernelInterface',
             'registerBundles',
@@ -2182,10 +2182,10 @@ return static function (RectorConfig $rectorConfig): void {
             'countErrors',
             new IntegerType()
         ),
-    ], 'symfony/http-kernel', '>=6.0');
+    ], 'symfony/http-kernel', '>=6.0')
 
     // symfony/options-resolver 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\OptionsResolver\OptionsResolver',
             'setNormalizer',
@@ -2211,10 +2211,10 @@ return static function (RectorConfig $rectorConfig): void {
             'addAllowedTypes',
             new SimpleStaticType('Symfony\Component\OptionsResolver\OptionsResolver')
         ),
-    ], 'symfony/options-resolver', '>=6.0');
+    ], 'symfony/options-resolver', '>=6.0')
 
     // symfony/property-access 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\PropertyAccess\PropertyPathInterface',
             'getLength',
@@ -2248,10 +2248,10 @@ return static function (RectorConfig $rectorConfig): void {
             'isIndex',
             new BooleanType()
         ),
-    ], 'symfony/property-access', '>=6.0');
+    ], 'symfony/property-access', '>=6.0')
 
     // symfony/property-info 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface',
             'isReadable',
@@ -2272,10 +2272,10 @@ return static function (RectorConfig $rectorConfig): void {
             'getTypes',
             $nullableArrayType
         ),
-    ], 'symfony/property-info', '>=6.0');
+    ], 'symfony/property-info', '>=6.0')
 
     // symfony/routing 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Routing\Loader\AnnotationClassLoader',
             'getDefaultRouteName',
@@ -2291,10 +2291,10 @@ return static function (RectorConfig $rectorConfig): void {
             'getRouteCollection',
             $routeCollectionType
         ),
-    ], 'symfony/routing', '>=6.0');
+    ], 'symfony/routing', '>=6.0')
 
     // symfony/security-core 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         // @see https://wouterj.nl/2021/09/symfony-6-native-typing#when-upgrading-to-symfony-54
         new AddReturnTypeDeclaration(
             'Symfony\Component\Security\Core\User\UserInterface',
@@ -2327,8 +2327,8 @@ return static function (RectorConfig $rectorConfig): void {
             'supportsClass',
             new BooleanType()
         ),
-    ], 'symfony/security-core', '>=6.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/security-core', '>=6.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\Security\Core\User\UserProviderInterface',
             'loadUserByUsername',
@@ -2340,10 +2340,10 @@ return static function (RectorConfig $rectorConfig): void {
             'getUsername',
             'getUserIdentifier',
         ),
-    ], 'symfony/security-core', '>=6.0');
+    ], 'symfony/security-core', '>=6.0')
 
     // symfony/security-http 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface',
             'start',
@@ -2360,10 +2360,10 @@ return static function (RectorConfig $rectorConfig): void {
             'authenticate',
             new ObjectType('Symfony\Component\Security\Http\Authenticator\Passport\Passport')
         ),
-    ], 'symfony/security-http', '>=6.0');
+    ], 'symfony/security-http', '>=6.0')
 
     // symfony/serializer 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Serializer\Encoder\DecoderInterface',
             'decode',
@@ -2445,19 +2445,19 @@ return static function (RectorConfig $rectorConfig): void {
             'normalize',
             $scalarArrayObjectUnionType
         ),
-    ], 'symfony/serializer', '>=6.0');
+    ], 'symfony/serializer', '>=6.0')
 
     // symfony/templating 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Templating\Helper\HelperInterface',
             'getName',
             new StringType()
         ),
-    ], 'symfony/templating', '>=6.0');
+    ], 'symfony/templating', '>=6.0')
 
     // symfony/translation 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Translation\Extractor\AbstractFileExtractor',
             'canBeExtracted',
@@ -2468,10 +2468,10 @@ return static function (RectorConfig $rectorConfig): void {
             'extractFromDirectory',
             $iterableType
         ),
-    ], 'symfony/translation', '>=6.0');
+    ], 'symfony/translation', '>=6.0')
 
     // symfony/validator 6.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Validator\Constraint',
             'getDefaultOption',
@@ -2484,17 +2484,17 @@ return static function (RectorConfig $rectorConfig): void {
             'getTargets',
             new UnionType([new StringType(), $arrayType])
         ),
-    ], 'symfony/validator', '>=6.0');
+    ], 'symfony/validator', '>=6.0')
 
     // symfony/serializer 6.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/43982
         'Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface' => 'Symfony\Component\Serializer\Normalizer\DenormalizerInterface',
         'Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-    ], 'symfony/serializer', '>=6.1');
+    ], 'symfony/serializer', '>=6.1')
 
     // symfony/validator 6.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AttributeKeyToClassConstFetchRector::class, [
+    ->withComposerBasedRule(AttributeKeyToClassConstFetchRector::class, [
         new AttributeKeyToClassConstFetch(
             'Symfony\\Component\\Validator\\Constraints\\Email',
             'mode',
@@ -2503,74 +2503,74 @@ return static function (RectorConfig $rectorConfig): void {
                 'html5-allow-no-tld' => 'VALIDATION_MODE_HTML5_ALLOW_NO_TLD',
             ]
         ),
-    ], 'symfony/validator', '>=6.1');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ], 'symfony/validator', '>=6.1')
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/45623
         'Symfony\Component\Validator\Constraints\ExpressionLanguageSyntax' => 'Symfony\Component\Validator\Constraints\ExpressionSyntax',
         'Symfony\Component\Validator\Constraints\ExpressionLanguageSyntaxValidator' => 'Symfony\Component\Validator\Constraints\ExpressionSyntaxValidator',
-    ], 'symfony/validator', '>=6.1');
+    ], 'symfony/validator', '>=6.1')
 
     // symfony/console 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         // @see https://github.com/symfony/symfony/pull/49347
         new AddReturnTypeDeclaration('Symfony\Component\Console\Command\Command', 'configure', new VoidType()),
-    ], 'symfony/console', '>=6.2');
+    ], 'symfony/console', '>=6.2')
 
     // symfony/framework-bundle 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/46854
         new MethodCallRename(
             'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
             'renderForm',
             'render'
         ),
-    ], 'symfony/framework-bundle', '>=6.2');
+    ], 'symfony/framework-bundle', '>=6.2')
 
     // symfony/http-foundation 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/47595
         'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
         'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\ChainRequestMatcher',
-    ], 'symfony/http-foundation', '>=6.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/http-foundation', '>=6.2')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/45034
         new MethodCallRename(
             'Symfony\Component\HttpFoundation\Request',
             'getContentType',
             'getContentTypeFormat'
         ),
-    ], 'symfony/http-foundation', '>=6.2');
+    ], 'symfony/http-foundation', '>=6.2')
 
     // symfony/http-kernel 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46880
         'Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache' => 'Symfony\Component\HttpKernel\Attribute\Cache',
         // @see https://github.com/symfony/symfony/pull/47363
         'Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface' => 'Symfony\Component\HttpKernel\Controller\ValueResolverInterface',
-    ], 'symfony/http-kernel', '>=6.2');
+    ], 'symfony/http-kernel', '>=6.2')
 
     // symfony/mail-pace-mailer 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46714
         'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpApiTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceApiTransport',
         'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpSmtpTransport' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceSmtpTransport',
         'Symfony\Component\Mailer\Bridge\OhMySmtp\Transport\OhMySmtpTransportFactory' => 'Symfony\Component\Mailer\Bridge\MailPace\Transport\MailPaceTransportFactory',
-    ], 'symfony/mail-pace-mailer', '>=6.2');
+    ], 'symfony/mail-pace-mailer', '>=6.2')
 
     // symfony/mime 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/47711
         new MethodCallRename('Symfony\Component\Mime\Email', 'attachPart', 'addPart'),
-    ], 'symfony/mime', '>=6.2');
+    ], 'symfony/mime', '>=6.2')
 
     // symfony/security-bundle 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46094
         'Symfony\Component\Security\Core\Security' => 'Symfony\Bundle\SecurityBundle\Security',
-    ], 'symfony/security-bundle', '>=6.2');
+    ], 'symfony/security-bundle', '>=6.2')
 
     // symfony/security-http 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassAndConstFetch(
             'Symfony\Component\Security\Core\Security',
             'ACCESS_DENIED_ERROR',
@@ -2595,71 +2595,71 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge',
             'MAX_USERNAME_LENGTH'
         ),
-    ], 'symfony/security-http', '>=6.2');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ], 'symfony/security-http', '>=6.2')
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46907
         'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted' => 'Symfony\Component\Security\Http\Attribute\IsGranted',
-    ], 'symfony/security-http', '>=6.2');
+    ], 'symfony/security-http', '>=6.2')
 
     // symfony/symfony 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [
+    ->withComposerBasedRule(AnnotationToAttributeRector::class, [
         // @see https://github.com/symfony/symfony/pull/46907
         new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted'),
         // @see https://github.com/symfony/symfony/pull/46880
         new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache'),
         // @see https://github.com/symfony/symfony/pull/46906
         new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template'),
-    ], 'symfony/symfony', '>=6.2');
+    ], 'symfony/symfony', '>=6.2')
 
     // symfony/translation 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46161
         'Symfony\Component\Translation\Extractor\PhpExtractor' => 'Symfony\Component\Translation\Extractor\PhpAstExtractor',
-    ], 'symfony/translation', '>=6.2');
+    ], 'symfony/translation', '>=6.2')
 
     // symfony/twig-bridge 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/46906
         'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template' => 'Symfony\Bridge\Twig\Attribute\Template',
-    ], 'symfony/twig-bridge', '>=6.2');
+    ], 'symfony/twig-bridge', '>=6.2')
 
     // symfony/validator 6.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassConstFetchRector::class, [
+    ->withComposerBasedRule(RenameClassConstFetchRector::class, [
         new RenameClassConstFetch(
             'Symfony\\Component\\Validator\\Constraints\\Email',
             'VALIDATION_MODE_LOOSE',
             'VALIDATION_MODE_HTML5'
         ),
-    ], 'symfony/validator', '>=6.2');
+    ], 'symfony/validator', '>=6.2')
 
     // symfony/dependency-injection 6.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/commit/b653adf426aedc66d16c5fc1cf71e261f20b9638
         'Symfony\Component\DependencyInjection\Attribute\MapDecorated' => 'Symfony\Component\DependencyInjection\Attribute\AutowireDecorated',
-    ], 'symfony/dependency-injection', '>=6.3');
+    ], 'symfony/dependency-injection', '>=6.3')
 
     // symfony/http-client 6.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/commit/20ab567385e3812ef661dae01a1fdc5d1bde2666
         'Http\Client\HttpClient' => 'Psr\Http\Client\ClientInterface',
-    ], 'symfony/http-client', '>=6.3');
+    ], 'symfony/http-client', '>=6.3')
 
     // symfony/messenger 6.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/commit/9415b438b75204c72ff66b838307b73646393cbf
         'Symfony\Component\Messenger\EventListener\StopWorkerOnSigtermSignalListener' => 'Symfony\Component\Messenger\EventListener\StopWorkerOnSignalsListener',
         // @see https://github.com/symfony/symfony/commit/a7926b2d83f35fe53c41a28d8055490cc1955928
         'Symfony\Component\Messenger\Transport\InMemoryTransport' => 'Symfony\Component\Messenger\Transport\InMemory\InMemoryTransport',
         'Symfony\Component\Messenger\Transport\InMemoryTransportFactory' => 'Symfony\Component\Messenger\Transport\InMemory\InMemoryTransportFactory',
-    ], 'symfony/messenger', '>=6.3');
+    ], 'symfony/messenger', '>=6.3')
 
     // symfony/error-handler 6.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\HttpKernel\Debug\FileLinkFormatter' => 'Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter',
-    ], 'symfony/error-handler', '>=6.4');
+    ], 'symfony/error-handler', '>=6.4')
 
     // symfony/form 6.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [
+    ->withComposerBasedRule(AddReturnTypeDeclarationRector::class, [
         new AddReturnTypeDeclaration(
             'Symfony\Component\Form\DataTransformerInterface',
             'transform',
@@ -2670,61 +2670,61 @@ return static function (RectorConfig $rectorConfig): void {
             'reverseTransform',
             new MixedType(),
         ),
-    ], 'symfony/form', '>=6.4');
+    ], 'symfony/form', '>=6.4')
 
     // symfony/http-foundation 6.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\HttpKernel\UriSigner' => 'Symfony\Component\HttpFoundation\UriSigner',
-    ], 'symfony/http-foundation', '>=6.4');
+    ], 'symfony/http-foundation', '>=6.4')
 
     // symfony/routing 6.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameAttributeRector::class, [
+    ->withComposerBasedRule(RenameAttributeRector::class, [
         new RenameAttribute(
             'Symfony\Component\Routing\Annotation\Route',
             'Symfony\Component\Routing\Attribute\Route'
         ),
-    ], 'symfony/routing', '>=6.4');
+    ], 'symfony/routing', '>=6.4')
 
     // symfony/contracts 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [
+    ->withComposerBasedRule(AnnotationToAttributeRector::class, [
         new AnnotationToAttribute('required', 'Symfony\Contracts\Service\Attribute\Required'),
-    ], 'symfony/contracts', '>=7.0');
+    ], 'symfony/contracts', '>=7.0')
 
     // symfony/dependency-injection 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameAttributeRector::class, [
+    ->withComposerBasedRule(RenameAttributeRector::class, [
         new RenameAttribute(
             'Symfony\Component\DependencyInjection\Attribute\MapDecorated',
             'Symfony\Component\DependencyInjection\Attribute\AutowireDecorated',
         ),
-    ], 'symfony/dependency-injection', '>=7.0');
+    ], 'symfony/dependency-injection', '>=7.0')
 
     // symfony/http-foundation 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#httpfoundation
         'Symfony\Component\HttpFoundation\RequestMatcher' => 'Symfony\Component\HttpFoundation\ChainRequestMatcher',
         'Symfony\Component\HttpFoundation\ExpressionRequestMatcher' => 'Symfony\Component\HttpFoundation\RequestMatcher\ExpressionRequestMatcher',
-    ], 'symfony/http-foundation', '>=7.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ], 'symfony/http-foundation', '>=7.0')
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\HttpFoundation\Request', 'getContentType', 'getContentTypeFormat'),
-    ], 'symfony/http-foundation', '>=7.0');
+    ], 'symfony/http-foundation', '>=7.0')
 
     // symfony/routing 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameAttributeRector::class, [
+    ->withComposerBasedRule(RenameAttributeRector::class, [
         new RenameAttribute(
             'Symfony\Component\Routing\Annotation\Route',
             'Symfony\Component\Routing\Attribute\Route',
         ),
-    ], 'symfony/routing', '>=7.0');
+    ], 'symfony/routing', '>=7.0')
 
     // symfony/serializer 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.0/UPGRADE-7.0.md#frameworkbundle
         'Symfony\Component\Serializer\Normalizer\ObjectNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
         'Symfony\Component\Serializer\Normalizer\PropertyNormalizer' => 'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
-    ], 'symfony/serializer', '>=7.0');
+    ], 'symfony/serializer', '>=7.0')
 
     // symfony/dependency-injection 7.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameAttributeRector::class, [
+    ->withComposerBasedRule(RenameAttributeRector::class, [
         new RenameAttribute(
             'Symfony\Component\DependencyInjection\Attribute\TaggedIterator',
             'Symfony\Component\DependencyInjection\Attribute\AutowireIterator'
@@ -2733,43 +2733,43 @@ return static function (RectorConfig $rectorConfig): void {
             'Symfony\Component\DependencyInjection\Attribute\TaggedLocator',
             'Symfony\Component\DependencyInjection\Attribute\AutowireLocator'
         ),
-    ], 'symfony/dependency-injection', '>=7.1');
+    ], 'symfony/dependency-injection', '>=7.1')
 
     // symfony/serializer 7.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // typo fix
         new MethodCallRename(
             'Symfony\Component\Serializer\Context\Normalizer\AbstractNormalizerContextBuilder',
             'withDefaultContructorArguments',
             'withDefaultConstructorArguments',
         ),
-    ], 'symfony/serializer', '>=7.1');
+    ], 'symfony/serializer', '>=7.1')
 
     // symfony/mailer 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#mailer
         'Symfony\Component\Mailer\Test\TransportFactoryTestCase' => 'Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase',
-    ], 'symfony/mailer', '>=7.2');
+    ], 'symfony/mailer', '>=7.2')
 
     // symfony/notifier 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#notifier
         'Symfony\Component\Mailer\Test\TransportFactoryTestCase' => 'Symfony\Component\Mailer\Test\AbstractTransportFactoryTestCase',
-    ], 'symfony/notifier', '>=7.2');
+    ], 'symfony/notifier', '>=7.2')
 
     // symfony/serializer 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.2/UPGRADE-7.2.md#serializer
         'Symfony\Component\Serializer\NameConverter\AdvancedNameConverterInterface' => 'Symfony\Component\Serializer\NameConverter\NameConverterInterface',
-    ], 'symfony/serializer', '>=7.2');
+    ], 'symfony/serializer', '>=7.2')
 
     // symfony/translation 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\Translation\Test\ProviderFactoryTestCase' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase',
-    ], 'symfony/translation', '>=7.2');
+    ], 'symfony/translation', '>=7.2')
 
     // symfony/type-info 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#typeinfo
         new MethodCallRename(
             'Symfony\Component\TypeInfo\Type',
@@ -2782,30 +2782,30 @@ return static function (RectorConfig $rectorConfig): void {
             'is',
             'isSatisfiedBy',
         ),
-    ], 'symfony/type-info', '>=7.2');
+    ], 'symfony/type-info', '>=7.2')
 
     // symfony/dependency-injection 7.3
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.3.md#dependencyinjection
         new MethodCallRename(
             'Symfony\Component\DependencyInjection\ContainerBuilder',
             'getAutoconfiguredAttributes',
             'getAttributeAutoconfigurators',
         ),
-    ], 'symfony/dependency-injection', '>=7.3');
+    ], 'symfony/dependency-injection', '>=7.3')
 
     // symfony/console 7.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Console\Application', 'add', 'addCommand'),
-    ], 'symfony/console', '>=7.4');
+    ], 'symfony/console', '>=7.4')
 
     // symfony/framework-bundle 7.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Bundle\FrameworkBundle\Console\Application', 'add', 'addCommand'),
-    ], 'symfony/framework-bundle', '>=7.4');
+    ], 'symfony/framework-bundle', '>=7.4')
 
     // symfony/json-streamer 7.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename(
             'Symfony\Component\JsonStreamer\Mapping\PropertyMetadata',
             'getNativeToStreamValueTransformer',
@@ -2836,21 +2836,21 @@ return static function (RectorConfig $rectorConfig): void {
             'withAdditionalStreamToNativeValueTransformer',
             'withAdditionalValueTransformer'
         ),
-    ], 'symfony/json-streamer', '>=7.4');
+    ], 'symfony/json-streamer', '>=7.4')
 
     // symfony/routing 7.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/61358
         new MethodCallRename('Symfony\Component\Routing\Attribute\Route', 'setEnv', 'setEnvs'),
-    ], 'symfony/routing', '>=7.4');
+    ], 'symfony/routing', '>=7.4')
 
     // symfony/workflow 7.4
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Bundle\FrameworkBundle\Command\WorkflowDumpCommand' => 'Symfony\Component\Workflow\Command\WorkflowDumpCommand',
-    ], 'symfony/workflow', '>=7.4');
+    ], 'symfony/workflow', '>=7.4')
 
     // symfony/dependency-injection 8.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         'Symfony\Component\HttpKernel\Bundle\BundleInterface' => 'Symfony\Component\DependencyInjection\Kernel\BundleInterface',
         'Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass' => 'Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass',
         'Symfony\Component\HttpKernel\Config\FileLocator' => 'Symfony\Component\DependencyInjection\Kernel\FileLocator',
@@ -2858,22 +2858,21 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\HttpKernel\DependencyInjection\ServicesResetterInterface' => 'Symfony\Component\DependencyInjection\ServicesResetterInterface',
         'Symfony\Component\HttpKernel\DependencyInjection\ResettableServicePass' => 'Symfony\Component\DependencyInjection\Compiler\ResettableServicePass',
         'Symfony\Component\HttpKernel\DependencyInjection\Extension' => 'Symfony\Component\DependencyInjection\Extension\Extension',
-    ], 'symfony/dependency-injection', '>=8.1');
+    ], 'symfony/dependency-injection', '>=8.1')
 
     // symfony/serializer 8.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+    ->withComposerBasedRule(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/blob/8.1/UPGRADE-8.1.md#serializer
         new MethodCallRename(
             'Symfony\Component\Serializer\Exception\PartialDenormalizationException',
             'getErrors',
             'getNotNormalizableValueErrors'
         ),
-    ], 'symfony/serializer', '>=8.1');
+    ], 'symfony/serializer', '>=8.1')
 
     // symfony/doctrine-bridge 8.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+    ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/8.2/UPGRADE-8.2.md#doctrinebridge
         'Symfony\Bridge\Doctrine\Messenger\DoctrineCloseConnectionMiddleware' => 'Symfony\Bridge\Doctrine\Messenger\DoctrineDbalCloseConnectionMiddleware',
         'Symfony\Bridge\Doctrine\Messenger\DoctrinePingConnectionMiddleware' => 'Symfony\Bridge\Doctrine\Messenger\DoctrineDbalPingConnectionMiddleware',
     ], 'symfony/doctrine-bridge', '>=8.2');
-};
