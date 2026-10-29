@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -237,7 +238,13 @@ CODE_SAMPLE
                 return null;
             }
 
-            $methodsWithPriorities[] = [$methodName->value->value, $priority?->value];
+            // priority 0 is the default, drop it to keep the attribute clean
+            $priorityExpr = $priority?->value;
+            if ($priorityExpr instanceof Int_ && $priorityExpr->value === 0) {
+                $priorityExpr = null;
+            }
+
+            $methodsWithPriorities[] = [$methodName->value->value, $priorityExpr];
         }
 
         return $methodsWithPriorities;
