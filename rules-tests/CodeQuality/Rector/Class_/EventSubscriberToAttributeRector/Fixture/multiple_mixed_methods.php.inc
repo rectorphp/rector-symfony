@@ -40,10 +40,12 @@ class MultipleMixedMethods
     public function onKernelException(ExceptionEvent $event)
     {
     }
+
     #[\Symfony\Component\EventDispatcher\Attribute\AsEventListener(event: 'single_event')]
     public function singles()
     {
     }
+
     public function unknownMethod()
     {
     }

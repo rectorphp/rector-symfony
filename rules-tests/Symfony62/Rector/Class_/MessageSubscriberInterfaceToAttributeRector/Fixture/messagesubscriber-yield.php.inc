@@ -49,6 +49,7 @@ class SmsNotificationHandler
     {
         // ...
     }
+
     #[\Symfony\Component\Messenger\Attribute\AsMessageHandler(priority: 12, bus: 'messenger.bus.default')]
     public function handleOtherSmsNotification(OtherSmsNotification $message)
     {
