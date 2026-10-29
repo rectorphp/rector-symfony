@@ -36,10 +36,12 @@ class MultipleEventSubscriptions
     public function callMe()
     {
     }
+
     #[\Symfony\Component\EventDispatcher\Attribute\AsEventListener(event: 'single_event')]
     public function singles()
     {
     }
+
     #[\Symfony\Component\EventDispatcher\Attribute\AsEventListener(event: 'multi_event')]
     public function meToo()
     {
