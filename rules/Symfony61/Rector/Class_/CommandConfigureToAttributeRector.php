@@ -162,9 +162,7 @@ CODE_SAMPLE),
             $attributeArgs
         );
 
-        // #[AsCommand] requires a name: when there is something to move into the attribute but the name is neither
-        // on it already nor set by a constant setName() here (e.g. it is passed to the parent constructor),
-        // converting would produce an invalid attribute
+        // #[AsCommand] requires name, skip when it cannot be resolved
         if (! in_array('name', $existingAttributeNames, true)
             && ! $this->hasPermittedMethodCall($configureClassMethod, 'setName')
             && $this->hasPermittedAttributeMethodCall($configureClassMethod)
@@ -324,6 +322,10 @@ CODE_SAMPLE),
             $methodName
         ): null {
             if (! $node instanceof MethodCall || ! $this->isName($node->name, $methodName)) {
+                return null;
+            }
+
+            if ($node->isFirstClassCallable()) {
                 return null;
             }
 
