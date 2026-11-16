@@ -83,6 +83,7 @@ use Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberR
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
+use Rector\Symfony\Symfony52\Rector\Attribute\EmailModeToConstantRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
@@ -119,10 +120,8 @@ use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticator
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
 use Rector\Symfony\Symfony82\Rector\MethodCall\ScheduleWithToAddRector;
 use Rector\Symfony\Yaml\Rector\StaticCall\YamlFlagsToConstantRector;
-use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
-use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Rector\Transform\ValueObject\WrapReturn;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -296,6 +295,7 @@ return RectorConfig::configure()
         ReflectionExtractorEnableMagicCallExtractorRector::class,
 
         // symfony/validator 5.2
+        EmailModeToConstantRector::class,
         LoadValidatorMetadataToAttributeRector::class,
         ValidatorBuilderEnableAnnotationMappingRector::class,
 
@@ -1654,20 +1654,6 @@ return RectorConfig::configure()
         ),
     ], 'symfony/security-http', '>=5.2')
 
-    // symfony/validator 5.2
-    ->withComposerBasedRule(AttributeKeyToClassConstFetchRector::class, [
-        new AttributeKeyToClassConstFetch(
-            'Symfony\\Component\\Validator\\Constraints\\Email',
-            'mode',
-            'Symfony\\Component\\Validator\\Constraints\\Email',
-            [
-                'strict' => 'VALIDATION_MODE_STRICT',
-                'loose' => 'VALIDATION_MODE_LOOSE',
-                'html5' => 'VALIDATION_MODE_HTML5',
-            ]
-        ),
-    ], 'symfony/validator', '>=5.2')
-
     // symfony/console 5.3
     ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'),
@@ -2494,16 +2480,6 @@ return RectorConfig::configure()
     ], 'symfony/serializer', '>=6.1')
 
     // symfony/validator 6.1
-    ->withComposerBasedRule(AttributeKeyToClassConstFetchRector::class, [
-        new AttributeKeyToClassConstFetch(
-            'Symfony\\Component\\Validator\\Constraints\\Email',
-            'mode',
-            'Symfony\\Component\\Validator\\Constraints\\Email',
-            [
-                'html5-allow-no-tld' => 'VALIDATION_MODE_HTML5_ALLOW_NO_TLD',
-            ]
-        ),
-    ], 'symfony/validator', '>=6.1')
     ->withComposerBasedRule(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/45623
         'Symfony\Component\Validator\Constraints\ExpressionLanguageSyntax' => 'Symfony\Component\Validator\Constraints\ExpressionSyntax',
