@@ -69,6 +69,7 @@ use Rector\Symfony\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector;
 use Rector\Symfony\Symfony40\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
+use Rector\Symfony\Symfony42\Rector\Class_\GetExtendedTypesReturnArrayRector;
 use Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector;
@@ -120,10 +121,8 @@ use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticator
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
 use Rector\Symfony\Symfony82\Rector\MethodCall\ScheduleWithToAddRector;
 use Rector\Symfony\Yaml\Rector\StaticCall\YamlFlagsToConstantRector;
-use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
-use Rector\Transform\ValueObject\WrapReturn;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -235,6 +234,9 @@ return RectorConfig::configure()
 
         // symfony/config 4.2
         RootNodeTreeBuilderRector::class,
+
+        // symfony/form 4.2
+        GetExtendedTypesReturnArrayRector::class,
 
         // symfony/process 4.2
         StringToArrayArgumentProcessRector::class,
@@ -801,9 +803,6 @@ return RectorConfig::configure()
     ], 'symfony/form', '>=4.2')
     ->withComposerBasedRule(RenameMethodRector::class, [
         new MethodCallRename('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedType', 'getExtendedTypes'),
-    ], 'symfony/form', '>=4.2')
-    ->withComposerBasedRule(WrapReturnRector::class, [
-        new WrapReturn('Symfony\Component\Form\AbstractTypeExtension', 'getExtendedTypes', true),
     ], 'symfony/form', '>=4.2')
 
     // symfony/framework-bundle 4.2
