@@ -84,6 +84,7 @@ use Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberR
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
+use Rector\Symfony\Symfony51\Rector\StaticCall\ResponseCreateToNewRector;
 use Rector\Symfony\Symfony52\Rector\Attribute\EmailModeToConstantRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
@@ -121,8 +122,6 @@ use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticator
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
 use Rector\Symfony\Symfony82\Rector\MethodCall\ScheduleWithToAddRector;
 use Rector\Symfony\Yaml\Rector\StaticCall\YamlFlagsToConstantRector;
-use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
-use Rector\Transform\ValueObject\StaticCallToNew;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -278,6 +277,7 @@ return RectorConfig::configure()
         LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
 
         // symfony/http-foundation 5.1
+        ResponseCreateToNewRector::class,
         ParameterBagTypedGetMethodCallRector::class,
 
         // symfony/dependency-injection 5.2
@@ -1501,14 +1501,6 @@ return RectorConfig::configure()
             new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator')
         ),
     ], 'symfony/framework-bundle', '>=5.1')
-
-    // symfony/http-foundation 5.1
-    ->withComposerBasedRule(StaticCallToNewRector::class, [
-        new StaticCallToNew('Symfony\Component\HttpFoundation\Response', 'create'),
-        new StaticCallToNew('Symfony\Component\HttpFoundation\JsonResponse', 'create'),
-        new StaticCallToNew('Symfony\Component\HttpFoundation\RedirectResponse', 'create'),
-        new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create'),
-    ], 'symfony/http-foundation', '>=5.1')
 
     // symfony/inflector 5.1
     ->withComposerBasedRule(RenameClassRector::class, [
