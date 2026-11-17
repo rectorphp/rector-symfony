@@ -29,7 +29,6 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Renaming\ValueObject\RenameAttribute;
@@ -85,6 +84,7 @@ use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubs
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Symfony\Symfony51\Rector\StaticCall\ResponseCreateToNewRector;
+use Rector\Symfony\Symfony51\Rector\String_\PreviousAdminRoleToIsImpersonatorRector;
 use Rector\Symfony\Symfony52\Rector\Attribute\EmailModeToConstantRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
@@ -275,6 +275,9 @@ return RectorConfig::configure()
         // symfony/security-http 5.1
         LogoutHandlerToLogoutEventSubscriberRector::class,
         LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
+
+        // symfony/security-core 5.1
+        PreviousAdminRoleToIsImpersonatorRector::class,
 
         // symfony/http-foundation 5.1
         ResponseCreateToNewRector::class,
@@ -1513,12 +1516,6 @@ return RectorConfig::configure()
         // @see https://github.com/symfony/symfony/pull/35828
         new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
     ], 'symfony/notifier', '>=5.1')
-
-    // symfony/security-core 5.1
-    ->withComposerBasedRule(RenameStringRector::class, [
-        // @see https://github.com/symfony/symfony/pull/35858
-        'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-    ], 'symfony/security-core', '>=5.1')
 
     // symfony/mime 5.2
     ->withComposerBasedRule(RenameMethodRector::class, [
