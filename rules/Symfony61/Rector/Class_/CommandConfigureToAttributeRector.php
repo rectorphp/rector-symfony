@@ -308,7 +308,7 @@ CODE_SAMPLE),
 
     private function hasPermittedAttributeMethodCall(ClassMethod $classMethod): bool
     {
-        return array_any(array_keys(self::METHODS_TO_ATTRIBUTE_NAMES), fn(string $methodName): bool => $this->hasPermittedMethodCall($classMethod, $methodName));
+        return array_any(array_keys(self::METHODS_TO_ATTRIBUTE_NAMES), fn (string $methodName): bool => $this->hasPermittedMethodCall($classMethod, $methodName));
     }
 
     private function hasPermittedMethodCall(ClassMethod $classMethod, string $methodName): bool
