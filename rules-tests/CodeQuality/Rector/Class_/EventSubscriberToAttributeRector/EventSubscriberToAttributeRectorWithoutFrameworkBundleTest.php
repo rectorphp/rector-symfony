@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventSubscriberToAttributeRector;
+
+use Iterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+
+final class EventSubscriberToAttributeRectorWithoutFrameworkBundleTest extends AbstractRectorTestCase
+{
+    #[DataProvider('provideData')]
+    public function test(string $filePath): void
+    {
+        $this->doTestFile($filePath);
+    }
+
+    public static function provideData(): Iterator
+    {
+        return self::yieldFilesFromDirectory(__DIR__ . '/FixtureWithoutFrameworkBundle');
+    }
+
+    public function provideConfigFilePath(): string
+    {
+        return __DIR__ . '/config/config_with_parameter.php';
+    }
+
+    protected function provideComposerJsonFilePath(): string
+    {
+        return __DIR__ . '/config/composer_without_framework_bundle.json';
+    }
+}

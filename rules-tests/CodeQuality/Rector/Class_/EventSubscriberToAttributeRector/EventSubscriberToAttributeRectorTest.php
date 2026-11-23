@@ -25,4 +25,9 @@ final class EventSubscriberToAttributeRectorTest extends AbstractRectorTestCase
     {
         return __DIR__ . '/config/config_with_parameter.php';
     }
+
+    protected function provideComposerJsonFilePath(): string
+    {
+        return __DIR__ . '/config/composer.json';
+    }
 }

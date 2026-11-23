@@ -35,10 +35,17 @@ use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
  */
 final class EventSubscriberToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    /**
+     * @return array{ComposerPackageConstraint, ComposerPackageConstraint}
+     */
+    public function provideComposerPackageConstraint(): array
     {
-        // #[AsEventListener] attribute allowed on methods since Symfony 5.4
-        return new ComposerPackageConstraint('symfony/event-dispatcher', '>=5.4');
+        // #[AsEventListener] is allowed on methods since symfony/event-dispatcher 5.4, but only FrameworkBundle
+        // registers it for autoconfiguration; without it, e.g. in Drupal or Laravel, the converted listeners never run
+        return [
+            new ComposerPackageConstraint('symfony/event-dispatcher', '>=5.4'),
+            new ComposerPackageConstraint('symfony/framework-bundle', '>=5.4'),
+        ];
     }
 
     public function __construct(
